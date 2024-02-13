@@ -1,0 +1,21 @@
+{
+  "name": "Cohabify Frontend",
+  "short_name": "CohabifyFrontend",
+  "description": "This is the Vue.js frontend for the PWA Cohabify",
+  "icons": [
+    {
+      "src": "/placeholder-icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/placeholder-icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4DBA87"
+}
