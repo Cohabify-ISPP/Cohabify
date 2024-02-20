@@ -10,10 +10,15 @@ import HelloWorld from './components/HelloWorld.vue'
     <a href="https://vuejs.org/" target="_blank">
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
+    <a href="https://getbootstrap.com/" target="_blank">
+      <i class="bi bi-bootstrap-fill h1"></i>
+    </a>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+  <div class="card">
+    <h1>Vite + Vue + Bootstrap + Bootstrap Icons <i class="bi bi-heart-fill"></i></h1>
+  </div>
+  <HelloWorld />
 </template>
-
 <style scoped>
 .logo {
   height: 6em;
