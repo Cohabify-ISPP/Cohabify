@@ -1,5 +1,11 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+import { ref, onMounted } from 'vue'
+
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+console.log('VITE_BACKEND_URL:', VITE_BACKEND_URL)
+
+
 </script>
 
 <template>
@@ -17,8 +23,12 @@ import HelloWorld from './components/HelloWorld.vue'
   <div class="card">
     <h1>Vite + Vue + Bootstrap + Bootstrap Icons <i class="bi bi-heart-fill"></i></h1>
   </div>
+  <div class="card mt-2">
+    <h1>Backend URL: {{ VITE_BACKEND_URL }}</h1>
+  </div>
   <HelloWorld />
 </template>
+
 <style scoped>
 .logo {
   height: 6em;
