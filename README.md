@@ -25,7 +25,7 @@ You can follow either the command line set up or one of the IDEs.
 
 ## Command line
 
-1. Cloning: git clone https://github.com/Cohabify/CohabifyBackend.git
+1. Go to the backend folder
 2. Installing: mvnw install -e
 3. Properties: Rename as you like.
 4. Running: mvnw spring-boot:run
@@ -78,15 +78,15 @@ The Vue.js frontend project for the PWA Cohabify is located in the folder "Front
 
 ## General project set up instructions
 
-1. Navigate to the folder "Frontend" and operate from there.
-2. Install with npm.
-3. Rename .env.example to remove ".example" and change any needed properties.
-4. Now you are ready to execute this Vue.js application.
+1. Install with npm.
+2. Rename .env.example to remove ".example" and change any needed properties.
+3. Now you are ready to execute this Vue.js application.
 
 You can follow either the command line set up or one of the IDEs.
 
 ## Command line
 
+1. Go to frontend folder
 2. Installing: npm install
 3. Environment: Rename as you like.
 4. Running: npm run dev
