@@ -95,7 +95,7 @@ local.properties
 .mtj.tmp/
 
 # Package Files #
-/target/*
+*/target/*
 *.jar
 *.war
 *.nar
