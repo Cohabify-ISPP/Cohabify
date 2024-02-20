@@ -85,9 +85,6 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
-						<exclude>
-							Frontend/**
-						</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
