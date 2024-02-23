@@ -15,7 +15,7 @@ local.properties
 .classpath
 
 # Properties files
-.properties
+*.properties
 
 # External tool builders
 .externalToolBuilders/
