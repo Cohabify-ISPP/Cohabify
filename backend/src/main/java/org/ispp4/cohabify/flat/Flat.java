@@ -1,6 +1,7 @@
 package org.ispp4.cohabify.flat;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -71,4 +72,8 @@ public class Flat extends BaseEntity{
 
     @NotNull
     private boolean elevator; 
+
+    @NotNull
+    @DocumentReference
+    private List<String> tags;
 }
