@@ -30,6 +30,10 @@ body {
   min-height: 100vh;
 }
 
+.body-custom {
+  background-image: url('/background.png');
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -54,15 +58,36 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.card {
-  padding: 2em;
+.btn-circle.btn-xl {
+  width: min(20vw, 130px); 
+  height: min(20vw, 130px);
+  padding: 10px 16px;
+  border-radius: 50%;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #28426B;
 }
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 4rem;
   text-align: center;
+  min-width: 100vw;
+  min-height: 100vh;
 }
 
 @media (prefers-color-scheme: light) {
