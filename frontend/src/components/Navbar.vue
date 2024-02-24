@@ -21,7 +21,7 @@
       <!-- Navbar brand -->
       <a class="navbar-brand mt-2 mt-lg-0" href="/">
         <img
-          src="/images/LogoCohabify.png"
+          src="/images/LogoMonoColor.png"
           height="35"
           alt="Cohabify"
           loading="lazy"
@@ -43,7 +43,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Planes</a>
+          <a class="nav-link " href="#">Planes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Publicar Anuncio</a>
@@ -77,7 +77,7 @@
           aria-labelledby="navbarDropdownMenuAvatar"
         >
           <li>
-            <a class="dropdown-item" href="#">Perfil</a>
+            <a class="dropdown-item " href="#" >Perfil</a>
           </li>
           <li>
             <a class="dropdown-item" href="#">Cerrar sesión</a>
@@ -92,6 +92,23 @@
 <!-- Navbar -->
 </template>
 
-<script>
+<style scoped>
+ .nav-link {
+   color: white;
+   transition: 0.1s;
+ }
 
-</script>
+ .nav-link:hover {
+   color: #a4c7ff;
+   transition: 0.2s;
+ }
+ .dropdown-toggle::after {
+  border-top-color: white; /* Cambia esto al color que prefieras */
+  border-width: 0.3em; /* Cambia esto al tamaño que prefieras */
+}
+
+.dropdown-toggle:hover::after {
+  border-top-color: #a4c7ff; /* Cambia esto al color que prefieras */
+  transition: 0.2s;
+}
+</style>
