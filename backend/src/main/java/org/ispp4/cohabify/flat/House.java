@@ -1,7 +1,8 @@
 package org.ispp4.cohabify.flat;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -9,39 +10,25 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.List;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 
 import org.ispp4.cohabify.model.BaseEntity;
 
 @Getter
 @Setter
-@Document(collection = "flats")
-public class Flat extends BaseEntity{
-
-    @NotBlank
-    @Size(min = 1, max = 100)
-    private String name;
-
-    @NotBlank
-    @Size(min = 1, max = 1500)
-    private String description;
-
-    @NotNull
-    @PositiveOrZero
-    private Float price;
+@Document(collection = "houses")
+public class House extends BaseEntity{
 
     @NotNull
     @Min(1)
     @Max(6)
-    private int rooms_number;
+    private int roomsNumber;
 
     @NotNull
     @Min(1)
     @Max(4)
-    private int bathrooms_number;
+    private int bathroomsNumber;
 
     @NotNull
     @Positive
@@ -53,27 +40,17 @@ public class Flat extends BaseEntity{
     @NotNull
     private int floor;
 
-    @NotNull
-    @Min(0)
-    @Max(6)
-    private int tenants;
-
     @NotBlank
     @Size(min = 1, max = 100)
     private String location;
+
+    @GeoSpatialIndexed
+    private GeoJsonPoint locationPoint;
 
     @NotNull
     @Size(min=20, max = 20)
     private int cadastre;
 
-    @NotNull
-    @Size(min = 1, max = 5)
-    private List<String> images;
+    //TODO: Add tags  
 
-    @NotNull
-    private boolean elevator; 
-
-    @NotNull
-    @DocumentReference
-    private List<String> tags;
 }
