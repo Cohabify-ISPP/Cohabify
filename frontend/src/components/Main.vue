@@ -1,8 +1,9 @@
 <script setup>
-
+import Navbar from './Navbar.vue'
 </script>
 
 <template>
+  <Navbar />
   <div class="container d-flex align-items-center justify-content-center text-center my-5">
     <h1 color="#282828">Hora de buscar...</h1>
   </div>
@@ -36,7 +37,7 @@
           </div>
         </div>
         <div class="col-md-4">
-          <img src="/explorador.png" class="img-fluid rounded-start" alt="...">
+          <img src="/images/explorador.png" class="img-fluid rounded-start" alt="...">
         </div>
       </div>
     </div>
