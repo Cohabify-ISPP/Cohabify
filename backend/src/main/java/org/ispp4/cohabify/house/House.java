@@ -1,4 +1,4 @@
-package org.ispp4.cohabify.flat;
+package org.ispp4.cohabify.house;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
