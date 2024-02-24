@@ -7,7 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Document(collection = "userAdvertisements")
 public class UserAdvertisement {
     
@@ -47,77 +51,6 @@ public class UserAdvertisement {
         this.entranceDate = entranceDate;
         this.exitDate = exitDate;
         this.maxCohabitants = maxCohabitants;
-    }
-
-    public ObjectId getId() {
-        return this.id;
-    }
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getMinBudget() {
-        return this.minBudget;
-    }
-
-    public void setMinBudget(Double minBudget) {
-        this.minBudget = minBudget;
-    }
-
-    public Double getMaxBudget() {
-        return this.maxBudget;
-    }
-
-    public void setMaxBudget(Double maxBudget) {
-        this.maxBudget = maxBudget;
-    }
-
-    public String getDesiredLocation() {
-        return this.desiredLocation;
-    }
-
-    public void setDesiredLocation(String desiredLocation) {
-        this.desiredLocation = desiredLocation;
-    }
-
-    public LocalDate getEntranceDate() {
-        return this.entranceDate;
-    }
-
-    public void setEntranceDate(LocalDate entranceDate) {
-        this.entranceDate = entranceDate;
-    }
-
-    public LocalDate getExitDate() {
-        return this.exitDate;
-    }
-
-    public void setExitDate(LocalDate exitDate) {
-        this.exitDate = exitDate;
-    }
-
-    public Integer getMaxCohabitants() {
-        return this.maxCohabitants;
-    }
-
-    public void setMaxCohabitants(Integer maxCohabitants) {
-        this.maxCohabitants = maxCohabitants;
-    }
-
-    public ObjectId getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(ObjectId userId) {
-        this.userId = userId;
     }
 
     @Override

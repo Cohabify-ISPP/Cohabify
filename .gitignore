@@ -15,7 +15,7 @@ local.properties
 .classpath
 
 # Properties files
-.properties
+*.properties
 
 # External tool builders
 .externalToolBuilders/
@@ -240,3 +240,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Vue.js generated files
+*/node_modules/
+*/package-lock.json
+*/package.json
+*/manifest.json
