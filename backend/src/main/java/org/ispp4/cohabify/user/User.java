@@ -41,7 +41,7 @@ public class User extends BaseEntity {
     private String email;
     
     @NotNull
-    private Tag tag;
+    private List<Tag> tag;
     
     @NotNull
     @Size(max = 255)
