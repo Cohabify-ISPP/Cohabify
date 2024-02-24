@@ -1,4 +1,5 @@
 package org.ispp4.cohabify.flatRating;
+import org.bson.types.ObjectId;
 import org.ispp4.cohabify.model.BaseEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,11 +17,11 @@ public class FlatRating extends BaseEntity{
     
     @NotNull
     @Size(max = 255)
-    private String flatId;
+    private ObjectId flatId;
    
     @NotNull
     @Size(max = 255)
-    private String userId;
+    private ObjectId userId;
 
     @NotNull
     @PositiveOrZero

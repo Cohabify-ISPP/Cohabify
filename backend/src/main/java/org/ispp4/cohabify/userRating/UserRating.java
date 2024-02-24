@@ -1,5 +1,6 @@
 package org.ispp4.cohabify.userRating;
 
+import org.bson.types.ObjectId;
 import org.ispp4.cohabify.model.BaseEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotNull;
@@ -15,11 +16,11 @@ public class UserRating extends BaseEntity {
     
     @NotNull
     @Size(max = 20)
-    private String userId;
+    private ObjectId userId;
 
     @NotNull
     @Size(max = 20)
-    private String ratedUserId;
+    private ObjectId ratedUserId;
 
     private Boolean like;
 
