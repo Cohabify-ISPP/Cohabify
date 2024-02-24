@@ -1,0 +1,60 @@
+project:
+  name: 'ISPP-2024-04'
+  owner: '04'
+  teamId: '04'
+  identities: {}
+  notifications:
+    email: 'ismbargar@alum.us.es'
+  members:
+    member1:
+      name: 'Daniel'
+      surname: 'Arriaza Arriaza' 
+      githubUsername: 'danarrarr'
+    member2:
+      name: 'Ismael'
+      surname: 'Barrera García' 
+      githubUsername: 'TerryIsmael'
+    member3:
+      name: 'Marina'
+      surname: 'Calero López' 
+      githubUsername: 'marcallop7'
+     member4:
+        name: 'Guillermo'
+        surname: 'Galeano de Paz' 
+        githubUsername: 'guigalde'
+    member5:
+      name: 'Rafael'
+      surname: 'González Castillero' 
+      githubUsername: 'rafgoncas1'
+    member6:
+          name: 'María'
+          surname: 'Márquez Sierra' 
+          githubUsername: 'nxniya'
+    member7:
+          name: 'María'
+          surname: 'Márquez Soldán' 
+          githubUsername: 'marmarsol4'
+    member8:
+          name: 'Juan Carlos'
+          surname: 'Morato Navarro' 
+          githubUsername: 'juamornav3'
+    member9:
+          name: 'Olegario'
+          surname: 'Morato Navarro' 
+          githubUsername: 'olemornav'
+    member10:
+          name: 'Eduardo'
+          surname: 'Robles Russo' 
+          githubUsername: 'edurobrus'
+    member11:
+          name: 'Miguel Ángel'
+          surname: 'Roldán García' 
+          githubUsername: 'Miguel-Angel-Roldan-Garcia'
+    member12:
+          name: 'Juan'
+          surname: 'Romero González' 
+          githubUsername: 'juanrg8'
+    member13:
+          name: 'Álvaro'
+          surname: 'Urquijo Martínez' 
+          githubUsername: 'alvurqmar'
