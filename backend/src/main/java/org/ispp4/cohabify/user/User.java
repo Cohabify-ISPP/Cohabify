@@ -54,14 +54,14 @@ public class User extends BaseEntity {
     private Boolean isVerified;
 
     @NotNull
-    private List<String> Authorities;
+    private List<String> authorities;
     
     public User() {
     
     }
 
     public Boolean isAdmin() {
-        return Authorities.contains("Admin");
+        return this.authorities.contains("Admin");
     }
 
 }
