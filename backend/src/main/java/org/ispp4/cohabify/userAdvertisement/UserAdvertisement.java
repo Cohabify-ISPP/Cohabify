@@ -2,7 +2,9 @@ package org.ispp4.cohabify.userAdvertisement;
 
 import java.time.LocalDate;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+import org.ispp4.cohabify.model.BaseEntity;
+import org.ispp4.cohabify.user.User;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.validation.constraints.NotBlank;
@@ -13,11 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Document(collection = "userAdvertisements")
-public class UserAdvertisement {
-    
-    @Id
-    @NotNull
-    private ObjectId id;
+public class UserAdvertisement extends BaseEntity {
 
     private String description;
     @NotNull
@@ -38,9 +36,9 @@ public class UserAdvertisement {
     @NotNull
     private Integer maxCohabitants;
 
-    @Id
+    @DBRef
     @NotNull
-    private ObjectId userId;
+    private User user;
 
     public UserAdvertisement(ObjectId id, String description, Double minBudget, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants) {
         this.id = id;
@@ -64,7 +62,7 @@ public class UserAdvertisement {
             ", entranceDate='" + getEntranceDate() + "'" +
             ", exitDate='" + getExitDate() + "'" +
             ", maxCohabitants='" + getMaxCohabitants() + "'" +
-            ", userId='" + getUserId() + "'"+
+            ", userId='" + getUser() + "'"+
             "}";
     }
 
