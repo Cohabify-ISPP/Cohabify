@@ -9,17 +9,17 @@ import org.springframework.security.access.AccessDeniedException;
 import java.util.Optional;
 import java.util.NoSuchElementException;
 
-import org.ispp4.cohabify.utils.GlobalVariables;
+import org.ispp4.cohabify.utils.Global;
 import org.ispp4.cohabify.user.User;
 
 @Service
 public class UserAdvertisementService {
 
     private final UserAdvertisementRepository userAdvertisementRepository;
-    private final GlobalVariables globalVariables;
+    private final Global globalVariables;
 
     @Autowired
-    public UserAdvertisementService(UserAdvertisementRepository userAdvertisementRepository, GlobalVariables globalVariables) {
+    public UserAdvertisementService(UserAdvertisementRepository userAdvertisementRepository, Global globalVariables) {
         this.userAdvertisementRepository = userAdvertisementRepository;
         this.globalVariables = globalVariables;
     }
@@ -28,7 +28,7 @@ public class UserAdvertisementService {
     public void deleteUserAdvertisementById(ObjectId advertisementId) {
         
         Optional<UserAdvertisement> userAdvertisement = userAdvertisementRepository.findById(advertisementId);
-        User loggedInUser = globalVariables.getLoggedInUser();
+        User loggedInUser = globalVariables.getCurrentUser();
 
         if (userAdvertisement.isPresent()) {
 
@@ -46,5 +46,3 @@ public class UserAdvertisementService {
     }
 
 }
-
-
