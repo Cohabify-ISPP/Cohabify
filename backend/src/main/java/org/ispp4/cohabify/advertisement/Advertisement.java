@@ -20,7 +20,7 @@ import org.ispp4.cohabify.model.BaseEntity;
 
 @Getter
 @Setter
-@Document(collection = "advertisement")
+@Document(collection = "advertisements")
 public class Advertisement extends BaseEntity {
 
     @NotBlank
