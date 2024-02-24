@@ -28,7 +28,7 @@ public class User extends BaseEntity {
     private String password;
 
     @NotNull
-    private Boolean is_owner;
+    private Boolean isOwner;
     
     @NotNull
     @Size(max = 9)
@@ -51,13 +51,17 @@ public class User extends BaseEntity {
     private Plan plan;
     
     @NotNull
-    private Boolean is_verified;
+    private Boolean isVerified;
 
     @NotNull
     private List<String> Authorities;
-
+    
     public User() {
     
+    }
+
+    public Boolean isAdmin() {
+        return Authorities.contains("Admin");
     }
 
 }
