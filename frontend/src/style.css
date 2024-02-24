@@ -5,6 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
+  background-color: #fff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,7 +14,7 @@
 }
 
 html { 
-  background: url('/background.png') no-repeat center center fixed; 
+  background: url('/images/background.png') no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -84,14 +85,13 @@ button:focus-visible {
   line-height: 1.42857;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #28426B;
+.navbar-custom {
+  background-color: #28426b4a;
+  box-shadow: none;
 }
 
 #app {
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
   min-width: 100vw;
   min-height: 100vh;
