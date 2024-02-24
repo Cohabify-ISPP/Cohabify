@@ -1,17 +1,19 @@
 package org.ispp4.cohabify.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+
 
 public class BaseEntity {
 
     @Id
-    protected Integer id;
+    protected ObjectId id;
 
-    public Integer getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
