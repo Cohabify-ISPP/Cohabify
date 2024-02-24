@@ -6,14 +6,14 @@
   <div class="container d-flex align-items-center justify-content-center text-center my-5">
     <h1 color="#282828">Hora de buscar...</h1>
   </div>
-  <div class="d-flex flex-row justify-content-between align-items-center" style="max-width: 30%; margin-left: auto; margin-right: auto;">
-    <div class="d-flex flex-column align-items-center">
+  <div class="d-flex flex-row justify-content-center align-items-center">
+    <div class="d-flex flex-column align-items-center" style="padding-right: 2rem;">
       <button class="btn btn-primary btn-circle btn-xl">
         <i class="bi bi-houses h1"></i>
       </button>
       <b>Viviendas</b>
     </div>
-    <div class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column align-items-center" style="padding-left: 2rem;">
       <button class="btn btn-primary btn-circle btn-xl">
         <i class="bi bi-people h1"></i>
       </button>
