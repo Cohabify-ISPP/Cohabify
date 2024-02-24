@@ -18,7 +18,7 @@ project:
       name: 'Marina'
       surname: 'Calero López' 
       githubUsername: 'marcallop7'
-     member4:
+    member4:
         name: 'Guillermo'
         surname: 'Galeano de Paz' 
         githubUsername: 'guigalde'
