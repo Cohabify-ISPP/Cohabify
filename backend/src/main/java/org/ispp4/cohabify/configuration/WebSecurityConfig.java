@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,8 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.OPTIONS).permitAll()
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+					.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.GET, "^/user/[0-9a-fA-F]+$"))
+						.authenticated() 
 					.anyRequest().denyAll() 
 			)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
