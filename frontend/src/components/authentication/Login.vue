@@ -3,8 +3,8 @@
 
     <div class="login-container">
 
-        <img src="/images/LogoCohabify.png" class="img-fluid rounded-start" alt="..." style="max-width: 400px; padding-bottom: 2%;">
-        <h1>Iniciar sesión</h1>
+        <img src="/images/LogoCohabify.png" class="img-fluid rounded-start" alt="..." style="max-width: 400px; padding-top: 30px; padding-bottom: 2%;">
+        <h1 >Iniciar sesión</h1>
 
         <div class="card mt-5">
             <h3 style="color: white; padding-bottom: 10px;">Usuario</h3>
