@@ -4,11 +4,12 @@ import org.ispp4.cohabify.dto.LoginRequest;
 import org.ispp4.cohabify.dto.UserDto;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +37,13 @@ public class AuthenticationController {
 		
 		String jwt = jwtService.generateToken(user);
 		
-		return ResponseEntity.ok(UserDto.builder().user(user).token(jwt).build());
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.SET_COOKIE, 
+			"Authentication=" + jwt + "; Max-Age=604800; Path=/; Secure; HttpOnly");
+		
+		return ResponseEntity.status(HttpStatus.OK)
+							 .headers(headers)
+							 .body(UserDto.builder().user(user).token(jwt).build());
 	}
 	
 }
