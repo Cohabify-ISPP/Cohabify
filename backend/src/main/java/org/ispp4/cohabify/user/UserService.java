@@ -17,4 +17,8 @@ public class UserService {
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElse(null);
     }
+
+	public User save(User user) {
+		return userRepository.save(user);
+	}
 }
