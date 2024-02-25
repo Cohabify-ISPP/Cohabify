@@ -15,13 +15,13 @@
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
-              <input type="text" class="form-control" id="phone" v-model="phone" placeholder="XXXXXXXXX">
+              <input type="tel"  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" id="phone" v-model="phone" placeholder="XXX-XXX-XXX">
             </div>
           </div>
           <div class="col-md-6" style="padding-inline: 20px;">
             <div class="form-group" style="padding: 20px;">
               <label for="email" class="form-label text-white fw-bold">Email</label>
-              <input type="text" class="form-control" id="email" v-model="email" placeholder="email">
+              <input type="email" class="form-control" id="email" v-model="email" placeholder="email">
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="password" class="form-label text-white fw-bold">Contraseña</label>
@@ -52,13 +52,44 @@ import { ref } from 'vue'
 
 export default {
     setup() {
+        const name = ref('')
         const username = ref('')
         const email = ref('')
+        const phone = ref('')
         const password = ref('')
+        const confirmPassword = ref('')
 
         const register = () => {
-            // TODO: Lógica de registro
-        }
+            const data = {
+                name: name.value,
+                username: username.value,
+                email: email.value,
+                phone: phone.value,
+                password: password.value,
+                confirmPassword: confirmPassword.value
+            }
+            if (password.value !== confirmPassword.value) {
+                alert('Las contraseñas no coinciden')
+            }else{
+                fetch(import.meta.env.VITE_BACKEND_URL + '/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        name: data.name,
+                        username: data.username,
+                        email: data.email,
+                        phone: data.phone,
+                        password: data.password
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(jsonData => window.location.href = '/login')
+                    .catch(error => console.error('Error al enviar datos al backend:', error));
+              }
+            };
 
         return {
             username,

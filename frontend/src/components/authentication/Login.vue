@@ -1,28 +1,33 @@
 <template>
-
-
-    <div class="login-container">
-
+    <div class="container d-flex justify-content-center align-items-center  vh-100">
+      <div class="text-center">
         <img src="/images/LogoCohabify.png" class="img-fluid rounded-start" alt="..." style="max-width: 400px; padding-top: 30px; padding-bottom: 2%;">
-        <h1 >Iniciar sesión</h1>
-
-        <div class="card mt-5">
-            <h3 style="color: white; padding-bottom: 10px;">Usuario</h3>
-            <input style="width: 300px; align-self: center;" type="text" v-model="username" placeholder="Usuario" />
-            <h3 style="color: white; padding-top: 10px; padding-bottom: 10px;">Contraseña</h3>
-            <input style="width: 300px; align-self: center;" type="password" v-model="password" placeholder="Contraseña" />
-            <div style="padding-top: 30px; padding-bottom: 10px;">
+        <h1>Iniciar sesión</h1>
+        <div class="card">
+        <form class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="form-group" style="padding: 20px;">
+              <label for="username" class="form-label text-white fw-bold">Nombre de usuario</label>
+              <input type="text" class="form-control" id="username" v-model="username" placeholder="Nombre de usuario">
+            </div>
+            <div class="form-group" style="padding: 20px;">
+              <label for="password" class="form-label text-white fw-bold">Contraseña</label>
+              <input type="password" class="form-control" id="password" v-model="password" placeholder="Contraseña">
+            </div>
+            <div class="form-group" style="padding: 20px;">
                 <button class="btn-primary" @click="login">Iniciar sesión</button>
             </div>
+            </div>
+        </form>
         </div>
-
         <div>
-            <h3 style="color: rgb(0, 0, 0); padding-top: 10%;">¿No tienes cuenta?</h3>
-            <router-link to="/register">Regístrate</router-link>
+          <h3 style="color: rgb(0, 0, 0); padding-top: 10%;">¿No tienes cuenta?</h3>
+          <router-link to="/register">Regístrate</router-link>
         </div>
-        
+      </div>
     </div>
-</template>
+  </template>
+  
 
 
 <script>
@@ -36,18 +41,19 @@
                     username: username.value,
                     password: password.value,
                 }
-                fetch('/auth/login', {
+                fetch(import.meta.env.VITE_BACKEND_URL + '/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include',
                     body: JSON.stringify({
                         username: data.username,
                         password: data.password,
                     }),
                 })
                     .then(response => response.json())
-                    .then(jsonData => console.log('Respuesta del backend:', jsonData))
+                    .then(jsonData => window.location.href = '/')
                     .catch(error => console.error('Error al enviar datos al backend:', error));
             };
 
