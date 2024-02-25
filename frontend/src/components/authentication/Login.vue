@@ -4,7 +4,7 @@
     <div class="login-container">
         <h1>{{ msg }}</h1>
 
-        <img src="/LogoCohabify.png" class="img-fluid rounded-start" alt="..." style="max-width: 400px; padding-bottom: 2%;">
+        <img src="/images/LogoCohabify.png" class="img-fluid rounded-start" alt="..." style="max-width: 400px; padding-bottom: 2%;">
 
         <div class="card mt-5">
             <h3 style="color: white; padding-bottom: 10px;">Iniciar sesión</h3>
@@ -34,7 +34,24 @@ export default {
     },
     methods: {
         login() {
-            //TODO: Implementar lógica de inicio de sesión
+            const data = {
+                username: this.username,
+                password: this.password,
+            };
+            console.log(data);
+            fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: data.username,
+                    password: data.password,
+                }),
+                })
+                .then(response => response.json())
+                .then(data => console.log('Respuesta del backend:', data))
+                .catch(error => console.error('Error al enviar datos al backend:', error));
         },
     },
 };
