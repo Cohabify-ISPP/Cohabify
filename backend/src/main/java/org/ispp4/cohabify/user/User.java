@@ -1,6 +1,11 @@
 package org.ispp4.cohabify.user;
 
+import java.util.List;
+
+import org.ispp4.cohabify.model.BaseEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -8,10 +13,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
-
-import org.ispp4.cohabify.model.BaseEntity;
 
 @Getter
 @Setter
@@ -24,6 +25,7 @@ public class User extends BaseEntity {
     
     @NotNull
     @Size(max = 255)
+    @JsonIgnore
     private String password;
 
     @NotNull
