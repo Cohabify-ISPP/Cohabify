@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import jakarta.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.ispp4.cohabify.model.BaseEntity;
@@ -36,8 +37,11 @@ public class User extends BaseEntity {
     @Email
     private String email;
     
-    @NotNull
-    private Tag tag;
+
+    // TODO: relacion onetomany hacia la entidad tag
+    // @NotNull
+    // @OneToMany
+    //private Tag tag;
     
     @NotNull
     @Size(max = 255)
@@ -47,7 +51,7 @@ public class User extends BaseEntity {
     private Plan plan;
     
     @NotNull
-    private Boolean is_verified;
+    private Boolean isVerified;
 
     public User() {
     
