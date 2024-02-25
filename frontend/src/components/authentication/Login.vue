@@ -2,12 +2,12 @@
 
 
     <div class="login-container">
-        <h1>{{ msg }}</h1>
 
         <img src="/images/LogoCohabify.png" class="img-fluid rounded-start" alt="..." style="max-width: 400px; padding-bottom: 2%;">
+        <h1>Iniciar sesión</h1>
 
         <div class="card mt-5">
-            <h3 style="color: white; padding-bottom: 10px;">Iniciar sesión</h3>
+            <h3 style="color: white; padding-bottom: 10px;">Usuario</h3>
             <input style="width: 300px; align-self: center;" type="text" v-model="username" placeholder="Usuario" />
             <h3 style="color: white; padding-top: 10px; padding-bottom: 10px;">Contraseña</h3>
             <input style="width: 300px; align-self: center;" type="password" v-model="password" placeholder="Contraseña" />
@@ -24,47 +24,44 @@
     </div>
 </template>
 
+
 <script>
-export default {
-    data() {
-        return {
-            username: '',
-            password: '',
-        };
-    },
-    methods: {
-        login() {
-            const data = {
-                username: this.username,
-                password: this.password,
-            };
-            console.log(data);
-            fetch('/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: data.username,
-                    password: data.password,
-                }),
+    import { ref } from 'vue'
+    export default {
+        setup() {
+            const username = ref('')
+            const password = ref('')
+            const login = () => {
+                const data = {
+                    username: username.value,
+                    password: password.value,
+                }
+                fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: data.username,
+                        password: data.password,
+                    }),
                 })
-                .then(response => response.json())
-                .then(data => console.log('Respuesta del backend:', data))
-                .catch(error => console.error('Error al enviar datos al backend:', error));
-        },
-    },
-};
+                    .then(response => response.json())
+                    .then(jsonData => console.log('Respuesta del backend:', jsonData))
+                    .catch(error => console.error('Error al enviar datos al backend:', error));
+            };
+
+            return {
+                username,
+                password,
+                login,
+            }
+        }
+    }
 </script>
 
 <style scoped>
-.login-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-}
+
 
 .card {
     padding-top: 40px;
