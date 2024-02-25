@@ -103,6 +103,22 @@ button:focus-visible {
   box-shadow: none;
 }
 
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 #app {
   margin: 0 auto;
   text-align: center;
