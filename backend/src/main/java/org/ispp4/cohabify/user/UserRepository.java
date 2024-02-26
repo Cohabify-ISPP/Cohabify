@@ -8,7 +8,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<User, ObjectId> {
 
-    Optional<User> findByUsername(String username);
+    List<User> findByUsername(String username);
+
+    List<User> findByIsOwner(Boolean isOwner); 
 
     List<User> findAll();
 

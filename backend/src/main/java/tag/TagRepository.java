@@ -8,7 +8,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface TagRepository extends MongoRepository<Tag, ObjectId> {
 
-    Optional<Tag> findByTagname(String username);
+    List<Tag> findByTag(String tag);
+
+    List<Tag> findByTagType(TagType tagtype);
 
     List<Tag> findAll();
 

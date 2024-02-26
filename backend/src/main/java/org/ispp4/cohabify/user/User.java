@@ -2,6 +2,8 @@ package org.ispp4.cohabify.user;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -9,6 +11,10 @@ import jakarta.validation.constraints.Size;
 import jakarta.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
+import tag.Tag;
+
+import java.util.List;
+
 import org.ispp4.cohabify.model.BaseEntity;
 
 @Getter
@@ -25,7 +31,7 @@ public class User extends BaseEntity {
     private String password;
 
     @NotNull
-    private Boolean is_owner;
+    private Boolean isOwner;
     
     @NotNull
     @Size(max = 9)
@@ -37,11 +43,8 @@ public class User extends BaseEntity {
     @Email
     private String email;
     
-
-    // TODO: relacion onetomany hacia la entidad tag
-    // @NotNull
-    // @OneToMany
-    //private Tag tag;
+    @NotNull
+    private List<Tag> tag;
     
     @NotNull
     @Size(max = 255)
@@ -53,8 +56,15 @@ public class User extends BaseEntity {
     @NotNull
     private Boolean isVerified;
 
+    @NotNull
+    private List<String> authorities;
+    
     public User() {
     
+    }
+
+    public Boolean isAdmin() {
+        return this.authorities.contains("Admin");
     }
 
 }
