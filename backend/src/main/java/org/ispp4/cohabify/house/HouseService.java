@@ -2,8 +2,6 @@ package org.ispp4.cohabify.house;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,31 +16,26 @@ public class HouseService {
         this.houseRepository = houseRepository;
     }
 
-    public ResponseEntity<List<House>> getAllHouses() {
+    public List<House> getAllHouses() {
         List<House> houses = houseRepository.findAll();
-        return new ResponseEntity<>(houses, HttpStatus.OK);
+        return houses;
     }
 
-    public ResponseEntity<House> getHouseById(ObjectId id) {
-        return houseRepository.findById(id)
-                .map(house -> new ResponseEntity<>(house, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public House getHouseById(ObjectId id) {
+        return houseRepository.findById(id).orElse(null);
     }
 
-    public ResponseEntity<House> saveHouse(House house) {
+    public House saveHouse(House house) {
         House savedHouse = houseRepository.save(house);
-        return new ResponseEntity<>(savedHouse, HttpStatus.CREATED);
+        return savedHouse;
     }
 
-    public ResponseEntity<Void> deleteHouse(ObjectId id) {
+    public void deleteHouse(ObjectId id) {
         houseRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<House> getHouseByCadastre(int cadastre) {
-        return houseRepository.findByCadastre(cadastre)
-                .map(house -> new ResponseEntity<>(house, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public House getHouseByCadastre(int cadastre) {
+        return houseRepository.findByCadastre(cadastre).orElse(null);
     }
     
 }
