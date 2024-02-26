@@ -21,54 +21,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserRepository userRepository;
+    private UserService userService;
 
-    
-  
-    @PostMapping("/users")
+    @PostMapping("/add")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
             if (user.getUsername() == null || user.getDescription() == null || user.getPhone() == null || user.getEmail() == null || user.getPassword() == null || user.getPlan() == null || user.getIsVerified() == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             
-            User newUser = userRepository.save(user);
+            User newUser = userService.save(user);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/allusers")
-    public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String user) {
+    @GetMapping("/list")
+    public ResponseEntity<List<User>> getAllUsers() {
         try {
-            List<User> users = new ArrayList<User>();
-
-            if (user == null)
-                userRepository.findAll().forEach(users::add);
-            else
-                userRepository.findByUsername(user).forEach(users::add);
-
-            if (users.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            List<User> users = userService.findAll();
+            if (users != null && !users.isEmpty()){
+                return new ResponseEntity<>(users, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
-
-            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") ObjectId id) {
-        Optional<User> userData = userRepository.findById(id);
+        Optional<User> userData = userService.findById(id);
 
         if (userData.isPresent()) {
             return new ResponseEntity<>(userData.get(), HttpStatus.OK);
@@ -77,10 +70,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/owners")
+    @GetMapping("/owners")
     public ResponseEntity<List<User>> findOwners() {
       try {
-        List<User> users = userRepository.findByIsOwner(true);
+        List<User> users = userService.findByIsOwner(true);
     
         if (users.isEmpty()) {
           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -91,9 +84,9 @@ public class UserController {
       }
     }
 
-    @PutMapping("/users/update/{id}")
+    @PutMapping("update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") ObjectId id, @Valid @RequestBody User user) {
-        Optional<User> userData = userRepository.findById(id);
+        Optional<User> userData = userService.findById(id);
 
         if (userData.isPresent()) {
             User _user = userData.get();
@@ -108,29 +101,20 @@ public class UserController {
             _user.setIsVerified(user.getIsVerified());
             _user.setAuthorities(user.getAuthorities());
 
-            return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+            return new ResponseEntity<>(userService.save(_user), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @DeleteMapping("/user/delete/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") ObjectId id) {
         try {
-            userRepository.deleteById(id);
+            userService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/delete/all")
-    public ResponseEntity<HttpStatus> deleteAllUsers() {
-        try {
-            userRepository.deleteAll();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }
