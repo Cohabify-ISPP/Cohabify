@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #fff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,13 +13,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html { 
+  background: url('/images/background.png') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #28426b;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #28426b;
 }
 
 body {
@@ -28,6 +36,10 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+.bg-custom {
+  background-color: #ffffff00;
 }
 
 h1 {
@@ -54,26 +66,62 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.card {
-  padding: 2em;
+.btn-circle.btn-xl {
+  width: min(20vw, 130px); 
+  height: min(20vw, 130px);
+  padding: 10px 16px;
+  border-radius: 50%;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #28426B;
+  border-color: #28426b;
+  transition: 0.1s;
+} 
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #475e84;
+  border-color: #28426B;
+}
+
+.navbar-custom {
+  background-color: #28426bf1;
+  box-shadow: none;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  min-width: 100vw;
+  min-height: 100vh;
 }
