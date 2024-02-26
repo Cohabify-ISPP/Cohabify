@@ -15,7 +15,7 @@
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
-              <input type="tel"  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" id="phone" v-model="phone" placeholder="XXX-XXX-XXX">
+              <input type="tel"  pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" class="form-control" id="phone" v-model="phone" placeholder="XXX-XXX-XXX">
             </div>
           </div>
           <div class="col-md-6" style="padding-inline: 20px;">
