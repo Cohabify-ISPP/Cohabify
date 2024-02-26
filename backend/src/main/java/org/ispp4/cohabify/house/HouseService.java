@@ -16,21 +16,21 @@ public class HouseService {
         this.houseRepository = houseRepository;
     }
 
-    public List<House> getAllHouses() {
+    public List<House> findAll() {
         List<House> houses = houseRepository.findAll();
         return houses;
     }
 
-    public House getHouseById(ObjectId id) {
+    public House findById(ObjectId id) {
         return houseRepository.findById(id).orElse(null);
     }
 
-    public House saveHouse(House house) {
+    public House save(House house) {
         House savedHouse = houseRepository.save(house);
         return savedHouse;
     }
 
-    public void deleteHouse(ObjectId id) {
+    public void deleteById(ObjectId id) {
         houseRepository.deleteById(id);
     }
 
