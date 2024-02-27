@@ -6,7 +6,13 @@ export default {
     setup() {
 
         //props = ['id'];
-        const userAdvertisement = ref({ description: "Desc de prueba", minBudget: 123.4, maxBudget: 567.8, desiredLocation: "Street 123", entranceDate: "2021-12-12", exitDate: "2022-12-12", maxCohabitants: 3, likes: 19});
+        const userAdvertisement = ref({ description: "Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga ", 
+                                        minBudget: 123.4, maxBudget: 567.8, desiredLocation: "Street 123", entranceDate: "2021-12-12", 
+                                        exitDate: "2022-12-12", maxCohabitants: 3, likes: 19,
+                                        comments: [{user: "Usuario1", comment: "Comentario1"}, {user: "Usuario2", comment: "Comentario2"}, {user: "Usuario3", comment: "Comentario3"}, {user: "Usuario4", comment: "Comentario4"}, {user: "Usuario5", comment: "Comentario5"}, {user: "Usuario6", comment: "Comentario6"}, {user: "Usuario7", comment: "Comentario7"}, {user: "Usuario8", comment: "Comentario8"}, {user: "Usuario9", comment: "Comentario9"}, {user: "Usuario10", comment: "Comentario10"}]});
+        const user = ref({ name: "Nombre de prueba", gender: "Masculino", photo: "https://via.placeholder.com/200", 
+                        etiquetas: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10"]})
+
         /*
         const fetchData = async () => {
             try {
@@ -26,8 +32,8 @@ export default {
         };
         */
         
-
         return {
+            user,
             userAdvertisement,
         }
     }
@@ -38,13 +44,9 @@ export default {
 
     <Navbar />
 
-    <div class="contenedor d-flex align-items-center justify-content-center text-center my-5">
-        <div class="logo">
-            <h2>Aquí logo</h2>
-        </div>
-            
+    <div class="contenedor d-flex align-items-center justify-content-center text-center my-5">            
         <div class="panel">
-            <div class="fila">
+            <div class="columna">
                 <div class="subseccion">
                     <div class="rectangulo">
                         <div class="imagen-circulo">
@@ -60,18 +62,36 @@ export default {
                         <button type="button" class="boton"><strong>Comentar</strong></button>
                         <button type="button" class="boton"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                     </div>
-
                 </div>
                 
-                <div class="subseccion">
-
-
+                <div style="overflow-y: auto;" class="subseccion">
+                    <h5 style="color:#5D5E60; text-align: left;">Comentarios</h5>
+                    
+                    <div v-for="comentario in userAdvertisement.comments" :key="comentario">
+                        <div class="comentario"> {{ comentario.comment }} </div>
+                   </div>
                 </div>
             </div>
-            <div class="fila">
-                <div class="subseccion">3</div>
-                <div class="subseccion">4</div>
+
+            <div class="columna">
+                <div class="subseccion">
+                    <h3 style="text-align: left;"> {{ user.name }}</h3>
+
+                    <h5 style="color:#5D5E60; text-align: left;">Etiquetas</h5> 
+                    <div style="display: inline-flex;" v-for="etiqueta in user.etiquetas" :key="etiqueta">
+                        <span class="etiqueta"> {{ etiqueta }} </span>
+                    </div>
+
+                    <h5 style="color:#5D5E60; text-align: left;">Género</h5> 
+                    <p style="text-align: left; font-weight: bold;">{{ user.gender }} </p>
+
+                    <h5 style="text-align: left;">Descripción</h5>
+                    <p style="text-align:left;">{{ userAdvertisement.description }}</p>
+                </div>
+
+                <div class="subseccion">2</div>
             </div>
+        
         </div>
     </div>
 
@@ -89,22 +109,22 @@ export default {
     align-items: center;
 }
 
-.logo {
-    width: 15%;
-    align-self: self-start;
-}
-
 .panel {
     height: 100%;
+    max-width: 100%;
     display: flex;
     flex: 1;
-    flex-direction: column;
 }
 
-.fila {
+.columna {
     display: flex;
+    height: auto;
+    flex-direction: column;
     flex: 1;
     border: 1px solid #20b318;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 5px;
 }
 
 .subseccion {
@@ -112,9 +132,10 @@ export default {
     align-self: center;
     padding: 10px;
     width: 95%;
-    height: 95%;
+    height: auto;
     margin: 1%;
-    border: 1px solid #b31818;
+    align-self: center;
+    border: 1px solid #b31818; 
 }
 
 .rectangulo {
@@ -167,13 +188,41 @@ export default {
     margin-left: 5px; 
     background-color:#28426B;
     border-radius: 10px;
-    width: 145px;
-    height: 40px
+    width: 32%;
+    height: 40px;
 }
 
 .boton strong {
     display: flex;
     align-items: center;
+}
+
+.etiqueta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 7px; 
+    margin-top: 5px;
+    background-color:#28426B;
+    border-radius: 10px;
+    width: auto;
+    height: 40px;
+    color: white;
+    border: 2px solid #28426B;
+}
+
+.comentario {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 7px; 
+    margin-top: 5px;
+    background-color:#859FC4;
+    border-radius: 10px;
+    width: auto;
+    height: 40px;
+    color: black;
+    border: 2px solid #859FC4;
 }
 
 </style>
