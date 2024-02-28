@@ -5,7 +5,6 @@ export default {
     
     setup() {
 
-        //props = ['id'];
         const userAdvertisement = ref({ description: "Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga ", 
                                         minBudget: 123.4, maxBudget: 567.8, desiredLocation: "Street 123", entranceDate: "2021-12-12", 
                                         exitDate: "2022-12-12", maxCohabitants: 3, likes: 19,
@@ -22,7 +21,12 @@ export default {
         const user = ref({ name: "Nombre de prueba", gender: "Masculino", photo: "https://via.placeholder.com/200", 
                         etiquetas: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10"]})
 
+        //TODO: Fetch data from API
+
         /*
+
+        props = ['id'];
+
         const fetchData = async () => {
             try {
                 const response = await fetch(import.meta.env.VITE_API_URL + `/userAdvertisment/${id}`,
