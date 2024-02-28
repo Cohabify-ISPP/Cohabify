@@ -49,7 +49,7 @@ public class House extends BaseEntity{
 
     @NotNull
     @Size(min=20, max = 20)
-    private int cadastre;
+    private Long cadastre;
 
     //TODO: Add tags  
 

@@ -1,4 +1,4 @@
-package org.ispp4.cohabify.advertisement;
+package org.ispp4.cohabify.houseAdvertisement;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,8 +19,8 @@ import org.ispp4.cohabify.model.BaseEntity;
 
 @Getter
 @Setter
-@Document(collection = "advertisements")
-public class Advertisement extends BaseEntity {
+@Document(collection = "houseAdvertisements")
+public class HouseAdvertisement extends BaseEntity {
 
     @NotBlank
     @Size(min = 1, max = 100)
