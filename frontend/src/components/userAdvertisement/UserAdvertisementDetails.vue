@@ -57,7 +57,7 @@ export default {
 
     <Navbar />
 
-    <div class="contenedor d-flex align-items-center justify-content-center text-center my-5">            
+    <div class="contenedor d-flex align-items-center justify-content-center text-center">            
         <div class="panel">
             <div class="columna">
                 <div class="subseccion">
