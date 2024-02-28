@@ -61,7 +61,7 @@ export default {
                         <img :src= user.photo alt = "Imagen de perfil">
                     </div>
 
-                    <div class ="botones">
+                    <div class ="botones" style="margin-top: 3%;">
                         <div class="likes">
                             <i class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
                             <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.likes }} </span>
