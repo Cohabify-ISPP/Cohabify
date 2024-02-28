@@ -40,10 +40,6 @@ public class UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
-	public User save(User user) {
-		return userRepository.save(user);
-	}
-
 	public List<User> findByIsOwner(Boolean owner) {
 	  return userRepository.findByIsOwner(owner);
 	}
