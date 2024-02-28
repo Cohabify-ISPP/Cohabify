@@ -8,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,12 +36,31 @@ public class HouseAdvertisementController {
     }
 
     @GetMapping("/advertisements/{id}")
-    public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
-        Optional<HouseAdvertisement> advertisement = advertisementService.findById(new ObjectId(id));
+    public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable ObjectId id) {
+        Optional<HouseAdvertisement> advertisement = advertisementService.findById(id);
         if(advertisement.isPresent()){
             return new ResponseEntity<>(advertisement.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/advertisements")
+    public ResponseEntity<HouseAdvertisement> createAdvertisement(HouseAdvertisement advertisement) {
+        HouseAdvertisement newAdvertisement = advertisementService.save(advertisement);
+        return new ResponseEntity<>(newAdvertisement, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/advertisements/{id}")
+    public ResponseEntity<HouseAdvertisement> updateAdvertisement(@PathVariable ObjectId id, @RequestBody HouseAdvertisement advertisement) {
+        HouseAdvertisement updatedAdvertisement = advertisementService.update(id, advertisement);
+        return new ResponseEntity<>(updatedAdvertisement, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/advertisements/{id}")
+    public ResponseEntity<Void> deleteAdvertisement(@PathVariable ObjectId id) {
+        advertisementService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
+

@@ -28,6 +28,25 @@ public class HouseAdvertisementService {
     public HouseAdvertisement save(HouseAdvertisement advertisement) {
         return (HouseAdvertisement) advertisementRepository.save(advertisement);
     }
+    
+    public HouseAdvertisement update(ObjectId id, HouseAdvertisement advertisement) {
+        Optional<HouseAdvertisement> existingAdvertisement = advertisementRepository.findById(id);
+        if (existingAdvertisement.isPresent()) {
+            HouseAdvertisement adv = existingAdvertisement.get();
+
+            adv.setTitle(advertisement.getTitle());
+            adv.setDescription(advertisement.getDescription());
+            adv.setPrice(advertisement.getPrice());
+            adv.setImages(advertisement.getImages());
+            adv.setTenants(advertisement.getTenants());
+            adv.setHouse(advertisement.getHouse());
+
+            return advertisementRepository.save(adv);
+        } else {
+            return advertisementRepository.save(advertisement);
+        }
+}
+
 
     public void deleteById(ObjectId id) {
         advertisementRepository.deleteById(id);
