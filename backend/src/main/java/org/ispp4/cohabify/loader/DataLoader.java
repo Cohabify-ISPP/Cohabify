@@ -1,39 +1,29 @@
 package org.ispp4.cohabify.loader;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.ispp4.cohabify.tag.Tag;
+import org.ispp4.cohabify.tag.TagRepository;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.Arrays;
-import java.util.List;
+import lombok.AllArgsConstructor;
 
 @Component
+@AllArgsConstructor
 public class DataLoader implements ApplicationRunner {
 
-    private final UserRepository userRepository;
-
-    @Autowired
-    public DataLoader(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
+    private TagRepository tagRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -42,15 +32,26 @@ public class DataLoader implements ApplicationRunner {
 
         // Lee los datos del archivo JSON
         ObjectMapper objectMapper = new ObjectMapper();
-        List<User> usersToInsert = Arrays.asList(objectMapper.readValue(resource.getInputStream(), User[].class));
+        JsonNode rootNode = objectMapper.readTree(resource.getInputStream());
 
-        // Elimina todos los datos existentes
         userRepository.deleteAll();
-
-        // Inserta los nuevos usuarios en la base de datos
-        userRepository.saveAll(usersToInsert);
+        tagRepository.deleteAll();
         
-        System.out.println(usersToInsert.size() + " usuarios insertados correctamente: "+usersToInsert.get(0).getUsername()+" y "+usersToInsert.get(1).getUsername());
+        // Procesa los usuarios
+        JsonNode usersNode = rootNode.get("users");
+        if (usersNode != null) {
+            List<User> usersToInsert = Arrays.asList(objectMapper.readValue(usersNode.toString(), User[].class));
+            userRepository.saveAll(usersToInsert);
+            System.out.println(usersToInsert.size() + " usuarios insertados correctamente.");
+        }
+
+        // Procesa las etiquetas
+        JsonNode tagsNode = rootNode.get("tags");
+        if (tagsNode != null) {
+            List<Tag> tagsToInsert = Arrays.asList(objectMapper.readValue(tagsNode.toString(), Tag[].class));
+            tagRepository.saveAll(tagsToInsert);
+            System.out.println(tagsToInsert.size() + " etiquetas insertadas correctamente.");
+        }
     }
 }
 

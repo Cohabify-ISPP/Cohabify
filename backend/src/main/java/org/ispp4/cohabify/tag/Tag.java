@@ -1,4 +1,4 @@
-package tag;
+package org.ispp4.cohabify.tag;
 
 import org.ispp4.cohabify.model.BaseEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,7 +20,7 @@ public class Tag extends BaseEntity{
 
   }
 
-  public Tag(String tag, tag.TagType tagType) {
+  public Tag(String tag, TagType tagType) {
     this.tag = tag;
     this.tagType = tagType;
   }

@@ -1,4 +1,5 @@
-[
+{
+  "users": [
     {
       "username": "admin",
       "password": "$2a$10$S/9Tn47FJ68fR7.tCKLqhelXOQbZbXmBOnzQqKqC97TPUHeIhOoim",
@@ -17,10 +18,29 @@
       "isOwner": false,
       "phone": "987654321",
       "email": "user2@example.com",
-      "tag": ["tag3", "tag4"],
+      "tag": ["tag1", "tag2"],
       "description": "Description for user 2",
       "plan": "Explorer",
       "isVerified": false,
       "authorities": ["User"]
     }
+  ],
+  "tags": [
+    {
+      "tag": "tag1",
+      "tagType": "USER_TAG"
+    },
+    {
+      "tag": "tag2",
+      "tagType": "USER_TAG"
+    },
+    {
+      "tag": "tag3",
+      "tagType": "USER_TAG"
+    },
+    {
+      "tag": "tag4",
+      "tagType": "USER_TAG"
+    }
   ]
+}

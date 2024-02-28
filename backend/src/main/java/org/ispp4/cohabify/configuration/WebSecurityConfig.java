@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +38,17 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.OPTIONS).permitAll()
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-					.requestMatchers(HttpMethod.GET,"/api/user/list","/api/user/{id}","/api/user/owners").permitAll()
-					.requestMatchers(HttpMethod.POST,"/api/user/add").permitAll()
-					.requestMatchers(HttpMethod.PUT,"/api/user/update/{id}").permitAll()
-					.requestMatchers(HttpMethod.DELETE,"/api/user/delete/{id}").permitAll()
+					.requestMatchers(HttpMethod.GET,"/api/user/list", "/api/user/owners").authenticated()
+					.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.GET, "^/api/user/[0-9a-fA-F]+$")).authenticated()
+					.requestMatchers(HttpMethod.POST,"/api/user/add").authenticated()
+					.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.PUT,"^/api/user/update/[0-9a-fA-F]+$")).authenticated()
+					.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.DELETE,"^/api/user/delete/[0-9a-fA-F]+$")).authenticated()
+					.requestMatchers(HttpMethod.GET,"/api/tag/list").authenticated()
+					.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.GET, "^/api/tag/[0-9a-fA-F]+$"),
+									 RegexRequestMatcher.regexMatcher(HttpMethod.GET, "^/api/tag/types/[0-9a-zA-Z_]+$")).authenticated()
+					.requestMatchers(HttpMethod.POST,"/api/tag/add").authenticated()
+					.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.PUT,"^/api/tag/update/[0-9a-fA-F]+$")).authenticated()
+					.requestMatchers(RegexRequestMatcher.regexMatcher(HttpMethod.DELETE,"^/api/tag/delete/[0-9a-fA-F]+$")).authenticated()
 					.anyRequest().denyAll() 
 			)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

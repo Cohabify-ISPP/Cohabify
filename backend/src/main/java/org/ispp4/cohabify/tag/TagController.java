@@ -1,4 +1,4 @@
-package tag;
+package org.ispp4.cohabify.tag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/tag")
 public class TagController {
 
     @Autowired
     TagRepository tagRepository;
 
-    @PostMapping("/tags")
+    @PostMapping("/add")
     public ResponseEntity<Tag> createTag(@RequestBody Tag tag) {
         try {
             Tag _tag = tagRepository
@@ -36,7 +36,7 @@ public class TagController {
         }
     }
 
-    @GetMapping("/alltags")
+    @GetMapping("/list")
     public ResponseEntity<List<Tag>> getAllTags(@RequestParam(required = false) String tag) {
         try {
             List<Tag> tags = new ArrayList<Tag>();
@@ -56,7 +56,7 @@ public class TagController {
         }
     }
 
-    @GetMapping("/tags/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Tag> getTagById(@PathVariable("id") ObjectId id) {
         Optional<Tag> tagData = tagRepository.findById(id);
 
@@ -67,7 +67,7 @@ public class TagController {
         }
     }
 
-    @GetMapping("/tags/{tagtype}")
+    @GetMapping("/types/{tagtype}")
     public ResponseEntity<List<Tag>> findByTagType(@PathVariable("tagtype")TagType tagtype) {
         try {
             List<Tag> tags = tagRepository.findByTagType(tagtype);
@@ -81,7 +81,7 @@ public class TagController {
         }
     }
 
-    @PutMapping("/tags/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Tag> updateTag(@PathVariable("id") ObjectId id, @RequestBody Tag tag) {
         Optional<Tag> tagData = tagRepository.findById(id);
 
@@ -95,20 +95,10 @@ public class TagController {
         }
     }
 
-    @DeleteMapping("/tag/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteTag(@PathVariable("id") ObjectId id) {
         try {
             tagRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/delete/all")
-    public ResponseEntity<HttpStatus> deleteAllTags() {
-        try {
-            tagRepository.deleteAll();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

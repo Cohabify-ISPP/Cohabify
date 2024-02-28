@@ -3,9 +3,9 @@ package org.ispp4.cohabify.user;
 import java.util.List;
 
 import org.ispp4.cohabify.model.BaseEntity;
+import org.ispp4.cohabify.tag.Tag;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -15,7 +15,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import tag.Tag;
 
 @Getter
 @Setter
