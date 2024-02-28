@@ -122,6 +122,6 @@ button:focus-visible {
 #app {
   margin: 0 auto;
   text-align: center;
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: 95vw;
+  min-height: 95vh;
 }
