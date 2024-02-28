@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "$2a$10$S/9Tn47FJ68fR7.tCKLqhelXOQbZbXmBOnzQqKqC97TPUHeIhOoim",
+      "isOwner": true,
+      "phone": "123456789",
+      "email": "user1@example.com",
+      "tag": ["tag1", "tag2"],
+      "description": "Description for user 1",
+      "plan": "Basic",
+      "isVerified": true,
+      "authorities": ["Admin"]
+    },
+    {
+      "username": "user1",
+      "password": "$2a$10$PcN/V6liOTDpfQqjh0s6weo7vi8BGKXqYjtIYzp/m9ciP60CyCsQa",
+      "isOwner": false,
+      "phone": "987654321",
+      "email": "user2@example.com",
+      "tag": ["tag1", "tag2"],
+      "description": "Description for user 2",
+      "plan": "Explorer",
+      "isVerified": false,
+      "authorities": ["User"]
+    }
+  ],
+  "tags": [
+    {
+      "tag": "tag1",
+      "tagType": "USER_TAG"
+    },
+    {
+      "tag": "tag2",
+      "tagType": "USER_TAG"
+    },
+    {
+      "tag": "tag3",
+      "tagType": "USER_TAG"
+    },
+    {
+      "tag": "tag4",
+      "tagType": "USER_TAG"
+    }
+  ]
+}
