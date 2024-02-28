@@ -151,7 +151,6 @@ export default {
     height: auto;
     flex-direction: column;
     flex: 1;
-    border: 1px solid #20b318;
     overflow-y: auto;
     overflow-x: hidden;
     margin-bottom: 5px;
@@ -165,7 +164,6 @@ export default {
     height: auto;
     margin: 1%;
     align-self: center;
-    border: 1px solid #b31818; 
 }
 
 .imagen-circulo {
