@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.Optional;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.ispp4.cohabify.utils.Global;
@@ -22,6 +23,10 @@ public class UserAdvertisementService {
     public UserAdvertisementService(UserAdvertisementRepository userAdvertisementRepository, Global globalVariables) {
         this.userAdvertisementRepository = userAdvertisementRepository;
         this.globalVariables = globalVariables;
+    }
+
+    public List<UserAdvertisement> findAll() {
+        return userAdvertisementRepository.findAll();
     }
     
     @Transactional
