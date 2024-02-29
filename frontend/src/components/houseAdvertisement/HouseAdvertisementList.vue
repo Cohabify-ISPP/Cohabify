@@ -19,8 +19,10 @@ onMounted(() => {
     fetch('http://localhost:8080/api/houses')
         .then(response => response.json())
         .then(data => {
-            houses.value = data
-            isLoading.value = false
+            setTimeout(() => {
+                isLoading.value = false
+                houses.value = data
+            }, 500)
         })
         .catch(error => {
             isLoading.value = false
@@ -161,16 +163,16 @@ defineExpose({
                     <button class="btn btn-danger" @click="errors=[]; price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Limpiar filtros</button>
                 </div>
             </div>
-            <div class="col list-container">
+            <div class="col">
                 <div v-if="isLoading" class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
                 <div v-else-if="fetchError" class="alert alert-danger" role="alert">
                     {{ fetchError }}
                 </div>
-                <div v-else>
+                <div class="list-container" v-else>
                     <div class="list-item" v-for="house in houses" :key="house.id">
-                        
+                        <img src="/images/flat.jpg" alt="house" class="house-list-image">
                     </div>
                 </div>
             </div>

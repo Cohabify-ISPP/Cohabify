@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/advertisements/houses")
 public class HouseAdvertisementController {
     
     private final HouseAdvertisementService advertisementService;
@@ -25,13 +25,13 @@ public class HouseAdvertisementController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/advertisements")
+    @GetMapping("/")
     public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements() {
         List<HouseAdvertisement> advertisements = advertisementService.findAll();
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
-    @GetMapping("/advertisements/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
         Optional<HouseAdvertisement> advertisement = advertisementService.findById(new ObjectId(id));
         if(advertisement.isPresent()){

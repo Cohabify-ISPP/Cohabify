@@ -180,6 +180,12 @@ input[type=range]::-ms-fill-upper {
   margin-bottom: 20px;
 }
 
+.house-list-image {
+  height: 200px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
 #app {
   margin: 0 auto;
   text-align: center;
