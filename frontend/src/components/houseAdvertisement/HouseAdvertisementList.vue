@@ -141,7 +141,7 @@ defineExpose({
         </form>
         <div class="d-flex justify-content-between mb-2 mt-5">
             <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar filtros</button>
-            <button class="btn btn-danger" @click="price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Limpiar filtros</button>
+            <button class="btn btn-danger" @click="errors=[]; price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Limpiar filtros</button>
         </div>
     </div>
     <div class="col-10 list-container">
