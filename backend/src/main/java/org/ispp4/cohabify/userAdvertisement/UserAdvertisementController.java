@@ -1,9 +1,9 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +40,16 @@ public class UserAdvertisementController {
     public ResponseEntity<List<UserAdvertisement>> getAllUserAdvertisements() {
         List<UserAdvertisement> userAdvertisements = userAdvertisementService.findAll();
         return new ResponseEntity<>(userAdvertisements, HttpStatus.OK);
+    }
+
+	@GetMapping("/userAdvertisements/{id}")
+    public ResponseEntity<UserAdvertisement> getUserAdvertisement(@PathVariable String id) {
+        Optional<UserAdvertisement> userAd = userAdvertisementService.findById(new ObjectId(id));
+        if(userAd.isPresent()){
+            return new ResponseEntity<>(userAd.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     
 	@DeleteMapping("{userAdvertisementId}")

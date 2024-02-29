@@ -10,22 +10,26 @@ import java.util.Optional;
 import java.util.List;
 
 import org.ispp4.cohabify.utils.Global;
-import org.ispp4.cohabify.user.User;
+//import org.ispp4.cohabify.user.User;
 
 @Service
 public class UserAdvertisementService {
 
     private final UserAdvertisementRepository userAdvertisementRepository;
-    private final Global globalVariables;
+    //private final Global globalVariables;
 
     @Autowired
     public UserAdvertisementService(UserAdvertisementRepository userAdvertisementRepository, Global globalVariables) {
         this.userAdvertisementRepository = userAdvertisementRepository;
-        this.globalVariables = globalVariables;
+        //this.globalVariables = globalVariables;
     }
 
     public List<UserAdvertisement> findAll() {
         return userAdvertisementRepository.findAll();
+    }
+
+    public Optional<UserAdvertisement> findById(ObjectId id) {
+        return userAdvertisementRepository.findById(id);
     }
     
     @Transactional
