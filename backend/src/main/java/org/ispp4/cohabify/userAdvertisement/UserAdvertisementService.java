@@ -28,6 +28,10 @@ public class UserAdvertisementService {
     public List<UserAdvertisement> findAll() {
         return userAdvertisementRepository.findAll();
     }
+
+    public Optional<UserAdvertisement> findById(ObjectId id) {
+        return userAdvertisementRepository.findById(id);
+    }
     
     @Transactional
     public void deleteUserAdvertisementById(ObjectId advertisementId) {
