@@ -8,7 +8,7 @@ const routes = [
     { path: '/', component: Main },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
-    { path: '/viviendas', component: HouseAdvertisementList},
+    { path: '/houses', component: HouseAdvertisementList},
     { path: '/:pathMatch(.*)*', redirect: '/' }
 ];
   

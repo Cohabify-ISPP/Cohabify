@@ -119,6 +119,55 @@ button:focus-visible {
   height: 100vh;
 }
 
+input[type=range]::-webkit-slider-runnable-track {
+  background: #ddd;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background: #007bff;
+}
+
+input[type=range]::-moz-range-track {
+  background: #ddd;
+}
+
+input[type=range]::-moz-range-thumb {
+  background: #007bff;
+}
+
+input[type=range]::-ms-fill-lower {
+  background: #007bff;
+}
+
+input[type=range]::-ms-fill-upper {
+  background: #ddd;
+}
+
+.filter-column {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  padding: 1%;
+  height: 90vh;
+  background-color: #fffffff1;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  box-shadow: #1a1a1a 0px 0px 10px 0px;
+  justify-content: start;
+  text-align: left;
+  overflow: auto;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 #app {
   margin: 0 auto;
   text-align: center;
