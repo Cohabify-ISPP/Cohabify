@@ -1,6 +1,6 @@
 project:
-  name: 'ISPP-2024-04'
-  owner: '04'
+  name: 'ISPP-2024-L1-04'
+  owner: 'L1'
   teamId: '04'
   identities: {}
   notifications:
