@@ -37,7 +37,7 @@ public class WebSecurityConfig {
 					.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE).permitAll()
 					.requestMatchers(HttpMethod.OPTIONS).permitAll()
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**").permitAll()
-					.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").anonymous()
 					.requestMatchers("/api/**").permitAll()
 					.anyRequest().denyAll() 
 			)

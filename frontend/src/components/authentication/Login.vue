@@ -15,7 +15,7 @@
               <input type="password" class="form-control" id="password" v-model="password" placeholder="Contraseña">
             </div>
             <div class="form-group" style="padding: 20px;">
-                <button class="btn-primary" @click="login">Iniciar sesión</button>
+                <button type="button" class="btn-primary" @click="login">Iniciar sesión</button>
             </div>
             </div>
         </form>
