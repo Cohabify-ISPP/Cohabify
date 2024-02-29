@@ -15,7 +15,7 @@
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
-              <input type="tel"  pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" class="form-control" id="phone" v-model="phone" placeholder="XXX-XXX-XXX">
+              <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" class="form-control" id="phone" v-model="phone" placeholder="XXX-XXX-XXX">
             </div>
           </div>
           <div class="col-md-6" style="padding-inline: 20px;">
@@ -34,7 +34,7 @@
           </div>
   
           <div style="padding-top: 20px;">
-            <button class="btn-primary" @click="register">Registrarse</button>
+            <button type="button" class="btn-primary" @click="register">Registrarse</button>
           </div>
         </form>
       </div>
@@ -44,8 +44,7 @@
       </div>
     </div>
   </template>
-  
-  
+
 
 <script>
 import { ref } from 'vue'
@@ -70,7 +69,7 @@ export default {
             }
             if (password.value !== confirmPassword.value) {
                 alert('Las contraseñas no coinciden')
-            }else{
+            } else {
                 fetch(import.meta.env.VITE_BACKEND_URL + '/auth/register', {
                     method: 'POST',
                     headers: {
@@ -88,13 +87,16 @@ export default {
                     .then(response => response.json())
                     .then(jsonData => window.location.href = '/login')
                     .catch(error => console.error('Error al enviar datos al backend:', error));
-              }
-            };
+            }
+        };
 
         return {
+            name,
             username,
             email,
+            phone,
             password,
+            confirmPassword,
             register
         }
     }
