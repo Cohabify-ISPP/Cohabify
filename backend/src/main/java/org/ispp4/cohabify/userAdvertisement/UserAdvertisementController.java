@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
-
 @RestController
 @RequestMapping("/api/userAdvertisement")
 public class UserAdvertisementController {
@@ -42,7 +39,7 @@ public class UserAdvertisementController {
         return new ResponseEntity<>(userAdvertisements, HttpStatus.OK);
     }
 
-	@GetMapping("/userAdvertisements/{id}")
+	@GetMapping("{id}")
     public ResponseEntity<UserAdvertisement> getUserAdvertisement(@PathVariable String id) {
         Optional<UserAdvertisement> userAd = userAdvertisementService.findById(new ObjectId(id));
         if(userAd.isPresent()){
