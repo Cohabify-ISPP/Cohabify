@@ -170,20 +170,34 @@ input[type=range]::-ms-fill-upper {
   z-index: 2;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
   width: 70vw;
-  height: 200px;
+  max-height: 200px;
   background-color: #fffffff1;
   border-radius: 20px;
   box-shadow: #1a1a1a 0px 0px 10px 0px;
   margin-bottom: 20px;
+  transition: box-shadow 0.25s;
 }
 
-.house-list-image {
-  height: 200px;
+.list-item:hover {
+  box-shadow: #1a1a1a 0px 0px 20px 0px;
+  cursor: pointer;
+}
+
+.list-item-image {
+  max-height: 100%;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
+}
+
+.list-item-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: start;
+  align-items: start;
+  padding: 20px;
+  width: 100%;
 }
 
 #app {

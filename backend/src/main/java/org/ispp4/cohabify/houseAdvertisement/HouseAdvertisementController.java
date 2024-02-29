@@ -25,7 +25,7 @@ public class HouseAdvertisementController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements() {
         List<HouseAdvertisement> advertisements = advertisementService.findAll();
         return new ResponseEntity<>(advertisements, HttpStatus.OK);

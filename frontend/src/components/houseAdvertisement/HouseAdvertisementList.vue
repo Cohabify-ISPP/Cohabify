@@ -11,17 +11,22 @@ const maxBathrooms = ref(null)
 const minBedrooms = ref(null)
 const maxBedrooms = ref(null)
 const errors = ref(['priceVal'])
-const houses = ref([])
+const advertisements = ref([])
 const fetchError = ref(null)
 const isLoading = ref(true)
 
 onMounted(() => {
-    fetch('http://localhost:8080/api/houses')
-        .then(response => response.json())
+    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se han podido cargar las viviendas')
+            }
+            return response.json()
+        })
         .then(data => {
             setTimeout(() => {
                 isLoading.value = false
-                houses.value = data
+                advertisements.value = data
             }, 500)
         })
         .catch(error => {
@@ -171,8 +176,21 @@ defineExpose({
                     {{ fetchError }}
                 </div>
                 <div class="list-container" v-else>
-                    <div class="list-item" v-for="house in houses" :key="house.id">
-                        <img src="/images/flat.jpg" alt="house" class="house-list-image">
+                    <div class="list-item" v-for="advertisement in advertisements" :key="advertisement.id">
+                        <img src="/images/flat.jpg" alt="house" class="list-item-image">
+                        <div class="list-item-content">
+                            <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
+                                <h3>{{ advertisement.title }}</h3>
+                                <h3><b>{{ advertisement.price }}€/mes</b></h3>
+                            </div>
+                            <b>{{ advertisement.house.location }}</b>
+                            <div class="d-flex justify-content-between w-50 mt-2 h-100 align-items-center">
+                                <p>{{ advertisement.house.roomsNumber }} habitaciones</p>
+                                <p>{{ advertisement.house.bathroomsNumber }} baños</p>
+                                <p>{{ advertisement.house.area }}m²</p>
+                                <p>{{ advertisement.house.floor }} planta</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
