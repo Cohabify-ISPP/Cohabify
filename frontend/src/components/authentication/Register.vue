@@ -34,7 +34,7 @@
           </div>
   
           <div style="padding-top: 20px;">
-            <button class="btn-primary" @click="register">Registrarse</button>
+            <button type="button" class="btn-primary" @click="register">Registrarse</button>
           </div>
         </form>
       </div>
