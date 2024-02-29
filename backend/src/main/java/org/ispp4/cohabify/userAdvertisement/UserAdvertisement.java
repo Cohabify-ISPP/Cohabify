@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,11 +37,15 @@ public class UserAdvertisement extends BaseEntity {
     @NotNull
     private Integer maxCohabitants;
 
+    @NotNull
+    @PositiveOrZero
+    private Integer likes;
+
     @DBRef
     @NotNull
     private User user;
 
-    public UserAdvertisement(ObjectId id, String description, Double minBudget, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants) {
+    public UserAdvertisement(ObjectId id, String description, Double minBudget, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, Integer likes, User user) {
         this.id = id;
         this.description = description;
         this.minBudget = minBudget;
@@ -49,6 +54,8 @@ public class UserAdvertisement extends BaseEntity {
         this.entranceDate = entranceDate;
         this.exitDate = exitDate;
         this.maxCohabitants = maxCohabitants;
+        this.likes = likes;
+        this.user = user;
     }
 
     @Override
@@ -62,7 +69,8 @@ public class UserAdvertisement extends BaseEntity {
             ", entranceDate='" + getEntranceDate() + "'" +
             ", exitDate='" + getExitDate() + "'" +
             ", maxCohabitants='" + getMaxCohabitants() + "'" +
-            ", userId='" + getUser() + "'"+
+            ", likes='" + getLikes() + "'" +
+            ", user='" + getUser() + "'"+
             "}";
     }
 

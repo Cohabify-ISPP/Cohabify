@@ -7,15 +7,20 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@Controller
-@RequestMapping("/userAdvertisement")
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
+
+@RestController
+@RequestMapping("/api/userAdvertisement")
 public class UserAdvertisementController {
 
 	private UserAdvertisementService userAdvertisementService;
@@ -31,24 +36,29 @@ public class UserAdvertisementController {
 	}
 
 	@Transactional(readOnly = true)
-    @GetMapping("/userAdvertisement")
+    @GetMapping("")
     public ResponseEntity<List<UserAdvertisement>> getAllUserAdvertisements() {
         List<UserAdvertisement> userAdvertisements = userAdvertisementService.findAll();
         return new ResponseEntity<>(userAdvertisements, HttpStatus.OK);
     }
     
-	@GetMapping("/{userAdvertisementId}/delete")
-	public ModelAndView deleteCause(@PathVariable("userAdvertisementId") ObjectId userAdvertisementId) {
+	@DeleteMapping("{userAdvertisementId}")
+	public ResponseEntity<HttpStatus> deleteUserAdvertisement(@PathVariable("userAdvertisementId") ObjectId userAdvertisementId) {
 		try {
 			userAdvertisementService.deleteUserAdvertisementById(userAdvertisementId);
-			ModelAndView res = new ModelAndView("redirect:/userAdvertisement");
-			res.addObject("error", "El anuncio de usuario ha sido eliminado correctamente.");
-			return res;
-		
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
-			ModelAndView res = new ModelAndView("redirect:/userAdvertisement");
-			res.addObject("error", "Error al eliminar el anuncio de usuario.");
-			return res;
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	}
+
+	@PostMapping()
+	public ResponseEntity<UserAdvertisement> processCreationForm(@RequestBody UserAdvertisement userAdvertisement) {		
+		try {
+			UserAdvertisement res = userAdvertisementService.save(userAdvertisement);
+			return new ResponseEntity<UserAdvertisement>(res, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
