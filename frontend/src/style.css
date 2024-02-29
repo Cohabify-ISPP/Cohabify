@@ -5,6 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
+  background-color: #fff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,7 +14,7 @@
 }
 
 html { 
-  background: url('/background.png') no-repeat center center fixed; 
+  background: url('/images/background.png') no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -22,11 +23,11 @@ html {
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #28426b;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #28426b;
 }
 
 body {
@@ -87,11 +88,39 @@ button:focus-visible {
 .btn-primary {
   color: #fff;
   background-color: #28426B;
+  border-color: #28426b;
+  transition: 0.1s;
+} 
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #475e84;
+  border-color: #28426B;
+}
+
+.navbar-custom {
+  background-color: #28426bf1;
+  box-shadow: none;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 #app {
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
   min-width: 100vw;
   min-height: 100vh;
