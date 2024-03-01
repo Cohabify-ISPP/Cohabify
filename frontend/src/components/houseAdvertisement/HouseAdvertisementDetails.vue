@@ -11,7 +11,7 @@ export default {
                         {name: "Nombre de prueba", gender: "Hombre", photo: "https://via.placeholder.com/200", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                         etiquetas: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10"]}])
 
-        const houseAdvertisement = ref({ title:  "Nombre de prueba", price:"0€", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 
+        const houseAdvertisement = ref({ title:  "Nombre de prueba", price:"0", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 
         tenants: tenants, images: []});
         
         const house = ref({ location:"Zona desconocida", rooms:"20", bathrooms:"1",
@@ -42,7 +42,7 @@ export default {
 
         const fetchData = async () => {
             try {
-                const response = await fetch(import.meta.env.VITE_API_URL + `/userAdvertisment/${id}`,
+                const response = await fetch(import.meta.env.VITE_API_URL + `api/advertisements/${id}`,
                     {
                         method: "GET",
                         credentials: "include",
@@ -151,7 +151,7 @@ export default {
                             <i class="bi bi-share-fill" ></i>
                         </button>
                     </div>
-                    <h1 style="text-align: left;"> {{ houseAdvertisement.price }}</h1>
+                    <h1 style="text-align: left;"> {{ houseAdvertisement.price }}€</h1>
                     <transition name="fade">
                         <div v-show="clipboardMessage" class="alert alert-success alert-dismissible fade show" role="alert">
                             Enlace copiado al portapapeles.

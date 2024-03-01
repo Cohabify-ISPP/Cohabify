@@ -1,6 +1,9 @@
 package org.ispp4.cohabify.house;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 
@@ -13,7 +16,10 @@ import lombok.Setter;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.util.List;
+
 import org.ispp4.cohabify.model.BaseEntity;
+import org.ispp4.cohabify.tag.Tag;
 
 @Getter
 @Setter
@@ -49,8 +55,9 @@ public class House extends BaseEntity{
 
     @NotNull
     @Size(min=20, max = 20)
-    private Long cadastre;
+    private String cadastre;
 
-    //TODO: Add tags  
+    @DBRef
+    private List<Tag> tags;  
 
 }
