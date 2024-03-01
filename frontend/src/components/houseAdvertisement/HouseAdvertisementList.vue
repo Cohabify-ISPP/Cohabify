@@ -101,7 +101,7 @@ const applyFilters = () => {
                     <!-- Metros cuadrados -->
 
                     <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
-                        <h5>Min. Espacio</h5>
+                        <p>Min. Espacio</p>
                         <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="meters = 0">
                             <i class="bi bi-x-lg"></i>
                         </button>
@@ -112,7 +112,7 @@ const applyFilters = () => {
                     <!-- Vivienda vacía -->
 
                     <div class="mt-3">
-                        <h5>Vivienda vacía</h5>
+                        <p>Vivienda vacía</p>
                         <input type="checkbox" class="form-check-input" id="empty" v-model="empty" :class="{'is-invalid': errors.includes('empty')}">
                         <b style="margin-left: 10px;">{{ empty ? 'Sí' : 'No' }}</b>
                     </div>
@@ -121,7 +121,7 @@ const applyFilters = () => {
 
                     <div v-if="!empty">
                         <div class="mt-3 d-flex justify-content-between" :invalid="true" style="width: 100%; height: 30px;">
-                            <h5>Max. Inquilinos</h5>
+                            <p>Max. Inquilinos</p>
                             <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="tenants = 0">
                                 <i class="bi bi-x-lg"></i>
                             </button>
@@ -133,7 +133,7 @@ const applyFilters = () => {
                     <!-- Baños -->
 
                     <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
-                        <h5>Baños</h5>
+                        <p>Baños</p>
                         <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="minBathrooms = null; maxBathrooms = null">
                             <i class="bi bi-x-lg"></i>
                         </button>
@@ -147,7 +147,7 @@ const applyFilters = () => {
                     <!-- Habitaciones -->
 
                     <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
-                        <h5>Habitaciones</h5>
+                        <p>Habitaciones</p>
                         <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="minBedrooms = null; maxBedrooms = null">
                             <i class="bi bi-x-lg"></i>
                         </button>
