@@ -148,7 +148,8 @@ input[type=range]::-ms-fill-upper {
 .filter-column {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
+  border-bottom-right-radius: 20px;
   background-color: #fffffff1;
   box-shadow: #1a1a1a 0px 0px 10px 0px;
   justify-content: start;

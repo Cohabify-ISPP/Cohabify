@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineExpose, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import Navbar from '../Navbar.vue'
 
 const price = ref(0)
@@ -77,17 +77,13 @@ const applyFilters = () => {
 
 }
 
-defineExpose({
-  applyFilters
-})
-
 
 
 </script>
 <template>
     <navbar />
         <div class="row">
-            <div class="col-3 filter-column justify-content-between p-4">
+            <div class="col-3 filter-column p-4">
                 <form class="needs-validation" novalidate>
                     <h3>Filtros</h3>
                     <hr>
@@ -106,7 +102,7 @@ defineExpose({
                     <!-- Metros cuadrados -->
 
                     <div class="mt-4 d-flex justify-content-between">
-                        <h5>Min. Metros cuadrados</h5>
+                        <h5>Min. Espacio</h5>
                         <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="meters = 0">
                             <i class="bi bi-x-lg"></i>
                         </button>
@@ -163,7 +159,8 @@ defineExpose({
                         <input type="number" class="form-control" v-model="maxBedrooms" id="maxRoomsVal" :class="{'is-invalid': errors.includes('maxRoomsVal')}">
                     </div>
                 </form>
-                <div class="d-flex justify-content-between mb-2 mt-5">
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
                     <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar filtros</button>
                     <button class="btn btn-danger" @click="errors=[]; price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Limpiar filtros</button>
                 </div>
@@ -184,11 +181,23 @@ defineExpose({
                                 <h3><b>{{ advertisement.price }}€/mes</b></h3>
                             </div>
                             <b>{{ advertisement.house.location }}</b>
-                            <div class="d-flex justify-content-between w-50 mt-2 h-100 align-items-center">
-                                <p>{{ advertisement.house.roomsNumber }} habitaciones</p>
-                                <p>{{ advertisement.house.bathroomsNumber }} baños</p>
-                                <p>{{ advertisement.house.area }}m²</p>
-                                <p>{{ advertisement.house.floor }} planta</p>
+                            <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
+                                <div class="d-flex flex-column align-items-center">
+                                    <span class="material-icons">bed</span>
+                                    <p>{{ advertisement.house.roomsNumber }} dorm.</p>
+                                </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <span class="material-icons">shower</span>
+                                    <p>{{ advertisement.house.bathroomsNumber }} baños</p>
+                                </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <span class="material-icons">square_foot</span>
+                                    <p>{{ advertisement.house.area }} m²</p>
+                                </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <span class="material-symbols-outlined">floor</span>
+                                    <p>Planta {{ advertisement.house.floor }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
