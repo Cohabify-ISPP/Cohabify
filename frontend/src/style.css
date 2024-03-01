@@ -154,7 +154,8 @@ input[type=range]::-ms-fill-upper {
   box-shadow: #1a1a1a 0px 0px 10px 0px;
   justify-content: start;
   text-align: left;
-  overflow: auto;
+  max-height: 80vh;
+  overflow-y: scroll;
   position: sticky;
   top: 60px;
 }
@@ -165,7 +166,7 @@ input[type=range]::-ms-fill-upper {
   justify-content: start;
   align-items: center;
   height: 100%;
-  overflow: show;
+  overflow-y: show;
 }
 
 .list-item {

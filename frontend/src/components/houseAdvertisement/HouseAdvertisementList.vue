@@ -83,25 +83,24 @@ const applyFilters = () => {
 <template>
     <navbar />
         <div class="row">
-            <div class="col-3 filter-column p-4">
+            <div class="col-md-2 filter-column p-4">
                 <form class="needs-validation" novalidate>
-                    <h3>Filtros</h3>
-                    <hr>
-
                     <!-- Precio -->
 
-                    <div class="mt-4 d-flex justify-content-between" style="width: 100%;">
-                        <h5>Max. Precio</h5>
+                    <div class="d-flex justify-content-between" style="width: 100%; height: 30px;">
+                        <div>
+                            <p>Max. Precio</p>
+                        </div>
                         <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="price = 0">
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>
                     <input type="range" class="form-range" min="0" max="5000" step="50" v-model="price" id="priceVal" :class="{'is-invalid': errors.includes('priceVal')}">
-                    <b>{{ price == 0 ? '-' : price == 5000 ? '+ ' + price.toString() + '€' : '<= ' + price.toString() + '€' }}</b>
+                    <b>{{ price == 0 ? '-' : price == 5000 ? '+ ' + price.toString() + '€/mes' : '<= ' + price.toString() + '€/mes' }}</b>
 
                     <!-- Metros cuadrados -->
 
-                    <div class="mt-4 d-flex justify-content-between">
+                    <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
                         <h5>Min. Espacio</h5>
                         <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="meters = 0">
                             <i class="bi bi-x-lg"></i>
@@ -112,7 +111,7 @@ const applyFilters = () => {
 
                     <!-- Vivienda vacía -->
 
-                    <div class="mt-4">
+                    <div class="mt-3">
                         <h5>Vivienda vacía</h5>
                         <input type="checkbox" class="form-check-input" id="empty" v-model="empty" :class="{'is-invalid': errors.includes('empty')}">
                         <b style="margin-left: 10px;">{{ empty ? 'Sí' : 'No' }}</b>
@@ -121,7 +120,7 @@ const applyFilters = () => {
                     <!-- Inquilinos -->
 
                     <div v-if="!empty">
-                        <div class="mt-4 d-flex justify-content-between" :invalid="true">
+                        <div class="mt-3 d-flex justify-content-between" :invalid="true" style="width: 100%; height: 30px;">
                             <h5>Max. Inquilinos</h5>
                             <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="tenants = 0">
                                 <i class="bi bi-x-lg"></i>
@@ -133,7 +132,7 @@ const applyFilters = () => {
 
                     <!-- Baños -->
 
-                    <div class="mt-4 d-flex justify-content-between">
+                    <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
                         <h5>Baños</h5>
                         <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="minBathrooms = null; maxBathrooms = null">
                             <i class="bi bi-x-lg"></i>
@@ -147,7 +146,7 @@ const applyFilters = () => {
 
                     <!-- Habitaciones -->
 
-                    <div class="mt-4 d-flex justify-content-between">
+                    <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
                         <h5>Habitaciones</h5>
                         <button class="btn btn-danger btn-sm rounded-circle " @click.prevent="minBedrooms = null; maxBedrooms = null">
                             <i class="bi bi-x-lg"></i>
@@ -161,8 +160,8 @@ const applyFilters = () => {
                 </form>
                 <hr>
                 <div class="d-flex justify-content-between mb-2">
-                    <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar filtros</button>
-                    <button class="btn btn-danger" @click="errors=[]; price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Limpiar filtros</button>
+                    <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar</button>
+                    <button class="btn btn-danger" @click="errors=[]; price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
                 </div>
             </div>
             <div class="col">
@@ -173,7 +172,7 @@ const applyFilters = () => {
                     {{ fetchError }}
                 </div>
                 <div class="list-container mt-4" v-else>
-                    <div class="list-item" v-for="advertisement in advertisements" :key="advertisement.id">
+                    <div class="list-item mt-2" v-for="advertisement in advertisements" :key="advertisement.id">
                         <img src="/images/flat.jpg" alt="house" class="list-item-image">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
