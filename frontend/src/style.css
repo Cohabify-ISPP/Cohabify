@@ -100,8 +100,9 @@ button:focus-visible {
 }
 
 .navbar-custom {
-  background-color: #28426bf1;
+  background-color: #28426b;
   box-shadow: none;
+  height: 60px;
 }
 
 .login-container {
@@ -147,14 +148,14 @@ input[type=range]::-ms-fill-upper {
 .filter-column {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 100vh;
   background-color: #fffffff1;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
   box-shadow: #1a1a1a 0px 0px 10px 0px;
   justify-content: start;
   text-align: left;
   overflow: auto;
+  position: sticky;
+  top: 60px;
 }
 
 .list-container {

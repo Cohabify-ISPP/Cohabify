@@ -1,5 +1,5 @@
 <template>
-<nav class="navbar navbar-expand navbar-custom">
+<nav class="navbar navbar-expand navbar-custom sticky-top">
   <div class="container-fluid">
 
     <a class="navbar-brand mt-2 mt-lg-0" href="/">

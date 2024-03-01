@@ -86,8 +86,8 @@ defineExpose({
 </script>
 <template>
     <navbar />
-        <div class="row pt-4">
-            <div class="col-2 filter-column justify-content-between p-4">
+        <div class="row">
+            <div class="col-3 filter-column justify-content-between p-4">
                 <form class="needs-validation" novalidate>
                     <h3>Filtros</h3>
                     <hr>
@@ -175,7 +175,7 @@ defineExpose({
                 <div v-else-if="fetchError" class="alert alert-danger" role="alert">
                     {{ fetchError }}
                 </div>
-                <div class="list-container" v-else>
+                <div class="list-container mt-4" v-else>
                     <div class="list-item" v-for="advertisement in advertisements" :key="advertisement.id">
                         <img src="/images/flat.jpg" alt="house" class="list-item-image">
                         <div class="list-item-content">
