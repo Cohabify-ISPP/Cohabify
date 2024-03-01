@@ -1,129 +1,91 @@
+
 <script setup>
+import { ref } from 'vue'
 import Navbar from '../Navbar.vue'
-const img = '/images/uploadImage.png';
-</script>
 
-<template>
-  <Navbar />
-  <div class="container text-center my-5">
-    <div class="row">
-      <div class="col">
-        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img :src="img" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img :src="img" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img :src="img" class="d-block w-100" alt="...">
-              </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-      </div>
-      <div class="col">
-        <div class="container text-center">
-        <form @submit.prevent="submitForm">
-            <div class="mb-3">
-                <label for="title" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="title" v-model="advertisement.title">
-            </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Precio</label>
-                <input type="number" class="form-control" id="price" v-model="advertisement.price">
-            </div>
-            <div class="mb-3">
-                <label for="location" class="form-label">Ubicación</label>
-                <input type="text" class="form-control" id="location" v-model="advertisement.location">
-            </div>
-            <div class="row align-items-start">
-                    <div class="col">
-                        <label for="bedrooms" class="form-label">Habitaciones</label>
-                        <input type="number" class="form-control" id="bedrooms" v-model="advertisement.bedrooms">
-                    </div>
-                    <div class="col">
-                        <label for="bathrooms" class="form-label">Baños</label>
-                        <input type="number" class="form-control" id="bathrooms" v-model="advertisement.bathrooms">
-                    </div>
-                    <div class="col">
-                        <label for="squareMeters" class="form-label">Metros cuadrados</label>
-                        <input type="number" class="form-control" id="squareMeters" v-model="advertisement.squareMeters">
-                    </div>
-            </div>
-            <div class="row align-items-start">
-                    <div class="col">
-                        <label for="heatingGas" class="form-label">Calefacción de gas</label>
-                        <input type="checkbox" class="form-check-input" id="heatingGas" v-model="advertisement.heatingGas">
-                    </div>
-                    <div class="col">
-                        <label for="floors" class="form-label">Plantas</label>
-                        <input type="number" class="form-control" id="floors" v-model="advertisement.floors">
-                    </div>
-                    <div class="col">
-                        <label for="elevator" class="form-label">Ascensor</label>
-                        <input type="checkbox" class="form-check-input" id="elevator" v-model="advertisement.elevator">
-                    </div>
-            </div>
-            <div class="row align-items-start">
-                    <div class="col">
-                        <label for="tenants" class="form-label">Inquilinos</label>
-                        <input type="number" class="form-control" id="tenants" v-model="advertisement.tenants">
-                    </div>
-                    <div class="col">
-                        <label for="tags" class="form-label">Etiquetas</label>
-                        <input type="text" class="form-control" id="tags" v-model="advertisement.tags">
-                    </div>
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Descripción</label>
-                <textarea class="form-control" id="description" rows="3" v-model="advertisement.description"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Crear anuncio</button>
-        </form>
+const selectedImage = ref(false)
 
-      </div>
-    </div>
-  </div>
-  </div>
-</template>
+const images = ref([])
 
-<script>
-export default {
-  data() {
-    return {
-      advertisement: {
-        title: '',
-        price: 0,
-        location: '',
-        bedrooms: 0,
-        bathrooms: 0,
-        squareMeters: 0,
-        heatingGas: false,
-        floors: 0,
-        elevator: false,
-        tenants: 0,
-        tags: '',
-        description: ''
+
+const selectImage = (index) => {
+  selectedImage.value = index
+}
+
+const handleFileChange = (event) => {
+  const data = {
+    images: ['/images/uploadImage.png',
+  '/images/uploadImage.png',
+  '/images/uploadImage.png',
+  '/images/uploadImage.png',
+  '/images/uploadImage.png']
+  }
+  const files = event.target.files
+  const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'))
+
+  if (files.length !== imageFiles.length) {
+    alert("Sólo se permiten archivos de imagen, por favor seleccione archivos de imagen")
+    event.target.value = ''
+  }
+
+  if (imageFiles.length > 5) {
+    alert('Solo se permiten un máximo de 5 archivos.')
+    event.target.value = ''
+  } else {
+    for (let i = 0; i < data.images.length; i++) {
+      if (i < imageFiles.length) {
+        const file = imageFiles[i]
+        images.value.push(URL.createObjectURL(file)) 
+      } else {
+        images.value.push('/images/uploadImage.png')
       }
     }
-  },
-  methods: {
-    submitForm() {
-      // Aquí puedes hacer la llamada a la API para crear el anuncio
-      console.log(this.advertisement);
-    }
+    
   }
 }
 </script>
+<template>
+  <Navbar />
+  <div class="container">
+        <div class="row mt-5">
+            <div class="col col-6 justify-content-center align-items-center">
+                <div class="container" >
+                    <div id="imgCarousel" class="carousel slide mb-4">
+                        <!-- Imagen superior --> 
+                        <div class="carousel-inner" >
+                            <div class="carousel-item active" v-for="image in images" :key="image">
+                                <img style="object-fit: cover;" :src="image" class="img-fluid" alt="...">
+                            </div>
+                       </div>
+                        <!-- Botones de control -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#imgCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#imgCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Imágenes debajo -->
+                <div class="container w-75">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 mb-4" v-for="(image,index) in images" :key="image">
+                            <img :src="image" class="d-block w-100" alt="..." data-bs-target="#imgCarousel" :data-bs-slide-to="index" :@click="selectImage(index)" :class="{'shadow': selectedImage === index }">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="formFileMultiple" class="form-label">Seleccione o arrastre hasta 5 fotos</label>
+                      <input class="form-control" type="file" id="formFileMultiple" v-on:change="handleFileChange" multiple>
+                    </div>
+                </div>
+            </div>   
+        </div>
+        
+    </div>
+</template>
+
 
 <style scoped>
 h1 > .gradient-text {
@@ -145,5 +107,66 @@ h1 > .gradient-text {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.boton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1%; 
+    background-color:#28426B;
+    color: #FFFFFF;
+    border-radius: 15px;
+    width: 27%;
+    height: 5vh;
+}
+.boton strong {
+    display: flex;
+    align-items: center;
+}
+
+.etiqueta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2de63967;
+    color: #04481c;
+}
+
+
+
+.btn-share {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    line-height: 40px;
+    justify-content: center;
+    align-items: center;
+    background-color: #28426B;
+    color: #FFFFFF; 
+    border: none;
+}
+
+.btn-share:hover {
+    background-color: #28426B;
+    color: #FFFFFF; 
+    border: none;
+}
+.carousel-item {
+    height: 45vh;
+    object-fit: contain;
+}
+
+.carousel-item img {
+    height: 45vh;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
