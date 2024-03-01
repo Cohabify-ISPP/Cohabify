@@ -1,6 +1,5 @@
 package org.ispp4.cohabify.model;
 
-import java.beans.Transient;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
