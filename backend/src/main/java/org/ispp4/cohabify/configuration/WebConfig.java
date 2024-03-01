@@ -12,6 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addMapping("/**")
 				.allowedOrigins("http://localhost:8080", "ws://localhost:8080",
 								"http://localhost:5173", "ws://localhost:5173")
+				.allowedOriginPatterns("*")
 				.allowedMethods("*") 
 				.allowedHeaders("Authentication", "content-type")
 				.allowCredentials(true)
