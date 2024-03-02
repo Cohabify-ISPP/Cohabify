@@ -37,14 +37,6 @@ public class DataLoader implements ApplicationRunner {
         userRepository.deleteAll();
         tagRepository.deleteAll();
         
-        // Procesa los usuarios
-        JsonNode usersNode = rootNode.get("users");
-        if (usersNode != null) {
-            List<User> usersToInsert = Arrays.asList(objectMapper.readValue(usersNode.toString(), User[].class));
-            userRepository.saveAll(usersToInsert);
-            System.out.println(usersToInsert.size() + " usuarios insertados correctamente.");
-        }
-
         // Procesa las etiquetas
         JsonNode tagsNode = rootNode.get("tags");
         if (tagsNode != null) {
@@ -52,6 +44,15 @@ public class DataLoader implements ApplicationRunner {
             tagRepository.saveAll(tagsToInsert);
             System.out.println(tagsToInsert.size() + " etiquetas insertadas correctamente.");
         }
+        
+        // Procesa los usuarios
+        JsonNode usersNode = rootNode.get("users");
+        if (usersNode != null) {
+            List<User> usersToInsert = Arrays.asList(objectMapper.readValue(usersNode.toString(), User[].class));
+            userRepository.saveAll(usersToInsert);
+            System.out.println(usersToInsert.size() + " usuarios insertados correctamente.");
+        }
+        
     }
 }
 
