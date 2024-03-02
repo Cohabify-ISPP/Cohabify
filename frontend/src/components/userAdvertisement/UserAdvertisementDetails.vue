@@ -16,8 +16,6 @@ export default {
         const route = useRoute();
         const commonHouses = ref([]);
 
-        //props = ['id'];
-
         const fetchAdvertisement = async () => {
             try {
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userAdvertisement/${userAdvertisementId.value}`,
