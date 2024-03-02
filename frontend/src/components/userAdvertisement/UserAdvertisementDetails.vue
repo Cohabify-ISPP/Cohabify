@@ -1,68 +1,57 @@
 <script>
-import { ref, onMounted, computed, inject } from 'vue';
+import { ref, onMounted, onBeforeMount, computed, inject } from 'vue';
+import { useRoute } from 'vue-router';
 
 export default {
     
     setup() {
 
-        const user = ref({ id: "65e305e4597c9969f3b36f05", username: "Nombre de prueba", gender: "Masculino", img: "https://via.placeholder.com/200",  valorations: [{user: "id_usuario1", like: false, comment: "Comentario1"}, {user: "65e305e4597c9969f3b36f05", like: true, comment: null}, {user: "id_usuario3", like: false, comment: "Comentario3"}, {user: "id_usuario4",  like: true, comment: "Comentario4"}], 
-                        tags: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1"]})
-
-
-        const userAdvertisement = ref({ description: "Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga ", 
-                                        minBudget: 123.4, maxBudget: 567.8, desiredLocation: "Street 123", entranceDate: "2021-12-12", 
-                                        exitDate: "2022-12-12", maxCohabitants: 3, author: user});
-        
-        const commonHouses = ref([{img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Aderla", monthly_price: 123.4, size_m2:45, floor: "7th", description: "description description description description description description description description description description description description description description description description description description description"},
-                                {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Cazorla", monthly_price: 124.4, size_m2:45, floor: "7th", description: "Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga  "},
-                                {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Ibiza", monthly_price: 125.4, size_m2:45, floor: "7th", description: "description"},
-                                {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Senderón", monthly_price: 126.4, size_m2:45, floor: "7th", description: "description"},
-                                {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Bami", monthly_price: 127.4, size_m2:45, floor: "7th", description: "description"},
-                                {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Calares", monthly_price: 128.4, size_m2:45, floor: "7th", description: "description"},
-                                {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Web", monthly_price: 129.4, size_m2:45, floor: "7th", description: "description"}])
-        
-
-        const userAdvertisementId = "65e326184510d9c9a7c48173";
-        const currentUser = inject('user')
+        const userAdvertisementId = ref(""); 
+        const currentUser = inject('user');
+        const userAdvertisement = ref({});
+        const valorations = ref([]);
+        const likesCount = ref(0)
+        const commentsCount = ref(0)
+        const hasLike = ref(false)
+        const route = useRoute();
+        const commonHouses = ref([]);
 
         //props = ['id'];
 
-        /*
-        const fetchData = async () => {
+        const fetchAdvertisement = async () => {
             try {
-                const response = await fetch(import.meta.env.VITE_API_URL + `/api/userAdvertisement/${id}`,
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userAdvertisement/${userAdvertisementId.value}`,
                     {
                         method: "GET",
                         credentials: "include",
                     });
                 const data = await response.json();
-
+                
                 userAdvertisement.value = data;
+                await fetchValorations()
             } catch (error) {
                 console.error("Error:", error);
             }
         };
-        */
 
-        const likesCount = computed(() => {
-            return user.value && user.value.valorations
-                ? user.value.valorations.filter(valoration => valoration.like).length
-                : 0;
-        });
-
-        const commentsCount = computed(() => {
-            return user.value && user.value.valorations
-                ? user.value.valorations.filter(valoration => valoration.comment !== null).length
-                : 0;
-        });
-
-        const hasLike = computed(() => {
-            return user.value.valorations.some(valoration => valoration.user === currentUser.value.id && valoration.like);
-        });
+        const fetchValorations = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userRating/user/${userAdvertisement.value.author.id}`,
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    });
+                const data = await response.json();
+                valorations.value = data;
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
 
         const toggleLike = async () => {
+  
             try {
-                const response = await fetch(import.meta.env.VITE_API_URL + `/api/addPositiveRater/${user.value.id}/${userAdvertisement.value.author.id}`, {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/user/like/${userAdvertisement.value.id}/${currentUser.value.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -70,19 +59,21 @@ export default {
                 });
 
                 if (response.ok) {
-                    const likedIndex = user.value.valorations.findIndex(valoration => valoration.user === currentUser.value.id);
-                    if (likedIndex !== -1) {
-                        user.value.valorations[likedIndex].like = !user.value.valorations[likedIndex].like;
-                    }
+                    hasLike.value = !hasLike.value;
                 }
-            
+
             } catch (error) {
                 console.error("Error:", error);
             }
         };
 
+        onMounted(() => {
+            userAdvertisementId.value = route.params.id;
+            fetchAdvertisement();
+        });
+        
         return {
-            user,
+            currentUser,
             userAdvertisement,
             commonHouses,
             likesCount,
@@ -103,7 +94,7 @@ export default {
             <div class="columna">
                 <div class="subseccion">
                     <div class="imagen-circulo">
-                        <img :src= user.img alt = "Imagen de perfil">
+                        <img :src="'https://img.freepik.com/foto-gratis/cerrar-lindo-gato-interior_23-2148882585.jpg'" alt = "Imagen de perfil">
                     </div>
 
                     <div class ="botones" style="margin-top: 3%;">
@@ -132,7 +123,7 @@ export default {
                     <div v-if="commentsCount == 0" style="text-align: left;">Aún no hay comentarios...</div>
 
                     <div v-else>
-                        <div v-for="comentario in user.valorations" :key="comentario">
+                        <div v-for="comentario in userAdvertisement.valorations" :key="comentario">
                             <div v-if="comentario.comment != null" class="comentario"> {{ comentario.comment }} </div>
                         </div>
                     </div>
@@ -141,20 +132,24 @@ export default {
 
             <div class="columna">
                 <div class="subseccion">
-                    <h3 style="text-align: left;"> {{ user.username }}</h3>
+                    <h3 style="text-align: left;"> {{ userAdvertisement.author?.username  }}</h3>
 
                     <br>
 
-                    <div v-if="user.tags.length == 0" style="text-align: left;">Este usuario no tiene etiquetas establecidas</div>
+                    <div v-if="userAdvertisement.author?.tag.length === 0" style="text-align: left;">
+                        Este usuario no tiene etiquetas establecidas
+                    </div>
                     <div v-else style="margin-bottom: 5px;">
                         <h5 style="color:#5D5E60; text-align: left;">Etiquetas</h5> 
-                        <div style="display: inline-flex;" v-for="etiqueta in user.tags" :key="etiqueta">
-                            <span class="etiqueta"> {{ etiqueta }} </span>
+                        <div style="display:flex; justify-content: start; align-items:start;">
+                            <div style="display: inline-flex;" v-for="etiqueta in userAdvertisement.author?.tag" :key="etiqueta">
+                                <span class="etiqueta"> {{ etiqueta.tag }} </span>
+                            </div>
                         </div>
                     </div>
-
+ 
                     <h5 style="color:#5D5E60; text-align: left;">Género</h5> 
-                    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{ user.gender }} </p>
+                    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{  userAdvertisement.author?.gender?userAdvertisement.author.gender:"Otro" }} </p>
 
                     <h5 style="color:#5D5E60; text-align: left;">Presupuesto máximo</h5> 
                     <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{ userAdvertisement.maxBudget }}€</p>
@@ -173,7 +168,9 @@ export default {
 
                 <div class="subseccion" style="overflow-y: auto;">
                     <h5 style="color:#5D5E60; text-align: left;">Pisos promocionados cercanos</h5>
-                    
+
+                    <p style="text-align: left;"> Próximamente...</p>
+                        
                     <div v-for="anuncio in commonHouses" :key="anuncio">
 
                         <div class="piso">
@@ -211,7 +208,6 @@ export default {
 }
 
 .panel {
-    height: 100vh;
     max-width: 100%;
     display: flex;
     flex: 1;

@@ -1,7 +1,6 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import java.time.LocalDate;
-import java.util.List;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.user.User;
@@ -34,14 +33,14 @@ public class UserAdvertisement extends BaseEntity {
     @NotNull
     private Integer maxCohabitants;
 
-    @NotNull
-    private List<User> likes;
-
     @DBRef
-    @NotNull
-    private User user;
+    private User author;
 
-    public UserAdvertisement(ObjectId id, String description, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, List<User> likes, User user) {
+    public UserAdvertisement() {
+        
+    }
+
+    public UserAdvertisement(ObjectId id, String description, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, User author) {
         this.id = id;
         this.description = description;
         this.maxBudget = maxBudget;
@@ -49,8 +48,7 @@ public class UserAdvertisement extends BaseEntity {
         this.entranceDate = entranceDate;
         this.exitDate = exitDate;
         this.maxCohabitants = maxCohabitants;
-        this.likes = likes;
-        this.user = user;
+        this.author = author;
     }
 
     @Override
@@ -63,8 +61,7 @@ public class UserAdvertisement extends BaseEntity {
             ", entranceDate='" + getEntranceDate() + "'" +
             ", exitDate='" + getExitDate() + "'" +
             ", maxCohabitants='" + getMaxCohabitants() + "'" +
-            ", likes='" + getLikes() + "'" +
-            ", user='" + getUser() + "'"+
+            ", user='" + getAuthor() + "'"+
             "}";
     }
 

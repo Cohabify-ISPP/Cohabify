@@ -109,32 +109,35 @@ public class UserController {
     }
 
     @PutMapping("like/{id}/{raterId}")
-    public ResponseEntity<User> addPositiveRater(@PathVariable("id") ObjectId id, @PathVariable("raterId") ObjectId raterId) {
+    public ResponseEntity<User> modifyRaters(@PathVariable("id") ObjectId id, @PathVariable("raterId") ObjectId raterId) {
+        
         try {
             Optional<User> optionalUser = userService.findById(id);
-            if(optionalUser.isPresent() == false) {
+            if (optionalUser.isPresent() == false) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }else{
+            } else {
                 User user = optionalUser.get();
                 Optional<User> optionalRaterUser = userService.findById(raterId);
-                if(optionalRaterUser.isPresent() == false) {
+
+                if (optionalRaterUser.isPresent() == false) {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                }else{
+
+                } else {
                     User raterUser = optionalRaterUser.get();
                     List<User> positiveRaters = user.getLikes();
+
                     if (positiveRaters.contains(raterUser)) {
-                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                        positiveRaters.remove(raterUser);                        
                     } else {
                         positiveRaters.add(raterUser);
-                        user.setLikes(positiveRaters);
-                        user = userService.save(user);
-                        return new ResponseEntity<>(user, HttpStatus.OK);
                     }
+                    user.setLikes(positiveRaters);
+                    user = userService.save(user);
+                    return new ResponseEntity<User>(user, HttpStatus.OK);
                 }
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }
