@@ -61,14 +61,14 @@
                         return response.json();
                     }else if (response.status === 400) {
                         throw new Error('Usuario o contraseña incorrectos');
-                    } else {
+                    } else { 
                         throw new Error('Error al iniciar sesión');
                     }
                 })
                 .then(data => {
                     window.location.href = '/';
                 })
-                .catch(error => console.error(error));
+                .catch(error => fetchError.value = error.message);
             };
 
             return {
