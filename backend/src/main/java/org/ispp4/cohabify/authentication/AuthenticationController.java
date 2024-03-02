@@ -1,5 +1,9 @@
 package org.ispp4.cohabify.authentication;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.coyote.BadRequestException;
@@ -11,6 +15,7 @@ import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,7 +25,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -34,9 +41,10 @@ public class AuthenticationController {
 	private JwtService jwtService;
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
-
-	@PostMapping("/register")
-	public ResponseEntity<?> register(@Valid @RequestBody UserRegisterRequest request, BindingResult result) throws BadRequestException {
+	
+	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
+									  @RequestPart("profile-pic") MultipartFile image) throws BadRequestException {
 		
 		if(result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -65,6 +73,23 @@ public class AuthenticationController {
 		user.setAuthorities(List.of("User"));
 		user = userService.save(user);
 		// TODO: Add the user full name when it is fixed in the model
+		
+		// Save the image and add the static uri to the user
+		String[] filename_split = image.getOriginalFilename().split("\\.");
+		String filename = user.getJsonId() + "." + filename_split[filename_split.length-1];
+		String static_path = "/uploads/saved-images/user-profile-pictures/" + filename;
+		Path path = Paths.get("src/main/resources/static/uploads/saved-images/user-profile-pictures", filename);
+		try {
+			Files.createDirectories(path.getParent());
+			Files.write(path, image.getBytes());
+		} catch (IOException e) {
+			userService.deleteById(user.getId());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					 .body(e.getMessage());
+		}
+		
+		user.setImageUri(static_path);
+		user = userService.save(user);
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 							 .body(user);

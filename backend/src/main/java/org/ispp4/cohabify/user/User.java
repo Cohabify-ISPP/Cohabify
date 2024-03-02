@@ -55,6 +55,11 @@ public class User extends BaseEntity {
     private Plan plan;
     
     @NotNull
+    private Genre genre;
+    
+    private String imageUri;
+    
+    @NotNull
     private Boolean isVerified;
 
     @NotNull

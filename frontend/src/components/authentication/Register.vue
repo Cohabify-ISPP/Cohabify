@@ -12,9 +12,9 @@
             <div class="form-group" style="padding: 20px;">
               <label for="genre" class="form-label text-white fw-bold">Género</label>
               <select required class="form-select" id="genre" v-model="genre">
-                <option value="Hombre">Hombre</option>
-                <option value="Mujer">Mujer</option>
-                <option value="Otro">Otro</option>
+                <option value="MASCULINO">Masculino</option>
+                <option value="FEMENINO">Femenino</option>
+                <option value="OTRO">Otro</option>
               </select>
             </div>
             <div class="form-group" style="padding: 20px;">
@@ -79,7 +79,6 @@ export default {
             img.value = event.target.files[0];
         }
 
-
         const register = () => {
             const data = {
                 name: name.value,
@@ -95,21 +94,21 @@ export default {
             if (password.value !== confirmPassword.value) {
                 alert('Las contraseñas no coinciden')
             } else {
+                const formData = new FormData();
+                formData.append("string-data", new Blob([JSON.stringify({
+                          name: data.name,
+                          username: data.username,
+                          genre: data.genre,
+                          email: data.email,
+                          phone: data.phone,
+                          password: data.password
+                        })], { type: "application/json" }))
+                formData.append("profile-pic", data.img)
+                
                 fetch(import.meta.env.VITE_BACKEND_URL + '/auth/register', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                     credentials: 'include',
-                    body: JSON.stringify({
-                        name: data.name,
-                        username: data.username,
-                        genre: data.genre,
-                        email: data.email,
-                        phone: data.phone,
-                        password: data.password,
-                        img: data.img
-                    }),
+                    body: formData,
                 })
                     .then(response => {
                         console.log(response.status);
