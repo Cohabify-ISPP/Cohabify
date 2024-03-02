@@ -61,7 +61,7 @@ public class User extends BaseEntity {
     private List<String> authorities;
 
     @DBRef
-    private List<User> positiveRaters;
+    private List<User> likes;
     
     public User() {
     
