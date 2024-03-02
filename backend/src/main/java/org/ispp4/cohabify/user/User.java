@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.tag.Tag;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -58,6 +59,9 @@ public class User extends BaseEntity {
 
     @NotNull
     private List<String> authorities;
+
+    @DBRef
+    private List<User> positiveRaters;
     
     public User() {
     

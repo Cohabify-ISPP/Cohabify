@@ -129,9 +129,8 @@ public class UserRatingController {
             if (_userRating != null) {
                 _userRating.setId(userRatingId);
                 _userRating.setComment(userRating.getComment());
-                _userRating.setLike(userRating.getLike());
-                _userRating.setRatedUserId(userRating.getRatedUserId());
-                _userRating.setUserId(userRating.getUserId());
+                _userRating.setRatedUser(userRating.getRatedUser());
+                _userRating.setUser(userRating.getUser());
                 UserRating updatedUserRating = userRatingService.save(_userRating);
                 return ResponseEntity.ok(updatedUserRating);
             } else {

@@ -94,6 +94,7 @@ public class UserController {
             _user.setPlan(user.getPlan());
             _user.setIsVerified(user.getIsVerified());
             _user.setAuthorities(user.getAuthorities());
+            _user.setPositiveRaters(user.getPositiveRaters());
 
             return new ResponseEntity<>(userService.save(_user), HttpStatus.OK);
         } else {
@@ -106,6 +107,31 @@ public class UserController {
         try {
             userService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("addPositiveRater/{id}/{raterId}")
+    public ResponseEntity<User> addPositiveRater(@PathVariable("id") ObjectId id, @PathVariable("raterId") ObjectId raterId) {
+        try {
+            Optional<User> optionalUser = userService.findById(id);
+            if(optionalUser.isPresent() == false) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }else{
+                User user = optionalUser.get();
+                Optional<User> optionalRaterUser = userService.findById(raterId);
+                if(optionalRaterUser.isPresent() == false) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }else{
+                User raterUser = optionalRaterUser.get();
+                List<User> positiveRaters = user.getPositiveRaters();
+                positiveRaters.add(raterUser);
+                user.setPositiveRaters(positiveRaters);
+                user = userService.save(user);
+                return new ResponseEntity<>(user, HttpStatus.OK);
+                }
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

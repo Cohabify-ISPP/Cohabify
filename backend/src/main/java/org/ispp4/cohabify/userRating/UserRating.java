@@ -1,7 +1,7 @@
 package org.ispp4.cohabify.userRating;
 
-import org.bson.types.ObjectId;
 import org.ispp4.cohabify.model.BaseEntity;
+import org.ispp4.cohabify.user.User;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotNull;
@@ -18,16 +18,14 @@ public class UserRating extends BaseEntity {
     @DBRef
     @NotNull
     @Size(max = 20)
-    private ObjectId userId;
+    private User user;
 
     @DBRef
     @NotNull
     @Size(max = 20)
-    private ObjectId ratedUserId;
+    private User ratedUser;
 
     @NotNull
-    private Boolean like;
-
     @Size(max = 400)
     private String comment;
 
@@ -38,9 +36,8 @@ public class UserRating extends BaseEntity {
     @Override
     public String toString() {
         return "UserRating{" +
-            "userId='" + userId + '\'' +
-            ", ratedUserId='" + ratedUserId + '\'' +
-            ", like=" + like +
+            "userId='" + user.getId() + '\'' +
+            ", ratedUserId='" + ratedUser.getId() + '\'' +
             ", comment='" + comment + '\'' +
             '}';
     }
