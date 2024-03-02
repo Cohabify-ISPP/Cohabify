@@ -22,25 +22,29 @@
       "password": "$2a$10$S/9Tn47FJ68fR7.tCKLqhelXOQbZbXmBOnzQqKqC97TPUHeIhOoim",
       "isOwner": true,
       "phone": "123456789",
-      "email": "user1@example.com",
+      "email": "usuario1@example.com",
       "tag": [{"id": "60d5ec9af682fbd39a1b8b9a"}, {"id": "60d5ec9af682fbd39a1b8b9b"}],
-      "description": "Description for user 1",
+      "description": "Descripción para el usuario 1",
       "plan": "Basic",
       "isVerified": true,
-      "authorities": ["Admin"]
+      "authorities": ["Admin"],
+      "gender": "MAN",
+      "image": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
     },
     {
       "id": "60d5ec9af682fbd39a1b8b9e",
-      "username": "user1",
+      "username": "usuario 2",
       "password": "$2a$10$PcN/V6liOTDpfQqjh0s6weo7vi8BGKXqYjtIYzp/m9ciP60CyCsQa",
       "isOwner": false,
       "phone": "987654321",
-      "email": "user2@example.com",
+      "email": "usuario2@example.com",
       "tag": [{"id": "60d5ec9af682fbd39a1b8b9a"}, {"id": "60d5ec9af682fbd39a1b8b9b"}],
-      "description": "Description for user 2",
+      "description": "Descripción para el usuario 2",
       "plan": "Explorer",
       "isVerified": false,
-      "authorities": ["User"]
+      "authorities": ["User"],
+      "gender": "NON_BINARY",
+      "image": "https://hips.hearstapps.com/hmg-prod/images/demi-lovaro-ge-nero-no-binario-1-1622484860.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=1200:*"
     }
   ],
   "houses": [
@@ -57,19 +61,94 @@
         "x": -2.6637, 
         "y": 54.6944
       }
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b8f",
+      "location":"Vallecas, Madrid", 
+      "roomsNumber":"4", 
+      "bathroomsNumber":"2",
+      "area":"105", 
+      "heating":"AIR_CONDITIONING", 
+      "floor":"9",  
+      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
+      "locationPoint" : {
+        "x": 40.3437, 
+        "y": -3.6124
+      }
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b7f",
+      "location":"Guarromán, Jaén", 
+      "roomsNumber":"5", 
+      "bathroomsNumber":"2",
+      "area":"120", 
+      "heating":"NATURAL_GAS", 
+      "floor":"9",  
+      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
+      "locationPoint" : {
+        "x": 38.184049, 
+        "y": -3.685237
+      }
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b6f",
+      "location":"Cabra, Córdoba", 
+      "roomsNumber":"3", 
+      "bathroomsNumber":"1",
+      "area":"70", 
+      "heating":"RADIATOR", 
+      "floor":"0",  
+      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
+      "locationPoint" : {
+        "x": 37.471815, 
+        "y": -4.433562
+      }
     }
   ],
   "houseAdvertisements": [
     {
       "id": "60d5ec9af682fbd39a1b8b1a",
-      "title": "House 1",
-      "description": "Description for house 1",
+      "title": "Casa 1",
+      "description": "Descripción para casa 1",
       "price": 1000,
       "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://www.google.com/url?sa=i&url=https%3A%2F%2Fdecofilia.com%2Fpisos-lujo-mundo%2F&psig=AOvVaw3vVjB8XAvnQZYPygZrOCoE&ust=1709371588180000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOC3lMTf0oQDFQAAAAAdAAAAABAE"]
+      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+                  "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+                  "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b2a",
+      "title": "Casa 2",
+      "description": "Descripción para casa 2",
+      "price": 900,
+      "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
+      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
+      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b3a",
+      "title": "Casa 3",
+      "description": "Descripción para casa 3",
+      "price": 800,
+      "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
+      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
+      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b4a",
+      "title": "Casa 4",
+      "description": "Descripción para casa 4",
+      "price": 1100,
+      "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
+      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
+      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+                "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+                "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
     }
   ]
-  
-
 }

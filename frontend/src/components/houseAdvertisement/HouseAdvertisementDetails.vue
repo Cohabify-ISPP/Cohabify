@@ -1,119 +1,120 @@
-<script>
+<script setup>
+import { nextTick } from 'vue';
 import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
-export default {
-    
-    setup() {
-        const tenants = ref([{name: "Nombre de prueba", gender: "Hombre", photo: "https://via.placeholder.com/200", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                        etiquetas: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10"]},
-                        {name: "Nombre de prueba", gender: "Hombre", photo: "https://via.placeholder.com/200", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                        etiquetas: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10"]},
-                        {name: "Nombre de prueba", gender: "Hombre", photo: "https://via.placeholder.com/200", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                        etiquetas: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10"]}])
+const houseAdvertisement = ref(null);
 
-        const houseAdvertisement = ref({ title:  "Nombre de prueba", price:"0", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 
-        tenants: tenants, images: []});
-        
-        const house = ref({ location:"Zona desconocida", rooms:"20", bathrooms:"1",
-            area:"10", heating:"Central", floor:"1",  etiquetas: ["No fumadores"]})
+const selectedImage = ref(false)
 
-        const selectedImage = ref(false)
+const clipboardMessage = ref(false);
 
-        const clipboardMessage = ref(false);
+const selectImage = (index) => {
+    selectedImage.value = index;
+};
 
-        const selectImage = (index) => {
-            selectedImage.value = index;
-        };
+const isLoading = ref(true);
 
-        const truncateDescription = (description) => {
-            const words = description.split(' ');
-            if (words.length > 10) {
-                return words.slice(0, 10).join(' ') + '...';
-            } else {
-                return description;
-            }
-        }
-        
-        //TODO: Fetch data from API
+const fetchError = ref(null);
 
-        /*
-
-        props = ['id'];
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(import.meta.env.VITE_API_URL + `api/advertisements/${id}`,
-                    {
-                        method: "GET",
-                        credentials: "include",
-                    });
-                const data = await response.json();
-
-                data.entranceDate = new Date(data.entranceDate);
-                data.exitDate = new Date(data.exitDate);
-                userAdvertisement.value = data;
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        };
-        */
-        
-        function copyToClipboard() {
-            navigator.clipboard.writeText(window.location.href)
-                .then(function() {
-                    clipboardMessage.value = true;
-                    setTimeout(() => {
-                        clipboardMessage.value = false;
-                    }, 1500);
-                })
-                .catch(function(error) {
-                    console.error("Error al copiar al portapapeles: ", error);
-                });
-        }
-        
-        onMounted(() => {
-            document.getElementById('imgCarousel').addEventListener('slid.bs.carousel', function (e) {
-            const activeSlideIndex = Array.from(e.target.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
-            selectedImage.value = activeSlideIndex;
-        });
-        });
-        
-        return {
-            tenants,
-            house,
-            houseAdvertisement,
-            selectImage,
-            selectedImage,
-            copyToClipboard,
-            clipboardMessage,
-            truncateDescription
-        }
+const truncateDescription = (description) => {
+    const words = description.split(' ');
+    if (words.length > 10) {
+        return words.slice(0, 10).join(' ') + '...';
+    } else {
+        return description;
     }
 }
+
+const route = useRoute();
+const id = route.params.id;
+
+function parseHeating(heating) {
+    if (heating === 'CENTRAL_HEATING') {
+        return 'Calefacción central';
+    } else if (heating === 'AIR_CONDITIONING') {
+        return 'Aire acondicionado';
+    } 
+    else if (heating == 'NATURAL_GAS') {
+        return 'Gas natural';
+    }
+    else {
+        return 'Radiador';
+    }
+}
+
+function copyToClipboard() {
+    navigator.clipboard.writeText(window.location.href)
+        .then(function() {
+            clipboardMessage.value = true;
+            setTimeout(() => {
+                clipboardMessage.value = false;
+            }, 1500);
+        })
+        .catch(function(error) {
+            console.error("Error al copiar al portapapeles: ", error);
+        });
+}
+
+onMounted(() => {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/' + id)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('No se han podido cargar la vivienda')
+        }
+        
+        return response.json();
+        
+    }).then(data => {
+        if (JSON.stringify(data) !== JSON.stringify(houseAdvertisement.value)) {
+            isLoading.value = false
+            houseAdvertisement.value = data
+        }
+        return 
+        
+    }).then(() => {
+        const carousel = document.getElementById('imgCarousel');
+        
+        if (carousel) {
+            carousel.addEventListener('slid.bs.carousel', function (e) {
+                const activeSlideIndex = Array.from(e.target.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+                selectedImage.value = activeSlideIndex;
+            });
+        }
+    }).catch(error => {
+        isLoading.value = false
+        fetchError.value = error.message
+    });
+    
+    
+    
+});
+        
+        
+    
 </script>
 <template>
 
     <Navbar />
-
-    <div class="container">
-        <div class="row mt-5">
+    
+    <div class="container" >
+        <div v-if="isLoading" class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div v-else-if="fetchError" class="alert alert-danger" role="alert">
+            {{ fetchError }}
+        </div>
+        <div v-else> 
+        <div class="row mt-5" >
             <div class="col col-6 justify-content-center align-items-center">
                 <div class="container" >
                     <div id="imgCarousel" class="carousel slide mb-4">
                         <!-- Imagen superior --> 
                         <div class="carousel-inner" >
-                            <!-- <div class="carousel-item active" v-for="image in houseAdvertisement.images" :key="image">
-                                <img style="object-fit: cover;" src="/images/user.png" class="img-fluid" alt="...">
-                            </div> -->
-                            <div class="carousel-item active">
-                                <img style="object-fit: cover;" src="/images/user.png" class="img-fluid" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img style="object-fit: cover;" src="/images/explorador.png" class="img-fluid" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img style="object-fit: cover;" src="/images/LogoCohabifyCuadrado.png" class="img-fluid" alt="...">
-                            </div>
+                            <div class="carousel-item active" v-for="image in houseAdvertisement.images" :key="image">
+                                <img style="object-fit: cover;" :src="image" class="img-fluid" alt="...">
+                            </div> 
+                        
                         </div>
                         <!-- Botones de control -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#imgCarousel" data-bs-slide="prev">
@@ -129,18 +130,10 @@ export default {
                 <!-- Imágenes debajo -->
                 <div class="container w-75">
                     <div class="row align-items-center">
-                        <!-- <div class="col-md-4 mb-4" v-for="(image,index) in houseAdvertisement.images" :key="image">
+                        <div class="col-md-4 mb-4" v-for="(image,index) in houseAdvertisement.images" :key="image">
                             <img :src="image" class="d-block w-100" alt="..." data-bs-target="#imgCarousel" :data-bs-slide-to="index" :@click="selectImage(index)" :class="{'shadow': selectedImage === index }">
-                        </div> -->
-                        <div class="col-md-4 mb-4">
-                            <img src="/images/user.png" class="d-block w-100" alt="..." data-bs-target="#imgCarousel" data-bs-slide-to="0" @click="selectImage(0)" :class="{'shadow': selectedImage === 0 }">
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <img src="/images/explorador.png" class="d-block w-100" alt="..." data-bs-target="#imgCarousel" @click="selectImage(1)" data-bs-slide-to="1" :class="{'shadow': selectedImage === 1 }">
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <img src="/images/LogoCohabifyCuadrado.png" class="d-block w-100" alt="..." data-bs-target="#imgCarousel" data-bs-slide-to="2" @click="selectImage(2)" :class="{'shadow': selectedImage === 2 }">
-                        </div>
+                        </div> 
+                        
                     </div>
                 </div>
             </div>    
@@ -162,25 +155,25 @@ export default {
                         <h4 style=" text-align: left;">Detalles</h4> 
                         <hr>
                         <div style="color:black;display: flex; align-items: left;" class="justify-content-between">
-                            <div style="display: grid;margin-right: 10%;">
+                            <div style="display: grid;">
                                 <span class="material-icons" style="font-size: xx-large">bed</span>
-                                <h5 style="color:#5D5E60;text-align: center;">{{ house.rooms }}</h5>
+                                <h5 style="color:#5D5E60;text-align: center;">{{ houseAdvertisement.house.roomsNumber }}</h5>
                             </div>
-                            <div style=" display: grid;margin-right: 10%;">
+                            <div style=" display: grid;">
                                 <span class="material-icons" style="font-size: xx-large">shower</span>
-                                <h5 style="color:#5D5E60;text-align: center;">{{ house.bathrooms }}</h5>
+                                <h5 style="color:#5D5E60;text-align: center;">{{ houseAdvertisement.house.bathroomsNumber }}</h5>
                             </div>
-                            <div style=" display: grid;margin-right: 10%;">
+                            <div style=" display: grid;">
                                 <span class="material-icons" style="font-size: xx-large">square_foot</span>
-                                <h5 style="color:#5D5E60;text-align: center;">{{ house.area }} m<sup>2</sup></h5>
+                                <h5 style="color:#5D5E60;text-align: center;">{{ houseAdvertisement.house.area }} m<sup>2</sup></h5>
                             </div>
-                            <div style="display: grid;margin-right: 10%;">
+                            <div style="display: grid;">
                                 <span class="material-symbols-outlined" style="font-size: xx-large">mode_fan</span>
-                                <h5 style="color: #5D5E60; text-align: center;">{{ house.heating }}</h5>
+                                <h5 style="color: #5D5E60; text-align: center;">{{ parseHeating(houseAdvertisement.house.heating) }}</h5>
                             </div>
-                            <div style="display: grid;margin-right: 10%;">
+                            <div style="display: grid;">
                                 <span class="material-symbols-outlined" style="font-size: xx-large">floor</span>
-                                <h5 style="color:#5D5E60;text-align: center;">{{ house.floor }}</h5>
+                                <h5 style="color:#5D5E60;text-align: center;">{{ houseAdvertisement.house.floor }}</h5>
                             </div>
                         </div>
                     </div>
@@ -195,8 +188,8 @@ export default {
                             </div>
                             <div style=" display: grid;margin-right: 10%;">
                                 <h5 style="color: #5D5E60;">Etiquetas</h5>
-                                <div style="display: inline-flex;" v-for="etiqueta in house.etiquetas" :key="etiqueta">
-                                    <span class="badge etiqueta" style="font-size: 105%;"> {{ etiqueta }} </span>
+                                <div style="display: inline-flex;" v-for="etiqueta in houseAdvertisement.house.tags" :key="etiqueta">
+                                    <span class="badge etiqueta" style="font-size: 105%;"> {{ etiqueta.tag }} </span>
                                 </div>
                             </div>
                         </div>
@@ -204,16 +197,16 @@ export default {
                         <div v-for="tenant in houseAdvertisement.tenants" :key="tenant">
                             <div class="card mb-3 mt-3" style="padding: 10px; background-color: #bdd2f4;">
                                     <div class="card-body">
-                                        <div class="d-flex justify-content-center align-items-center">
+                                        <div class="d-flex">
                                             <div class="mx-2">
-                                                <img :src="tenant.photo" style="border-radius: 50%; width: 10vh; height: 10vh;">
+                                                <img :src="tenant.image" style="border-radius: 50%; width: 10vh; height: 10vh;">
                                             </div>
                                             <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px">
                                                 <div class ="d-flex" style="margin-bottom: 5px;">
-                                                    <h5 style="text-align: left;" class="card-title">{{ tenant.name }}</h5>
-                                                    <i class="bi bi-gender-female" style="margin-left: 5px;" v-if="tenant.gender == 'Mujer'"></i>
-                                                    <i class="bi bi-gender-male" style="margin-left: 5px;" v-if="tenant.gender == 'Hombre'"></i>
-                                                    <i class="bi bi-gender-ambiguous" style="margin-left: 5px;" v-if="tenant.gender == 'No binario'"></i>
+                                                    <h5 style="text-align: left;" class="card-title">{{ tenant.username }}</h5>
+                                                    <i class="bi bi-gender-female" style="margin-left: 5px;" v-if="tenant.gender == 'WOMAN'"></i>
+                                                    <i class="bi bi-gender-male" style="margin-left: 5px;" v-if="tenant.gender == 'MAN'"></i>
+                                                    <i class="bi bi-gender-ambiguous" style="margin-left: 5px;" v-if="tenant.gender == 'NON_BINARY'"></i>
                                                 </div>
                                                 <p style="text-align: justify;" class="card-text">{{ truncateDescription(tenant.description) }}</p>
                                             </div>
@@ -243,12 +236,13 @@ export default {
             <div class="col mb-4" style="padding-left: 5%; padding-right: 5%;">
                 <div class="d-flex flex-column align-items-left">
                     <div style="color:#5D5E60;display: flex;">
-                        <h5>{{ house.location }}</h5> 
+                        <h5>{{ houseAdvertisement.house.location }}</h5> 
                         <i class="bi bi-geo-alt" style="margin-left: 5px;"></i>
                     </div>  
                     <img src="https://motor.elpais.com/wp-content/uploads/2022/01/google-maps-22-1046x616.jpg" class="rounded-4" style="max-width:80%; max-height:80%;">
                 </div>
             </div>
+        </div>
         </div>
     </div>
 

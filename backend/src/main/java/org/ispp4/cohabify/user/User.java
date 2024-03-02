@@ -61,6 +61,12 @@ public class User extends BaseEntity {
     @NotNull
     private List<String> authorities;
     
+    @NotNull
+    private String image;
+
+    @NotNull
+    private Gender gender;
+
     public User() {
     
     }
