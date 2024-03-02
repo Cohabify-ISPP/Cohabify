@@ -17,6 +17,9 @@
             <div class="form-group" style="padding: 20px;">
                 <button type="button" class="btn-primary" @click="login">Iniciar sesión</button>
             </div>
+            <div v-if="fetchError" class="alert alert-danger" role="alert">
+                    {{ fetchError }}
+            </div>
             </div>
         </form>
         </div>
@@ -36,6 +39,7 @@
         setup() {
             const username = ref('')
             const password = ref('')
+            const fetchError = ref(null)
             const login = () => {
                 const data = {
                     username: username.value,
@@ -52,14 +56,25 @@
                         password: data.password,
                     }),
                 })
-                    .then(response => response.json())
-                    .then(jsonData => window.location.href = '/')
-                    .catch(error => console.error('Error al enviar datos al backend:', error));
+                .then(response =>{
+                    if(response.status === 200){
+                        return response.json();
+                    }else if (response.status === 400) {
+                        throw new Error('Usuario o contraseña incorrectos');
+                    } else {
+                        throw new Error('Error al iniciar sesión');
+                    }
+                })
+                .then(data => {
+                    window.location.href = '/';
+                })
+                .catch(error => console.error(error));
             };
 
             return {
                 username,
                 password,
+                fetchError,
                 login,
             }
         }
