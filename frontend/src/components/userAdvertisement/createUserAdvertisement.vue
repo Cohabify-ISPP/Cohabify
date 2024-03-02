@@ -51,6 +51,22 @@ export default {
             popoverContent.value += `</div>`;
         };
 
+        const saveUserAd = async () => {
+            try{
+            const response = await fetch('http://localhost:3000/api/userAdvertisements', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userAd.value),
+            });
+            const data = await response.json();
+            console.log(data);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
         onBeforeMount(() => {
             initializePopoverContent();
         });
@@ -70,6 +86,8 @@ export default {
             tags,
             handleClick,
             popoverContent,
+            userAd,
+            saveUserAd,
             
         }
     }
@@ -83,18 +101,18 @@ export default {
         <div class="columna" style="flex-grow:2">
             <form>
                 <div class="form-group" style="text-align: left; margin-top: 3vh;">
-                    <input type="text" class="form-control" id="titulo" placeholder="Añadir título..."> 
+                    <input type="text" class="form-control" id="titulo" v-model="userAd.title" placeholder="Añadir título..."> 
                     <h5>Presupuesto</h5>
                     <div class="input-group mb-3 d-flex w-50">
                         <div class="d-flex align-items-center">
-                            <input type="text" class="form-control" aria-label="Cantidad máxima" placeholder="Max...">
+                            <input type="text" class="form-control" aria-label="Cantidad máxima" v-model="userAd.max_budget" placeholder="Max...">
                             <div class="input-group-append">
                                 <span class="input-group-text">€</span>
                             </div>
                         </div>
                     </div>
                     <div class="input-group mb-3 d-flex w-50">
-                        <input type="text" class="form-control" aria-label="Añadir ubicación" placeholder="Añadir ubicación...">
+                        <input type="text" class="form-control" aria-label="Añadir ubicación" v-model="userAd.desiredLocation" placeholder="Añadir ubicación...">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="bi bi-geo-alt" style="font-size: inherit;"></i></span>
                         </div>
@@ -104,13 +122,13 @@ export default {
                         <div class="input-up">
                             <label for="entrada">Entrada</label>
                             <div class="d-flex align-items-center">
-                                <input type="text" id="entrada" class="form-control" aria-label="Cantidad mínima" placeholder="Min...">
+                                <input type="text" id="entrada" class="form-control" aria-label="Cantidad mínima" v-model="userAd.entranceDate" placeholder="Min...">
                                 <h5 style="margin: 0 2vw"> - </h5>
                             </div>
                         </div>
                         <div class="input-up">
                             <label for="salida">Salida</label>
-                           <input type="text" id="salida" class="form-control" aria-label="Cantidad máxima" placeholder="Max...">
+                           <input type="text" id="salida" class="form-control" aria-label="Cantidad máxima" v-model="userAd.exitDate" placeholder="Max...">
                         </div>
                     </div>
                     <h5>Inquilinos</h5>
@@ -118,7 +136,7 @@ export default {
                         <div class="input-up">
                             <label for="entrada">Número</label>
                             <div class="d-flex align-items-center">
-                                <input type="text" id="entrada" class="form-control" aria-label="Cantidad máxima" placeholder="Max..."> 
+                                <input type="text" id="entrada" class="form-control" aria-label="Cantidad máxima" v-model="userAd.maxCohabitants" placeholder="Max..."> 
                             </div>
                         </div>
                         <div class="input-up" style="margin-left: 1vw;">
@@ -130,6 +148,7 @@ export default {
                     </div>
                     <textarea class="form-control" id="descripcion" rows="3" placeholder="Añadir descripción..."></textarea>
                 </div>
+                <button type="submit" class="btn btn-primary" @click.prevent="saveUserAd">Guardar</button>
             </form>
         </div>
     </div>
@@ -177,8 +196,6 @@ h5 {
     --bs-popover-max-width: 80% !important;
 }
 
-input{
-    border-radius: 10% !important;
-}
+
 
 </style>
