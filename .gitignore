@@ -246,3 +246,6 @@ dist
 */package-lock.json
 */package.json
 */manifest.json
+
+# Uploaded files
+*/uploads/*

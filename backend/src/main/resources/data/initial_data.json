@@ -8,10 +8,10 @@
       "phone": "123456789",
       "email": "user1@example.com",
       "tag": [{
-              "id": "65e305e4597c9969f3b36f06"
-          }, {
-              "id": "65e305e4597c9969f3b36f07"
-          }],
+      		  "id": "65e305e4597c9969f3b36f06"
+      	  }, {
+      		  "id": "65e305e4597c9969f3b36f07"
+      }],
       "description": "Description for user 1",
       "plan": "Basic",
       "isVerified": true,
@@ -26,9 +26,9 @@
       "email": "user2@example.com",
       "tag": [{
               "id": "65e305e4597c9969f3b36f06"
-          }, {
+           }, {
               "id": "65e305e4597c9969f3b36f07"
-          }],
+      }],
       "description": "Description for user 2",
       "plan": "Explorer",
       "isVerified": false,

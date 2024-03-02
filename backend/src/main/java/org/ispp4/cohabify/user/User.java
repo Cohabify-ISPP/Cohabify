@@ -45,7 +45,7 @@ public class User extends BaseEntity {
     @Email
     private String email;
     
-    @NotNull
+    @DBRef
     private List<Tag> tag;
     
     @NotNull
@@ -54,6 +54,11 @@ public class User extends BaseEntity {
     
     @NotNull
     private Plan plan;
+    
+    @NotNull
+    private Genre genre;
+    
+    private String imageUri;
     
     @NotNull
     private Boolean isVerified;
