@@ -1,14 +1,17 @@
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 export default {
     
     setup() {
 
+        const user = ref({ id: "65e305e4597c9969f3b36f05", username: "Nombre de prueba", gender: "Masculino", img: "https://via.placeholder.com/200",  valorations: [{user: "id_usuario1", like: false, comment: "Comentario1"}, {user: "65e305e4597c9969f3b36f05", like: true, comment: null}, {user: "id_usuario3", like: false, comment: "Comentario3"}, {user: "id_usuario4",  like: true, comment: "Comentario4"}], 
+                        tags: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1"]})
+
+
         const userAdvertisement = ref({ description: "Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga ", 
                                         minBudget: 123.4, maxBudget: 567.8, desiredLocation: "Street 123", entranceDate: "2021-12-12", 
-                                        exitDate: "2022-12-12", maxCohabitants: 3, likes: 19,
-                                        comments: [{user: "Usuario1", comment: "Comentario1"}, {user: "Usuario2", comment: "Comentario2"}, {user: "Usuario3", comment: "Comentario3"}, {user: "Usuario4", comment: "Comentario4"}, {user: "Usuario5", comment: "Comentario5"}, {user: "Usuario6", comment: "Comentario6"}, {user: "Usuario7", comment: "Comentario7"}, {user: "Usuario8", comment: "Comentario8"}, {user: "Usuario9", comment: "Comentario9"}, {user: "Usuario10", comment: "Comentario10"}]});
+                                        exitDate: "2022-12-12", maxCohabitants: 3, author: user});
         
         const commonHouses = ref([{img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Aderla", monthly_price: 123.4, size_m2:45, floor: "7th", description: "description description description description description description description description description description description description description description description description description description description"},
                                 {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Cazorla", monthly_price: 124.4, size_m2:45, floor: "7th", description: "Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga Desc de prueba muy larga  "},
@@ -18,41 +21,79 @@ export default {
                                 {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Calares", monthly_price: 128.4, size_m2:45, floor: "7th", description: "description"},
                                 {img: "https://via.placeholder.com/200", name:"Habitación de piso en calle Web", monthly_price: 129.4, size_m2:45, floor: "7th", description: "description"}])
         
-        const user = ref({ name: "Nombre de prueba", gender: "Masculino", photo: "https://via.placeholder.com/200", 
-                        etiquetas: ["etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10, etiqueta1", "etiqueta2", "etiqueta3", "etiqueta4", "etiqueta5", "etiqueta6", "etiqueta7", "etiqueta8", "etiqueta9", "etiqueta10"]})
 
-        //TODO: Fetch data from API
+        const userAdvertisementId = "65e326184510d9c9a7c48173";
+        const currentUser = user
+
+        //props = ['id'];
 
         /*
-
-        props = ['id'];
-
         const fetchData = async () => {
             try {
-                const response = await fetch(import.meta.env.VITE_API_URL + `/userAdvertisment/${id}`,
+                const response = await fetch(import.meta.env.VITE_API_URL + `/api/userAdvertisement/${id}`,
                     {
                         method: "GET",
                         credentials: "include",
                     });
                 const data = await response.json();
 
-                data.entranceDate = new Date(data.entranceDate);
-                data.exitDate = new Date(data.exitDate);
                 userAdvertisement.value = data;
             } catch (error) {
                 console.error("Error:", error);
             }
         };
         */
-        
+
+        const likesCount = computed(() => {
+            return user.value && user.value.valorations
+                ? user.value.valorations.filter(valoration => valoration.like).length
+                : 0;
+        });
+
+        const commentsCount = computed(() => {
+            return user.value && user.value.valorations
+                ? user.value.valorations.filter(valoration => valoration.comment !== null).length
+                : 0;
+        });
+
+        const hasLike = computed(() => {
+            return user.value.valorations.some(valoration => valoration.user === currentUser.value.id && valoration.like);
+        });
+
+        const toggleLike = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_API_URL + `/api/addPositiveRater/${user.value.id}/${userAdvertisement.value.author.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const likedIndex = user.value.valorations.findIndex(valoration => valoration.user === currentUser.value.id);
+                    if (likedIndex !== -1) {
+                        user.value.valorations[likedIndex].like = !user.value.valorations[likedIndex].like;
+                    }
+                }
+            
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+
         return {
             user,
             userAdvertisement,
             commonHouses,
+            likesCount,
+            commentsCount,
+            hasLike,
+            toggleLike,
         }
     }
 }
 </script>
+
 <template>
 
     <Navbar />
@@ -62,13 +103,19 @@ export default {
             <div class="columna">
                 <div class="subseccion">
                     <div class="imagen-circulo">
-                        <img :src= user.photo alt = "Imagen de perfil">
+                        <img :src= user.img alt = "Imagen de perfil">
                     </div>
 
                     <div class ="botones" style="margin-top: 3%;">
                         <div class="likes">
-                            <i class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
-                            <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.likes }} </span>
+                            <div v-if="hasLike" @click="toggleLike" style="cursor:pointer">
+                                <i class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878"></i>
+                            </div>
+                            <div v-else>
+                                <i class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                            </div>
+                            
+                            <span style="font-weight: bold; font-size: large; color:#28426B"> {{ likesCount }} </span>
                         </div>
                         <button type="button" class="boton"><strong>Comentar</strong></button>
                         <button type="button" class="boton"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
@@ -76,34 +123,56 @@ export default {
                 </div>
                 
                 <div style="overflow-y: auto; flex-basis: 30%;" class="subseccion">
+
+                    <h5 style="color:#5D5E60; text-align: left;">Descripción</h5>
+                    <p style="text-align: left; word-wrap: break-word; margin-bottom: 5px;">{{ userAdvertisement.description }}</p>
+
                     <h5 style="color:#5D5E60; text-align: left;">Comentarios</h5>
-                    
-                    <div v-for="comentario in userAdvertisement.comments" :key="comentario">
-                        <div class="comentario"> {{ comentario.comment }} </div>
-                   </div>
+                
+                    <div v-if="commentsCount == 0" style="text-align: left;">Aún no hay comentarios...</div>
+
+                    <div v-else>
+                        <div v-for="comentario in user.valorations" :key="comentario">
+                            <div v-if="comentario.comment != null" class="comentario"> {{ comentario.comment }} </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="columna">
                 <div class="subseccion">
-                    <h3 style="text-align: left;"> {{ user.name }}</h3>
+                    <h3 style="text-align: left;"> {{ user.username }}</h3>
 
                     <br>
 
-                    <h5 style="color:#5D5E60; text-align: left;">Etiquetas</h5> 
-                    <div style="display: inline-flex;" v-for="etiqueta in user.etiquetas" :key="etiqueta">
-                        <span class="etiqueta"> {{ etiqueta }} </span>
+                    <div v-if="user.tags.length == 0" style="text-align: left;">Este usuario no tiene etiquetas establecidas</div>
+                    <div v-else style="margin-bottom: 5px;">
+                        <h5 style="color:#5D5E60; text-align: left;">Etiquetas</h5> 
+                        <div style="display: inline-flex;" v-for="etiqueta in user.tags" :key="etiqueta">
+                            <span class="etiqueta"> {{ etiqueta }} </span>
+                        </div>
                     </div>
 
                     <h5 style="color:#5D5E60; text-align: left;">Género</h5> 
-                    <p style="text-align: left; font-weight: bold;">{{ user.gender }} </p>
+                    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{ user.gender }} </p>
 
-                    <h5 style="text-align: left;">Descripción</h5>
-                    <p style="text-align: left; word-wrap: break-word">{{ userAdvertisement.description }}</p>
+                    <h5 style="color:#5D5E60; text-align: left;">Presupuesto máximo</h5> 
+                    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{ userAdvertisement.maxBudget }}€</p>
+
+                    <h5 style="color:#5D5E60; text-align: left;">Localización deseada</h5> 
+                    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{ userAdvertisement.desiredLocation }}</p>
+
+                    <h5 style="color:#5D5E60; text-align: left;">Fecha de alojamiento</h5>
+                        <div style="display: flex; align-items: flex-start;">
+                            <p style="font-weight: bold; margin-bottom: 5px;"> De {{ userAdvertisement.entranceDate }}</p> 
+                            <div v-if="userAdvertisement.exitDate != null"> 
+                                <p style="font-weight: bold; margin-left: 4px; margin-bottom: 5px;"> a {{ userAdvertisement.exitDate }}</p>
+                            </div>
+                        </div>
                 </div>
 
                 <div class="subseccion" style="overflow-y: auto;">
-                    <h5 style="color:#5D5E60; text-align: left;">Pisos en común</h5>
+                    <h5 style="color:#5D5E60; text-align: left;">Pisos promocionados cercanos</h5>
                     
                     <div v-for="anuncio in commonHouses" :key="anuncio">
 
@@ -118,14 +187,12 @@ export default {
                                     <span>{{ anuncio.size_m2 }}m2</span>
                                     <span style="">{{ anuncio.floor }}</span>
                                 </div>
-
                                 <p class="text-truncate" style="text-align: left; word-wrap: break-word; margin: 10px 0;">{{ anuncio.description }}</p>
                             </div>
                         </div>
                    </div>
                 </div>
             </div>
-        
         </div>
     </div>
 
@@ -138,7 +205,7 @@ export default {
     display: flex;
     height: auto;
     width: 97%;
-    margin: 1%;
+    margin: 0.5%;
     justify-content: center;
     align-items: center;
 }
@@ -157,7 +224,7 @@ export default {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    margin-bottom: 5px;
+    margin-bottom: 1%;
 }
 
 .subseccion {
@@ -166,7 +233,6 @@ export default {
     padding: 10px;
     width: 95%;
     height: auto;
-    margin: 1%;
     align-self: center;
 }
 
