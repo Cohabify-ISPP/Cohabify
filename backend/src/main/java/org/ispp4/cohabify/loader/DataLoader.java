@@ -14,6 +14,8 @@ import org.ispp4.cohabify.tag.Tag;
 import org.ispp4.cohabify.tag.TagRepository;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserRepository;
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisementRepository;
 import org.ispp4.cohabify.userRating.UserRating;
 import org.ispp4.cohabify.userRating.UserRatingRepository;
 import org.springframework.boot.ApplicationArguments;
@@ -22,10 +24,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import lombok.AllArgsConstructor;
 
 @Component
@@ -36,6 +36,7 @@ public class DataLoader implements ApplicationRunner {
     private TagRepository tagRepository;
     private HouseRepository houseRepository;
     private HouseAdvertisementRepository houseAdvertisementRepository;
+    private UserAdvertisementRepository userAdvertisementRepository;
     private UserRatingRepository userRatingRepository;
 
 
@@ -46,13 +47,15 @@ public class DataLoader implements ApplicationRunner {
 
         // Lee los datos del archivo JSON
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
         JsonNode rootNode = objectMapper.readTree(resource.getInputStream());
 
         userRepository.deleteAll();
         tagRepository.deleteAll();
         houseRepository.deleteAll();
         houseAdvertisementRepository.deleteAll();
-
+        userAdvertisementRepository.deleteAll();
+        
         // Procesa las etiquetas
         JsonNode tagsNode = rootNode.get("tags");
         if (tagsNode != null) {
@@ -143,6 +146,15 @@ public class DataLoader implements ApplicationRunner {
             houseAdvertisementRepository.saveAll(houseAdvertisementsToInsert);
             System.out.println(houseAdvertisementsToInsert.size() + " anuncios de viviendas insertados correctamente.");
         }
+        
+        // Procesa los anuncios de usuarios
+        JsonNode userAdvertismentsNode = rootNode.get("userAdvertisements");
+        if (userAdvertismentsNode != null) {
+            List<UserAdvertisement> userAdvertisementsToInsert = Arrays.asList(objectMapper.readValue(userAdvertismentsNode.toString(), UserAdvertisement[].class));
+            userAdvertisementRepository.saveAll(userAdvertisementsToInsert);
+            System.out.println(userAdvertisementsToInsert.size() + " anuncios de usuario insertados correctamente."); 
+        }
+        
     }
 }
 

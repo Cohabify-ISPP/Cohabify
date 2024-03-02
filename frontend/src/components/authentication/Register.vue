@@ -43,7 +43,7 @@
               <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña</label>
               <input type="password" required class="form-control" id="confirmPassword" v-model="confirmPassword" placeholder="repetir contraseña"
               :class="{'is-invalid': password !== confirmPassword}">
-              <div class="invalid-feedback text-white fw-bold" v-if="password !== confirmPassword">Las contraseñas no coinciden</div>
+              <div class="invalid-feedback text-danger" v-if="password !== confirmPassword">Las contraseñas no coinciden</div>
             </div>
 
           </div>
@@ -76,7 +76,12 @@ export default {
         const img = ref('')
 
         const onFileChanged = (event) => {
-            img.value = event.target.files[0];
+          if (event.target.files[0].size > 1000000 && event.target.files[0].type.includes('image')) {
+            alert('La imagen debe pesar menos de 1MB')
+            event.target.value = ''
+          } else {
+            img.value = event.target.files[0]
+          }
         }
 
         const register = () => {

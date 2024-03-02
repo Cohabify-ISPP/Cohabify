@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,9 +18,7 @@ import lombok.Setter;
 public class UserAdvertisement extends BaseEntity {
 
     private String description;
-    @NotNull
-    private Double minBudget;
-
+    
     @NotNull
     private Double maxBudget;
 
@@ -31,31 +28,27 @@ public class UserAdvertisement extends BaseEntity {
     @NotNull
     private LocalDate entranceDate;
 
-    @NotNull
     private LocalDate exitDate;
 
     @NotNull
     private Integer maxCohabitants;
 
-    @NotNull
-    @PositiveOrZero
-    private Integer likes;
-
     @DBRef
-    @NotNull
-    private User user;
+    private User author;
 
-    public UserAdvertisement(ObjectId id, String description, Double minBudget, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, Integer likes, User user) {
+    public UserAdvertisement() {
+        
+    }
+
+    public UserAdvertisement(ObjectId id, String description, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, User author) {
         this.id = id;
         this.description = description;
-        this.minBudget = minBudget;
         this.maxBudget = maxBudget;
         this.desiredLocation = desiredLocation;
         this.entranceDate = entranceDate;
         this.exitDate = exitDate;
         this.maxCohabitants = maxCohabitants;
-        this.likes = likes;
-        this.user = user;
+        this.author = author;
     }
 
     @Override
@@ -63,14 +56,12 @@ public class UserAdvertisement extends BaseEntity {
         return "{" +
             " id='" + getId() + "'" +
             ", description='" + getDescription() + "'" +
-            ", minBudget='" + getMinBudget() + "'" +
             ", maxBudget='" + getMaxBudget() + "'" +
             ", desiredLocation='" + getDesiredLocation() + "'" +
             ", entranceDate='" + getEntranceDate() + "'" +
             ", exitDate='" + getExitDate() + "'" +
             ", maxCohabitants='" + getMaxCohabitants() + "'" +
-            ", likes='" + getLikes() + "'" +
-            ", user='" + getUser() + "'"+
+            ", user='" + getAuthor() + "'"+
             "}";
     }
 
