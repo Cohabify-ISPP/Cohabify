@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, inject } from 'vue';
 
 export default {
     
@@ -23,7 +23,7 @@ export default {
         
 
         const userAdvertisementId = "65e326184510d9c9a7c48173";
-        const currentUser = user
+        const currentUser = inject('user')
 
         //props = ['id'];
 

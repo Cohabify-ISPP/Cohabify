@@ -31,15 +31,14 @@
     </div>
   </template>
   
-
-
 <script>
-    import { ref } from 'vue'
+    import { inject, ref } from 'vue'
     export default {
         setup() {
             const username = ref('')
             const password = ref('')
             const fetchError = ref(null)
+            const user = inject('user')
             const login = () => {
                 const data = {
                     username: username.value,
@@ -66,6 +65,7 @@
                     }
                 })
                 .then(data => {
+                    user.value = data.user;
                     window.location.href = '/';
                 })
                 .catch(error => console.error(error));
@@ -82,7 +82,6 @@
 </script>
 
 <style scoped>
-
 
 .card {
     padding-top: 40px;
