@@ -1,7 +1,10 @@
 package org.ispp4.cohabify.dto;
 
+import org.ispp4.cohabify.user.Genre;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,7 +37,10 @@ public class UserRegisterRequest {
 	
     @NotBlank
     @Size(max = 11)
-    @Pattern(regexp = "^[0-9]{3}-[0-9]{3}-[0-9]{3}$")
+    @Pattern(regexp = "^[0-9]{9}$")
     private String phone;
-	
+    
+    @NotNull
+    private Genre genre;
+    
 }
