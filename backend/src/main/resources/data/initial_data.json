@@ -70,5 +70,19 @@
       "ratedUser": {"id": "65e305e4597c9969f3b36f04"},
       "comment": "Comment for user 2"
     }
+  ],
+  "userAdvertisements":[
+    {
+      "id": "65e326184510d9c9a7c48173",
+      "description": "Anuncio real",
+      "maxBudget": 400,
+      "desiredLocation": "C/ Pino N3",
+      "entranceDate": "2024-02-09",
+      "exitDate": "2024-06-30",
+      "maxCohabitants": 2,
+      "author": {
+        "id": "65e305e4597c9969f3b36f05"
+      }
+    }
   ]
 }
