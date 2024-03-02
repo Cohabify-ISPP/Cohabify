@@ -37,9 +37,11 @@ public class HouseAdvertisementService {
             adv.setTitle(advertisement.getTitle());
             adv.setDescription(advertisement.getDescription());
             adv.setPrice(advertisement.getPrice());
+            /*
             adv.setImages(advertisement.getImages());
+            */
             adv.setTenants(advertisement.getTenants());
-            adv.setHouse(advertisement.getHouse());
+            advertisement = advertisementRepository.save(advertisement);
 
             return advertisementRepository.save(adv);
         } else {

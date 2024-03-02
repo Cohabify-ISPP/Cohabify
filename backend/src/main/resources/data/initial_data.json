@@ -41,6 +41,10 @@
     {
       "tag": "tag4",
       "tagType": "USER_TAG"
+    },
+    {
+      "tag": "tag5",
+      "tagType": "FLAT_TAG"
     }
   ]
 }

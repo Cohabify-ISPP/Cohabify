@@ -2,88 +2,82 @@
 <template>
   <Navbar />
   <div class="container">
-        <div class="row mt-5">
-          <div class="col col-6 justify-content-center align-items-center">
-              <div class = "card">
-                  <div class = "top">
-                      <p>Arrastra aquí tus imágenes</p>
-                  </div>
-                  <div class="drag-area" @dragover.prevent="onDragover" @dragleave.prevent="onDragLeave" @drop.prevent="onDrop">
-                    <span v-if="!isDragging">
-                      Arrastra aquí tu imagen o
-                      <span class="select" role="button" @click="selectFiles">
-                        Elige
-                      </span>
-                    </span>
-                    <div v-else  class="select">Deja la imagen aquí</div>
-                    <input name="file" type="file" class="file" ref="fileInput" multiple @change="onFileSelect"/>
-                  </div>
-                  <div class="container">
-                      <div class="image" v-for="(image,index) in images" :key="index">
-                        <span class="delete" @click = "deleteImage(index)">&times;</span>
-                        <img :src="image.url"/>
-                      </div>
-                  </div>
-                  <button type = "button">Subir</button>
-              </div>  
+      <div class="row mt-5">
+        <div class="d-flex align-items-center justify-content-center text-center w-75 p-3 ">
+          <div class="container text-center">
+            <form class="row justify-content-center">
+              <div class="col-md-10">
+                <div class="form-group" style="padding: 20px;">
+                  <label for="title" class="form-label text-white fw-bold">Nombre de usuario</label>
+                  <input type="text" class="form-control" id="title" v-model="title" placeholder="Nombre de usuario">
+                </div>
+                <div class="form-group" style="padding: 20px;">
+                  <label for="description" class="form-label text-white fw-bold">Contraseña</label>
+                  <input type="text" class="form-control" id="description" v-model="description" placeholder="Contraseña">
+                </div>
+                <div class="form-group" style="padding: 20px;">
+                  <label for="price" class="form-label text-white fw-bold">price</label>
+                  <input type="number" step="0.01" class="form-control" id="price" v-model="price">
+                </div>
+                <div class="form-group" style="padding: 20px;">
+                  <label for="tenants" class="form-label text-white fw-bold">tenants</label>
+                  <input type="number" class="form-control" id="tenants" v-model="tenants">
+                </div>
+                <div class="form-group" style="padding: 20px;">
+                    <button type="button" class="btn-primary" @click="register">Publicar</button>
+                </div>
+              </div>
+            </form>
           </div>
-          <div class="col col-6 justify-content-center align-items-center">
-            <!--Aquí va la columna derecha-->
-          </div> 
-        </div>
-           
-        
-    </div>
+        </div> 
+      </div>
+  </div>
 </template>
 
 <script>
-export default(await import('vue')).defineComponent({
-  data(){
-    return{
-      images: [],
-      isDragging: false,  
-    }
-  },
-  methods:{
-    selectFiles(){
-      this.$refs.fileInput.click();
-    },
-    onFileSelect(event){
-      const files = event.target.files;
-      if(files.length === 0)return;
-        for(let i = 0; i<files.length; i++){
-          if(files[i].type.split('/')[0] !== 'image') continue;
-          if(!this.images.some((e)=> e.name === files[i].name)){
-            this.images.push({name: files[i].name, url: URL.createObjectURL(files[i])});
-          }
-        }
-      
-    },
-    deleteImage(index){
-      this.images.splice(index, 1);
-    },
-    onDragover(event){
-      event.preventDefault();
-      this.isDragging = true;
-      event.dataTransfer.dropEffect = 'copy';
-    },
-    onDragLeave(event){
-      event.preventDefault();
-      this.isDragging = false;
-    },
-    onDrop(event){
-      event.preventDefault();
-      this.isDragging = false;
-      const files = event.dataTransfer.files;
-      for(let i = 0; i<files.length; i++){
-          if(files[i].type.split('/')[0] !== 'image') continue;
-          if(!this.images.some((e)=> e.name === files[i].name)){
-            this.images.push({name: files[i].name, url: URL.createObjectURL(files[i])});
-          }
+import { ref } from 'vue'
+
+export default {
+    setup() {
+        const title = ref('')
+        const description = ref('')
+        const price = ref()
+        const tenants = ref()
+
+        const register = () => {
+            const data = {
+                title: title.value,
+                description: description.value,
+                price: price.value,
+                tenants: tenants.value
+            }
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: data.title,
+                        description: data.description,
+                        price: data.price,
+                        tenants: data.tenants
+                       
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(jsonData => window.location.href = '/')
+                    .catch(error => console.error('Error al enviar datos al backend:', error));
+        };
+
+        return {
+            title,
+            description,
+            price,
+            tenants,
+            register
         }
     }
-  }
-})
+}
 </script>
 
 <style scoped>

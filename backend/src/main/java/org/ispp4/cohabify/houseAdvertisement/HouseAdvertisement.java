@@ -21,7 +21,6 @@ import org.ispp4.cohabify.model.BaseEntity;
 @Setter
 @Document(collection = "houseAdvertisements")
 public class HouseAdvertisement extends BaseEntity {
-
     @NotBlank
     @Size(min = 1, max = 100)
     private String title;
@@ -32,19 +31,10 @@ public class HouseAdvertisement extends BaseEntity {
 
     @NotNull
     @PositiveOrZero
-    private Float price;
-
-    @NotNull
-    @Size(min = 1, max = 5)
-    private List<String> images;
+    private Double price;
 
     @NotNull
     @Min(0)
     @Max(6)
     private Integer tenants;
-
-    @NotNull
-    @DBRef
-    private House house;
-
 }
