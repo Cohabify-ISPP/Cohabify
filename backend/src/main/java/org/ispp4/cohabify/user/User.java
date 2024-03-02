@@ -1,5 +1,6 @@
 package org.ispp4.cohabify.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.ispp4.cohabify.model.BaseEntity;
@@ -61,7 +62,7 @@ public class User extends BaseEntity {
     private List<String> authorities;
 
     @DBRef
-    private List<User> likes;
+    private List<User> likes = new ArrayList<User>();
     
     public User() {
     

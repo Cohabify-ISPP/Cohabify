@@ -61,7 +61,7 @@ public class DataLoader implements ApplicationRunner {
         if (tagsNode != null) {
             List<UserRating> ratingsToInsert = Arrays.asList(objectMapper.readValue(userRatingNode.toString(), UserRating[].class));
             userRatingRepository.saveAll(ratingsToInsert);
-            System.out.println(ratingsToInsert.size() + " etiquetas insertadas correctamente.");
+            System.out.println(ratingsToInsert.size() + " valoraciones insertadas correctamente.");
         }
     }
 }
