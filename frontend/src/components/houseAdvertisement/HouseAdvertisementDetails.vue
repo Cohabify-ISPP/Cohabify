@@ -5,13 +5,9 @@ import { useRoute } from 'vue-router';
 
 const houseAdvertisement = ref(null);
 
-const selectedImage = ref(false)
+const selectedImage = ref(0)
 
 const clipboardMessage = ref(false);
-
-const selectImage = (index) => {
-    selectedImage.value = index;
-};
 
 const isLoading = ref(true);
 
@@ -66,28 +62,23 @@ onMounted(() => {
         return response.json();
         
     }).then(data => {
-        if (JSON.stringify(data) !== JSON.stringify(houseAdvertisement.value)) {
-            isLoading.value = false
-            houseAdvertisement.value = data
-        }
-        return 
-        
-    }).then(() => {
-        const carousel = document.getElementById('imgCarousel');
-        
-        if (carousel) {
-            carousel.addEventListener('slid.bs.carousel', function (e) {
-                const activeSlideIndex = Array.from(e.target.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
-                selectedImage.value = activeSlideIndex;
-            });
-        }
-    }).catch(error => {
+        isLoading.value = false
+        houseAdvertisement.value = data
+        nextTick(() => {
+            const carousel = document.getElementById('imgCarousel');
+            
+            if (carousel) {
+                carousel.addEventListener('slid.bs.carousel', function (e) {
+                    const activeSlideIndex = Array.from(e.target.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+                    selectedImage.value = activeSlideIndex;
+                });
+            }
+        });
+    })
+    .catch(error => {
         isLoading.value = false
         fetchError.value = error.message
     });
-    
-    
-    
 });
         
         
@@ -110,19 +101,22 @@ onMounted(() => {
                 <div class="container" >
                     <div id="imgCarousel" class="carousel slide mb-4">
                         <!-- Imagen superior --> 
-                        <div class="carousel-inner" >
-                            <div class="carousel-item active" v-for="image in houseAdvertisement.images" :key="image">
-                                <img style="object-fit: cover;" :src="image" class="img-fluid" alt="...">
-                            </div> 
-                        
+                        <div class="carousel-inner mx-auto p-3">
+                            <div class="carousel-item" v-for="(image,index) in houseAdvertisement.images" :key="image" :class="{'active': index === 0}">
+                                <img :src="image" class="img-fluid carousel-image" alt="...">
+                            </div>
                         </div>
                         <!-- Botones de control -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#imgCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="material-symbols-outlined" style="color: black;">
+                                arrow_back_ios
+                            </span>
                             <span class="visually-hidden">Previous</span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#imgCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="material-symbols-outlined" style="color: black;">
+                                arrow_forward_ios
+                            </span>
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
@@ -131,9 +125,8 @@ onMounted(() => {
                 <div class="container w-75">
                     <div class="row align-items-center">
                         <div class="col-md-4 mb-4" v-for="(image,index) in houseAdvertisement.images" :key="image">
-                            <img :src="image" class="d-block w-100" alt="..." data-bs-target="#imgCarousel" :data-bs-slide-to="index" :@click="selectImage(index)" :class="{'shadow': selectedImage === index }">
-                        </div> 
-                        
+                            <img :src="image" class="d-block w-100 rounded" alt="..." data-bs-target="#imgCarousel" :data-bs-slide-to="index" :class="{'image-selected': selectedImage === index }">
+                        </div>         
                     </div>
                 </div>
             </div>    

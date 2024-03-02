@@ -10,7 +10,7 @@ const routes = [
     { path: '/login', component: Login },
     { path: '/register', component: Register },
     {path: '/userAdvertisement/1', component: UserAdvertisementDetails },
-    {path: '/houseAdvertisement/:id', component: HouseAdvertisementDetails }
+    {path: '/advertisements/house/:id', component: HouseAdvertisementDetails }
 ];
   
 const router = createRouter({
