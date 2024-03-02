@@ -1,6 +1,8 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.user.User;
@@ -18,9 +20,10 @@ import lombok.Setter;
 @Document(collection = "userAdvertisements")
 public class UserAdvertisement extends BaseEntity {
 
+    @NotBlank
+    private String title;
+
     private String description;
-    @NotNull
-    private Double minBudget;
 
     @NotNull
     private Double maxBudget;
@@ -31,7 +34,6 @@ public class UserAdvertisement extends BaseEntity {
     @NotNull
     private LocalDate entranceDate;
 
-    @NotNull
     private LocalDate exitDate;
 
     @NotNull
@@ -39,7 +41,10 @@ public class UserAdvertisement extends BaseEntity {
 
     @NotNull
     @PositiveOrZero
-    private Integer likes;
+    private List<User> likes;
+
+    @DBRef
+    private List<Tag> tags;
 
     @DBRef
     @NotNull
