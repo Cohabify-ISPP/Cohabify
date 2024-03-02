@@ -76,7 +76,12 @@ export default {
         const img = ref('')
 
         const onFileChanged = (event) => {
-            img.value = event.target.files[0];
+          if (event.target.files[0].size > 1000000 && event.target.files[0].type.includes('image')) {
+            alert('La imagen debe pesar menos de 1MB')
+            event.target.value = ''
+          } else {
+            img.value = event.target.files[0]
+          }
         }
 
         const register = () => {
