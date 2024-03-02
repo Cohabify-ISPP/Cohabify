@@ -8,10 +8,10 @@
       "phone": "123456789",
       "email": "user1@example.com",
       "tag": [{
-      		"id": "65e305e4597c9969f3b36f06"
-      	}, {
-      		"id": "65e305e4597c9969f3b36f07"
-      	}],
+      		  "id": "65e305e4597c9969f3b36f06"
+      	  }, {
+      		  "id": "65e305e4597c9969f3b36f07"
+      }],
       "description": "Description for user 1",
       "plan": "Basic",
       "isVerified": true,
@@ -25,10 +25,10 @@
       "phone": "987654321",
       "email": "user2@example.com",
       "tag": [{
-      		"id": "65e305e4597c9969f3b36f06"
-      	}, {
-      		"id": "65e305e4597c9969f3b36f07"
-      	}],
+              "id": "65e305e4597c9969f3b36f06"
+           }, {
+              "id": "65e305e4597c9969f3b36f07"
+      }],
       "description": "Description for user 2",
       "plan": "Explorer",
       "isVerified": false,
@@ -55,6 +55,20 @@
       "id": "65e305e4597c9969f3b36f09",
       "tag": "tag4",
       "tagType": "USER_TAG"
+    }
+  ],
+  "userRatings":[
+    {
+      "id": "65e305e4597c9969f3b36f10",
+      "user": {"id" : "65e305e4597c9969f3b36f04"},
+      "ratedUser": {"id": "65e305e4597c9969f3b36f05"},
+      "comment": "Comment for user 1"
+    },
+    {
+      "id": "65e305e4597c9969f3b36f11",
+      "user": {"id": "65e305e4597c9969f3b36f05"},
+      "ratedUser": {"id": "65e305e4597c9969f3b36f04"},
+      "comment": "Comment for user 2"
     }
   ]
 }
