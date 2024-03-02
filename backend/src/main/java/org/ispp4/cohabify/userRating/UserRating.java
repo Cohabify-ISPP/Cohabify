@@ -17,12 +17,10 @@ public class UserRating extends BaseEntity {
     
     @DBRef
     @NotNull
-    @Size(max = 20)
     private User user;
 
     @DBRef
     @NotNull
-    @Size(max = 20)
     private User ratedUser;
 
     @NotNull
