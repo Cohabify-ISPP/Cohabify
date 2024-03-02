@@ -32,7 +32,7 @@ public class HouseAdvertisementController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/advertisements/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
         Optional<HouseAdvertisement> advertisement = advertisementService.findById(new ObjectId(id));
         if(advertisement.isPresent()){

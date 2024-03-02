@@ -72,9 +72,6 @@ public class User extends BaseEntity {
     @NotNull
     private String image;
 
-    @NotNull
-    private Gender gender;
-
     public User() {
     
     }

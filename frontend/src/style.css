@@ -132,6 +132,7 @@ button:focus-visible {
 .image-selected {
   box-shadow: 0 0 13px 0 rgba(102, 102, 102, 0.734);
   overflow: show;
+}
 
 input[type=range]::-webkit-slider-runnable-track {
   background: #ddd;

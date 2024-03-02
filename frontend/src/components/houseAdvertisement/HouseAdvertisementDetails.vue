@@ -53,7 +53,7 @@ function copyToClipboard() {
 }
 
 onMounted(() => {
-    fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/' + id)
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/' + id)
     .then(response => {
         if (!response.ok) {
             throw new Error('No se han podido cargar la vivienda')
@@ -197,9 +197,9 @@ onMounted(() => {
                                             <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px">
                                                 <div class ="d-flex" style="margin-bottom: 5px;">
                                                     <h5 style="text-align: left;" class="card-title">{{ tenant.username }}</h5>
-                                                    <i class="bi bi-gender-female" style="margin-left: 5px;" v-if="tenant.gender == 'WOMAN'"></i>
-                                                    <i class="bi bi-gender-male" style="margin-left: 5px;" v-if="tenant.gender == 'MAN'"></i>
-                                                    <i class="bi bi-gender-ambiguous" style="margin-left: 5px;" v-if="tenant.gender == 'NON_BINARY'"></i>
+                                                    <i class="bi bi-gender-female" style="margin-left: 5px;" v-if="tenant.genre == 'FEMENINO'"></i>
+                                                    <i class="bi bi-gender-male" style="margin-left: 5px;" v-if="tenant.genre == 'MASCULINO'"></i>
+                                                    <i class="bi bi-gender-ambiguous" style="margin-left: 5px;" v-if="tenant.genre == 'OTRO'"></i>
                                                 </div>
                                                 <p style="text-align: justify;" class="card-text">{{ truncateDescription(tenant.description) }}</p>
                                             </div>

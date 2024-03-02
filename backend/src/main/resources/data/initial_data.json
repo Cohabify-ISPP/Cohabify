@@ -33,7 +33,7 @@
       "plan": "Basic",
       "isVerified": true,
       "authorities": ["Admin"],
-      "gender": "MAN",
+      "genre": "MASCULINO",
       "image": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
     },
     {
@@ -53,7 +53,7 @@
       "plan": "Explorer",
       "isVerified": false,
       "authorities": ["User"],
-      "gender": "NON_BINARY",
+      "genre": "OTRO",
       "image": "https://hips.hearstapps.com/hmg-prod/images/demi-lovaro-ge-nero-no-binario-1-1622484860.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=1200:*"
     }
   ],
@@ -144,7 +144,7 @@
       "description": "Descripción para casa 3",
       "price": 800,
       "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
-      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
+      "tenants": [],
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
       "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
       "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
