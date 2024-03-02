@@ -160,5 +160,19 @@
                 "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
                 "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
     }
+  ],
+  "userRatings":[
+    {
+      "id": "65e305e4597c9969f3b36f10",
+      "user": {"id" : "60d5ec9af682fbd39a1b8b9d"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
+      "comment": "Comment for user 1"
+    },
+    {
+      "id": "65e305e4597c9969f3b36f11",
+      "user": {"id": "60d5ec9af682fbd39a1b8b9e"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
+      "comment": "Comment for user 2"
+    }
   ]
 }

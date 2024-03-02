@@ -14,6 +14,8 @@ import org.ispp4.cohabify.tag.Tag;
 import org.ispp4.cohabify.tag.TagRepository;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserRepository;
+import org.ispp4.cohabify.userRating.UserRating;
+import org.ispp4.cohabify.userRating.UserRatingRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -34,6 +36,8 @@ public class DataLoader implements ApplicationRunner {
     private TagRepository tagRepository;
     private HouseRepository houseRepository;
     private HouseAdvertisementRepository houseAdvertisementRepository;
+    private UserRatingRepository userRatingRepository;
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -56,7 +60,7 @@ public class DataLoader implements ApplicationRunner {
             tagRepository.saveAll(tagsToInsert);
             System.out.println(tagsToInsert.size() + " etiquetas insertadas correctamente.");
         }
-
+        
         // Procesa los usuarios
         JsonNode usersNode = rootNode.get("users");
         if (usersNode != null) {
@@ -65,6 +69,14 @@ public class DataLoader implements ApplicationRunner {
             System.out.println(usersToInsert.size() + " usuarios insertados correctamente.");
         }
 
+        // Procesa las valoraciones de usuarios
+        JsonNode userRatingNode = rootNode.get("userRatings");
+        if (tagsNode != null) {
+            List<UserRating> ratingsToInsert = Arrays.asList(objectMapper.readValue(userRatingNode.toString(), UserRating[].class));
+            userRatingRepository.saveAll(ratingsToInsert);
+            System.out.println(ratingsToInsert.size() + " valoraciones insertadas correctamente.");
+        }
+      
         //Procesa las viviendas
         JsonNode housesNode = rootNode.get("houses");
         if (housesNode != null) {
