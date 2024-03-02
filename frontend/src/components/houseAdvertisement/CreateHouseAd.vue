@@ -51,7 +51,7 @@ export default {
                 price: price.value,
                 tenants: tenants.value
             }
-            fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements', {
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/advertisements', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

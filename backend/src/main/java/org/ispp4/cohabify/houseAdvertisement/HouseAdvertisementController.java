@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/advertisements/houses")
 public class HouseAdvertisementController {
     
     private final HouseAdvertisementService advertisementService;
@@ -37,7 +37,7 @@ public class HouseAdvertisementController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/advertisements")
+    @GetMapping("")
     public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements() {
         List<HouseAdvertisement> advertisements = advertisementService.findAll();
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
@@ -46,6 +46,16 @@ public class HouseAdvertisementController {
     @GetMapping("/advertisements/{id}")
     public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable ObjectId id) {
         Optional<HouseAdvertisement> advertisement = advertisementService.findById(id);
+        if(advertisement.isPresent()){
+            return new ResponseEntity<>(advertisement.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
+        Optional<HouseAdvertisement> advertisement = advertisementService.findById(new ObjectId(id));
         if(advertisement.isPresent()){
             return new ResponseEntity<>(advertisement.get(), HttpStatus.OK);
         } else {
