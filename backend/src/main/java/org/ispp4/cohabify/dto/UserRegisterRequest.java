@@ -34,7 +34,7 @@ public class UserRegisterRequest {
 	
     @NotBlank
     @Size(max = 11)
-    @Pattern(regexp = "^[0-9]{3}-[0-9]{3}-[0-9]{3}$")
+    @Pattern(regexp = "^[0-9]{9}$")
     private String phone;
 	
 }
