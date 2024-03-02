@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class UserService {
-
+  
     private final UserRepository userRepository;
 
     public List<User> findAll() {
@@ -40,8 +40,9 @@ public class UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
-    public List<User> findByIsOwner(Boolean owner) {
-        return userRepository.findByIsOwner(owner);
-    }
+	public List<User> findByIsOwner(Boolean owner) {
+	  return userRepository.findByIsOwner(owner);
+	}
+
 
 }

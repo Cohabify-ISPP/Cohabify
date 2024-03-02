@@ -1,61 +1,29 @@
 <template>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-custom">
-  <!-- Container wrapper -->
+<nav class="navbar navbar-expand navbar-custom sticky-top">
   <div class="container-fluid">
-    <!-- Toggle button -->
-    <button
-      data-mdb-collapse-init
-      class="navbar-toggler"
-      type="button"
-      data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <i class="fas fa-bars"></i>
-    </button>
 
-    <!-- Collapsible wrapper -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Navbar brand -->
-      <a class="navbar-brand mt-2 mt-lg-0" href="/">
-        <img
-          src="/images/LogoMonoColor.png"
-          height="35"
-          alt="Cohabify"
-          loading="lazy"
-        />
-      </a>
-      <!-- Left links -->
-      
-      <!-- Left links -->
-    </div>
-    <!-- Collapsible wrapper -->
+    <a class="navbar-brand mt-2 mt-lg-0" href="/">
+      <img style="max-height: 35px;"
+        src="/images/LogoMonoColor.png"
+        alt="Cohabify"
+        loading="lazy"
+      />
+    </a>
 
-    <!-- Right elements -->
     <div class="d-flex align-items-center">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span class="badge rounded-pill badge-notification bg-danger">1</span>
-            Chat
-          </a>
+          <a class="nav-link" href="#"><span class="badge rounded-pill badge-notification bg-danger">1</span> Chat</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="#">Planes</a>
+          <a class="nav-link" href="#">Planes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Publicar Anuncio</a>
         </li>
       </ul>
-      <!-- Icon -->
-      <a class="text-reset me-3" href="#">
-        <i class="fas fa-shopping-cart"></i>
-      </a>
-
-      <!-- Avatar -->
-      <div class="dropdown">
+      
+      <div class="dropdown" style="margin-left: 1vw; margin-right: 1vw;">
         <a
           class="dropdown-toggle d-flex align-items-center hidden-arrow"
           href="#"
@@ -79,17 +47,23 @@
           <li>
             <a class="dropdown-item " href="#" >Perfil</a>
           </li>
+          <li class="d-lg-none">
+            <a class="dropdown-item" href="#">Chat <span class="badge rounded-pill badge-notification bg-danger">1</span></a>
+          </li>
+          <li class="d-lg-none">
+            <a class="dropdown-item" href="#">Publicar Anuncio</a>
+          </li>
+          <li class="d-lg-none">
+            <a class="dropdown-item" href="#">Planes</a>
+          </li>
           <li>
             <a class="dropdown-item" href="#">Cerrar sesión</a>
           </li>
         </ul>
       </div>
     </div>
-    <!-- Right elements -->
   </div>
-  <!-- Container wrapper -->
 </nav>
-<!-- Navbar -->
 </template>
 
 <style scoped>
