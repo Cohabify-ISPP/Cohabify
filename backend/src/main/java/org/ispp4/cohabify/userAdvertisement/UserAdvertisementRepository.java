@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserAdvertisementRepository extends MongoRepository<UserAdvertisement, ObjectId>{
 
     public List<UserAdvertisement> findAll();
-    public List<UserAdvertisement> findByAuthorId(ObjectId userId);
+    public List<UserAdvertisement> findByAuthorId(ObjectId authorId);
     public void deleteById(ObjectId id);
     
 }

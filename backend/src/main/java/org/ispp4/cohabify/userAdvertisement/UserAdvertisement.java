@@ -1,6 +1,7 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import java.time.LocalDate;
+
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.user.User;
@@ -16,6 +17,9 @@ import lombok.Setter;
 @Setter
 @Document(collection = "userAdvertisements")
 public class UserAdvertisement extends BaseEntity {
+
+    @NotBlank
+    private String title;
 
     private String description;
     
