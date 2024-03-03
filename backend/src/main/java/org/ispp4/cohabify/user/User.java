@@ -69,6 +69,9 @@ public class User extends BaseEntity {
     @DBRef
     private List<User> likes = new ArrayList<User>();
     
+    @NotNull
+    private String image;
+
     public User() {
     
     }

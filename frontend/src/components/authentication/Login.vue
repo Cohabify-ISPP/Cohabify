@@ -31,15 +31,14 @@
     </div>
   </template>
   
-
-
 <script>
-    import { ref } from 'vue'
+    import { inject, ref } from 'vue'
     export default {
         setup() {
             const username = ref('')
             const password = ref('')
             const fetchError = ref(null)
+            const user = inject('user')
             const login = () => {
                 const data = {
                     username: username.value,
@@ -61,14 +60,15 @@
                         return response.json();
                     }else if (response.status === 400) {
                         throw new Error('Usuario o contraseña incorrectos');
-                    } else {
+                    } else { 
                         throw new Error('Error al iniciar sesión');
                     }
                 })
                 .then(data => {
+                    user.value = data.user;
                     window.location.href = '/';
                 })
-                .catch(error => console.error(error));
+                .catch(error => fetchError.value = error.message);
             };
 
             return {
@@ -82,7 +82,6 @@
 </script>
 
 <style scoped>
-
 
 .card {
     padding-top: 40px;

@@ -31,6 +31,7 @@ public class HouseAdvertisementController {
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
         Optional<HouseAdvertisement> advertisement = advertisementService.findById(new ObjectId(id));

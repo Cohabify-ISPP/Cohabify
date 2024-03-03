@@ -1,11 +1,9 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.ispp4.cohabify.model.BaseEntity;
-import org.ispp4.cohabify.tag.Tag;
 import org.ispp4.cohabify.user.User;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,7 +22,7 @@ public class UserAdvertisement extends BaseEntity {
     private String title;
 
     private String description;
-
+    
     @NotNull
     private Double maxBudget;
 
@@ -39,32 +37,36 @@ public class UserAdvertisement extends BaseEntity {
     @NotNull
     private Integer maxCohabitants;
 
-    @NotNull
     @DBRef
-    private List<User> likes = new ArrayList<>();
-
-    @DBRef
-    @NotNull
     private User author;
 
-    public UserAdvertisement(String title, String description, Double minBudget, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, List<User> likes, List<Tag> tags, User author) {
-        this.title = title;
+    public UserAdvertisement() {
+        
+    }
+
+    public UserAdvertisement(ObjectId id, String description, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, User author) {
+        this.id = id;
         this.description = description;
         this.maxBudget = maxBudget;
         this.desiredLocation = desiredLocation;
         this.entranceDate = entranceDate;
         this.exitDate = exitDate;
         this.maxCohabitants = maxCohabitants;
-        this.likes = likes;
         this.author = author;
-        
     }
 
     @Override
     public String toString() {
-        return "UserAdvertisement [description=" + description + ", desiredLocation=" + desiredLocation + ", entranceDate="
-                + entranceDate + ", exitDate=" + exitDate + ", likes=" + likes + ", maxBudget=" + maxBudget
-                + ", maxCohabitants=" + maxCohabitants + ", title=" + title + ", user=" + author + "]";
+        return "{" +
+            " id='" + getId() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", maxBudget='" + getMaxBudget() + "'" +
+            ", desiredLocation='" + getDesiredLocation() + "'" +
+            ", entranceDate='" + getEntranceDate() + "'" +
+            ", exitDate='" + getExitDate() + "'" +
+            ", maxCohabitants='" + getMaxCohabitants() + "'" +
+            ", user='" + getAuthor() + "'"+
+            "}";
     }
 
 }

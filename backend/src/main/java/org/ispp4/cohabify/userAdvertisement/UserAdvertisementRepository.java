@@ -5,13 +5,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface UserAdvertisementRepository extends MongoRepository<UserAdvertisement, ObjectId>{
 
     public List<UserAdvertisement> findAll();
-    public Optional<UserAdvertisement> findById(ObjectId id);
     public List<UserAdvertisement> findByAuthorId(ObjectId authorId);
     public void deleteById(ObjectId id);
     
