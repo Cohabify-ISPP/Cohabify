@@ -165,7 +165,7 @@ export default {
                 </div>
 
                 <div class="subseccion" style="overflow-y: auto;">
-                    <h5 style="color:#5D5E60; text-align: left;">Pisos promocionados cercanos</h5>
+                    <h5 style="color:#5D5E60; text-align: left;">Pisos en común</h5>
 
                     <p style="text-align: left;"> Próximamente...</p>
                         
