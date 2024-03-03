@@ -34,7 +34,7 @@ public class HouseService {
         houseRepository.deleteById(id);
     }
 
-    public House getHouseByCadastre(int cadastre) {
+    public House getHouseByCadastre(String cadastre) {
         return houseRepository.findByCadastre(cadastre).orElse(null);
     }
     

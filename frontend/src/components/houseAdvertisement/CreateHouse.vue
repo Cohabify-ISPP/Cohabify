@@ -5,7 +5,7 @@
       <div class="row mt-5 mt-5 align-items-center justify-content-center text-center">
         <div class="d-flex w-75 p-3 ">
           <div class="container text-center">
-            <form @submit.prevent="submitForm" class="needs-validation" novalidate>
+            <form @submit.prevent="register">
               <div class="mb-3">
                   <label for="title" class="form-label">Titulo</label>
                   <input type="text" class="form-control" id="title" v-model="title" required>
@@ -15,7 +15,7 @@
               </div>
               <div class="mt-5">
                   <label for="description" class="form-label">Descripción</label>
-                  <textarea class="form-control" id="description" rows="3" v-model="description"></textarea>
+                  <textarea class="form-control" id="description" rows="3" v-model="description" required></textarea>
               </div>
               <div class="row mt-5">
                   <div class="col">
@@ -27,7 +27,7 @@
                   </div>
                   <div class="col">
                       <label for="location" class="form-label">Ubicación</label>
-                      <input type="text" class="form-control" id="location" v-model="location">
+                      <input type="text" class="form-control" id="location" v-model="location" required>
                   </div>
               </div>
               <div class="row mt-5">
@@ -35,7 +35,7 @@
                     <div class="align-middle">
                       <label for="heating" class="form-label">Tipo de calefacción</label>
                     </div>
-                    <select id="heating" name="heating" v-model="heating">
+                    <select id="heating" name="heating" v-model="heating" required>
                         <option value="NATURAL_GAS">Gas Natural</option>
                         <option value="RADIATOR">Radiador</option>
                         <option value="CENTRAL_HEATING">Calefacción central</option>
@@ -60,34 +60,34 @@
                   <div class="d-flex justify-content-between">
                       <div style="padding-right: 10%;">
                           <label for="roomsNumber" class="form-label text-center">Habitaciones</label>
-                          <input type="number" class="form-control text-center" id="bedrooms" v-model="roomsNumber">
+                          <input type="number" class="form-control text-center" id="bedrooms" v-model="roomsNumber" required>
                       </div>
                       <div style="padding-right: 10%;">
                           <label for="bathroomsNumber" class="form-label text-center">Baños</label>
-                          <input type="number" class="form-control text-center" id="bathroomsNumber" v-model="bathroomsNumber">
+                          <input type="number" class="form-control text-center" id="bathroomsNumber" v-model="bathroomsNumber" required>
                       </div>
                       <div style="padding-right: 10%;">
                           <label for="area" class="form-label text-center">m²</label>
-                          <input type="number" class="form-control text-center" id="area" v-model="area">
+                          <input type="number" class="form-control text-center" id="area" v-model="area" required>
                       </div>
                       <div>
                           <label for="floor" class="form-label text-center">Plantas</label>
-                          <input type="number" class="form-control text-center" id="floor" v-model="floor">
+                          <input type="number" class="form-control text-center" id="floor" v-model="floor" required>
                       </div>
                   </div>
               </div>
               <div class="row mt-5">
                   <div class="col">
                       <label for="cadastre" class="form-label">Catastro</label>
-                      <input type="text" class="form-control" id="cadastre" v-model="cadastre">
+                      <input type="text" class="form-control" id="cadastre" v-model="cadastre" required>
                   </div>
                   <div class="col">
                       <label for="x" class="form-label">Coordenada X</label>
-                      <input type="text" class="form-control" id="x" v-model="x">
+                      <input type="text" class="form-control" id="x" v-model="x" required>
                   </div>
                   <div class="col">
                       <label for="y" class="form-label">Coordenada Y</label>
-                      <input type="text" class="form-control" id="y" v-model="y">
+                      <input type="text" class="form-control" id="y" v-model="y" required>
                   </div>
               </div>
               <div class="card mt-3">
@@ -102,7 +102,7 @@
                           </span>
                       </span>
                       <div v-else class="select">Deja la imagen aquí</div>
-                      <input name="file" type="file" accept="image/*" class="file" ref="fileInput" multiple @change="onFileSelect" />
+                      <input name="file" type="file" accept="image/*" class="file" ref="fileInput" multiple @change="onFileSelect" required/>
                   </div>
                   <div class="container">
                       <div class="image" v-for="(image, index) in imagesUrl" :key="index">
@@ -112,7 +112,7 @@
                   </div>
               </div>
               <div class="mt-3">
-                  <button style="margin-right: 10px;" type="submit" @click="register" class="btn btn-success">Publicar</button>
+                  <button style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
                   <button type="submit" class="btn btn-danger" @click="onCancel">Cancelar</button>
               </div>
           </form>
