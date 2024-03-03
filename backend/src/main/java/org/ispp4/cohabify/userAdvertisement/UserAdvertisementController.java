@@ -41,7 +41,16 @@ public class UserAdvertisementController {
 
 	@GetMapping("{id}")
     public ResponseEntity<UserAdvertisement> getUserAdvertisement(@PathVariable String id) {
-        Optional<UserAdvertisement> userAd = userAdvertisementService.findById(new ObjectId(id));
+
+		Optional<UserAdvertisement> userAd = Optional.empty();
+
+		try {
+			ObjectId objId = new ObjectId(id);
+			userAd = userAdvertisementService.findById(objId);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
         if(userAd.isPresent()){
             return new ResponseEntity<>(userAd.get(), HttpStatus.OK);
         } else {

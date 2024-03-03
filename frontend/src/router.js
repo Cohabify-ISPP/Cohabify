@@ -5,6 +5,7 @@ import Register from './components/authentication/Register.vue';
 import CreateHouse from './components/houseAdvertisement/CreateHouse.vue';
 import HouseAdvertisementList from './components/houseAdvertisement/HouseAdvertisementList.vue';
 import UserAdvertisementDetails from './components/userAdvertisement/UserAdvertisementDetails.vue';
+import Error from './components/Error.vue';
 
 
 const routes = [
@@ -14,7 +15,8 @@ const routes = [
     { path: '/createHouse', component: CreateHouse },
     {path: '/userAdvertisement/1', component: UserAdvertisementDetails },
     { path: '/houses', component: HouseAdvertisementList},
-    { path: '/userAdvertisement/1', component: UserAdvertisementDetails },
+    { path: '/userAdvertisement/:id', component: UserAdvertisementDetails },
+    { path: '/404', component: Error },
     { path: '/:pathMatch(.*)*', redirect: '/' }
 ];
   
