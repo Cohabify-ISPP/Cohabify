@@ -1,6 +1,7 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.ispp4.cohabify.model.BaseEntity;
@@ -11,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,14 +40,14 @@ public class UserAdvertisement extends BaseEntity {
     private Integer maxCohabitants;
 
     @NotNull
-    @PositiveOrZero
-    private List<User> likes;
+    @DBRef
+    private List<User> likes = new ArrayList<>();
 
     @DBRef
     @NotNull
     private User author;
 
-    public UserAdvertisement(String title, String description, Double minBudget, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, List<User> likes, List<Tag> tags, User user) {
+    public UserAdvertisement(String title, String description, Double minBudget, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, List<User> likes, List<Tag> tags, User author) {
         this.title = title;
         this.description = description;
         this.maxBudget = maxBudget;
@@ -56,8 +56,7 @@ public class UserAdvertisement extends BaseEntity {
         this.exitDate = exitDate;
         this.maxCohabitants = maxCohabitants;
         this.likes = likes;
-        this.tags = tags;
-        this.author = user;
+        this.author = author;
         
     }
 
@@ -65,7 +64,7 @@ public class UserAdvertisement extends BaseEntity {
     public String toString() {
         return "UserAdvertisement [description=" + description + ", desiredLocation=" + desiredLocation + ", entranceDate="
                 + entranceDate + ", exitDate=" + exitDate + ", likes=" + likes + ", maxBudget=" + maxBudget
-                + ", maxCohabitants=" + maxCohabitants + ", tags=" + tags + ", title=" + title + ", user=" + user + "]";
+                + ", maxCohabitants=" + maxCohabitants + ", title=" + title + ", user=" + author + "]";
     }
 
 }

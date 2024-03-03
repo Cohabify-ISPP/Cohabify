@@ -5,45 +5,27 @@ export default {
     
     setup() {
 
-        const tags= ref([{tag: 'Ordenado',tagtype:"USER_TAG"},{tag: 'Limpio',tagtype:"USER_TAG"},
-        {tag: 'Amueblado',tagtype:"USER_TAG"},{tag: 'Céntrico',tagtype:"USER_TAG"},
-        {tag: 'Exterior',tagtype:"USER_TAG"},{tag: 'Interior',tagtype:"USER_TAG"},
-        {tag: 'Luminoso',tagtype:"USER_TAG"},{tag: 'Tranquilo',tagtype:"USER_TAG"},
-        {tag: 'Reformado',tagtype:"USER_TAG"},{tag: 'Terraza',tagtype:"USER_TAG"},
-        {tag: 'Ascensor',tagtype:"USER_TAG"},{tag: 'Parking',tagtype:"USER_TAG"},
-        {tag: 'Piscina',tagtype:"USER_TAG"},{tag: 'Jardín',tagtype:"USER_TAG"},
-        {tag: 'Calefacción',tagtype:"USER_TAG"},{tag: 'Aire acondicionado',tagtype:"USER_TAG"},
-        {tag: 'Vistas',tagtype:"USER_TAG"},{tag: 'Amueblado',tagtype:"USER_TAG"},
-        {tag: 'Céntrico',tagtype:"USER_TAG"},{tag: 'Exterior',tagtype:"USER_TAG"},
-        {tag: 'Interior',tagtype:"USER_TAG"},{tag: 'Luminoso',tagtype:"USER_TAG"},
-        {tag: 'Tranquilo',tagtype:"USER_TAG"},{tag: 'Reformado',tagtype:"USER_TAG"},
-        {tag: 'Terraza',tagtype:"USER_TAG"},{tag: 'Ascensor',tagtype:"USER_TAG"},
-        {tag: 'Parking',tagtype:"USER_TAG"},{tag: 'Piscina',tagtype:"USER_TAG"},
-        {tag: 'Jardín',tagtype:"USER_TAG"},{tag: 'Calefacción',tagtype:"USER_TAG"},
-        {tag: 'Aire acondicionado',tagtype:"USER_TAG"},{tag: 'Vistas',tagtype:"USER_TAG"},
-        {tag: 'Amueblado',tagtype:"USER_TAG"},{tag: 'Céntrico',tagtype:"USER_TAG"},
-        {tag: 'Exterior',tagtype:"USER_TAG"},{tag: 'Interior',tagtype:"USER_TAG"}]);
+        const tags= ref([{tag: 'Próximamente...',tagtype:"USER_TAG"},{tag: 'Próximamente...',tagtype:"USER_TAG"},
+        {tag: 'Próximamente...',tagtype:"USER_TAG"},{tag: 'Próximamente...',tagtype:"USER_TAG"}]);
         
         const userAd = ref({
             title: '',
             description: '',
-            max_budget: '',
+            maxBudget: '',
             desiredLocation: '',
             entranceDate: '',
             exitDate: '',
             maxCohabitants: '',
-            likes: [],
-            tags: [],
         });
         const popoverContent = ref('');
 
         const handleClick = (tag) => {
-            console.log('Clicked on tag:', tag.tag);
+            
         };
 
         const initializePopoverContent = () => {
             popoverContent.value = `<div style="width: 100%; display: block;">
-                <p>Etiquetas</p>`
+                <p>Vuelve a pulsar el botón para cerrar...</p>`
             for (const tag of tags.value){
                  popoverContent.value += `
                 <button type="button" class="btn btn-primary" @click.prevent="handleClick(tag)">`+ tag.tag +`</button>`
@@ -52,8 +34,9 @@ export default {
         };
 
         const saveUserAd = async () => {
+            
             try{
-            const response = await fetch('http://localhost:3000/api/userAdvertisements', {
+            const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/userAdvertisement', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,9 +44,9 @@ export default {
                 body: JSON.stringify(userAd.value),
             });
             const data = await response.json();
-            console.log(data);
+            window.href = '/'
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error:', error); 
             }
         };
 
@@ -72,8 +55,6 @@ export default {
         });
 
         onMounted(() => {
-            console.log('User Advertisement Component is mounted');
-            
             const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
             const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new Popover(popoverTriggerEl,{
                 html: true,
@@ -105,7 +86,7 @@ export default {
                     <h5>Presupuesto</h5>
                     <div class="input-group mb-3 d-flex w-50">
                         <div class="d-flex align-items-center">
-                            <input type="text" class="form-control" aria-label="Cantidad máxima" v-model="userAd.max_budget" placeholder="Max...">
+                            <input type="number" class="form-control" aria-label="Cantidad máxima" v-model="userAd.maxBudget" placeholder="Max...">
                             <div class="input-group-append">
                                 <span class="input-group-text">€</span>
                             </div>
@@ -122,13 +103,13 @@ export default {
                         <div class="input-up">
                             <label for="entrada">Entrada</label>
                             <div class="d-flex align-items-center">
-                                <input type="text" id="entrada" class="form-control" aria-label="Cantidad mínima" v-model="userAd.entranceDate" placeholder="Min...">
+                                <input type="date" id="entrada" class="form-control" style="margin-right: 1vw;" aria-label="Cantidad mínima" v-model="userAd.entranceDate" placeholder="Min...">
                                 <h5 style="margin: 0 2vw"> - </h5>
                             </div>
                         </div>
                         <div class="input-up">
                             <label for="salida">Salida</label>
-                           <input type="text" id="salida" class="form-control" aria-label="Cantidad máxima" v-model="userAd.exitDate" placeholder="Max...">
+                           <input type="date" id="salida" class="form-control" style="margin-left: 1vw;" aria-label="Cantidad máxima" v-model="userAd.exitDate" placeholder="Max...">
                         </div>
                     </div>
                     <h5>Inquilinos</h5>
@@ -136,19 +117,21 @@ export default {
                         <div class="input-up">
                             <label for="entrada">Número</label>
                             <div class="d-flex align-items-center">
-                                <input type="text" id="entrada" class="form-control" aria-label="Cantidad máxima" v-model="userAd.maxCohabitants" placeholder="Max..."> 
+                                <input type="number" id="entrada" class="form-control" aria-label="Cantidad máxima" v-model="userAd.maxCohabitants" placeholder="Max..."> 
                             </div>
                         </div>
-                        <div class="input-up" style="margin-left: 1vw;">
-                            <span>Etiquetas</span>
-                            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" :data-bs-content="popoverContent" >
-                                +
-                            </button>
-                        </div>
                     </div>
-                    <textarea class="form-control" id="descripcion" rows="3" placeholder="Añadir descripción..."></textarea>
+                    <div class="input-up">
+                        <h5>Etiquetas</h5>
+                        <button type="button" class="btn btn-secondary mb-3" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" :data-bs-content="popoverContent" >
+                            +
+                        </button>
+                    </div>
+                    <textarea class="form-control" id="descripcion" rows="3" v-model="userAd.description" placeholder="Añadir descripción..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" @click.prevent="saveUserAd">Guardar</button>
+                <div class=mt-3>
+                    <button type="submit" class="btn btn-primary" @click.prevent="saveUserAd">Guardar</button>
+                </div>
             </form>
         </div>
     </div>

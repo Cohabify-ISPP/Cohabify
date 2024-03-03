@@ -12,7 +12,7 @@ public interface UserAdvertisementRepository extends MongoRepository<UserAdverti
 
     public List<UserAdvertisement> findAll();
     public Optional<UserAdvertisement> findById(ObjectId id);
-    public List<UserAdvertisement> findByUserId(ObjectId userId);
+    public List<UserAdvertisement> findByAuthorId(ObjectId authorId);
     public void deleteById(ObjectId id);
     
 }
