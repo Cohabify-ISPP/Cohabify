@@ -40,6 +40,7 @@ local.properties
 
 # sbteclipse plugin
 .target
+*/target/
 
 # Tern plugin
 .tern-project
@@ -246,3 +247,6 @@ dist
 */package-lock.json
 */package.json
 */manifest.json
+
+# Uploaded files
+*/uploads/*

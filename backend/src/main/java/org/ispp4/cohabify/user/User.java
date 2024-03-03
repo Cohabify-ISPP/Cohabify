@@ -1,9 +1,11 @@
 package org.ispp4.cohabify.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.tag.Tag;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,7 +45,7 @@ public class User extends BaseEntity {
     @Email
     private String email;
     
-    @NotNull
+    @DBRef
     private List<Tag> tag;
     
     @NotNull
@@ -54,11 +56,22 @@ public class User extends BaseEntity {
     private Plan plan;
     
     @NotNull
+    private Genre genre;
+    
+    private String imageUri;
+    
+    @NotNull
     private Boolean isVerified;
 
     @NotNull
     private List<String> authorities;
+
+    @DBRef
+    private List<User> likes = new ArrayList<User>();
     
+    @NotNull
+    private String image;
+
     public User() {
     
     }

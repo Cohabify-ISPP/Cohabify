@@ -3,8 +3,6 @@ package org.ispp4.cohabify.houseAdvertisement;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
@@ -16,12 +14,12 @@ import java.util.List;
 
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.model.BaseEntity;
+import org.ispp4.cohabify.user.User;
 
 @Getter
 @Setter
 @Document(collection = "houseAdvertisements")
 public class HouseAdvertisement extends BaseEntity {
-
     @NotBlank
     @Size(min = 1, max = 100)
     private String title;
@@ -32,19 +30,14 @@ public class HouseAdvertisement extends BaseEntity {
 
     @NotNull
     @PositiveOrZero
-    private Float price;
-
-    @NotNull
-    @Size(min = 1, max = 5)
-    private List<String> images;
-
-    @NotNull
-    @Min(0)
-    @Max(6)
-    private Integer tenants;
+    private Double price;
 
     @NotNull
     @DBRef
-    private House house;
+    private List<User> tenants;
 
+    private List<String> images;
+    
+    @DBRef
+    private House house;
 }

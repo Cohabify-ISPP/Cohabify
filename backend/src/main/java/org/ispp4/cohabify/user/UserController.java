@@ -43,11 +43,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         try {
             List<User> users = userService.findAll();
-            if (users != null && !users.isEmpty()){
-                return new ResponseEntity<>(users, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -94,6 +90,7 @@ public class UserController {
             _user.setPlan(user.getPlan());
             _user.setIsVerified(user.getIsVerified());
             _user.setAuthorities(user.getAuthorities());
+            _user.setLikes(user.getLikes());
 
             return new ResponseEntity<>(userService.save(_user), HttpStatus.OK);
         } else {
@@ -111,4 +108,36 @@ public class UserController {
         }
     }
 
+    @PutMapping("like/{id}/{raterId}")
+    public ResponseEntity<User> modifyRaters(@PathVariable("id") ObjectId id, @PathVariable("raterId") ObjectId raterId) {
+        
+        try {
+            Optional<User> optionalUser = userService.findById(id);
+            if (optionalUser.isPresent() == false) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                User user = optionalUser.get();
+                Optional<User> optionalRaterUser = userService.findById(raterId);
+
+                if (optionalRaterUser.isPresent() == false) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+                } else {
+                    User raterUser = optionalRaterUser.get();
+                    List<User> positiveRaters = user.getLikes();
+
+                    if (positiveRaters.contains(raterUser)) {
+                        positiveRaters.remove(raterUser);                        
+                    } else {
+                        positiveRaters.add(raterUser);
+                    }
+                    user.setLikes(positiveRaters);
+                    user = userService.save(user);
+                    return new ResponseEntity<User>(user, HttpStatus.OK);
+                }
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
