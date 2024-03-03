@@ -44,7 +44,7 @@ export default {
                 body: JSON.stringify(userAd.value),
             });
             const data = await response.json();
-            window.href = '/'
+            window.location.href = '/'
             } catch (error) {
                 console.error('Error:', error); 
             }
