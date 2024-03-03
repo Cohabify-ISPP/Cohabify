@@ -60,7 +60,6 @@ public class HouseController {
         house.setHeating(request.getHeating());
         GeoJsonPoint point = new GeoJsonPoint(request.getX(), request.getY());
         house.setLocationPoint(point);
-        house.setTags(request.getTags());
 		house = houseService.save(house);
 		// TODO: Add the user full name when it is fixed in the model
 		

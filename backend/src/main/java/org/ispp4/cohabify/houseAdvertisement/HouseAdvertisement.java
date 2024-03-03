@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.model.BaseEntity;
+import org.ispp4.cohabify.user.User;
 
 @Getter
 @Setter
@@ -34,11 +35,11 @@ public class HouseAdvertisement extends BaseEntity {
     private Double price;
 
     @NotNull
-    @Min(0)
-    @Max(6)
-    private Integer tenants;
+    @DBRef
+    private List<User> tenants;
 
     private String image;
-
+    
+    @DBRef
     private House house;
 }

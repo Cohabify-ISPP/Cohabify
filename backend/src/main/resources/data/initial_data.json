@@ -57,7 +57,18 @@
       "tagType": "USER_TAG"
     },
     {
+      "id": "65e305e4597c9969f3b36f12",
       "tag": "tag5",
+      "tagType": "FLAT_TAG"
+    },
+    {
+      "id": "65e305e4597c9969f3b36f13",
+      "tag": "tag6",
+      "tagType": "FLAT_TAG"
+    },
+    {
+      "id": "65e305e4597c9969f3b36f14",
+      "tag": "tag7",
       "tagType": "FLAT_TAG"
     }
   ],

@@ -98,7 +98,8 @@ public class HouseAdvertisementController {
         house.setLocation(request.getHouse().getLocation());
 		house.setCadastre(request.getHouse().getCadastre());
         house.setHeating(request.getHouse().getHeating());
-        GeoJsonPoint point = new GeoJsonPoint(2, 2);
+        house.setTags(request.getHouse().getTags());
+        GeoJsonPoint point = new GeoJsonPoint(request.getX(), request.getY());
         house.setLocationPoint(point);
         house.setTags(request.getHouse().getTags());
 		house = houseService.save(house);
@@ -109,7 +110,7 @@ public class HouseAdvertisementController {
 		advertisement.setDescription(request.getDescription());
         advertisement.setPrice(request.getPrice());
         advertisement.setTenants(request.getTenants());
-        advertisement.setHouse(request.getHouse());
+        advertisement.setHouse(house);
         advertisement = advertisementService.save(advertisement);
         
         // Save the image and add the static uri to the user

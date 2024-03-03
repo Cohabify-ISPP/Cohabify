@@ -2,10 +2,10 @@ package org.ispp4.cohabify.dto;
 
 import java.util.List;
 
-import java.util.List;
 
 import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
+import org.ispp4.cohabify.tag.Tag;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ispp4.cohabify.user.User;
 
 @Data
 @AllArgsConstructor
@@ -37,13 +38,18 @@ public class AdvertisementHouseRequest {
     @NotNull
     @PositiveOrZero
     private Double price;
-
+    
     @NotNull
-    @Min(0)
-    @Max(6)
-    private Integer tenants;
+    @DBRef
+    private List<User> tenants;
 
     List<String> images;
 
+    @NotNull
+    private Float x;
+    
+    @NotNull    
+    private Float y;
+    
     private House house;
 }

@@ -44,11 +44,15 @@
                     
                   </div>
                   <div class="col">
-                      <label for="tenants" class="form-label">Etiquetas</label>
-                      <select id="tags" name="tags" v-model="tags" class="form-select" size="3" multiple aria-label="Size 3 select example">
-                        <option value="TAG_HOLA">One</option>
-                        <option value="TAG_ADIOS">Two</option>
-                        <option value="TAG_QUE_TAL">Three</option>
+                      <label for="tags" class="form-label">Etiquetas</label>
+                      <select id="tags" name="tags" v-model="tags" class="form-select" size="3" multiple aria-label="Size 3 select example" required>
+                        <option v-for="(tag, index) in tagsSelect" :key="index" :value="tag">{{ tag.tag }}</option>
+                      </select>
+                  </div>
+                  <div class="col">
+                      <label for="tenants" class="form-label">Inquilinos</label>
+                      <select id="tenants" name="tenants" v-model="tenants" class="form-select" size="3" multiple aria-label="Size 3 select example" required>
+                        <option v-for="(tenant, index) in tenantsSelect" :key="index" :value="tenant">{{ tenant.username }}</option>
                       </select>
                   </div>
               </div>
@@ -65,10 +69,6 @@
                       <div style="padding-right: 10%;">
                           <label for="area" class="form-label text-center">m²</label>
                           <input type="number" class="form-control text-center" id="area" v-model="area">
-                      </div>
-                      <div style="padding-right: 10%;">
-                          <label for="tenants" class="form-label text-center">Inquilinos</label>
-                          <input type="number" class="form-control text-center" id="tenants" v-model="tenants">
                       </div>
                       <div>
                           <label for="floor" class="form-label text-center">Plantas</label>
@@ -138,6 +138,7 @@ export default {
         const heating = ref('')
         const x = ref()
         const y = ref()
+        const tagsSelect = ref([])
         const tags = ref([])
 
         //ADVERTISEMENT
@@ -145,11 +146,56 @@ export default {
         const title = ref('')
         const description = ref('')
         const price = ref()
-        const tenants = ref()
+        const tenants = ref([])
+        const tenantsSelect =ref([])
         const imagesUrl = ref([])
         const images= ref([])
+
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/user/list`,
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        tenantsSelect.value = data;
+                        await fetchValorations()
+                    } else {
+                        window.location.href = "/404";
+                    }
+
+                } catch (error) {
+                console.error("Error:", error);
+            }
+        };
         
-        //HOUSEs
+        const fetchTags = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/tag/types/FLAT_TAG`,
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        tagsSelect.value = data;
+                        await fetchValorations()
+                    } else {
+                        window.location.href = "/404";
+                    }
+
+                } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+        
+        fetchUsers();
+        fetchTags();
+
         const register = () => {
           const data = {
               roomsNumber: roomsNumber.value,
@@ -175,14 +221,14 @@ export default {
                         description: data.description,
                         price: data.price,
                         tenants: data.tenants,
+                        x: data.x,
+                        y: data.y,
                         house: {
                           roomsNumber: data.roomsNumber,
                           bathroomsNumber: data.bathroomsNumber,
                           floor: data.floor,
                           area: data.area,
                           location: data.location,
-                          x: data.x,
-                          y: data.y,
                           cadastre: data.cadastre,
                           heating: data.heating,
                           tags: data.tags
@@ -210,61 +256,17 @@ export default {
             cadastre,
             heating,
             tags,
+            tagsSelect,
             title,//Advertisement
             description,
             price,
             tenants,
+            tenantsSelect,
             images,
             imagesUrl,
             register
         }
     },
-    /*setup2(){
-        const title = ref('')
-        const description = ref('')
-        const price = ref()
-        const tenants = ref()
-        const imagesUrl = ref([])
-        const images= ref([])
-
-        const register2 = () => {
-            const data = {
-                title: title.value,
-                description: description.value,
-                price: price.value,
-                tenants: tenants.value,
-                images: images.value
-            }
-            for (let i of images.value){
-              console.log(i);
-            }
-            const formData = new FormData();
-            formData.append("string-data", new Blob([JSON.stringify({
-                        title: data.title,
-                        description: data.description,
-                        price: data.price,
-                        tenants: data.tenants,
-                    })], { type: "application/json" }))
-            formData.append("profile-pic1", data.images[0])
-            fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/advertisements', {
-                    method: 'POST',
-                    body: formData,
-                })
-                    .then(response => response.json())
-                    .then(jsonData => window.location.href = '/')
-                    .catch(error => console.error('Error al enviar datos al backend:', error));
-        };
-
-        return {
-            title,
-            description,
-            price,
-            tenants,
-            images,
-            imagesUrl,
-            register
-        }
-    },*/
     methods:{
         onCancel() {
           const confirmExit = window.confirm('¿Estás seguro de que deseas salir?');
