@@ -29,7 +29,7 @@ export default {
     */
     const tagsSeleccionadas = ref([])
 
-    const userAds = [
+    const userAdas = [
       {
         description: "Description 1",
         minBudget: 100,
@@ -162,7 +162,7 @@ export default {
       }
     ];
 
-    const userAdas = ref({});
+    const userAds = ref([]);
     const tags = ref([]);
     const route = useRoute();
 
@@ -176,7 +176,7 @@ export default {
 
         if (response.ok) {
           const data = await response.json();
-          userAdvertisements.value = data;
+          userAds.value = data;
         } else {
           window.location.href = "/404";
         }
@@ -200,12 +200,14 @@ export default {
       }
     };
 
+    /*
     const searchQuery = ref('');
     const isSubmitted = ref(false);
 
     function searchFunction() {
       isSubmitted.value = true;
     }
+    */
 
     const toggleTag = (tag) => {
       const index = tagsSeleccionadas.value.indexOf(tag);
@@ -223,16 +225,17 @@ export default {
 
     const filteredUserAdsByTags = computed(() => {
       if (tagsSeleccionadas.value.length === 0) {
-        return userAds;
+        return userAds.value;
       } else {
-        return userAds.filter(ad => {
+        return userAds.value.filter(ad => {
           return tagsSeleccionadas.value.every(selectedTag => {
-            return ad.author.tags.some(adTag => adTag.tag === selectedTag.tag);
+            return ad.author.tag.some(adTag => adTag.tag === selectedTag.tag);
           });
         });
       }
     });
 
+    /*
     const filteredUserAdsByNameAndDescription = computed(() => {
       if (!isSubmitted.value) {
         return userAds;
@@ -246,10 +249,12 @@ export default {
         return nameMatch || descriptionMatch;
       });
     });
+    */
 
     onMounted(() => {
       fetchAdvertisements();
       fetchTags();
+      toggleDivVisibility();
     });
 
     return {
@@ -257,7 +262,7 @@ export default {
       tags,
       tagsSeleccionadas,
       toggleDivVisibility,
-      searchFunction,
+      //searchFunction,
       toggleTag
     }
   },
@@ -296,27 +301,23 @@ export default {
       </div>
     </div>
     <div class="box" style="width:80vw" v-for="anuncio in userAds" :key="anuncio">
-      <a style="color: inherit; text-decoration: none; width:100%" :href="'/userAdvertisement/' + anuncio.id">
+      <a style="color: inherit; text-decoration: none; width:100%" :href="'/userAdvertisement/' + anuncio?.id">
         <div class="inside-box" style="width:100%">
-          <img class="imagen-circulo" :src="anuncio.author.imageUri" alt="Imagen del usuario">
-
+          <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario">
           <div class="columna-informacion" style="width:100%">
-            <div class="user-name" style="text-align: left;">{{ anuncio.author.name }}</div>
-
+            <div class="user-name" style="text-align: left;">{{ anuncio?.author?.username }}</div>
             <div
               style="display:flex; width:100%; justify-content: space-between; align-content: left; margin-right: 20px;">
-              <span>{{ anuncio.author.description }}</span>
+              {{ anuncio?.author?.description }}
             </div>
           </div>
-          <div class="tags-container" style="width:30%; display:flex; align-content: right; align-items: center;">
-            <span v-for="(tag, index) in anuncio.author.tags.slice(0, 8)" :key="index" class="tag"
-              @click="toggletag(tag)"
+          <div class="tags-container" style="width:40%; display:flex; align-items: center">
+            <span v-for="(tag, index) in anuncio?.author?.tag.slice(0, 8)" :key="index" class="tag"
+              @click="toggleTag(tag)"
               :class="{ 'selected': tagsSeleccionadas.includes(tag), 'selected': !tagsSeleccionadas.includes(tag) }">
               {{ tag.tag }}
             </span>
           </div>
-
-
         </div>
       </a>
     </div>
@@ -479,6 +480,7 @@ export default {
 .tags-container {
   display: flex;
   flex-wrap: wrap;
+  background-color: rgba(182, 205, 239, 0);
 }
 
 .tag {
@@ -500,7 +502,7 @@ export default {
   color: #232323;
   align-self: start;
   margin-top: 15px;
-  font: 700 40px Karla, sans-serif;
+  font: 700 30px Karla, sans-serif;
 }
 
 .imagen-circulo {
@@ -531,7 +533,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-top: 30px;
-  font: 400 24px Karla, sans-serif;
+  font: 400 20px Karla, sans-serif;
 }
 
 .searchInput {

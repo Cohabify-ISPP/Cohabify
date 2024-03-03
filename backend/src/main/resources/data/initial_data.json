@@ -25,8 +25,6 @@
       "email": "usuario1@example.com",
       "tag": [
         {
-          "id": "60d5ec9af682fbd39a1b8b9a"
-        }, {
           "id": "60d5ec9af682fbd39a1b8b9b"
         }],
       "description": "Me encantan las charlas nocturnas. Me gusta mantener el hogar limpio y ordenado.",
@@ -34,7 +32,7 @@
       "isVerified": true,
       "authorities": ["Admin"],
       "genre": "MASCULINO",
-      "image": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
+      "imageUri": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
     },
     {
       "id": "60d5ec9af682fbd39a1b8b9e",
@@ -54,7 +52,7 @@
       "isVerified": false,
       "authorities": ["User"],
       "genre": "OTRO",
-      "image": "https://hips.hearstapps.com/hmg-prod/images/demi-lovaro-ge-nero-no-binario-1-1622484860.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=1200:*"
+      "imageUri": "https://hips.hearstapps.com/hmg-prod/images/demi-lovaro-ge-nero-no-binario-1-1622484860.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=1200:*"
     }
   ],
   "houses": [
@@ -185,7 +183,19 @@
       "exitDate": "2024-06-30",
       "maxCohabitants": 2,
       "author": {
-        "id": "65e305e4597c9969f3b36f05"
+        "id": "60d5ec9af682fbd39a1b8b9e"
+      }
+    },
+    {
+      "id": "65e326184510d9c9a7c48174",
+      "description": "Busco 2 compañeros organizados por Calle Awawa",
+      "maxBudget": 444,
+      "desiredLocation": "Calle Awawa, Sevilla",
+      "entranceDate": "2022-03-01",
+      "exitDate": "2022-06-30",
+      "maxCohabitants": 4,
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9d"
       }
     }
   ]
