@@ -2,17 +2,17 @@
   "tags": [
     {
       "id": "60d5ec9af682fbd39a1b8b9a",
-      "tag": "tag1",
+      "tag": "Ordenado",
       "tagType": "USER_TAG"
     },
     {
       "id": "60d5ec9af682fbd39a1b8b9b",
-      "tag": "tag2",
+      "tag": "Extrovertido",
       "tagType": "USER_TAG"
     },
     {
       "id": "60d5ec9af682fbd39a1b8b9c",
-      "tag": "tag3",
+      "tag": "Amueblado",
       "tagType": "FLAT_TAG"
     }],
   "users": [
@@ -29,7 +29,7 @@
         }, {
           "id": "60d5ec9af682fbd39a1b8b9b"
         }],
-      "description": "Descripción para el usuario 1",
+      "description": "Me encantan las charlas nocturnas. Me gusta mantener el hogar limpio y ordenado.",
       "plan": "Basic",
       "isVerified": true,
       "authorities": ["Admin"],
@@ -49,7 +49,7 @@
         }, {
           "id": "60d5ec9af682fbd39a1b8b9b"
         }],
-      "description": "Descripción para el usuario 2",
+      "description": "Me encanta salir de fiesta y divertirme",
       "plan": "Explorer",
       "isVerified": false,
       "authorities": ["User"],
@@ -166,22 +166,22 @@
       "id": "65e305e4597c9969f3b36f10",
       "user": {"id" : "60d5ec9af682fbd39a1b8b9d"},
       "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
-      "comment": "Comment for user 1"
+      "comment": "He convivido con este usuario y es muy interesante, además de ordenado."
     },
     {
       "id": "65e305e4597c9969f3b36f11",
       "user": {"id": "60d5ec9af682fbd39a1b8b9e"},
       "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
-      "comment": "Comment for user 2"
+      "comment": "Aunque parezca que pueda hacer mucho ruido, es una persona tranquila para convivir."
     }
   ],
   "userAdvertisements":[
     {
       "id": "65e326184510d9c9a7c48173",
-      "description": "Anuncio real",
-      "maxBudget": 400,
-      "desiredLocation": "C/ Pino N3",
-      "entranceDate": "2024-02-09",
+      "description": "Busco 2 compañeros organizados por Avenida Reina Mercedes",
+      "maxBudget": 600,
+      "desiredLocation": "Avenida Reina Mercedes, Sevilla",
+      "entranceDate": "2024-03-01",
       "exitDate": "2024-06-30",
       "maxCohabitants": 2,
       "author": {
