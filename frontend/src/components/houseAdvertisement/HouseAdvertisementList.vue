@@ -172,8 +172,8 @@ const applyFilters = () => {
                     {{ fetchError }}
                 </div>
                 <div class="list-container mt-4" v-else>
-                    <div class="list-item mt-2" v-for="advertisement in advertisements" :key="advertisement.id">
-                        <img src="/images/flat.jpg" alt="house" class="list-item-image">
+                    <div class="list-item mt-2" v-for="advertisement in advertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
+                        <img :src="advertisement.images[0]" alt="house" class="list-item-image">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
                                 <h3>{{ advertisement.title }}</h3>
