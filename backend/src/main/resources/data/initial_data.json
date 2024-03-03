@@ -99,6 +99,13 @@
       }
     },
     {
+
+      "id": "65e305e4597c9969f3b36f09",
+      "tag": "tag4",
+      "tagType": "USER_TAG"
+    },
+    
+    { 
       "id": "60d5ec9af682fbd39a1b8b6f",
       "location":"Cabra, Córdoba", 
       "roomsNumber":"3", 
@@ -112,8 +119,7 @@
         "y": -4.433562
       }
     }
-  ],
-  "houseAdvertisements": [
+  ],"houseAdvertisements": [
     {
       "id": "60d5ec9af682fbd39a1b8b1a",
       "title": "Casa 1",
@@ -121,9 +127,9 @@
       "price": 1000,
       "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
-                  "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-                  "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+      "images":["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
     },
     {
       "id": "60d5ec9af682fbd39a1b8b2a",
@@ -157,8 +163,11 @@
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
                 "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
                 "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+
+
     }
   ],
+  
   "userRatings":[
     {
       "id": "65e305e4597c9969f3b36f10",
