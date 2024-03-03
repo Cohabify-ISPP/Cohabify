@@ -23,11 +23,16 @@ export default {
                         method: "GET",
                         credentials: "include",
                     });
-                const data = await response.json();
-                
-                userAdvertisement.value = data;
-                await fetchValorations()
-            } catch (error) {
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        userAdvertisement.value = data;
+                        await fetchValorations()
+                    } else {
+                        window.location.href = "/404";
+                    }
+
+                } catch (error) {
                 console.error("Error:", error);
             }
         };
