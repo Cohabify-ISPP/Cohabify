@@ -4,6 +4,7 @@ import Login from './components/authentication/Login.vue';
 import Register from './components/authentication/Register.vue';
 import HouseAdvertisementList from './components/houseAdvertisement/HouseAdvertisementList.vue';
 import UserAdvertisementDetails from './components/userAdvertisement/UserAdvertisementDetails.vue';
+import Error from './components/Error.vue';
 
 const routes = [
     { path: '/', component: Main },
@@ -11,6 +12,7 @@ const routes = [
     { path: '/register', component: Register },
     { path: '/houses', component: HouseAdvertisementList},
     { path: '/userAdvertisement/:id', component: UserAdvertisementDetails },
+    { path: '/404', component: Error },
     { path: '/:pathMatch(.*)*', redirect: '/' }
 ];
   
