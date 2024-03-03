@@ -1,32 +1,31 @@
-package org.ispp4.cohabify.house;
-import java.util.List;
+package org.ispp4.cohabify.dto;
 
-
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import java.util.List;
 //import org.ispp4.cohabify.tag.Tag; <-TODO: Implementar Tag
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import java.util.List;
-
+import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.model.BaseEntity;
-import org.ispp4.cohabify.tag.Tag;
 
-@Getter
-@Setter
-@Document(collection = "houses")
-public class House extends BaseEntity{
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class HouseRequest {
 
     @NotNull
     @Min(1)
@@ -37,7 +36,7 @@ public class House extends BaseEntity{
     @Min(1)
     @Max(4)
     private int bathroomsNumber;
- 
+
     @NotNull
     @Positive
     private int area;
@@ -52,16 +51,17 @@ public class House extends BaseEntity{
     @Size(min = 1, max = 100)
     private String location;
 
-    @GeoSpatialIndexed
-    private GeoJsonPoint locationPoint;
+    @NotNull
+    private Float x;
     
+    @NotNull    
+    private Float y;
+
     @NotNull
     @Size(min=20, max = 20)
     private String cadastre;
 
     @NotNull
-    @DBRef
-    private List<Tag> tags;
-    
+    private List<String> tags;
 
 }
