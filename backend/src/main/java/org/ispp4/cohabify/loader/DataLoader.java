@@ -20,6 +20,7 @@ import org.ispp4.cohabify.userRating.UserRating;
 import org.ispp4.cohabify.userRating.UserRatingRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
@@ -27,9 +28,11 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @AllArgsConstructor
+@Profile("!prod")
 public class DataLoader implements ApplicationRunner {
 
     private UserRepository userRepository;
