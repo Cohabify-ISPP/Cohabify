@@ -306,7 +306,7 @@ export default {
           <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario">
           <div class="columna-informacion" style="width:100%">
             <div class="user-name" style="text-align: left;">{{ anuncio?.author?.username }}</div>
-            <div
+            <div class="text-truncate"
               style="display:flex; width:100%; justify-content: space-between; align-content: left; margin-right: 20px;">
               {{ anuncio?.author?.description }}
             </div>
