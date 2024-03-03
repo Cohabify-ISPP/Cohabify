@@ -5,15 +5,21 @@ import UserAdvertisements from './components/userAdvertisement/UserAdvertisement
 import Register from './components/authentication/Register.vue';
 import HouseAdvertisementList from './components/houseAdvertisement/HouseAdvertisementList.vue';
 import UserAdvertisementDetails from './components/userAdvertisement/UserAdvertisementDetails.vue';
+import HouseAdvertisementDetails from './components/houseAdvertisement/HouseAdvertisementDetails.vue';
+import Error from './components/Error.vue';
+
 
 const routes = [
     { path: '/', component: Main },
     { path: '/login', component: Login },
     { path: '/userAdvertisements', component: UserAdvertisements },
     { path: '/register', component: Register },
-    { path: '/houses', component: HouseAdvertisementList},
-    { path: '/userAdvertisement/1', component: UserAdvertisementDetails },
+    { path: '/advertisements/houses/:id', component: HouseAdvertisementDetails },
+    { path: '/advertisements/houses', component: HouseAdvertisementList},
+    { path: '/userAdvertisement/:id', component: UserAdvertisementDetails },
+    { path: '/404', component: Error },
     { path: '/:pathMatch(.*)*', redirect: '/' }
+
 ];
   
 const router = createRouter({

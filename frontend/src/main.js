@@ -10,4 +10,5 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 const app = createApp(App);
 app.component("Navbar", Navbar);
 app.use(router);
+app.provide("user", {});
 app.mount('#app');

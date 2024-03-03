@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +35,7 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(requests -> requests
 					.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE).permitAll()
 					.requestMatchers(HttpMethod.OPTIONS).permitAll()
+					.requestMatchers("/**").permitAll()
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").anonymous()
 					.requestMatchers("/api/**").permitAll()
