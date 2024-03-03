@@ -136,8 +136,7 @@
         "y": -4.433562
       }
     }
-  ],
-  "houseAdvertisements": [
+  ],"houseAdvertisements": [
     {
       "id": "60d5ec9af682fbd39a1b8b1a",
       "title": "Casa 1",
@@ -145,9 +144,7 @@
       "price": 1000,
       "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
-                  "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-                  "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+      "image": "https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg"
     },
     {
       "id": "60d5ec9af682fbd39a1b8b2a",
@@ -156,10 +153,8 @@
       "price": 900,
       "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
-      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
-    },
+      "image": "https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg"
+    },  
     {
       "id": "60d5ec9af682fbd39a1b8b3a",
       "title": "Casa 3",
@@ -167,9 +162,7 @@
       "price": 800,
       "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
       "tenants": [],
-      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
-      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+      "image": "https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg"
     },
     {
       "id": "60d5ec9af682fbd39a1b8b4a",
@@ -178,13 +171,11 @@
       "price": 1100,
       "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
-                "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-                "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
-
+      "image": "https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg"
 
     }
   ],
+  
   "userRatings":[
     {
       "id": "65e305e4597c9969f3b36f10",
