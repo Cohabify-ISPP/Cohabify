@@ -121,6 +121,19 @@ button:focus-visible {
   height: 100vh;
 }
 
+
+.carousel-image {
+  box-shadow: 0 0 13px 0 rgba(0, 0, 0, 0.734);
+  border-radius: 8px;
+  overflow: show;
+  object-fit: cover;
+}
+
+.image-selected {
+  box-shadow: 0 0 13px 0 rgba(102, 102, 102, 0.734);
+  overflow: show;
+}
+
 input[type=range]::-webkit-slider-runnable-track {
   background: #ddd;
 }
