@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface HouseRepository extends MongoRepository<House, ObjectId> {
     
     @Query("{ 'cadastre' : ?0 }")
-    Optional<House> findByCadastre(int cadastre);
+    Optional<House> findByCadastre(String cadastre);
     
 }

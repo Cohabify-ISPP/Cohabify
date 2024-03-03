@@ -40,5 +40,6 @@ public class HouseAdvertisement extends BaseEntity {
 
     private String image;
 
+    @DBRef
     private House house;
 }

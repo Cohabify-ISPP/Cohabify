@@ -109,7 +109,7 @@ public class HouseAdvertisementController {
 		advertisement.setDescription(request.getDescription());
         advertisement.setPrice(request.getPrice());
         advertisement.setTenants(request.getTenants());
-        advertisement.setHouse(request.getHouse());
+        advertisement.setHouse(house);
         advertisement = advertisementService.save(advertisement);
         
         // Save the image and add the static uri to the user
