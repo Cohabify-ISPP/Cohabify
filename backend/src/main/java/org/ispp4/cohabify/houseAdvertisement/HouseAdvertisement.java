@@ -36,7 +36,7 @@ public class HouseAdvertisement extends BaseEntity {
     @DBRef
     private List<User> tenants;
 
-    private String image;
+    private List<String> images;
     
     @DBRef
     private House house;

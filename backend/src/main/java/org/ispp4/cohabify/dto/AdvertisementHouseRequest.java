@@ -43,7 +43,7 @@ public class AdvertisementHouseRequest {
     @DBRef
     private List<User> tenants;
 
-    List<String> images;
+    String images;
 
     @NotNull
     private Float x;

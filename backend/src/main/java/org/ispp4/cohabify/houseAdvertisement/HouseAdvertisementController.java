@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,8 +130,9 @@ public class HouseAdvertisementController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					 .body(e.getMessage());
 		}
-		
-		advertisement.setImage(static_path);
+		List<String> imagesPath = new ArrayList<>();
+        imagesPath.add(static_path);
+		advertisement.setImages(imagesPath);
 		advertisement = advertisementService.save(advertisement);
 		// TODO: Add the user full name when it is fixed in the model
 		
