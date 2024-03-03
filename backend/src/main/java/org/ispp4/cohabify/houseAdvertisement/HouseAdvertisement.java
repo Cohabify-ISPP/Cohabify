@@ -37,4 +37,8 @@ public class HouseAdvertisement extends BaseEntity {
     @Min(0)
     @Max(6)
     private Integer tenants;
+
+    private String image;
+
+    private House house;
 }
