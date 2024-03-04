@@ -12,19 +12,17 @@ import Error from './components/Error.vue';
 
 
 const routes = [
-    { name:"main", path: '/', component: Main },
+
+    { name: "main", path: '/', component: Main },
     { path: '/login', component: Login },
-    { path: '/userAdvertisements', component: UserAdvertisements },
     { path: '/register', component: Register },
-    { path: '/createHouse', component: CreateHouse },
-    {path: '/userAdvertisement/1', component: UserAdvertisementDetails },
-    { path: '/houses', component: HouseAdvertisementList},
-    { path: '/advertisements/houses/:id', component: HouseAdvertisementDetails },
+    { path: '/advertisements/users', component: UserAdvertisements },
     { path: '/advertisements/houses', component: HouseAdvertisementList},
-    { path: '/userAdvertisement/:id', component: UserAdvertisementDetails },
-    {path: '/userAdvertisement/new', component: createUserAdvertisement },
-    { path: '/404', component: Error },
-    { path: '/:pathMatch(.*)*', redirect: '/' }
+    { path: '/advertisements/users/:id', component: UserAdvertisementDetails },
+    { path: '/advertisements/houses/:id', component: HouseAdvertisementDetails },
+    { path: '/advertisements/users/new', component: createUserAdvertisement },
+    { path: '/advertisements/houses/new', component: CreateHouse },
+    { path: '/:pathMatch(.*)*', component: Error }
 
 ];
   
