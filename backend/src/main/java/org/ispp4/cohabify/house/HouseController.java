@@ -55,7 +55,7 @@ public class HouseController {
         house.setLocation(request.getLocation());
 		house.setCadastre(request.getCadastre());
         house.setHeating(request.getHeating());
-        GeoJsonPoint point = new GeoJsonPoint(request.getX(), request.getY());
+        GeoJsonPoint point = new GeoJsonPoint(2, 2);
         house.setLocationPoint(point);
 		house = houseService.save(house);
 		// TODO: Add the user full name when it is fixed in the model
