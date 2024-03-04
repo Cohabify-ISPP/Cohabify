@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/userAdvertisement")
+@RequestMapping("/api/advertisements/users")
 public class UserAdvertisementController {
 
 	private UserAdvertisementService userAdvertisementService;
@@ -37,7 +37,7 @@ public class UserAdvertisementController {
         return new ResponseEntity<>(userAdvertisements, HttpStatus.OK);
     }
 
-	@GetMapping("{id}")
+	@GetMapping("/{id}")
     public ResponseEntity<UserAdvertisement> getUserAdvertisement(@PathVariable String id) {
 
 		Optional<UserAdvertisement> userAd = Optional.empty();
@@ -56,8 +56,8 @@ public class UserAdvertisementController {
         }
     }
     
-	@DeleteMapping("{userAdvertisementId}")
-	public ResponseEntity<HttpStatus> deleteUserAdvertisement(@PathVariable("userAdvertisementId") ObjectId userAdvertisementId) {
+	@DeleteMapping("/{Id}")
+	public ResponseEntity<HttpStatus> deleteUserAdvertisement(@PathVariable("Id") ObjectId userAdvertisementId) {
 		try {
 			userAdvertisementService.deleteUserAdvertisementById(userAdvertisementId);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -66,7 +66,7 @@ public class UserAdvertisementController {
         }
 	}
 
-	@PostMapping()
+	@PostMapping("")
 	public ResponseEntity<UserAdvertisement> processCreationForm(@RequestBody UserAdvertisement userAdvertisement) {		
 		try {
 			UserAdvertisement res = userAdvertisementService.save(userAdvertisement);

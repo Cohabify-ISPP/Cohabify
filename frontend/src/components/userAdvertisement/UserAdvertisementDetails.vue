@@ -18,7 +18,7 @@ export default {
 
         const fetchAdvertisement = async () => {
             try {
-                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userAdvertisement/${userAdvertisementId.value}`,
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
                     {
                         method: "GET",
                         credentials: "include",
