@@ -168,7 +168,7 @@ export default {
 
     const fetchAdvertisements = async () => {
       try {
-        const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userAdvertisement`,
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users`,
           {
             method: "GET",
             credentials: "include",
@@ -301,7 +301,7 @@ export default {
       </div>
     </div>
     <div class="box" style="width:80vw" v-for="anuncio in userAds" :key="anuncio">
-      <a style="color: inherit; text-decoration: none; width:100%" :href="'/userAdvertisement/' + anuncio?.id">
+      <a style="color: inherit; text-decoration: none; width:100%" :href="'/advertisements/users/' + anuncio?.id">
         <div class="inside-box" style="width:100%">
           <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario">
           <div class="columna-informacion" style="width:100%">

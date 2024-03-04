@@ -44,11 +44,7 @@ public class HouseRequest {
     @Size(min = 1, max = 100)
     private String location;
 
-    @NotNull
-    private Float x;
-    
-    @NotNull    
-    private Float y;
+   
 
     @NotNull
     @Size(min=20, max = 20)

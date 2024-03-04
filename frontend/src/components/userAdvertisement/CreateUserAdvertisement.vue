@@ -36,7 +36,7 @@ export default {
         const saveUserAd = async () => {
             
             try{
-            const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/userAdvertisement', {
+            const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
