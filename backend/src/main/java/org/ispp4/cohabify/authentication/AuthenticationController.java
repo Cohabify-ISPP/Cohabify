@@ -1,9 +1,5 @@
 package org.ispp4.cohabify.authentication;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.coyote.BadRequestException;
@@ -11,8 +7,10 @@ import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.dto.JwtTokenDto;
 import org.ispp4.cohabify.dto.LoginRequest;
 import org.ispp4.cohabify.dto.UserRegisterRequest;
+import org.ispp4.cohabify.gcloudStorage.StorageService;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,17 +28,29 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
-@AllArgsConstructor
 public class AuthenticationController {
 
 	private UserService userService;
 	private JwtService jwtService;
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
+	
+	// Not required because on a profile that is not prod the injection will fail
+	// because the gcloud credentials won't be present
+	@Autowired(required = false)
+	private StorageService storageService;
+	
+	// Explicit constructor because of not required autowired on one service
+	public AuthenticationController(UserService userService, JwtService jwtService, AuthenticationManager authenticationManager, 
+			PasswordEncoder passwordEncoder) {
+		this.userService = userService;
+		this.jwtService = jwtService;
+		this.authenticationManager = authenticationManager;
+		this.passwordEncoder = passwordEncoder;
+	}
 	
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
@@ -76,19 +86,23 @@ public class AuthenticationController {
 		
 		// Save the image and add the static uri to the user
 		String[] filename_split = image.getOriginalFilename().split("\\.");
-		String filename = user.getJsonId() + "." + filename_split[filename_split.length-1];
-		String static_path = "/uploads/saved-images/user-profile-pictures/" + filename;
-		Path path = Paths.get("src/main/resources/static/uploads/saved-images/user-profile-pictures", filename);
+		String filename = "profile_pic." + user.getJsonId() + "." + filename_split[filename_split.length-1];
+		String path;
+//		String static_path = "/uploads/saved-images/user-profile-pictures/" + filename;
+//		Path path = Paths.get("src/main/resources/static/uploads/saved-images/user-profile-pictures", filename);
 		try {
-			Files.createDirectories(path.getParent());
-			Files.write(path, image.getBytes());
-		} catch (IOException e) {
-			userService.deleteById(user.getId());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					 .body(e.getMessage());
+//			Files.createDirectories(path.getParent());
+//			Files.write(path, image.getBytes());
+			path = storageService.saveImage(filename, image);
+		} catch (Exception e) {
+			//userService.deleteById(user.getId());
+			//return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+			//		 .body(e.getMessage());
+			path = "https://eu.ui-avatars.com/api/?name=John+Doe&size=250";
+			e.printStackTrace();
 		}
-		
-		user.setImageUri(static_path);
+
+		user.setImageUri(path);
 		user = userService.save(user);
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
