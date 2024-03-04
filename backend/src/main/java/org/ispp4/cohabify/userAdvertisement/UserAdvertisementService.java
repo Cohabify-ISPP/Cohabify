@@ -1,7 +1,6 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException;
@@ -18,7 +17,6 @@ public class UserAdvertisementService {
     private final UserAdvertisementRepository userAdvertisementRepository;
     //private final Global globalVariables;
 
-    @Autowired
     public UserAdvertisementService(UserAdvertisementRepository userAdvertisementRepository, Global globalVariables) {
         this.userAdvertisementRepository = userAdvertisementRepository;
         //this.globalVariables = globalVariables;

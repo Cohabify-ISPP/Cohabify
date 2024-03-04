@@ -1,3 +1,34 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import { jwtDecode } from 'jwt-decode'
+
+const isLoggedIn = ref(false)
+
+onMounted(() => {
+  console.log('mounted')
+  const cookies = document.cookie.split('; ')
+  console.log(cookies)
+  const authCookie = cookies.find(cookie => cookie.startsWith('Authentication='))
+  const token = authCookie ? authCookie.split('=')[1] : null
+  console.log(token)
+
+  if (token) {
+    const decoded = jwtDecode(token)
+    console.log(decoded)
+    const now = Date.now() / 1000
+    isLoggedIn.value = decoded.exp > now
+    console.log(isLoggedIn.value)
+  }
+
+})
+
+const logout = () => {
+  document.cookie = 'Authentication=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+  isLoggedIn.value = false
+}
+
+</script>
+
 <template>
 <nav class="navbar navbar-expand navbar-custom sticky-top">
   <div class="container-fluid">
@@ -10,7 +41,7 @@
       />
     </a>
 
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center" v-if="isLoggedIn">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
         <li class="nav-item">
           <a class="nav-link" href="#"><span class="badge rounded-pill badge-notification bg-danger">1</span> Chat</a>
@@ -18,8 +49,14 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Planes</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Publicar Anuncio</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Publicar Anuncio
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/advertisements/houses/new">Vivienda</a></li>
+            <li><a class="dropdown-item" href="/advertisements/users/new">Búsqueda</a></li>
+          </ul>
         </li>
       </ul>
       
@@ -57,10 +94,13 @@
             <a class="dropdown-item" href="#">Planes</a>
           </li>
           <li>
-            <a class="dropdown-item" href="#">Cerrar sesión</a>
+            <a class="dropdown-item" @click="logout()">Cerrar sesión</a>
           </li>
         </ul>
       </div>
+    </div>
+    <div class="d-flex align-items-center" v-else>
+      <a href="/login" class="btn btn-primary">Iniciar sesión</a>
     </div>
   </div>
 </nav>
