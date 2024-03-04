@@ -6,12 +6,10 @@ import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.HouseRequest;
 import org.ispp4.cohabify.dto.FormItemValidationError;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +25,6 @@ public class HouseController {
     
     private final HouseService houseService;
 
-    @Autowired
     public HouseController(HouseService houseService) {
         this.houseService = houseService;
     }
