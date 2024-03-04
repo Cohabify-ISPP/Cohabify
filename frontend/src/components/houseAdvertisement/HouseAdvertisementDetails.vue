@@ -192,7 +192,7 @@ onMounted(() => {
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <div class="mx-2">
-                                                <img :src="tenant.image" style="border-radius: 50%; width: 10vh; height: 10vh;">
+                                                <img :src="tenant.imageUri" style="border-radius: 50%; width: 10vh; height: 10vh;">
                                             </div>
                                             <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px">
                                                 <div class ="d-flex" style="margin-bottom: 5px;">
