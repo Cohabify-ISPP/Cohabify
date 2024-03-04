@@ -81,14 +81,6 @@
                       <label for="cadastre" class="form-label">Catastro</label>
                       <input type="text" class="form-control" id="cadastre" v-model="cadastre" required>
                   </div>
-                  <div class="col">
-                      <label for="x" class="form-label">Coordenada X</label>
-                      <input type="text" class="form-control" id="x" v-model="x" required>
-                  </div>
-                  <div class="col">
-                      <label for="y" class="form-label">Coordenada Y</label>
-                      <input type="text" class="form-control" id="y" v-model="y" required>
-                  </div>
               </div>
               <div class="card mt-3">
                   <div class="top">
@@ -136,8 +128,6 @@ export default {
         const location = ref('')
         const cadastre = ref('')
         const heating = ref('')
-        const x = ref()
-        const y = ref()
         const tagsSelect = ref([])
         const tags = ref([])
 
@@ -203,8 +193,6 @@ export default {
               floor: floor.value,
               area: area.value,
               location: location.value,
-              x: x.value,
-              y: y.value,
               cadastre: cadastre.value,
               heating: heating.value,
               tags: tags.value,
@@ -221,8 +209,6 @@ export default {
                         description: data.description,
                         price: data.price,
                         tenants: data.tenants,
-                        x: data.x,
-                        y: data.y,
                         house: {
                           roomsNumber: data.roomsNumber,
                           bathroomsNumber: data.bathroomsNumber,
@@ -235,7 +221,7 @@ export default {
                         }
                     })], { type: "application/json" }))
             formData.append("profile-pic1", data.images[0])
-            fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/advertisements', {
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses', {
                     method: 'POST',
                     body: formData,
                 })
@@ -251,8 +237,6 @@ export default {
             floor,
             area,
             location,
-            x,
-            y,
             cadastre,
             heating,
             tags,
