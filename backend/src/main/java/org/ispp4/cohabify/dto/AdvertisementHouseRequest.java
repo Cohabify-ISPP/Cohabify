@@ -38,11 +38,7 @@ public class AdvertisementHouseRequest {
 
     String images;
 
-    @NotNull
-    private Float x;
-    
-    @NotNull    
-    private Float y;
+   
     
     private House house;
 }
