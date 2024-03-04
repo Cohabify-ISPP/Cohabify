@@ -3,7 +3,6 @@ package org.ispp4.cohabify.utils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,7 +16,6 @@ public class Global {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public Global(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

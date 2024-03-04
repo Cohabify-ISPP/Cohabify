@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,6 @@ public class UserAdvertisementController {
 		return "UserAdvertisementController [userAdvertisementService=" + userAdvertisementService + "]";
 	}
 
-	@Autowired
 	public UserAdvertisementController(UserAdvertisementService userAdvertisementService) {
 		this.userAdvertisementService = userAdvertisementService;
 	}

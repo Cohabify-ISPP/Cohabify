@@ -1,30 +1,31 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Main from './components/Main.vue';
 import Login from './components/authentication/Login.vue';
-import UserAdvertisements from './components/userAdvertisement/UserAdvertisements.vue';
 import Register from './components/authentication/Register.vue';
-import CreateHouse from './components/houseAdvertisement/CreateHouse.vue';
+import UserAdvertisementList from './components/userAdvertisement/UserAdvertisementList.vue';
+import CreateHouseAdvertisement from './components/houseAdvertisement/CreateHouseAdvertisement.vue';
 import HouseAdvertisementList from './components/houseAdvertisement/HouseAdvertisementList.vue';
 import UserAdvertisementDetails from './components/userAdvertisement/UserAdvertisementDetails.vue';
-import createUserAdvertisement from './components/userAdvertisement/createUserAdvertisement.vue';
+import CreateUserAdvertisement from './components/userAdvertisement/CreateUserAdvertisement.vue';
 import HouseAdvertisementDetails from './components/houseAdvertisement/HouseAdvertisementDetails.vue';
 import Error from './components/Error.vue';
 
-
 const routes = [
-    { name:"main", path: '/', component: Main },
+
+    { name: "main", path: '/', component: Main },
     { path: '/login', component: Login },
-    { path: '/userAdvertisements', component: UserAdvertisements },
     { path: '/register', component: Register },
-    { path: '/createHouse', component: CreateHouse },
-    {path: '/userAdvertisement/1', component: UserAdvertisementDetails },
-    { path: '/houses', component: HouseAdvertisementList},
-    { path: '/advertisements/houses/:id', component: HouseAdvertisementDetails },
+
+    { path: '/advertisements/users', component: UserAdvertisementList },
     { path: '/advertisements/houses', component: HouseAdvertisementList},
-    { path: '/userAdvertisement/:id', component: UserAdvertisementDetails },
-    {path: '/userAdvertisement/new', component: createUserAdvertisement },
-    { path: '/404', component: Error },
-    { path: '/:pathMatch(.*)*', redirect: '/' }
+
+    { path: '/advertisements/users/:id', component: UserAdvertisementDetails },
+    { path: '/advertisements/houses/:id', component: HouseAdvertisementDetails },
+
+    { path: '/advertisements/users/new', component: CreateUserAdvertisement },
+    { path: '/advertisements/houses/new', component: CreateHouseAdvertisement },
+    
+    { path: '/:pathMatch(.*)*', component: Error }
 
 ];
   

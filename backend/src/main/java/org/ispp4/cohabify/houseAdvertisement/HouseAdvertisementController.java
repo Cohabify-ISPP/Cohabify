@@ -14,7 +14,6 @@ import org.ispp4.cohabify.dto.AdvertisementHouseRequest;
 import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.house.HouseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +41,6 @@ public class HouseAdvertisementController {
     private final HouseService houseService;
   
 
-    @Autowired
     public HouseAdvertisementController(HouseAdvertisementService advertisementService, HouseService houseService) {
         this.advertisementService = advertisementService;
         this.houseService = houseService;

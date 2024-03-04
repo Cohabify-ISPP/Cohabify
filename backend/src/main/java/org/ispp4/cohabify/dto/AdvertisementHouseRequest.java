@@ -3,17 +3,10 @@ package org.ispp4.cohabify.dto;
 import java.util.List;
 
 
-import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
-import org.ispp4.cohabify.tag.Tag;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
