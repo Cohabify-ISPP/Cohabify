@@ -12,11 +12,8 @@ import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.AdvertisementHouseRequest;
 import org.ispp4.cohabify.dto.FormItemValidationError;
-import org.ispp4.cohabify.dto.UserRegisterRequest;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.house.HouseService;
-import org.ispp4.cohabify.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +41,6 @@ public class HouseAdvertisementController {
     private final HouseService houseService;
   
 
-    @Autowired
     public HouseAdvertisementController(HouseAdvertisementService advertisementService, HouseService houseService) {
         this.advertisementService = advertisementService;
         this.houseService = houseService;
@@ -57,18 +53,6 @@ public class HouseAdvertisementController {
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
-
-    @GetMapping("/advertisements/{id}")
-    public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable ObjectId id) {
-        Optional<HouseAdvertisement> advertisement = advertisementService.findById(id);
-        if(advertisement.isPresent()){
-            return new ResponseEntity<>(advertisement.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-    
-
     @Transactional(readOnly = true)
     @GetMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
@@ -80,8 +64,7 @@ public class HouseAdvertisementController {
         }
     }
 
-
-    @PostMapping("/advertisements")
+    @PostMapping("")
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result,  
     @RequestPart("profile-pic1") MultipartFile image) throws BadRequestException {
 		
@@ -92,7 +75,6 @@ public class HouseAdvertisementController {
 										 	 	.map(fe -> new FormItemValidationError(fe))
 										 	 	.toList());
 		}
-		
 
         House house = new House();
         house.setRoomsNumber(request.getHouse().getRoomsNumber());
@@ -103,7 +85,7 @@ public class HouseAdvertisementController {
 		house.setCadastre(request.getHouse().getCadastre());
         house.setHeating(request.getHouse().getHeating());
         house.setTags(request.getHouse().getTags());
-        GeoJsonPoint point = new GeoJsonPoint(request.getX(), request.getY());
+        GeoJsonPoint point = new GeoJsonPoint(2, 2);
         house.setLocationPoint(point);
         house.setTags(request.getHouse().getTags());
 		house = houseService.save(house);
@@ -140,13 +122,13 @@ public class HouseAdvertisementController {
 							 .body(advertisement);
 	}
 
-    @PutMapping("/advertisements/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> updateAdvertisement(@PathVariable ObjectId id, @RequestBody HouseAdvertisement advertisement) {
         HouseAdvertisement updatedAdvertisement = advertisementService.update(id, advertisement);
         return new ResponseEntity<>(updatedAdvertisement, HttpStatus.OK);
     }
 
-    @DeleteMapping("/advertisements/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAdvertisement(@PathVariable ObjectId id) {
         advertisementService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

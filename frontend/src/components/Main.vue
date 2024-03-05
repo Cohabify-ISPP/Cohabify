@@ -16,7 +16,7 @@ import Navbar from './Navbar.vue'
         <b class="mt-3">Viviendas</b>
       </div>
       <div class="d-flex flex-column align-items-center" style="padding-left: 2rem;">
-        <button class="btn-primary btn-circle btn-xl">
+        <button class="btn-primary btn-circle btn-xl" @click="this.$router.push('/advertisements/users')">
           <i class="bi bi-people h1"></i>
         </button>
         <b class="mt-3">Compañeros</b>
