@@ -1,0 +1,4 @@
+runtime: java17
+service: backend
+env_variables:
+  SPRING_PROFILES_ACTIVE: "prod"

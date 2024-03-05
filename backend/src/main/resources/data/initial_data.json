@@ -1,0 +1,211 @@
+{
+  "tags": [
+    {
+      "id": "60d5ec9af682fbd39a1b8b9a",
+      "tag": "Ordenado",
+      "tagType": "USER_TAG"
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b9b",
+      "tag": "Extrovertido",
+      "tagType": "USER_TAG"
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b9c",
+      "tag": "Amueblado",
+      "tagType": "FLAT_TAG"
+    }],
+  "users": [
+    {
+      "id": "60d5ec9af682fbd39a1b8b9d",
+      "username": "admin",
+      "password": "$2a$10$S/9Tn47FJ68fR7.tCKLqhelXOQbZbXmBOnzQqKqC97TPUHeIhOoim",
+      "isOwner": true,
+      "phone": "123456789",
+      "email": "usuario1@example.com",
+      "tag": [
+        {
+          "id": "60d5ec9af682fbd39a1b8b9b"
+        }],
+      "description": "Me encantan las charlas nocturnas. Me gusta mantener el hogar limpio y ordenado.",
+      "plan": "Basic",
+      "isVerified": true,
+      "authorities": ["Admin"],
+      "genre": "MASCULINO",
+      "imageUri": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b9e",
+      "username": "usuario 2",
+      "password": "$2a$10$PcN/V6liOTDpfQqjh0s6weo7vi8BGKXqYjtIYzp/m9ciP60CyCsQa",
+      "isOwner": false,
+      "phone": "987654321",
+      "email": "usuario2@example.com",
+      "tag": [
+        {
+          "id": "60d5ec9af682fbd39a1b8b9a"
+        }, {
+          "id": "60d5ec9af682fbd39a1b8b9b"
+        }],
+      "description": "Me encanta salir de fiesta y divertirme",
+      "plan": "Explorer",
+      "isVerified": false,
+      "authorities": ["User"],
+      "genre": "OTRO",
+      "imageUri": "https://hips.hearstapps.com/hmg-prod/images/demi-lovaro-ge-nero-no-binario-1-1622484860.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=1200:*"
+    }
+  ],
+  "houses": [
+    {
+      "id": "60d5ec9af682fbd39a1b8b9f",
+      "location":"Zona desconocida", 
+      "roomsNumber":"20", 
+      "bathroomsNumber":"1",
+      "area":"10", 
+      "heating":"CENTRAL_HEATING", 
+      "floor":"1",  
+      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
+      "locationPoint" : {
+        "x": -2.6637, 
+        "y": 54.6944
+      }
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b8f",
+      "location":"Vallecas, Madrid", 
+      "roomsNumber":"4", 
+      "bathroomsNumber":"2",
+      "area":"105", 
+      "heating":"AIR_CONDITIONING", 
+      "floor":"9",  
+      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
+      "locationPoint" : {
+        "x": 40.3437, 
+        "y": -3.6124
+      }
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b7f",
+      "location":"Guarromán, Jaén", 
+      "roomsNumber":"5", 
+      "bathroomsNumber":"2",
+      "area":"120", 
+      "heating":"NATURAL_GAS", 
+      "floor":"9",  
+      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
+      "locationPoint" : {
+        "x": 38.184049, 
+        "y": -3.685237
+      }
+    },
+    {
+
+      "id": "65e305e4597c9969f3b36f09",
+      "tag": "tag4",
+      "tagType": "USER_TAG"
+    },
+    
+    { 
+      "id": "60d5ec9af682fbd39a1b8b6f",
+      "location":"Cabra, Córdoba", 
+      "roomsNumber":"3", 
+      "bathroomsNumber":"1",
+      "area":"70", 
+      "heating":"RADIATOR", 
+      "floor":"0",  
+      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
+      "locationPoint" : {
+        "x": 37.471815, 
+        "y": -4.433562
+      }
+    }
+  ],"houseAdvertisements": [
+    {
+      "id": "60d5ec9af682fbd39a1b8b1a",
+      "title": "Casa 1",
+      "description": "Descripción para casa 1",
+      "price": 1000,
+      "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
+      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
+      "images":["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b2a",
+      "title": "Casa 2",
+      "description": "Descripción para casa 2",
+      "price": 900,
+      "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
+      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
+      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b3a",
+      "title": "Casa 3",
+      "description": "Descripción para casa 3",
+      "price": 800,
+      "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
+      "tenants": [],
+      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+    },
+    {
+      "id": "60d5ec9af682fbd39a1b8b4a",
+      "title": "Casa 4",
+      "description": "Descripción para casa 4",
+      "price": 1100,
+      "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
+      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
+      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+                "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+                "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+
+
+    }
+  ],
+  
+  "userRatings":[
+    {
+      "id": "65e305e4597c9969f3b36f10",
+      "user": {"id" : "60d5ec9af682fbd39a1b8b9d"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
+      "comment": "He convivido con este usuario y es muy interesante, además de ordenado."
+    },
+    {
+      "id": "65e305e4597c9969f3b36f11",
+      "user": {"id": "60d5ec9af682fbd39a1b8b9e"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
+      "comment": "Aunque parezca que pueda hacer mucho ruido, es una persona tranquila para convivir."
+    }
+  ],
+  "userAdvertisements":[
+    {
+      "id": "65e326184510d9c9a7c48173",
+      "description": "Busco 2 compañeros organizados por Avenida Reina Mercedes",
+      "maxBudget": 600,
+      "desiredLocation": "Avenida Reina Mercedes, Sevilla",
+      "entranceDate": "2024-03-01",
+      "exitDate": "2024-06-30",
+      "maxCohabitants": 2,
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9e"
+      }
+    },
+    {
+      "id": "65e326184510d9c9a7c48174",
+      "description": "Busco 2 compañeros organizados por Calle Awawa",
+      "maxBudget": 444,
+      "desiredLocation": "Calle Awawa, Sevilla",
+      "entranceDate": "2022-03-01",
+      "exitDate": "2022-06-30",
+      "maxCohabitants": 4,
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9d"
+      }
+    }
+  ]
+}
