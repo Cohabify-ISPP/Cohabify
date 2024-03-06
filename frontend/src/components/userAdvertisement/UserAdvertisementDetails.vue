@@ -10,11 +10,10 @@ export default {
         const currentUser = inject('user');
         const userAdvertisement = ref({});
         const valorations = ref([]);
-        const likesCount = ref(0)
-        const commentsCount = ref(0)
         const hasLike = ref(false)
         const route = useRoute();
         const commonHouses = ref([]);
+        const clipboardMessage = ref(false);
 
         const fetchAdvertisement = async () => {
             try {
@@ -70,7 +69,20 @@ export default {
             }
         };
 
-        onMounted(() => {
+        function copyToClipboard() {
+            navigator.clipboard.writeText(window.location.href)
+                .then(function() {
+                    clipboardMessage.value = true;
+                    setTimeout(() => {
+                        clipboardMessage.value = false;
+                    }, 1500);
+                })
+                .catch(function(error) {
+                    console.error("Error al copiar al portapapeles: ", error);
+                });
+        }
+
+        onBeforeMount(() => {
             userAdvertisementId.value = route.params.id;
             fetchAdvertisement();
         });
@@ -79,10 +91,11 @@ export default {
             currentUser,
             userAdvertisement,
             commonHouses,
-            likesCount,
-            commentsCount,
             hasLike,
             toggleLike,
+            copyToClipboard,
+            clipboardMessage,
+            valorations,
         }
     }
 }
@@ -92,16 +105,17 @@ export default {
 
     <Navbar />
 
-    <div class="contenedor d-flex align-items-center justify-content-center text-center">            
+    <div class="container d-flex align-items-center justify-content-center text-center mt-5">            
         <div class="panel">
             <div class="columna">
                 <div class="subseccion">
                     <div class="imagen-circulo">
-                        <img :src="'https://img.freepik.com/foto-gratis/cerrar-lindo-gato-interior_23-2148882585.jpg'" alt = "Imagen de perfil">
+                        <img :src="userAdvertisement.author.imageUri" alt = "Imagen de perfil">
                     </div>
 
-                    <div class ="botones" style="margin-top: 3%;">
-                        <div class="likes">
+                    <div class= "botones" style="margin-top: 3%;">
+                        <div class="d-flex justify-content-center align-items-center">
+                        <div class="likes" style="margin-right: 1vw;">
                             <div v-if="hasLike" @click="toggleLike" style="cursor:pointer">
                                 <i class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878"></i>
                             </div>
@@ -109,70 +123,91 @@ export default {
                                 <i class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
                             </div>
                             
-                            <span style="font-weight: bold; font-size: large; color:#28426B"> {{ likesCount }} </span>
+                            <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author.likes.length }} </span>
                         </div>
-                        <button type="button" class="boton"><strong>Comentar</strong></button>
-                        <button type="button" class="boton"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                        <button type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                    </div>
                     </div>
                 </div>
                 
-                <div style="overflow-y: auto; flex-basis: 30%;" class="subseccion">
+                <div style="flex-basis: 30%;" class="subseccion">
 
-                    <h5 style="color:#5D5E60; text-align: left;">Descripción</h5>
-                    <p style="text-align: left; word-wrap: break-word; margin-bottom: 5px;">{{ userAdvertisement.description }}</p>
+                    <div class="card mb-2" style="padding: 10px;">   
+                        <div class="card-body">
+                            <h4 style="text-align: left;" class="card-title">Descripción</h4>
+                            <hr>
+                            <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ userAdvertisement.description }}</p>
+                        </div>
+                    </div>  
 
-                    <h5 style="color:#5D5E60; text-align: left;">Comentarios</h5>
-                
-                    <div v-if="commentsCount == 0" style="text-align: left;">Aún no hay comentarios...</div>
+                    <div style="margin-top: 5%;"> 
+                        <div style="margin-top: 5;">
+                            <div class="d-flex justify-content-between">
+                                <h4 style=" text-align: left;">Comentarios</h4>
+                                <button type="button" class="button boton" style="padding: 1vh;"><strong>Comentar</strong></button>
+                            </div>
+                            <hr>
+                        </div>
+                        <div v-if="valorations.length == 0" style="text-align: left;">Aún no hay comentarios...</div>
 
-                    <div v-else>
-                        <div v-for="comentario in userAdvertisement.valorations" :key="comentario">
-                            <div v-if="comentario.comment != null" class="comentario"> {{ comentario.comment }} </div>
+                        <div v-else style="overflow-y: auto; max-height: 50vh;">
+                            <div v-for="comentario in valorations" :key="comentario">
+                                <div class="card mb-2" style="padding: 10px;"> 
+                                    <div class="card-body">
+                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.user.username}}</p>
+                                        <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ comentario.comment }}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="columna">
+            <div class="columna" style="margin-left: 5%;" >
                 <div class="subseccion">
-                    <h3 style="text-align: left;"> {{ userAdvertisement.author?.username  }}</h3>
-
-                    <br>
-
-                    <div v-if="userAdvertisement.author?.tag.length === 0" style="text-align: left;">
-                        Este usuario no tiene etiquetas establecidas
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <h1 style="text-align: left;"> {{ userAdvertisement.author?.username}} <i :class="{'bi':true,'bi-gender-male': userAdvertisement.author?.genre == 'MASCULINO', 'bi-gender-female':userAdvertisement.author?.genre == 'FEMENINO', 'bi-gender-ambiguous': userAdvertisement.author?.genre == 'OTRO'}"></i></h1>
+                        <button class="btn btn-share" @click="copyToClipboard()">
+                            <i class="bi bi-share-fill" ></i>
+                        </button>
                     </div>
-                    <div v-else style="margin-bottom: 5px;">
-                        <h5 style="color:#5D5E60; text-align: left;">Etiquetas</h5> 
-                        <div style="display:flex; justify-content: start; align-items:start;">
-                            <div style="display: inline-flex;" v-for="etiqueta in userAdvertisement.author?.tag" :key="etiqueta">
-                                <span class="etiqueta"> {{ etiqueta.tag }} </span>
-                            </div>
+                    <h1 style="text-align: left;"> {{ userAdvertisement.maxBudget }}€</h1>
+                    <transition name="fade">
+                        <div v-show="clipboardMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                            Enlace copiado al portapapeles.
                         </div>
-                    </div>
+                    </transition>
  
-                    <h5 style="color:#5D5E60; text-align: left;">Género</h5> 
-                    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{  userAdvertisement.author?.gender?userAdvertisement.author.gender:"Otro" }} </p>
+                    <div style="margin-top: 5%;">
+                        <h4 style=" text-align: left;">Detalles</h4>
+                        <hr>
+                        <h5 style="color: #5D5E60; text-align: left;"><i class="bi bi-geo-alt" style="margin-left: 5px;"></i> {{ userAdvertisement.desiredLocation }}</h5>
+                        <h5 style="color: #5D5E60; text-align: left;"><i class="bi bi-calendar-week-fill" style="margin-left: 5px;"></i> {{ userAdvertisement.entranceDate }}<span v-if="userAdvertisement.exitDate != null"> a {{ userAdvertisement.exitDate }}</span> </h5> 
+                    </div>
 
-                    <h5 style="color:#5D5E60; text-align: left;">Presupuesto máximo</h5> 
-                    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{ userAdvertisement.maxBudget }}€</p>
+                    <div v-if="userAdvertisement.author?.tag.length === 0" style="text-align: left; margin-top: 5%;">
+                        <h5 style="color: #5D5E60">Este usuario no tiene etiquetas establecidas</h5>
+                    </div>
 
-                    <h5 style="color:#5D5E60; text-align: left;">Localización deseada</h5> 
-                    <p style="text-align: left; font-weight: bold; margin-bottom: 5px;">{{ userAdvertisement.desiredLocation }}</p>
-
-                    <h5 style="color:#5D5E60; text-align: left;">Fecha de alojamiento</h5>
-                        <div style="display: flex; align-items: flex-start;">
-                            <p style="font-weight: bold; margin-bottom: 5px;"> De {{ userAdvertisement.entranceDate }}</p> 
-                            <div v-if="userAdvertisement.exitDate != null"> 
-                                <p style="font-weight: bold; margin-left: 4px; margin-bottom: 5px;"> a {{ userAdvertisement.exitDate }}</p>
+                    <div v-else style="margin-bottom: 1%; margin-top: 5%;">
+                        <h4 style=" text-align: left;">Etiquetas</h4>
+                        <hr>
+                        <div style=" display: flex; flex-wrap:wrap; margin-right: 10%;">      
+                            <div style="display: inline-flex; align-items: start; justify-content: start; align-content: start; justify-items:start;" v-for="etiqueta in userAdvertisement.author?.tag" :key="etiqueta">
+                                <span class="badge etiqueta" style="font-size: 105%; margin: 0.25vh 0.25vw;"> {{ etiqueta.tag }} </span>
                             </div>
                         </div>
+                    </div>
                 </div>
 
                 <div class="subseccion" style="overflow-y: auto;">
-                    <h5 style="color:#5D5E60; text-align: left;">Pisos en común</h5>
+                    <div>
+                        <h4 style=" text-align: left;">Pisos en común</h4>
+                        <hr>
+                    </div>
 
-                    <p style="text-align: left;"> Próximamente...</p>
+                    <h5 style="text-align: left;color: #5D5E60"> Próximamente...</h5>
                         
                     <div v-for="anuncio in commonHouses" :key="anuncio">
 
@@ -199,16 +234,6 @@ export default {
 </template>
 
 <style scoped>
-
-.contenedor {
-    position: relative;
-    display: flex;
-    height: auto;
-    width: 97%;
-    margin: 0.5%;
-    justify-content: center;
-    align-items: center;
-}
 
 .panel {
     max-width: 100%;
@@ -258,13 +283,10 @@ export default {
 .likes {
     display: inline-flex;
 }
+
 .botones {
     display: flex;
     justify-content: space-around;
-    width: 80%;
-    margin-top: 1%;
-    margin-left: 10%;
-    margin-right: 10%;
     align-items: center;
 }
 
@@ -284,34 +306,34 @@ export default {
     align-items: center;
 }
 
+.btn-share {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    line-height: 40px;
+    justify-content: center;
+    align-items: center;
+    background-color: #28426B;
+    color: #FFFFFF; 
+    border: none;
+}
+
+.btn-share:hover {
+    background-color: #28426B;
+    color: #FFFFFF; 
+    border: none;
+}
+
 .etiqueta {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 7px; 
-    margin-top: 5px;
     background-color:#28426B;
+    color: white;
     border-radius: 10px;
     width: auto;
     height: 40px;
-    color: white;
-    border: 2px solid #28426B;
-}
-
-.comentario {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 7px; 
-    margin-top: 5px;
-    background-color:#859FC4;
-    border-radius: 10px;
-    width: auto;
-    height: auto;
-    min-height: 40px;
-    color: black;
-    border: 2px solid #859FC4;
-    word-wrap: break-word;
 }
 
 .piso {
@@ -336,6 +358,7 @@ export default {
     display: block;
     margin: 1% 1% 1% 1%;
 }
+
 .columna-informacion {
     flex: 2;
     padding: 1%;
@@ -343,6 +366,14 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
 </style>
