@@ -44,10 +44,16 @@ public class JwtService {
 	}
 
 	private String generateToken(Map<String, Object> extraClaims, User user) {
-		return Jwts.builder().setClaims(extraClaims).setSubject(user.getUsername())
+		Claims claims = Jwts.claims().setSubject(user.getUsername());
+		claims.put("plan", user.getPlan());
+		claims.put("image", user.getImageUri());
+
+		String token =  Jwts.builder().setClaims(extraClaims).setClaims(claims)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
 				.signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
+		return token;
+
 	}
 
 	private boolean isTokenExpired(String token) {
