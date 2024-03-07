@@ -194,9 +194,9 @@ onMounted(() => {
                                             <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px;">
                                                 <div class ="d-flex" style="margin-bottom: 5px;  align-items: center;">
                                                     <h5 style="text-align: left;" class="card-title">{{ tenant.username }}</h5>
-                                                    <i class="bi bi-gender-female" style="margin-left: 5px;" v-if="tenant.genre == 'FEMENINO'"></i>
-                                                    <i class="bi bi-gender-male" style="margin-left: 5px;" v-if="tenant.genre == 'MASCULINO'"></i>
-                                                    <i class="bi bi-gender-ambiguous" style="margin-left: 5px;" v-if="tenant.genre == 'OTRO'"></i>
+                                                    <i class="bi bi-gender-female" style="margin-left: 5px;" v-if="tenant.gender == 'FEMENINO'"></i>
+                                                    <i class="bi bi-gender-male" style="margin-left: 5px;" v-if="tenant.gender == 'MASCULINO'"></i>
+                                                    <i class="bi bi-gender-ambiguous" style="margin-left: 5px;" v-if="tenant.gender == 'OTRO'"></i>
                                                 </div>
                                                 <p style="text-align: justify;" class="card-text">{{ truncateDescription(tenant.description) }}</p>
                                             </div>

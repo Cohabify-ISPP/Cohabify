@@ -10,8 +10,8 @@
               <input type="text" required class="form-control" id="name" v-model="name" placeholder="Nombre completo">
             </div>
             <div class="form-group" style="padding: 20px;">
-              <label for="genre" class="form-label text-white fw-bold">Género</label>
-              <select required class="form-select" id="genre" v-model="genre">
+              <label for="gender" class="form-label text-white fw-bold">Género</label>
+              <select required class="form-select" id="gender" v-model="gender">
                 <option value="MASCULINO">Masculino</option>
                 <option value="FEMENINO">Femenino</option>
                 <option value="OTRO">Otro</option>
@@ -69,7 +69,7 @@ export default {
         const name = ref('')
         const username = ref('')
         const email = ref('')
-        const genre = ref('')
+        const gender = ref('')
         const phone = ref('')
         const password = ref('')
         const confirmPassword = ref('')
@@ -88,7 +88,7 @@ export default {
             const data = {
                 name: name.value,
                 username: username.value,
-                genre: genre.value,
+                gender: gender.value,
                 email: email.value,
                 phone: phone.value,
                 password: password.value,
@@ -102,7 +102,7 @@ export default {
                 formData.append("string-data", new Blob([JSON.stringify({
                           name: data.name,
                           username: data.username,
-                          genre: data.genre,
+                          gender: data.gender,
                           email: data.email,
                           phone: data.phone,
                           password: data.password
@@ -129,7 +129,7 @@ export default {
         return {
             name,
             username,
-            genre,
+            gender,
             email,
             phone,
             password,

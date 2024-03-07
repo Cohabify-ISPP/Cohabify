@@ -1,6 +1,6 @@
 package org.ispp4.cohabify.dto;
 
-import org.ispp4.cohabify.user.Genre;
+import org.ispp4.cohabify.user.Gender;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -41,6 +41,6 @@ public class UserRegisterRequest {
     private String phone;
     
     @NotNull
-    private Genre genre;
+    private Gender gender;
     
 }
