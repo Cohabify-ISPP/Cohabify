@@ -152,7 +152,7 @@ export default {
 
                         <div v-else style="overflow-y: auto; max-height: 50vh;">
                             <div v-for="comentario in valorations" :key="comentario">
-                                <div class="card mb-2" style="padding: 10px;"> 
+                                <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;"> 
                                     <div class="card-body">
                                         <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.user.username}}</p>
                                         <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ comentario.comment }}</p>
@@ -195,7 +195,7 @@ export default {
                         <hr>
                         <div style=" display: flex; flex-wrap:wrap; margin-right: 10%;">      
                             <div style="display: inline-flex; align-items: start; justify-content: start; align-content: start; justify-items:start;" v-for="etiqueta in userAdvertisement.author?.tag" :key="etiqueta">
-                                <span class="badge etiqueta" style="font-size: 105%; margin: 0.25vh 0.25vw;"> {{ etiqueta.tag }} </span>
+                                <span class="badge etiqueta shadow" style="font-size: 105%; margin: 0.25vh 0.25vw;"> {{ etiqueta.tag }} </span>
                             </div>
                         </div>
                     </div>
@@ -325,17 +325,6 @@ export default {
     border: none;
 }
 
-.etiqueta {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color:#28426B;
-    color: white;
-    border-radius: 10px;
-    width: auto;
-    height: 40px;
-}
-
 .piso {
     display: flex;
     justify-content: center;
@@ -374,6 +363,20 @@ export default {
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+.card-user {
+    border-top: 1vh solid #28426B;
+}
+
+.etiqueta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  border: 1px solid #28426B;
+  background-color: #FFFFFF;
+  color: #28426B;
 }
 
 </style>
