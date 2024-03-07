@@ -127,7 +127,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>    
-            <div class="col" style="padding-left: 5%; padding-right: 5%;">
+            <div class="col px-6" style="padding-left: 5%; padding-right: 5%;">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <h1 style="text-align: left;"> {{ houseAdvertisement.title }}</h1>
                         <button class="btn btn-share" @click="copyToClipboard()">
@@ -171,7 +171,7 @@ onMounted(() => {
                     <div>
                         <h4 style=" text-align: left;">Inquilinos</h4> 
                         <hr>
-                        <div style="display: flex">
+                        <div style="display: flex" class="mb-1">
                             <div style=" display: grid;margin-right: 10%;">
                                     <h5 style="color: #5D5E60;">Número</h5>
                                     <h5 style="color:black;text-align: center;">{{ houseAdvertisement.tenants.length }}</h5>
@@ -179,13 +179,13 @@ onMounted(() => {
                             <div style=" display: grid;margin-right: 10%;">
                                 <h5 style="color: #5D5E60;">Etiquetas</h5>
                                 <div style="display: inline-flex;" v-for="etiqueta in houseAdvertisement.house.tags" :key="etiqueta">
-                                    <span class="badge etiqueta" style="font-size: 105%;"> {{ etiqueta.tag }} </span>
+                                    <span class="badge etiqueta shadow" style="font-size: 105%;"> {{ etiqueta.tag }} </span>
                                 </div>
                             </div>
                         </div>
                         <div v-if="houseAdvertisement.tenants.length > 0" class="py-3 px-3 overflow-auto" style="height:20vh;">
                         <div v-for="tenant in houseAdvertisement.tenants" :key="tenant">
-                            <div class="card mb-3 mt-3" style="padding: 10px; background-color: #CDE1FF;">
+                            <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;">
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <div class="mx-2">
@@ -220,15 +220,15 @@ onMounted(() => {
                 </div>
             </div>
 
-            <div class="col-6 mb-4 mt-5">   
-                <div class="card mb-3 shadow " style="padding: 10px;background-color: #CDE1FF;">   
+            <div class="col-6 mb-4 mt-5" style="padding-left: 5%; padding-right: 5%;">   
+                <div class="card mb-3 shadow " style="padding: 10px;">   
                     <div class="card-body" >
                         <h4 style="text-align: left;" class="card-title">Descripción</h4>
                         <hr>
                         <p style="text-align: justify;" class="card-text">{{ houseAdvertisement.description }}</p>
                     </div>
                 </div>  
-                <div class="d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-content-center">
                     <button type="button" class="boton"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                 </div>
             </div>
@@ -247,7 +247,7 @@ onMounted(() => {
     background-color:#28426B;
     color: #FFFFFF;
     border-radius: 15px;
-    width: 27%;
+    width: 30%;
     height: 5vh;
 }
 .boton strong {
@@ -260,8 +260,9 @@ onMounted(() => {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    background-color: #2172b867;
-    color: #1c2450d2;
+    border: 1px solid #28426B;
+    background-color: #FFFFFF;
+    color: #28426B;
 }
 
 
@@ -299,5 +300,9 @@ onMounted(() => {
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+.card-user {
+    border-top: 1vh solid #28426B;
 }
 </style>
