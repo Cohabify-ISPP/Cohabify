@@ -20,10 +20,6 @@ onMounted(() => {
 
 })
 
-const goHome = () => {
-  this.$router.push('/')
-}
-
 const logout = () => {
   document.cookie = 'Authentication=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
   isLoggedIn.value = false
@@ -35,7 +31,7 @@ const logout = () => {
 <nav class="navbar navbar-expand navbar-dark navbar-custom sticky-top">
   <div class="container-fluid">
 
-    <a class="navbar-brand mt-2 mt-lg-0" >
+    <a class="navbar-brand mt-2 mt-lg-0" href="/" @click.prevent="$router.push('/')">
       <img style="max-height: 35px;"
         src="/images/LogoMonoColor.png"
         alt="Cohabify"
