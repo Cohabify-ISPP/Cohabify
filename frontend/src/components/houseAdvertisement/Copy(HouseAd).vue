@@ -2,11 +2,86 @@
 <template>
   <Navbar />
   <div class="container">
-    <h1 class="text-start mt-4">Anuncio de vivienda</h1>
-      <div class="row mt-5 justify-content-center">
-        <div class=" row d-flex w-75">
-              
-              <!--IMAGES-->
+      <div class="row mt-5 mt-5 align-items-center justify-content-center text-center">
+        <div class="d-flex w-75 p-3 ">
+          <div class="container text-center">
+            <form @submit.prevent="register">
+              <div class="mb-3">
+                  <label for="title" class="form-label">Titulo</label>
+                  <input type="text" class="form-control" id="title" v-model="title" required>
+                  <div class="invalid-feedback">
+                      Por favor, introduce un nombre.
+                  </div>
+              </div>
+              <div class="mt-5">
+                  <label for="description" class="form-label">Descripción</label>
+                  <textarea class="form-control" id="description" rows="3" v-model="description" required></textarea>
+              </div>
+              <div class="row mt-5">
+                  <div class="col">
+                      <label for="price" class="form-label">Precio</label>
+                      <input type="number" class="form-control" min="0" id="price" v-model="price" required>
+                      <div class="invalid-feedback">
+                          Por favor, introduce un precio.
+                      </div>
+                  </div>
+                  <div class="col">
+                      <label for="location" class="form-label">Ubicación</label>
+                      <input type="text" class="form-control" id="location" v-model="location" required>
+                  </div>
+              </div>
+              <div class="row mt-5">
+                  <div class="col">
+                    <div class="align-middle">
+                      <label for="heating" class="form-label">Tipo de calefacción</label>
+                    </div>
+                    <select id="heating" name="heating" v-model="heating" required>
+                        <option value="NATURAL_GAS">Gas Natural</option>
+                        <option value="RADIATOR">Radiador</option>
+                        <option value="CENTRAL_HEATING">Calefacción central</option>
+                        <option value="AIR_CONDITIONING">Aire acondicionado</option>
+                    </select>
+                    
+                  </div>
+                  <div class="col">
+                      <label for="tags" class="form-label">Etiquetas</label>
+                      <select id="tags" name="tags" v-model="tags" class="form-select" size="3" multiple aria-label="Size 3 select example" required>
+                        <option v-for="(tag, index) in tagsSelect" :key="index" :value="tag">{{ tag.tag }}</option>
+                      </select>
+                  </div>
+                  <div class="col">
+                      <label for="tenants" class="form-label">Inquilinos</label>
+                      <select id="tenants" name="tenants" v-model="tenants" class="form-select" size="3" multiple aria-label="Size 3 select example" required>
+                        <option v-for="(tenant, index) in tenantsSelect" :key="index" :value="tenant">{{ tenant.username }}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="row mt-5">
+                  <div class="d-flex justify-content-between">
+                      <div style="padding-right: 10%;">
+                          <label for="roomsNumber" class="form-label text-center">Habitaciones</label>
+                          <input type="number" class="form-control text-center" id="bedrooms" v-model="roomsNumber" required>
+                      </div>
+                      <div style="padding-right: 10%;">
+                          <label for="bathroomsNumber" class="form-label text-center">Baños</label>
+                          <input type="number" class="form-control text-center" id="bathroomsNumber" v-model="bathroomsNumber" required>
+                      </div>
+                      <div style="padding-right: 10%;">
+                          <label for="area" class="form-label text-center">m²</label>
+                          <input type="number" class="form-control text-center" id="area" v-model="area" required>
+                      </div>
+                      <div>
+                          <label for="floor" class="form-label text-center">Plantas</label>
+                          <input type="number" class="form-control text-center" id="floor" v-model="floor" required>
+                      </div>
+                  </div>
+              </div>
+              <div class="row mt-5">
+                  <div class="col">
+                      <label for="cadastre" class="form-label">Catastro</label>
+                      <input type="text" class="form-control" id="cadastre" v-model="cadastre" required>
+                  </div>
+              </div>
               <div class="card mt-3">
                   <div class="top">
                       <p>Arrastra aquí tus imágenes</p>
@@ -19,7 +94,7 @@
                           </span>
                       </span>
                       <div v-else class="select">Deja la imagen aquí</div>
-                      <input name="file" type="file" accept="image/*" class="file" ref="fileInput" multiple @change="onFileSelect"/>
+                      <input name="file" type="file" accept="image/*" class="file" ref="fileInput" multiple @change="onFileSelect" required/>
                   </div>
                   <div class="container">
                       <div class="image" v-for="(image, index) in imagesUrl" :key="index">
@@ -28,11 +103,14 @@
                       </div>
                   </div>
               </div>
-              <!--Success-->
               <div class="mt-3">
                   <button style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
                   <button type="submit" class="btn btn-danger" @click="onCancel">Cancelar</button>
               </div>
+          </form>
+
+
+          </div>
         </div> 
       </div>
   </div>
@@ -43,7 +121,6 @@ import { ref } from 'vue'
 
 export default {
     setup() {
-        var isDragging = ref(false)        
         const roomsNumber = ref()
         const bathroomsNumber = ref()
         const floor = ref()
@@ -75,7 +152,7 @@ export default {
                     if (response.ok) {
                         const data = await response.json();
                         tenantsSelect.value = data;
-                        await fetchTags()
+                        await fetchValorations()
                     } else {
                         window.location.href = "/404";
                     }
@@ -96,7 +173,7 @@ export default {
                     if (response.ok) {
                         const data = await response.json();
                         tagsSelect.value = data;
-                        
+                        await fetchValorations()
                     } else {
                         window.location.href = "/404";
                     }
@@ -107,7 +184,7 @@ export default {
         };
         
         fetchUsers();
-        
+        fetchTags();
 
         const register = () => {
           const data = {
@@ -126,17 +203,12 @@ export default {
               images: images.value
 
           }
-          if(data.images.length === 0){
-            alert("Selecciona al menos una imagen");
-            return;
-          }
             const formData = new FormData();
             formData.append("string-data", new Blob([JSON.stringify({
                         title: data.title,
                         description: data.description,
                         price: data.price,
                         tenants: data.tenants,
-                        
                         house: {
                           roomsNumber: data.roomsNumber,
                           bathroomsNumber: data.bathroomsNumber,
@@ -147,10 +219,8 @@ export default {
                           heating: data.heating,
                           tags: data.tags
                         }
-                    })], { type: "application/json" }));
-                    for (let i = 0; i < data.images.length; i++) {
-                        formData.append("images", data.images[i]);
-                    }
+                    })], { type: "application/json" }))
+            formData.append("profile-pic1", data.images[0])
             fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses', {
                     method: 'POST',
                     body: formData,
@@ -178,8 +248,7 @@ export default {
             tenantsSelect,
             images,
             imagesUrl,
-            register,
-            isDragging
+            register
         }
     },
     methods:{
@@ -190,63 +259,47 @@ export default {
           }
         },
           selectFiles(){
-            this.$refs.fileInput.value = null
-            this.$refs.fileInput.click()
+          this.$refs.fileInput.click();
         },
         
         onFileSelect(event){
-          const files = event.target.files
-          if(this.imagesUrl.length+files.length > 10){
-            alert("Selecciona 10 imágenes máximo")
-            return
+          const files = event.target.files;
+          if(files.length>10){
+            alert("Selecciona 10 imágenes máximo");
+            return;
           }
           
             for(let i = 0; i<files.length; i++){
-              if (files[i].size > 1000000) {
-                alert('La imagen debe pesar menos de 1MB')
-                return
-              } else {
-              if(files[i].type.split('/')[0] !== 'image') continue
+              if(files[i].type.split('/')[0] !== 'image') continue;
               if(!this.images.some((e)=> e.name === files[i].name)){
-                this.images.push(files[i])
-                this.imagesUrl.push({name: files[i].name, url: URL.createObjectURL(files[i])})
+                this.images.push(files[i]);
+                this.imagesUrl.push({name: files[i].name, url: URL.createObjectURL(files[i])});
               }
-            }
             }
           
         },
         deleteImage(index){
-          this.images.splice(index, 1)
-          this.imagesUrl.splice(index, 1)
+          this.images.splice(index, 1);
         },
         onDragover(event){
-          event.preventDefault()
-          this.isDragging = true
-          event.dataTransfer.dropEffect = 'copy'
+          event.preventDefault();
+          this.isDragging = true;
+          event.dataTransfer.dropEffect = 'copy';
         },
         onDragLeave(event){
-          event.preventDefault()
-          this.isDragging = false
+          event.preventDefault();
+          this.isDragging = false;
         },
         onDrop(event){
-          event.preventDefault()
-          this.isDragging = false
-          const files = event.dataTransfer.files
-          if(this.imagesUrl.length+files.length > 10){
-            alert("Selecciona 10 imágenes máximo")
-            return
-          }
+          event.preventDefault();
+          this.isDragging = false;
+          const files = event.dataTransfer.files;
           for(let i = 0; i<files.length; i++){
-            if (files[i].size > 1000000) {
-              alert('La imagen debe pesar menos de 1MB')
-              return
-            } else {
-              if(files[i].type.split('/')[0] !== 'image') continue
+              if(files[i].type.split('/')[0] !== 'image') continue;
               if(!this.images.some((e)=> e.name === files[i].name)){
-                this.images.push(files[i])
-                this.imagesUrl.push({name: files[i].name, url: URL.createObjectURL(files[i])})
+                this.images.push(files[i]);
+                this.imagesUrl.push({name: files[i].name, url: URL.createObjectURL(files[i])});
               }
-            }
             }
         },
     }
