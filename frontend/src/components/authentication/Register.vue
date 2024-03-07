@@ -95,7 +95,6 @@ export default {
                 confirmPassword: confirmPassword.value,
                 img: img.value
             }
-            console.log(data);
             if (password.value !== confirmPassword.value) {
                 alert('Las contraseñas no coinciden')
             } else {
@@ -116,7 +115,6 @@ export default {
                     body: formData,
                 })
                     .then(response => {
-                        console.log(response.status);
                         if (response.status === 201) {
                             return response.json();
                         } else {

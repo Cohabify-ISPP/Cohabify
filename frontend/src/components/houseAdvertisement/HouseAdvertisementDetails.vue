@@ -100,13 +100,11 @@ onMounted(() => {
             <div class="col col-6 justify-content-center align-items-center">
                 <div class="container" >
                     <div id="imgCarousel" class="carousel slide mb-4">
-                        <!-- Imagen superior --> 
                         <div class="carousel-inner mx-auto p-3">
                             <div class="carousel-item" v-for="(image,index) in houseAdvertisement.images" :key="image" :class="{'active': index === 0}">
                                 <img :src="image" class="img-fluid carousel-image" alt="...">
                             </div>
                         </div>
-                        <!-- Botones de control -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#imgCarousel" data-bs-slide="prev">
                             <span class="material-symbols-outlined" style="color: black;">
                                 arrow_back_ios
@@ -120,8 +118,7 @@ onMounted(() => {
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
-                </div>
-                <!-- Imágenes debajo -->
+                </div>  
                 <div class="container w-75">
                     <div class="row align-items-center">
                         <div class="col-md-4 mb-4" v-for="(image,index) in houseAdvertisement.images" :key="image">
@@ -137,7 +134,7 @@ onMounted(() => {
                             <i class="bi bi-share-fill" ></i>
                         </button>
                     </div>
-                    <h1 style="text-align: left;"> {{ houseAdvertisement.price }}€</h1>
+                    <h2 style="text-align: left;"> {{ houseAdvertisement.price }}€</h2>
                     <transition name="fade">
                         <div v-show="clipboardMessage" class="alert alert-success alert-dismissible fade show" role="alert">
                             Enlace copiado al portapapeles.
@@ -145,7 +142,7 @@ onMounted(() => {
                     </transition>
                     <br>
                     <div >
-                        <h4 style=" text-align: left;">Detalles</h4> 
+                        <h4 style="text-align: left;">Detalles</h4> 
                         <hr>
                         <div style="color:black;display: flex; align-items: left;" class="justify-content-between">
                             <div style="display: grid;">
@@ -188,14 +185,14 @@ onMounted(() => {
                         </div>
                         <div v-if="houseAdvertisement.tenants.length > 0" class="py-3 px-3 overflow-auto" style="height:20vh;">
                         <div v-for="tenant in houseAdvertisement.tenants" :key="tenant">
-                            <div class="card mb-3 mt-3" style="padding: 10px; background-color: #bdd2f4;">
+                            <div class="card mb-3 mt-3" style="padding: 10px; background-color: #CDE1FF;">
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <div class="mx-2">
                                                 <img :src="tenant.imageUri" style="border-radius: 50%; width: 10vh; height: 10vh;">
                                             </div>
-                                            <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px">
-                                                <div class ="d-flex" style="margin-bottom: 5px;">
+                                            <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px;">
+                                                <div class ="d-flex" style="margin-bottom: 5px;  align-items: center;">
                                                     <h5 style="text-align: left;" class="card-title">{{ tenant.username }}</h5>
                                                     <i class="bi bi-gender-female" style="margin-left: 5px;" v-if="tenant.genre == 'FEMENINO'"></i>
                                                     <i class="bi bi-gender-male" style="margin-left: 5px;" v-if="tenant.genre == 'MASCULINO'"></i>
@@ -212,10 +209,20 @@ onMounted(() => {
             </div>
 
         </div>
-        <div class="row">
-            <div class="col-6 mb-4">   
-                <div class="card mb-2" style="padding: 10px">   
-                    <div class="card-body">
+        <div class="row mt-1">
+            <div class="col mb-4 mt-1" style="padding-left: 5%; padding-right: 5%;">
+                <div class="d-flex flex-column align-items-left">
+                    <div style="color:#5D5E60; display: flex; align-items: center;"> 
+                        <h5>{{ houseAdvertisement.house.location }}</h5> 
+                        <i class="bi bi-geo-alt" style="margin-left: 1%;"></i>
+                    </div>  
+                    <img src="https://motor.elpais.com/wp-content/uploads/2022/01/google-maps-22-1046x616.jpg" class="rounded-4" style="max-width:100%; max-height:100%;">
+                </div>
+            </div>
+
+            <div class="col-6 mb-4 mt-5">   
+                <div class="card mb-3 shadow " style="padding: 10px;background-color: #CDE1FF;">   
+                    <div class="card-body" >
                         <h4 style="text-align: left;" class="card-title">Descripción</h4>
                         <hr>
                         <p style="text-align: justify;" class="card-text">{{ houseAdvertisement.description }}</p>
@@ -223,16 +230,6 @@ onMounted(() => {
                 </div>  
                 <div class="d-flex justify-content-center align-items-center">
                     <button type="button" class="boton"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
-                </div>
-            </div>
-
-            <div class="col mb-4" style="padding-left: 5%; padding-right: 5%;">
-                <div class="d-flex flex-column align-items-left">
-                    <div style="color:#5D5E60;display: flex;">
-                        <h5>{{ houseAdvertisement.house.location }}</h5> 
-                        <i class="bi bi-geo-alt" style="margin-left: 5px;"></i>
-                    </div>  
-                    <img src="https://motor.elpais.com/wp-content/uploads/2022/01/google-maps-22-1046x616.jpg" class="rounded-4" style="max-width:80%; max-height:80%;">
                 </div>
             </div>
         </div>
@@ -262,8 +259,9 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #2de63967;
-    color: #04481c;
+    border-radius: 15px;
+    background-color: #2172b867;
+    color: #1c2450d2;
 }
 
 
