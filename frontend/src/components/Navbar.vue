@@ -5,19 +5,14 @@ import { jwtDecode } from 'jwt-decode'
 const isLoggedIn = ref(false)
 
 onMounted(() => {
-  console.log('mounted')
   const cookies = document.cookie.split('; ')
-  console.log(cookies)
   const authCookie = cookies.find(cookie => cookie.startsWith('Authentication='))
   const token = authCookie ? authCookie.split('=')[1] : null
-  console.log(token)
 
   if (token) {
     const decoded = jwtDecode(token)
-    console.log(decoded)
     const now = Date.now() / 1000
     isLoggedIn.value = decoded.exp > now
-    console.log(isLoggedIn.value)
   }
 
 })
