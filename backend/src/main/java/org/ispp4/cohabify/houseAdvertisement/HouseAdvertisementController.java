@@ -13,8 +13,10 @@ import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.AdvertisementHouseRequest;
 import org.ispp4.cohabify.dto.FormItemValidationError;
+import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.house.HouseService;
+import org.ispp4.cohabify.tag.TagType;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,7 +93,6 @@ public class HouseAdvertisementController {
         house.setTags(request.getHouse().getTags());
         GeoJsonPoint point = new GeoJsonPoint(2, 2);
         house.setLocationPoint(point);
-        house.setTags(request.getHouse().getTags());
 		house = houseService.save(house);
         
 
@@ -128,6 +129,21 @@ public class HouseAdvertisementController {
 		return ResponseEntity.status(HttpStatus.CREATED)
 							 .body(advertisement);
 	}
+
+
+     @GetMapping("/heating")
+    public ResponseEntity<List<Heating>> findHeating() {
+        try {
+            List<Heating> heatings = List.of(Heating.values());
+
+            if (heatings.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(heatings, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> updateAdvertisement(@PathVariable ObjectId id, @RequestBody HouseAdvertisement advertisement) {

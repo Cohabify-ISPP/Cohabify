@@ -40,6 +40,10 @@ public class UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
+    public User getUserByUsernameAndPhone(String username, String phone) {
+        return userRepository.findByUsernameAndPhone(username,phone).orElse(null);
+    }
+
 	public List<User> findByIsOwner(Boolean owner) {
 	  return userRepository.findByIsOwner(owner);
 	}
