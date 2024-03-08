@@ -31,7 +31,7 @@
       "plan": "Basic",
       "isVerified": true,
       "authorities": ["Admin"],
-      "genre": "MASCULINO",
+      "gender": "MASCULINO",
       "imageUri": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
     },
     {
@@ -51,7 +51,7 @@
       "plan": "Explorer",
       "isVerified": false,
       "authorities": ["User"],
-      "genre": "OTRO",
+      "gender": "OTRO",
       "imageUri": "https://hips.hearstapps.com/hmg-prod/images/demi-lovaro-ge-nero-no-binario-1-1622484860.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=1200:*"
     }
   ],

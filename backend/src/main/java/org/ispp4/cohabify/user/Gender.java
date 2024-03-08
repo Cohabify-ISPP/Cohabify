@@ -1,5 +1,5 @@
 package org.ispp4.cohabify.user;
 
-public enum Genre {
+public enum Gender {
 	MASCULINO, FEMENINO, OTRO
 }
