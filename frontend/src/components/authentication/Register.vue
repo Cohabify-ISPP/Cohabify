@@ -187,7 +187,7 @@ export default {
         if (event.target.files[0].size > 1000000 && event.target.files[0].type.includes('image')) {
           alert('La imagen debe pesar menos de 1MB');
           event.target.value = '';
-        } else {
+        } else if (event.target.files[0].type.includes('image')){
           img.value = event.target.files[0];
         }
       };
@@ -249,6 +249,11 @@ export default {
                             throw new Error('Error al registrar usuario');
                         }
                     })
+                    .then(jsonData => {
+                      success.value = true;
+                      setTimeout(() => {
+                          window.location.href = '/login'
+                      }, 1000)})
                   .catch(error => console.error(error));
           }
       };
