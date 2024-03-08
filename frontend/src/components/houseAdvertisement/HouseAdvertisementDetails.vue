@@ -53,7 +53,13 @@ function copyToClipboard() {
 }
 
 onMounted(() => {
-    fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/' + id)
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/' + id, {
+        method: "GET",
+        headers: {
+            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+        },
+        credentials: "include"
+    })
     .then(response => {
         if (!response.ok) {
             throw new Error('No se han podido cargar la vivienda')

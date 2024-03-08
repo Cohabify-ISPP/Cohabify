@@ -146,6 +146,9 @@ export default {
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/user/list`,
                     {
                         method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        },
                         credentials: "include",
                     });
 
@@ -167,6 +170,9 @@ export default {
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/tag/types/FLAT_TAG`,
                     {
                         method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        },
                         credentials: "include",
                     });
 
@@ -223,6 +229,9 @@ export default {
             formData.append("profile-pic1", data.images[0])
             fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses', {
                     method: 'POST',
+                    headers: {
+                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                    },
                     body: formData,
                 })
                     .then(response => response.json())
