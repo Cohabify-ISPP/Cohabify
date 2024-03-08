@@ -210,51 +210,44 @@ export default {
 
     
 
-      const register = () => {
-          const data = {
-              name: name.value,
-              username: username.value,
-              gender: gender.value,
-              email: email.value,
-              phone: phone.value,
-              password: password.value,
-              confirmPassword: confirmPassword.value,
-              img: img.value,
-              tags: selectedTags.value
-          }
-          if (password.value !== confirmPassword.value) {
-              alert('Las contraseñas no coinciden')
-          } else {
-              const formData = new FormData();
-              formData.append("string-data", new Blob([JSON.stringify({
-                        name: data.name,
-                        username: data.username,
-                        gender: data.gender,
-                        email: data.email,
-                        phone: data.phone,
-                        password: data.password,
-                        tag: data.tags
-                      })], { type: "application/json" }))
-              formData.append("profile-pic", data.img);
+        const register = () => {
+            const data = {
+                name: name.value,
+                username: username.value,
+                gender: gender.value,
+                email: email.value,
+                phone: phone.value,
+                password: password.value,
+                confirmPassword: confirmPassword.value,
+                img: img.value,
+                tags: selectedTags.value
+            }
+            if (password.value !== confirmPassword.value) {
+                alert('Las contraseñas no coinciden')
+            } else {
+                const formData = new FormData();
+                formData.append("string-data", new Blob([JSON.stringify({
+                          name: data.name,
+                          username: data.username,
+                          gender: data.gender,
+                          email: data.email,
+                          phone: data.phone,
+                          password: data.password,
+                          tag: data.tags
+                        })], { type: "application/json" }))
+                formData.append("profile-pic", data.img);
 
-              fetch(import.meta.env.VITE_BACKEND_URL + '/auth/register', {
-                  method: 'POST',
-                  credentials: 'include',
-                  body: formData,
-              })
-                  .then(response => {
-                      console.log(response.status);
-                      if (response.status === 201) {
-                          return response.json();
-                      } else {
-                          throw new Error('Error al registrar usuario');
-                      }
-                  })
-                  .then(jsonData => {
-                      success.value = true;
-                      setTimeout(() => {
-                          window.location.href = '/login'
-                      }, 1000);
+                fetch(import.meta.env.VITE_BACKEND_URL + '/auth/register', {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: formData,
+                })
+                    .then(response => {
+                        if (response.status === 201) {
+                            return response.json();
+                        } else {
+                            throw new Error('Error al registrar usuario');
+                        }
                     })
                   .catch(error => console.error(error));
           }
