@@ -56,6 +56,7 @@
               </select>
             </div>
             <label for="tags" class="form-label text-white fw-bold">¿Cómo te describirías?</label>
+            <br>
             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
               <div class="tags-container">
               <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
@@ -89,11 +90,6 @@
           <div class="mt-3" style="padding-top: 20px;" v-if="secondPage">
             <button type="submit" class="btn-primary" @click="changePage" style="margin-right: 20px;">Anterior</button>
             <button type="submit" class="btn-green" @click="register">Registrarse</button>
-        </div>
-      </form>
-    </div>
-        <div style="padding-top: 20px;">
-          <button type="submit" class="btn-primary">Registrarse</button>
         </div>
       </form>
     </div>
@@ -221,16 +217,15 @@ export default {
     };
 
     const changePage = () => {
+      validatePassword();
       if (name.value && username.value && email.value && phone.value && password.value && confirmPassword.value 
-      && password.value === confirmPassword.value && phone.value.length === 9 && !isNaN(phone.value) && email.value.includes('@')) {
+      && password.value === confirmPassword.value && phone.value.length === 9 && !isNaN(phone.value) && email.value.includes('@') && !passwordError.value) {
           secondPage.value = !secondPage.value;
       }
     };
 
         const register = () => {
-            validatePassword();
-            if (!passwordError.value) {
-              const data = {
+          const data = {
                   name: name.value,
                   username: username.value,
                   gender: gender.value,
@@ -240,8 +235,7 @@ export default {
                   confirmPassword: confirmPassword.value,
                   img: img.value,
                   tags: selectedTags.value
-              }
-             };
+              };
             if (password.value !== confirmPassword.value) {
                 alert('Las contraseñas no coinciden')
             } else {
