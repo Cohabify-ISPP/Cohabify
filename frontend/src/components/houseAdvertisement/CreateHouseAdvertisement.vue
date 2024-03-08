@@ -2,11 +2,119 @@
 <template>
   <Navbar />
   <div class="container">
-    <h1 class="text-start mt-4">Anuncio de vivienda</h1>
+    <h1 class="text-center mt-4">Anuncio de vivienda</h1>
+    <form @submit.prevent="register">
       <div class="row mt-5 justify-content-center">
-        <div class=" row d-flex w-75">
-              
+
+        <div class=" row justify-content-center">
+              <div class="mb-3 w-75 text-start">
+                  <label for="title" class="form-label"><strong>Título</strong></label>
+                  <input type="text" class="form-control" id="title" v-model="title" required placeholder="Escribe un título para el anuncio...">
+              </div>
+              <div class="mb-3 w-75 text-start">
+                  <label for="description" class="form-label"><strong>Descripción</strong></label>
+                  <textarea class="form-control" id="description" rows="3" v-model="description" required placeholder="Escribe una descripción para el anuncio..."></textarea>
+              </div>
+              <div class="row w-75 mb-3">
+              <div class="mb-3 w-75 text-start col">
+                      <label for="cadastre" class="form-label"><strong>Catastro</strong></label>
+                      <input type="text" class="form-control" id="cadastre" v-model="cadastre" required placeholder="12345678901234567890...">
+              </div>
+              <div class="mb-3 w-75 text-start col">
+                      <label for="location" class="form-label"><strong>Ubicación</strong></label>
+                      <input type="text" class="form-control" id="location" v-model="location" required placeholder="C/...">
+              </div>
+            </div>
+              <div class="row w-75 mb-3">
+                  <div class="col text-start">
+                    <label for="area" class="form-label"><strong>Superficie</strong></label>
+                    <div class="input-group">
+                      <input type="number" class="form-control" id="area" v-model="area" required placeholder="0">
+                      <span class="input-group-text" style="color: grey;">m²</span>
+                    </div>
+                      
+                  </div>
+                  <div class="col mb-3 text-start">
+                      <label for="floor" class="form-label"><strong>Planta</strong></label>
+                      <input type="number" class="form-control" id="floor" v-model="floor" required placeholder="0">
+                  </div>
+                  <div class="col text-start">
+                    <div class="mb-3">
+                      <label for="price" class="form-label"><strong>Precio</strong></label>
+                      <div class="input-group">
+                      <input type="number" class="form-control" id="area" v-model="price" required placeholder="0">
+                      <span class="input-group-text" style="color: grey;">€</span>
+                    </div>
+                        </div>
+                  </div>
+              </div>
+              <div class="row w-75 mb-3" >
+                  <div class="col">
+                      <div class="mb-3">
+                          <label for="roomsNumber" class="form-label"><strong>Habitaciones</strong></label>
+                          <div class="input-group d-flex align-items-center justify-content-center">
+                            <button class=" btn-primary" type="button" @click="decreaseRoomsNumber()">-</button>
+                            <p class="mx-3" style=" margin: auto;">{{ roomsNumber }}</p>
+                            <button class="btn-primary" type="button" @click="increaseRoomsNumber()">+</button>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="bathroomsNumber" class="form-label"><strong>Baños</strong></label>
+                          <div class="input-group d-flex align-items-center justify-content-center">
+                            <button class="btn-primary" type="button" @click=" decreaseBathoomsNumber()">-</button>
+                            <p class="mx-3" style=" margin: auto;">{{ bathroomsNumber }}</p>
+                            <button class="btn-primary" type="button" @click="increaseBathroomsNumber()">+</button>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col">
+                    <div class="mb-3">
+                      <div>
+                      <label for="heating" class="form-label"><strong>Calefacción</strong></label>
+                      </div>
+                        <select id="heating" name="heating" v-model="heating" required>
+                          <option value="" disabled selected hidden>Selecciona una opción</option>
+                          <option value="NATURAL_GAS">Gas Natural</option>
+                          <option value="RADIATOR">Radiador</option>
+                          <option value="CENTRAL_HEATING">Calefacción central</option>
+                          <option value="AIR_CONDITIONING">Aire acondicionado</option>
+                        </select>
+                        </div>
+                  </div>
+              </div>
+              <div class="row w-75 mb-3">
+                <div class="col">
+                    <div class ="text-start">
+                      <label for="tenants" class="form-label"><strong>Inquilinos</strong></label>
+                    </div>
+                    <input type="text" class="form-control" v-model="search" placeholder="Buscar inquilinos">
+                    <div style="max-height: 60px; overflow-y: auto;">
+                    <div v-for="(tenant, index) in filteredTenants" :key="index">
+                        <input type="checkbox" :id="tenant.username" :value="tenant" v-model="selectedTenants">
+                        <label :for="tenant.username">{{ tenant.username }}</label>
+                    </div>
+                  </div>
+                    <div class ="text-start mb-3" v-if="selectedTenants.length > 0">
+                        <p><strong>Inquilinos seleccionados:</strong></p>
+                         <div style="max-height: 60px; overflow-y: auto;">
+                        <ul>
+                            <li v-for="(tenant, index) in selectedTenants" :key="'selected' + index">{{ tenant.username }}</li>
+                        </ul>
+                      </div>
+                    </div>
+                </div>
+                <div class="col">
+                      <label for="tags" class="form-label">Etiquetas</label>
+                      <select id="tags" name="tags" v-model="tags" class="form-select" size="3" multiple aria-label="Size 3 select example" required>
+                        <option v-for="(tag, index) in tagsSelect" :key="index" :value="tag">{{ tag.tag }}</option>
+                      </select>
+                  </div>
+              </div>
+        </div>
               <!--IMAGES-->
+        <div class=" row d-flex w-50 mb-5">
               <div class="card mt-3">
                   <div class="top">
                       <p>Arrastra aquí tus imágenes</p>
@@ -35,6 +143,7 @@
               </div>
         </div> 
       </div>
+    </form>
   </div>
 </template>
 
@@ -44,8 +153,8 @@ import { ref } from 'vue'
 export default {
     setup() {
         var isDragging = ref(false)        
-        const roomsNumber = ref()
-        const bathroomsNumber = ref()
+        const roomsNumber = ref(0)
+        const bathroomsNumber = ref(0)
         const floor = ref()
         const area = ref()
         const location = ref('')
@@ -55,12 +164,13 @@ export default {
         const tags = ref([])
 
         //ADVERTISEMENT
-
+        const search = ref('')
         const title = ref('')
         const description = ref('')
         const price = ref()
         const tenants = ref([])
         const tenantsSelect =ref([])
+        const selectedTenants = ref([])
         const imagesUrl = ref([])
         const images= ref([])
 
@@ -179,7 +289,20 @@ export default {
             images,
             imagesUrl,
             register,
-            isDragging
+            isDragging,
+            search,
+            selectedTenants,
+            
+        }
+    },
+    computed: {
+        filteredTenants() {
+            return this.tenantsSelect.filter(tenant => tenant.username.includes(this.search));
+        }
+    },
+    watch: {
+        selectedTenants(newVal) {
+            this.tenants = newVal;
         }
     },
     methods:{
@@ -248,6 +371,29 @@ export default {
               }
             }
             }
+        },
+        increaseRoomsNumber(){
+          if(this.roomsNumber < 6){
+            this.roomsNumber++
+          }
+          
+        },
+        decreaseRoomsNumber(){
+          if(this.roomsNumber > 0){
+            this.roomsNumber--
+          }
+          
+        },
+        increaseBathroomsNumber(){
+          if(this.bathroomsNumber < 6){
+            this.bathroomsNumber++
+          }
+          
+        },
+        decreaseBathoomsNumber(){
+          if(this.bathroomsNumber > 0){
+            this.bathroomsNumber--
+          }
         },
     }
 }

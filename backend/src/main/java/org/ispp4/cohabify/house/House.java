@@ -31,7 +31,7 @@ public class House extends BaseEntity{
 
     @NotNull
     @Min(1)
-    @Max(4)
+    @Max(6)
     private int bathroomsNumber;
  
     @NotNull
