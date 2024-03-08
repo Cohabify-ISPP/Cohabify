@@ -72,7 +72,7 @@ public class AuthenticationController {
 		user.setEmail(request.getEmail());
 		user.setPhone(request.getPhone().replaceAll("-", ""));
 		user.setTag(request.getTag());
-		user.setGenre(request.getGenre());
+		user.setGender(request.getGender());
 		user.setAuthorities(List.of("User"));
 		user = userService.save(user);
 		// TODO: Add the user full name when it is fixed in the model

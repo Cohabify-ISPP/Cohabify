@@ -15,11 +15,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "users")
 public class User extends BaseEntity {
 
@@ -56,7 +60,7 @@ public class User extends BaseEntity {
     private Plan plan;
     
     @NotNull
-    private Genre genre;
+    private Gender gender;
     
     private String imageUri;
     
@@ -69,12 +73,6 @@ public class User extends BaseEntity {
     @DBRef
     private List<User> likes = new ArrayList<User>();
     
-    @NotNull
-    private String image;
-
-    public User() {
-    
-    }
 
     public Boolean isAdmin() {
         return this.authorities.contains("Admin");
