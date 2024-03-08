@@ -93,10 +93,23 @@ button:focus-visible {
   transition: 0.1s;
 } 
 
+.btn-green {
+  color: #fff;
+  background-color: #1f7237;
+  border-color: #062407;
+  transition: 0.1s;
+} 
+
 .btn-primary:hover {
   color: #fff;
   background-color: #475e84;
   border-color: #28426B;
+}
+
+.btn-green:hover {
+  color: #fff;
+  background-color: #319c50;
+  border-color: #062407;
 }
 
 .navbar-custom {

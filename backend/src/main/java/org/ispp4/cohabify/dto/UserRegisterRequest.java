@@ -1,7 +1,9 @@
 package org.ispp4.cohabify.dto;
 
 import org.ispp4.cohabify.user.Genre;
+import org.ispp4.cohabify.tag.Tag;
 
+import java.util.List;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +31,9 @@ public class UserRegisterRequest {
 	@NotBlank
     @Size(max = 255)
 	private String password;
+
+    @NotNull
+    private List<Tag> tag;
 	
     @NotBlank
     @Size(max = 255)

@@ -46,6 +46,7 @@ public class AuthenticationController {
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
 									  @RequestPart("profile-pic") MultipartFile image) throws BadRequestException {
 		
+										
 		if(result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 								 .body(result.getFieldErrors()
@@ -70,6 +71,8 @@ public class AuthenticationController {
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		user.setEmail(request.getEmail());
 		user.setPhone(request.getPhone().replaceAll("-", ""));
+		user.setTag(request.getTag());
+		user.setGenre(request.getGenre());
 		user.setAuthorities(List.of("User"));
 		user = userService.save(user);
 		// TODO: Add the user full name when it is fixed in the model
