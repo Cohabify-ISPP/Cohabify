@@ -90,8 +90,8 @@
     padding-right: 40px;
     border: 1px  #28426b30;
     border-radius: 4px;
-    background-color: #28426b9d;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #28426bae;
+    box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.1);
 }
 
 input {
