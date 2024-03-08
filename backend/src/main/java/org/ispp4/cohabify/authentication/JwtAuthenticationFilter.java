@@ -23,59 +23,44 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-  
-  private final JwtService jwtService;
-  private final CustomUserDetailsService userDetailsService;
 
-  @Override
-  protected void doFilterInternal(HttpServletRequest request,
-		  						  HttpServletResponse response, 
-		  						  FilterChain filterChain)
-                 throws ServletException, IOException {
-	  
-      String authHeader = request.getHeader("Authorization");
-      String jwt = null;
-      String username;
-      
-      if (!StringUtils.hasText(authHeader) || !StringUtils.startsWithIgnoreCase(authHeader, "Bearer ")) {
-          
-    	  Cookie[] cookies = request.getCookies();
-    	  if(cookies != null && cookies.length != 0) {
-    		  Cookie authCookie = Arrays.stream(cookies).filter(c -> c.getName().equals("Authentication")).findFirst().orElse(null);
-    		   
-    		  if(authCookie != null) {
-    			  jwt = authCookie.getValue();
-    		  }
-    	  }
-    	  
-    	  if(jwt == null) {
-    		  filterChain.doFilter(request, response);
-              return;
-    	  }
-    	  
-      } else {
-    	  jwt = authHeader.substring(7);
-      }
-      
-      username = jwtService.extractUserName(jwt);
-      
-      if (StringUtils.hasText(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-          UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-          
-          if (jwtService.isTokenValid(jwt, userDetails)) {
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-            
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            context.setAuthentication(authToken);
-            SecurityContextHolder.setContext(context);
-          }
-      }
-      
-      filterChain.doFilter(request, response);
-  }
-  
-  
+	private final JwtService jwtService;
+	private final CustomUserDetailsService userDetailsService;
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request,
+			HttpServletResponse response,
+			FilterChain filterChain)
+			throws ServletException, IOException {
+
+		String authHeader = request.getHeader("Authentication");
+		String jwt = null;
+		String username;
+
+		if (!StringUtils.hasText(authHeader) || !StringUtils.startsWithIgnoreCase(authHeader, "Bearer ")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+
+		jwt = authHeader.substring(7);
+		username = jwtService.extractUserName(jwt);
+
+		if (StringUtils.hasText(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+			if (jwtService.isTokenValid(jwt, userDetails)) {
+				SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+
+				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				context.setAuthentication(authToken);
+				SecurityContextHolder.setContext(context);
+			}
+		}
+
+		filterChain.doFilter(request, response);
+	}
+
 }

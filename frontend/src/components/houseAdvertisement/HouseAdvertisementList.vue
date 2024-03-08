@@ -16,7 +16,13 @@ const fetchError = ref(null)
 const isLoading = ref(true)
 
 onMounted(() => {
-    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses')
+    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses', {
+        method: "GET",
+        headers: {
+            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+        },
+        credentials: "include"
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error('No se han podido cargar las viviendas')

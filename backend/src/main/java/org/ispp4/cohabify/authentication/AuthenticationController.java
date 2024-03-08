@@ -106,12 +106,7 @@ public class AuthenticationController {
 		
 		String jwt = jwtService.generateToken(user);
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.SET_COOKIE, 
-			"Authentication=" + jwt + "; Max-Age=604800; Path=/; Secure");
-		
 		return ResponseEntity.status(HttpStatus.OK)
-							 .headers(headers)
 							 .body(JwtTokenDto.builder().user(user).token(jwt).build());
 	}
 	

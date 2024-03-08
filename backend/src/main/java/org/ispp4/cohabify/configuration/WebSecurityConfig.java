@@ -1,5 +1,7 @@
 package org.ispp4.cohabify.configuration;
 
+import java.util.Arrays;
+
 import org.ispp4.cohabify.authentication.JwtAuthenticationFilter;
 import org.ispp4.cohabify.user.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -7,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
@@ -30,15 +34,14 @@ public class WebSecurityConfig {
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.cors(Customizer.withDefaults())
+		http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.csrf(csrf -> csrf.disable()) // TODO: Configure and enable
 			.authorizeHttpRequests(requests -> requests
 					.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE).permitAll()
 					.requestMatchers(HttpMethod.OPTIONS).permitAll()
-					.requestMatchers("/**").permitAll()
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").anonymous()
-					.requestMatchers("/api/**").permitAll()
+					.requestMatchers("/api/**").authenticated()
 					.anyRequest().denyAll() 
 			)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -65,5 +68,22 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration(); 
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8080", "ws://localhost:8080",
+													  "http://localhost:5173", "http://localhost:5173/", "ws://localhost:5173",
+													  "https://cohabify.onrender.com", "https://cohabify.onrender.com/"));
+		configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080", "http://localhost:8080", "ws://localhost:8080",
+																  "http://localhost:5173", "http://localhost:5173/", "ws://localhost:5173",
+																  "https://cohabify.onrender.com", "https://cohabify.onrender.com/"));
+		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedHeaders(Arrays.asList("Authentication", "content-type"));
+		configuration.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+	   return source;
+	}
     
 }
