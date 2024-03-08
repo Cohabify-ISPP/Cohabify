@@ -3,6 +3,7 @@
       <img src="/images/LogoCohabify.png" class="img-fluid rounded-start" alt="..." style="max-width: 400px; padding-top: 20px;padding-bottom: 2%;">
       <h1 style="padding-bottom: 30px;">Registro</h1>
       <div class="card">
+
         <div v-show="success" class="alert alert-success alert-dismissible fade show" role="alert">
           Registro completado con éxito.
         </div>
@@ -229,7 +230,7 @@ export default {
                 formData.append("string-data", new Blob([JSON.stringify({
                           name: data.name,
                           username: data.username,
-                          genre: data.gender,
+                          gender: data.gender,
                           email: data.email,
                           phone: data.phone,
                           password: data.password,
@@ -243,7 +244,6 @@ export default {
                     body: formData,
                 })
                     .then(response => {
-                        console.log(response.status);
                         if (response.status === 201) {
                             return response.json();
                         } else {
