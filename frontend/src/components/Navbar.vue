@@ -3,32 +3,33 @@ import { ref, onMounted } from 'vue'
 import { jwtDecode } from 'jwt-decode'
 
 const isLoggedIn = ref(false)
+const image = ref(null)
+const BACKEND_URL= import.meta.env.VITE_BACKEND_URL
 
 onMounted(() => {
-  const cookies = document.cookie.split('; ')
-  const authCookie = cookies.find(cookie => cookie.startsWith('Authentication='))
-  const token = authCookie ? authCookie.split('=')[1] : null
+  const token = sessionStorage.getItem("authentication")
 
   if (token) {
     const decoded = jwtDecode(token)
     const now = Date.now() / 1000
+    image.value = decoded.image.startsWith('/') ? `${BACKEND_URL}${decoded.image}` : decoded.image
     isLoggedIn.value = decoded.exp > now
   }
 
 })
 
 const logout = () => {
-  document.cookie = 'Authentication=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+  sessionStorage.setItem("authentication", "")
   isLoggedIn.value = false
 }
 
 </script>
 
 <template>
-<nav class="navbar navbar-expand navbar-custom sticky-top">
+<nav class="navbar navbar-expand navbar-dark navbar-custom sticky-top">
   <div class="container-fluid">
 
-    <a class="navbar-brand mt-2 mt-lg-0" href="/">
+    <a class="navbar-brand mt-2 mt-lg-0" href="/" @click.prevent="$router.push('/')">
       <img style="max-height: 35px;"
         src="/images/LogoMonoColor.png"
         alt="Cohabify"
@@ -50,7 +51,16 @@ const logout = () => {
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/advertisements/houses/new">Vivienda</a></li>
-            <li><a class="dropdown-item" href="/advertisements/users/new">Búsqueda</a></li>
+            <li><a class="dropdown-item" href="/advertisements/users/new">Perfil</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Buscar
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/advertisements/houses">Viviendas</a></li>
+            <li><a class="dropdown-item" href="/advertisements/users">Compañeros</a></li>
           </ul>
         </li>
       </ul>
@@ -65,11 +75,13 @@ const logout = () => {
           aria-expanded="false"
         >
           <img
-            src="/images/user.png"
+            :src="image"
             class="rounded-circle"
             height="40"
-            alt="Black and White Portrait of a Man"
+            width="40"
+            alt="avatar"
             loading="lazy"
+            style="object-fit: cover;"
           />
         </a>
         <ul
@@ -102,15 +114,7 @@ const logout = () => {
 </template>
 
 <style scoped>
- .nav-link {
-   color: white;
-   transition: 0.1s;
- }
 
- .nav-link:hover {
-   color: #a4c7ff;
-   transition: 0.2s;
- }
  .dropdown-toggle::after {
   border-top-color: white; /* Cambia esto al color que prefieras */
   border-width: 0.3em; /* Cambia esto al tamaño que prefieras */

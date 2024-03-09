@@ -3,9 +3,12 @@ package org.ispp4.cohabify.user;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,17 +24,20 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/api/user")
 @AllArgsConstructor
+@Validated
 public class UserController {
 
     private UserService userService;
 
     @PostMapping("/add")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         try {
-            if (user.getUsername() == null || user.getDescription() == null || user.getPhone() == null || user.getEmail() == null || user.getPassword() == null || user.getPlan() == null || user.getIsVerified() == null) {
+            if (user.getUsername() == null || user.getDescription() == null || user.getPhone() == null
+                    || user.getEmail() == null || user.getPassword() == null || user.getPlan() == null
+                    || user.getIsVerified() == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            
+
             User newUser = userService.save(user);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -60,18 +66,36 @@ public class UserController {
         }
     }
 
+    @PostMapping("/secureSearch")
+    public ResponseEntity<User> secureSearch(@RequestBody String requestBody) {
+        try {
+
+            JsonNode jsonNode = new ObjectMapper().readTree(requestBody);
+            String username = jsonNode.get("username").asText();
+            String phone = jsonNode.get("phone").asText();
+            User user = userService.getUserByUsernameAndPhone(username, phone);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/owners")
     public ResponseEntity<List<User>> findOwners() {
-      try {
-        List<User> users = userService.findByIsOwner(true);
-    
-        if (users.isEmpty()) {
-          return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            List<User> users = userService.findByIsOwner(true);
+
+            if (users.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(users, HttpStatus.OK);
-      } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-      }
     }
 
     @PutMapping("update/{id}")
@@ -109,8 +133,9 @@ public class UserController {
     }
 
     @PutMapping("like/{id}/{raterId}")
-    public ResponseEntity<User> modifyRaters(@PathVariable("id") ObjectId id, @PathVariable("raterId") ObjectId raterId) {
-        
+    public ResponseEntity<User> modifyRaters(@PathVariable("id") ObjectId id,
+            @PathVariable("raterId") ObjectId raterId) {
+
         try {
             Optional<User> optionalUser = userService.findById(id);
             if (optionalUser.isPresent() == false) {
@@ -127,7 +152,7 @@ public class UserController {
                     List<User> positiveRaters = user.getLikes();
 
                     if (positiveRaters.contains(raterUser)) {
-                        positiveRaters.remove(raterUser);                        
+                        positiveRaters.remove(raterUser);
                     } else {
                         positiveRaters.add(raterUser);
                     }
