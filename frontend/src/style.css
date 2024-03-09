@@ -229,6 +229,36 @@ input[type=range]::-ms-fill-upper {
   width: 100%;
 }
 
+.search-bar {
+  border: 2px solid #000;
+  border-radius: 50px;
+  background-color: #fff;
+  justify-content: space-between;
+  font-size: 24px;
+  width: 60%;
+  height: 70px;
+}
+
+.search-input {
+  background-color: #ffff;
+  border: none;
+  border-radius: 5px;
+  width: 90%;
+  margin-right: 10px;
+  color: black;
+}
+
+.search-button {
+  background-color: transparent;
+  border-radius: 50px;
+  color: black;
+  border: none;
+}
+
+.search-button:hover {
+  background-color: #dddddd;
+}
+
 #app {
   margin: 0 auto;
   text-align: center;
