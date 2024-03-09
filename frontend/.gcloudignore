@@ -16,5 +16,5 @@
 # Node.js dependencies:
 node_modules/
 
-# Carpeta de resources
-backend/main/resources/static/uploads/
+# Uploaded files
+uploads/
