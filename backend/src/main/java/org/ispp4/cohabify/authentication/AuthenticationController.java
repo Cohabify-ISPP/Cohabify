@@ -13,7 +13,6 @@ import org.ispp4.cohabify.dto.LoginRequest;
 import org.ispp4.cohabify.dto.UserRegisterRequest;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -113,4 +113,17 @@ public class AuthenticationController {
 							 .body(JwtTokenDto.builder().user(user).token(jwt).build());
 	}
 	
+	@PostMapping("/getUser")
+	public ResponseEntity<User> getUser(@RequestHeader("Authentication") String jwt) {
+		if (jwt == null || jwt.isEmpty()){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+								 .body(null);
+		}
+		jwt = jwt.replace("Bearer ", "").trim();
+		String username = jwtService.extractUserName(jwt);
+		User user = userService.getUserByUsername(username);
+		return ResponseEntity.status(HttpStatus.OK)
+							 .body(user);
+	}
+
 }

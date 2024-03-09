@@ -41,6 +41,7 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.OPTIONS).permitAll()
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**", "/static/**").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").anonymous()
+					.requestMatchers(HttpMethod.POST, "/auth/getUser").authenticated()
 					.requestMatchers("/api/**").authenticated()
 					.anyRequest().denyAll() 
 			)
