@@ -10,7 +10,7 @@
           <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
             <div class="form-group" style="padding: 20px;">
               <label for="name" class="form-label text-white fw-bold">Nombre completo</label>
-              <input type="text" required class="form-control" id="name" v-model="name" placeholder="Nombre completo">
+              <input type="text" maxlength="255" required class="form-control" id="name" v-model="name" placeholder="Nombre completo">
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
@@ -18,7 +18,7 @@
             </div>
           <div class="form-group" style="padding: 20px;">
             <label for="password" class="form-label text-white fw-bold">Contraseña</label>
-            <input type="password" required class="form-control" id="password" v-model="password"
+            <input type="password" maxlength="255" required class="form-control" id="password" v-model="password"
               placeholder="Contraseña" @input="validatePassword" :class="{ 'is-invalid': !isPasswordSafe }">
             <div class="invalid-feedback text-danger" v-if="!isPasswordSafe">{{passwordError}}</div>
           </div>
@@ -26,11 +26,11 @@
           <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
             <div class="form-group" style="padding: 20px;">
               <label for="username" class="form-label text-white fw-bold">Nombre de usuario</label>
-              <input type="text" required class="form-control" id="username" v-model="username" placeholder="Nombre de usuario">
+              <input type="text" maxlength="14" required class="form-control" id="username" v-model="username" placeholder="Nombre de usuario">
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="email" class="form-label text-white fw-bold">Email</label>
-              <input type="email" required class="form-control" id="email" v-model="email" placeholder="email">
+              <input type="email" maxlength="255" required class="form-control" id="email" v-model="email" placeholder="email">
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña</label>
@@ -88,14 +88,18 @@
               </div>
           </div>
           <div class="mt-3" style="padding-top: 20px;" v-if="secondPage">
-            <button type="submit" class="btn-primary" @click="changePage" style="margin-right: 20px;">Anterior</button>
-            <button type="submit" class="btn-green" @click="register">Registrarse</button>
+            <button type="submit" class="btn-primary " @click="changePage" style="margin-right: 20px;">Anterior</button>
+            <button type="submit" class="btn-green " @click="register">Registrarse</button>
         </div>
       </form>
     </div>
-    <div>
-      <h3 style="color: rgb(0, 0, 0); padding-top: 20px;">¿Ya tienes cuenta?</h3>
-      <router-link to="/login">Inicia sesión</router-link>
+    <div class="row justify-content-center">
+      <div class="col-md-7" >
+        <h3 style="color: rgb(0, 0, 0); padding-top: 10px; padding-right: 0px; padding-left: 150px;">¿Ya tienes cuenta?</h3>
+      </div>
+      <div class="col-md-5" style="padding-top: 15px; padding-left: 0px; padding-right: 200px;" >
+        <router-link to="/login" style="padding-top: 30px;">Inicia sesión</router-link>
+      </div>
     </div>
   </div>
 </template>
