@@ -6,14 +6,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.AdvertisementHouseRequest;
 import org.ispp4.cohabify.dto.FormItemValidationError;
+import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.house.HouseService;
+import org.ispp4.cohabify.tag.TagType;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/api/advertisements/houses")
@@ -65,8 +71,8 @@ public class HouseAdvertisementController {
     }
 
     @PostMapping("")
-	public ResponseEntity<?> register(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result,  
-    @RequestPart("profile-pic1") MultipartFile image) throws BadRequestException {
+	public ResponseEntity<?> register(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
+    @RequestPart("images") List<MultipartFile> images) throws BadRequestException {
 		
 		if(result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -87,7 +93,6 @@ public class HouseAdvertisementController {
         house.setTags(request.getHouse().getTags());
         GeoJsonPoint point = new GeoJsonPoint(2, 2);
         house.setLocationPoint(point);
-        house.setTags(request.getHouse().getTags());
 		house = houseService.save(house);
         
 
@@ -100,27 +105,45 @@ public class HouseAdvertisementController {
         advertisement = advertisementService.save(advertisement);
         
         // Save the image and add the static uri to the user
-		String[] filename_split = image.getOriginalFilename().split("\\.");
-		String filename = advertisement.getJsonId() + "." + filename_split[filename_split.length-1];
-		String static_path = "/uploads/saved-images/house-advertisement-pictures/" + filename;
-		Path path = Paths.get("src/main/resources/static/uploads/saved-images/house-advertisement-pictures", filename);
-		try {
-			Files.createDirectories(path.getParent());
-			Files.write(path, image.getBytes());
-		} catch (IOException e) {
-			advertisementService.deleteById(advertisement.getId());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					 .body(e.getMessage());
-		}
-		List<String> imagesPath = new ArrayList<>();
-        imagesPath.add(static_path);
-		advertisement.setImages(imagesPath);
-		advertisement = advertisementService.save(advertisement);
-		// TODO: Add the user full name when it is fixed in the model
-		
+        
+        List<String> imagesPath = new ArrayList<>();
+        for(int i = 0; i < images.size(); i++){
+            MultipartFile image = images.get(i);
+            String[] filename_split = images.get(i).getOriginalFilename().split("\\.");
+            String filename = advertisement.getJsonId() + "." + filename_split[filename_split.length-1];
+            String static_path = "/uploads/saved-images/house-advertisement-pictures/" + filename;
+            Path path = Paths.get("src/main/resources/static/uploads/saved-images/house-advertisement-pictures", filename);
+            try {
+                Files.createDirectories(path.getParent());
+                Files.write(path, image.getBytes());
+            } catch (IOException e) {
+                advertisementService.deleteById(advertisement.getId());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                         .body(e.getMessage());
+            }
+          
+            imagesPath.add(static_path);
+            advertisement.setImages(imagesPath);
+            advertisement = advertisementService.save(advertisement);
+        }
 		return ResponseEntity.status(HttpStatus.CREATED)
 							 .body(advertisement);
 	}
+
+
+     @GetMapping("/heating")
+    public ResponseEntity<List<Heating>> findHeating() {
+        try {
+            List<Heating> heatings = List.of(Heating.values());
+
+            if (heatings.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(heatings, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> updateAdvertisement(@PathVariable ObjectId id, @RequestBody HouseAdvertisement advertisement) {
