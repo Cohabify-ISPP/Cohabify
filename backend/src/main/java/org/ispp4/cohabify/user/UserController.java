@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +24,13 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/api/user")
 @AllArgsConstructor
+@Validated
 public class UserController {
 
     private UserService userService;
 
     @PostMapping("/add")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         try {
             if (user.getUsername() == null || user.getDescription() == null || user.getPhone() == null
                     || user.getEmail() == null || user.getPassword() == null || user.getPlan() == null

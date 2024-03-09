@@ -237,6 +237,9 @@ export default {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/user/secureSearch`,
           {
             method: "POST",
+            headers: {
+                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                    },
             credentials: "include",
             body: JSON.stringify(data),
             headers: {
@@ -265,6 +268,9 @@ export default {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/tag/types/FLAT_TAG`,
           {
             method: "GET",
+            headers: {
+                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                    },
             credentials: "include",
           });
 
@@ -287,6 +293,9 @@ export default {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/houses/heating`,
           {
             method: "GET",
+            headers: {
+                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                    },
             credentials: "include",
           });
 
@@ -338,6 +347,9 @@ export default {
       }
       fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses', {
         method: 'POST',
+        headers: {
+                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                    },
         body: formData,
       })
         .then(response => response.json())

@@ -55,10 +55,10 @@
                         password: data.password,
                     }),
                 })
-                .then(response =>{
-                    if(response.status === 200){
+                .then(response => {
+                    if(response.status === 200) {
                         return response.json();
-                    }else if (response.status === 400) {
+                    } else if (response.status === 400) {
                         throw new Error('Usuario o contraseña incorrectos');
                     } else { 
                         throw new Error('Error al iniciar sesión');
@@ -66,6 +66,7 @@
                 })
                 .then(data => {
                     user.value = data.user;
+                    sessionStorage.setItem("authentication", data.token)
                     window.location.href = '/';
                 })
                 .catch(error => fetchError.value = error.message);
@@ -90,8 +91,8 @@
     padding-right: 40px;
     border: 1px  #28426b30;
     border-radius: 4px;
-    background-color: #28426b9d;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #28426bae;
+    box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.1);
 }
 
 input {

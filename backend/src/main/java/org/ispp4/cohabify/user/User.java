@@ -12,14 +12,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "users")
 public class User extends BaseEntity {
 
@@ -30,6 +35,10 @@ public class User extends BaseEntity {
     @NotNull
     @Size(max = 255)
     @JsonProperty(access = Access.WRITE_ONLY)
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$",
+             message = "La contraseña debe contener al menos una letra mayúscula, una minúscula, un número y un carácter especial")
     private String password;
 
     @NotNull
@@ -56,7 +65,7 @@ public class User extends BaseEntity {
     private Plan plan;
     
     @NotNull
-    private Genre genre;
+    private Gender gender;
     
     private String imageUri;
     
@@ -69,12 +78,6 @@ public class User extends BaseEntity {
     @DBRef
     private List<User> likes = new ArrayList<User>();
     
-    @NotNull
-    private String image;
-
-    public User() {
-    
-    }
 
     public Boolean isAdmin() {
         return this.authorities.contains("Admin");
