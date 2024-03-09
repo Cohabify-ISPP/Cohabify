@@ -17,4 +17,4 @@
 node_modules/
 
 # Carpeta de resources
-resources/static/uploads/
+backend/main/resources/static/uploads/
