@@ -39,7 +39,9 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(requests -> requests
 					.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE).permitAll()
 					.requestMatchers(HttpMethod.OPTIONS).permitAll()
+					.requestMatchers("/**").permitAll()
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**", "/static/**").permitAll()
+					.requestMatchers("/api/tag/types/USER_TAG").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").anonymous()
 					.requestMatchers(HttpMethod.POST, "/auth/getUser").authenticated()
 					.requestMatchers("/api/**").authenticated()

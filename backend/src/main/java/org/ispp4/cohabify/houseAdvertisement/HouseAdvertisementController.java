@@ -1,12 +1,8 @@
 package org.ispp4.cohabify.houseAdvertisement;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.coyote.BadRequestException;
@@ -16,7 +12,7 @@ import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.house.HouseService;
-import org.ispp4.cohabify.tag.TagType;
+import org.ispp4.cohabify.storage.StorageService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,23 +30,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/advertisements/houses")
+@AllArgsConstructor
 public class HouseAdvertisementController {
     
-    private final HouseAdvertisementService advertisementService;
-
-    private final HouseService houseService;
-  
-
-    public HouseAdvertisementController(HouseAdvertisementService advertisementService, HouseService houseService) {
-        this.advertisementService = advertisementService;
-        this.houseService = houseService;
-    }
+    private HouseAdvertisementService advertisementService;
+    private HouseService houseService;
+    private StorageService storageService;
 
     @Transactional(readOnly = true)
     @GetMapping("")
@@ -71,7 +60,7 @@ public class HouseAdvertisementController {
     }
 
     @PostMapping("")
-	public ResponseEntity<?> register(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
+	public ResponseEntity<?> createAdvertisement(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
     @RequestPart("images") List<MultipartFile> images) throws BadRequestException {
 		
 		if(result.hasErrors()) {
@@ -111,11 +100,9 @@ public class HouseAdvertisementController {
             MultipartFile image = images.get(i);
             String[] filename_split = images.get(i).getOriginalFilename().split("\\.");
             String filename = advertisement.getJsonId() + "." + filename_split[filename_split.length-1];
-            String static_path = "/uploads/saved-images/house-advertisement-pictures/" + filename;
-            Path path = Paths.get("src/main/resources/static/uploads/saved-images/house-advertisement-pictures", filename);
+            String static_path;
             try {
-                Files.createDirectories(path.getParent());
-                Files.write(path, image.getBytes());
+                static_path = storageService.saveImage(filename, image);
             } catch (IOException e) {
                 advertisementService.deleteById(advertisement.getId());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

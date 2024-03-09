@@ -2,10 +2,9 @@ package org.ispp4.cohabify.dto;
 
 import java.util.List;
 
-
 import org.ispp4.cohabify.house.House;
+import org.ispp4.cohabify.user.User;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ispp4.cohabify.user.User;
 
 @Data
 @AllArgsConstructor
