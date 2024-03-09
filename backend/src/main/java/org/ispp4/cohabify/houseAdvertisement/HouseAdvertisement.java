@@ -32,7 +32,7 @@ public class HouseAdvertisement extends BaseEntity {
     @PositiveOrZero
     private Double price;
 
-    @NotNull
+  
     @DBRef
     private List<User> tenants;
 

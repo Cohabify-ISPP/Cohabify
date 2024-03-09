@@ -2,6 +2,9 @@
   <Navbar />
   <h1 class="text-center mt-4">Anuncio de vivienda</h1>
   <div class="container card2" style="margin-top: 40px;margin-bottom: 40px;">
+    <div v-show="success" class="alert alert-success alert-dismissible fade show" role="alert">
+        Anuncio creado con éxito.
+      </div>
     <form @submit.prevent="register">
       <div class="row mt-2 justify-content-center">
 
@@ -9,42 +12,42 @@
           <div class="mb-3  text-start">
             <label for="title" class="form-label text-white"><strong>Título</strong></label>
             <input type="text" class="form-control" id="title" v-model="title" required
-              placeholder="Escribe un título para el anuncio...">
+              placeholder="Escribe un título para el anuncio..." maxlength="100">
           </div>
           <div class="mb-3 text-start">
             <label for="description" class="form-label text-white"><strong>Descripción</strong></label>
             <textarea class="form-control" id="description" rows="3" v-model="description" required
-              placeholder="Escribe una descripción para el anuncio..."></textarea>
+              placeholder="Escribe una descripción para el anuncio..."maxlength="1500"></textarea>
           </div>
           <div class="row  mb-3">
             <div class="mb-3  text-start col">
               <label for="cadastre" class="form-label text-white"><strong>Catastro</strong></label>
               <input type="text" class="form-control" id="cadastre" v-model="cadastre" required
-                placeholder="12345678901234567890...">
+                placeholder="12345678901234567890..." minlength="20" maxlength="20">
             </div>
             <div class="mb-3  text-start col">
               <label for="location" class="form-label text-white"><strong>Ubicación</strong></label>
-              <input type="text" class="form-control" id="location" v-model="location" required placeholder="C/...">
+              <input type="text" class="form-control" id="location"  maxlength="100" v-model="location" required placeholder="C/...">
             </div>
           </div>
           <div class="row  mb-3">
             <div class="col text-start">
               <label for="area" class="form-label text-white"><strong>Superficie</strong></label>
               <div class="input-group">
-                <input type="number" class="form-control" id="area" v-model="area" required placeholder="0">
+                <input type="number" class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
                 <span class="input-group-text" style="color: grey;">m²</span>
               </div>
 
             </div>
             <div class="col mb-3 text-start">
               <label for="floor" class="form-label text-white"><strong>Planta</strong></label>
-              <input type="number" class="form-control" id="floor" v-model="floor" required placeholder="0">
+              <input type="number" class="form-control" id="floor" v-model="floor" required placeholder="0" min="-5" max="100">
             </div>
             <div class="col text-start">
               <div class="mb-3">
                 <label for="price" class="form-label text-white"><strong>Precio</strong></label>
                 <div class="input-group">
-                  <input type="number" class="form-control" id="area" v-model="price" required placeholder="0">
+                  <input type="number" class="form-control" id="area" v-model="price" required placeholder="0" min="0" max="10000000">
                   <span class="input-group-text" style="color: grey;">€</span>
                 </div>
               </div>
@@ -91,8 +94,8 @@
                 <label for="tenants" class="form-label text-white"><strong>Inquilinos (Ambos campos son necesarios)</strong></label>
               </div>
                 <div class="row justify-content-center" >
-                  <input type="text" style="margin-right: 20px;" class="form-control col" v-model="userSearch" placeholder="Nombre de usuario a buscar...">
-                  <input type="text" class="form-control col" v-model="phoneSearch" placeholder="Teléfono a buscar...">
+                  <input type="text" style="margin-right: 20px;" class="form-control col" v-model="userSearch" placeholder="Nombre de usuario a buscar..." maxlength="14">
+                  <input type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" class="form-control col" v-model="phoneSearch" placeholder="Teléfono a buscar...">
                 </div>
                 <div class="row justify-content-center" >  
                   <button type="button" class="btn-primary col-md-3" style="margin-top: 20px;" @click.prevent="fetchUser">Buscar</button>
@@ -107,7 +110,7 @@
               <div class="text-start mb-3" v-if="selectedTenants.length > 0">
                 <div style="max-height: 60px; overflow-y: auto;">
                   <ul>
-                    <li v-for="(tenant, index) in selectedTenants" :key="'selected' + index">{{ tenant.username }}</li>
+                    <li class="text-white" v-for="(tenant, index) in selectedTenants" :key="'selected' + index">{{ tenant.username }}</li>
                   </ul>
                 </div>
               </div>
@@ -172,8 +175,8 @@ import { ref, onBeforeMount} from 'vue'
 export default {
   setup() {
     var isDragging = ref(false)
-    const roomsNumber = ref(0)
-    const bathroomsNumber = ref(0)
+    const roomsNumber = ref(1)
+    const bathroomsNumber = ref(1)
     const floor = ref()
     const area = ref()
     const location = ref('')
@@ -182,6 +185,7 @@ export default {
     const heatingSelect = ref([])
     const selectedTags = ref([])
     const tags = ref([])
+    const success = ref(false)
     
 
     //ADVERTISEMENT
@@ -216,6 +220,16 @@ export default {
 
     const fetchUser = async () => {
       try {
+        
+        if (userSearch.value === '' || phoneSearch.value === '') {
+          return
+        }
+        for (let i = 0; i < selectedTenants.value.length; i++) {
+          if (selectedTenants.value[i].username === userSearch.value || selectedTenants.value[i].phone === phoneSearch.value) {
+           alert("Usuario ya seleccionado");
+            return;
+          }
+        }
        let data = {
           username: userSearch.value,
           phone: phoneSearch.value,
@@ -233,7 +247,11 @@ export default {
         if (response.ok) {
           const data = await response.json();
           selectedTenants.value.push(data);
-        } else {
+          userSearch.value = '';
+          phoneSearch.value = '';
+        } else if (response.status === 404){
+          alert("Usuario no encontrado");
+        }else{
           window.location.href = "/404";
         }
 
@@ -293,12 +311,16 @@ export default {
         alert("Selecciona al menos una imagen");
         return;
       }
+      if (selectedTags.value.length === 0) {
+        alert("Selecciona al menos un tag");
+        return;
+      }
       const formData = new FormData();
       formData.append("string-data", new Blob([JSON.stringify({
         title:title.value,
         description: description.value,
         price: price.value,
-        tenants: tenants.value,
+        tenants: selectedTenants.value,
 
         house: {
           roomsNumber: roomsNumber.value,
@@ -319,7 +341,15 @@ export default {
         body: formData,
       })
         .then(response => response.json())
-        .then(jsonData => window.location.href = '/')
+        .then(jsonData => {
+          success.value = true;
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1000);
+        }
+        
+        
+        )
         .catch(error => console.error('Error al enviar datos al backend:', error));
 
     };
@@ -349,6 +379,7 @@ export default {
       heatingSelect,
       fetchUser,
       toggleTag,
+      success,
     }
   },
   watch: {
@@ -430,7 +461,7 @@ export default {
 
     },
     decreaseRoomsNumber() {
-      if (this.roomsNumber > 0) {
+      if (this.roomsNumber > 1) {
         this.roomsNumber--
       }
 
@@ -442,7 +473,7 @@ export default {
 
     },
     decreaseBathoomsNumber() {
-      if (this.bathroomsNumber > 0) {
+      if (this.bathroomsNumber > 1) {
         this.bathroomsNumber--
       }
     },
