@@ -10,25 +10,27 @@
           <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
             <div class="form-group" style="padding: 20px;">
               <label for="name" class="form-label text-white fw-bold">Nombre completo</label>
-              <input type="text" required class="form-control" id="name" v-model="name" placeholder="Nombre completo">
+              <input type="text" maxlength="255" required class="form-control" id="name" v-model="name" placeholder="Nombre completo">
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
               <input type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" required class="form-control" id="phone" v-model="phone" placeholder="XXXXXXXXX">
             </div>
-            <div class="form-group" style="padding: 20px;">
-              <label for="password" class="form-label text-white fw-bold">Contraseña</label>
-              <input type="password" required class="form-control" id="password" v-model="password" placeholder="contraseña">
-            </div>
+          <div class="form-group" style="padding: 20px;">
+            <label for="password" class="form-label text-white fw-bold">Contraseña</label>
+            <input type="password" maxlength="255" required class="form-control" id="password" v-model="password"
+              placeholder="Contraseña" @input="validatePassword" :class="{ 'is-invalid': !isPasswordSafe }">
+            <div class="invalid-feedback text-danger" v-if="!isPasswordSafe">{{passwordError}}</div>
+          </div>
           </div>
           <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
             <div class="form-group" style="padding: 20px;">
               <label for="username" class="form-label text-white fw-bold">Nombre de usuario</label>
-              <input type="text" required class="form-control" id="username" v-model="username" placeholder="Nombre de usuario">
+              <input type="text" maxlength="14" required class="form-control" id="username" v-model="username" placeholder="Nombre de usuario">
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="email" class="form-label text-white fw-bold">Email</label>
-              <input type="email" required class="form-control" id="email" v-model="email" placeholder="email">
+              <input type="email" maxlength="255" required class="form-control" id="email" v-model="email" placeholder="email">
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña</label>
@@ -54,6 +56,7 @@
               </select>
             </div>
             <label for="tags" class="form-label text-white fw-bold">¿Cómo te describirías?</label>
+            <br>
             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
               <div class="tags-container">
               <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
@@ -85,11 +88,10 @@
               </div>
           </div>
           <div class="mt-3" style="padding-top: 20px;" v-if="secondPage">
-            <button type="submit" class="btn-primary" @click="changePage" style="margin-right: 20px;">Anterior</button>
-            <button type="submit" class="btn-green" @click="register">Registrarse</button>
+            <button type="submit" class="btn-primary " @click="changePage" style="margin-right: 20px;">Anterior</button>
+            <button type="submit" class="btn-green " @click="register">Registrarse</button>
         </div>
       </form>
-      
     </div>
     <div class="row justify-content-center">
       <div class="col-md-7" >
@@ -102,8 +104,8 @@
   </div>
 </template>
 
-
 <script>
+
 import { ref, onMounted, computed } from 'vue'
 
 export default {
@@ -122,7 +124,24 @@ export default {
       const selectedTags = ref([])
       const isDragging = ref(false);
       const fileInput = ref(null);
+      const passwordError = ref('');
+      const isPasswordSafe = ref('true');
   
+      const validatePassword = () => {
+      console.log("Validando contraseña...");
+      const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+      if (password.value.length==0) {
+        isPasswordSafe.value = true;
+      } else if(!passwordRegex.test(password.value)){
+        passwordError.value = 'Contraseña no segura: la contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial  (!@#$%^&*).';
+        isPasswordSafe.value = false;
+        console.log('Password error:', passwordError.value);
+      }else {
+        passwordError.value = '';
+        isPasswordSafe.value = true;
+      }
+      console.log("Contraseña válida:", !passwordError.value);
+      };
       
       const imgUrl = computed(() => {
         if (img.value) {
@@ -202,26 +221,25 @@ export default {
     };
 
     const changePage = () => {
+      validatePassword();
       if (name.value && username.value && email.value && phone.value && password.value && confirmPassword.value 
-      && password.value === confirmPassword.value && phone.value.length === 9 && !isNaN(phone.value) && email.value.includes('@')) {
+      && password.value === confirmPassword.value && phone.value.length === 9 && !isNaN(phone.value) && email.value.includes('@') && !passwordError.value) {
           secondPage.value = !secondPage.value;
       }
     };
 
-    
-
         const register = () => {
-            const data = {
-                name: name.value,
-                username: username.value,
-                gender: gender.value,
-                email: email.value,
-                phone: phone.value,
-                password: password.value,
-                confirmPassword: confirmPassword.value,
-                img: img.value,
-                tags: selectedTags.value
-            }
+          const data = {
+                  name: name.value,
+                  username: username.value,
+                  gender: gender.value,
+                  email: email.value,
+                  phone: phone.value,
+                  password: password.value,
+                  confirmPassword: confirmPassword.value,
+                  img: img.value,
+                  tags: selectedTags.value
+              };
             if (password.value !== confirmPassword.value) {
                 alert('Las contraseñas no coinciden')
             } else {
@@ -281,14 +299,18 @@ export default {
           onDrop,
           isDragging,
           imgUrl,
-          fileInput
+          fileInput,
+          passwordError,
+          isPasswordSafe,
+          validatePassword,
+          
   }
 }
 }
+
 </script>
 
 <style scoped>
-
 .card {
   padding-top: 40px;
   padding-bottom: 40px;
@@ -298,6 +320,7 @@ export default {
   border-radius: 4px;
   background-color: #28426bae;
   box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 button {
@@ -434,5 +457,6 @@ font-weight: bold;
 font-size: 30px;
 }
 </style>
+
 
 
