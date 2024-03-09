@@ -85,7 +85,7 @@ const applyFilters = () => {
         }
     }
 
-    if (minBathrooms.value && maxBathrooms.value && minBathrooms.value > maxBathrooms.value) {
+    if (minBathrooms.value != null && maxBathrooms.value != null && minBathrooms.value > maxBathrooms.value) {
         console.log('entra')
         if (!errors.value.minBathroomsVal) {
             errors.value.minBathroomsVal = 'Valor mayor que el máximo seleccionado'
@@ -112,7 +112,7 @@ const applyFilters = () => {
         }
     }
 
-    if (minBedrooms.value && maxBedrooms.value && minBedrooms.value > maxBedrooms.value) {
+    if (minBedrooms.value != null && maxBedrooms.value != null && minBedrooms.value > maxBedrooms.value) {
         if (!errors.value.minRoomsVal) {
             errors.value.minRoomsVal = 'Valor mayor que el máximo seleccionado'
         }
