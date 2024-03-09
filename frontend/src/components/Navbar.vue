@@ -50,8 +50,8 @@ const logout = () => {
             Publicar Anuncio
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/advertisements/houses/new">Vivienda</a></li>
-            <li><a class="dropdown-item" href="/advertisements/users/new">Perfil</a></li>
+            <li><a class="dropdown-item" href="/advertisements/houses/new" @click.prevent="$router.push('/advertisements/houses/new')">Vivienda</a></li>
+            <li><a class="dropdown-item" href="/advertisements/users/new" @click.prevent="$router.push('/advertisements/users/new')">Perfil</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -59,8 +59,8 @@ const logout = () => {
             Buscar
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/advertisements/houses">Viviendas</a></li>
-            <li><a class="dropdown-item" href="/advertisements/users">Compañeros</a></li>
+            <li><a class="dropdown-item" href="/advertisements/houses" @click.prevent="$router.push('/advertisements/houses')">Viviendas</a></li>
+            <li><a class="dropdown-item" href="/advertisements/users" @click.prevent="$router.push('/advertisements/users')">Compañeros</a></li>
           </ul>
         </li>
       </ul>
