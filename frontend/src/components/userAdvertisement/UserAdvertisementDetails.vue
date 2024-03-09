@@ -20,6 +20,9 @@ export default {
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
                     {
                         method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        },
                         credentials: "include",
                     });
 
@@ -41,6 +44,9 @@ export default {
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userRating/user/${userAdvertisement.value.author.id}`,
                     {
                         method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        },
                         credentials: "include",
                     });
                 const data = await response.json();
@@ -57,6 +63,7 @@ export default {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
                     },
                 });
 

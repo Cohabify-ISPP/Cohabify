@@ -7,9 +7,7 @@ const image = ref(null)
 const BACKEND_URL= import.meta.env.VITE_BACKEND_URL
 
 onMounted(() => {
-  const cookies = document.cookie.split('; ')
-  const authCookie = cookies.find(cookie => cookie.startsWith('Authentication='))
-  const token = authCookie ? authCookie.split('=')[1] : null
+  const token = sessionStorage.getItem("authentication")
 
   if (token) {
     const decoded = jwtDecode(token)
@@ -21,7 +19,7 @@ onMounted(() => {
 })
 
 const logout = () => {
-  document.cookie = 'Authentication=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+  sessionStorage.setItem("authentication", "")
   isLoggedIn.value = false
 }
 

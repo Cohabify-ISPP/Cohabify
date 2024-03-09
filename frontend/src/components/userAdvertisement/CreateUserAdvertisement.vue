@@ -40,6 +40,7 @@ export default {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
                 },
                 body: JSON.stringify(userAd.value),
             });

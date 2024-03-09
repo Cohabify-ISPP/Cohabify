@@ -171,6 +171,9 @@ export default {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users`,
           {
             method: "GET",
+            headers: {
+                'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+            },
             credentials: "include",
           });
 
@@ -191,6 +194,9 @@ export default {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/tag/types/USER_TAG`,
           {
             method: "GET",
+			headers: {
+				'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+			},
             credentials: "include",
           });
         const data = await response.json();

@@ -55,10 +55,10 @@
                         password: data.password,
                     }),
                 })
-                .then(response =>{
-                    if(response.status === 200){
+                .then(response => {
+                    if(response.status === 200) {
                         return response.json();
-                    }else if (response.status === 400) {
+                    } else if (response.status === 400) {
                         throw new Error('Usuario o contraseña incorrectos');
                     } else { 
                         throw new Error('Error al iniciar sesión');
@@ -66,6 +66,7 @@
                 })
                 .then(data => {
                     user.value = data.user;
+                    sessionStorage.setItem("authentication", data.token)
                     window.location.href = '/';
                 })
                 .catch(error => fetchError.value = error.message);
