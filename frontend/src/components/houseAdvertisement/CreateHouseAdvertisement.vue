@@ -239,12 +239,10 @@ export default {
             method: "POST",
             headers: {
                         'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Content-Type': 'application/json'
                     },
             credentials: "include",
             body: JSON.stringify(data),
-            headers: {
-              'Content-Type': 'application/json'
-            }
           });
 
         if (response.ok) {
