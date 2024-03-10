@@ -45,7 +45,7 @@ jobs:
           STATIC_FILES_HOST: http://localhost:8080
         run: |
           cd backend
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Cohabify_Cohabify
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Cohabify
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -62,4 +62,4 @@ jobs:
         run: |
           cd frontend
           npm run build
-          npx sonar-scanner -Dsonar.projectKey=Cohabify_Cohabify -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN -Dsonar.organization=cohabify
+          npx sonar-scanner -Dsonar.projectKey=Cohabify_Frontend -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN -Dsonar.organization=cohabify
