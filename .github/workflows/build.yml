@@ -52,7 +52,7 @@ jobs:
           node-version: '21'
       - name: Install frontend dependencies
         run: |
-          cd ../frontend
+          cd frontend
           npm install
       - name: Build and analyze frontend
         env:
