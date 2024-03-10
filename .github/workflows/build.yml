@@ -54,6 +54,7 @@ jobs:
         run: |
           cd frontend
           npm install
+          npm install --save-dev sonar-scanner
       - name: Build and analyze frontend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -61,4 +62,4 @@ jobs:
         run: |
           cd frontend
           npm run build
-          sonar-scanner -Dsonar.projectKey=Cohabify_Cohabify -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+          npx sonar-scanner -Dsonar.projectKey=Cohabify_Cohabify -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
