@@ -41,6 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           TOKEN_SECRET_KEY: 29da297b4fbb85dca0da6aea2f758819a9be22dcd308bab2ce3d4c6677841f31
+          TOKEN_EXPIRATIONMS: 86400000
         run: |
           cd backend
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Cohabify_Cohabify
