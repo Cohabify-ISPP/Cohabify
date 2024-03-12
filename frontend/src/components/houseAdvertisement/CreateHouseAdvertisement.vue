@@ -199,6 +199,7 @@ export default {
     const selectedTenants = ref([])
     const imagesUrl = ref([])
     const images = ref([])
+    const auth = ref()
   
 
 
@@ -217,6 +218,8 @@ export default {
         selectedTags.value.push(tag);
       }
     };
+
+ 
 
     const fetchUser = async () => {
       try {
@@ -288,6 +291,20 @@ export default {
 
     const fetchHeating = async () => {
       try {
+        const userFetch = await fetch(
+          import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
+          {
+            method: "POST",
+            headers: {
+              "Authentication":
+                "Bearer " + sessionStorage.getItem("authentication"),
+            },
+          }
+        );
+
+        const userData = await userFetch.json();
+        auth.value = userData;
+
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/houses/heating`,
           {
             method: "GET",
@@ -322,13 +339,14 @@ export default {
         alert("Selecciona al menos un tag");
         return;
       }
+      
       const formData = new FormData();
       formData.append("string-data", new Blob([JSON.stringify({
         title:title.value,
         description: description.value,
         price: price.value,
         tenants: selectedTenants.value,
-
+        author: auth.value,
         house: {
           roomsNumber: roomsNumber.value,
           bathroomsNumber: bathroomsNumber.value,
@@ -390,6 +408,7 @@ export default {
       fetchUser,
       toggleTag,
       success,
+      auth,
     }
   },
   watch: {
