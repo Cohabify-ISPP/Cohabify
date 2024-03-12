@@ -24,6 +24,7 @@ const routes = [
 
     { path: '/advertisements/users/new', component: CreateUserAdvertisement },
     { path: '/advertisements/houses/new', component: CreateHouseAdvertisement },
+    { path: '/advertisements/users/edit/:id', component: CreateUserAdvertisement },
     
     { path: '/:pathMatch(.*)*', component: Error }
 

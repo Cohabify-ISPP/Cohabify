@@ -1,14 +1,15 @@
 <script>
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const successfulAlert = ref(false);
     const router = useRouter();
-    const today = new Date();
+    const userAdvertisementId = ref();
 
     const userAd = ref({
+      id: "",
       title: "",
       description: "",
       maxBudget: "",
@@ -17,6 +18,29 @@ export default {
       exitDate: "",
       maxCohabitants: "",
     });
+    
+    const fetchUserAd = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        },
+                        credentials: "include",
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        userAd.value = data;
+                    } else {
+                        window.location.href = "/404";
+                    }
+
+                } catch (error) {
+                console.error("Error:", error);
+            }
+        };
 
     const saveUserAd = async () => {
       if (!validateForm()) {
@@ -100,7 +124,7 @@ export default {
         } else {
           errorMessages.value.entranceDate = "";
         }
-        if (new Date(userAd.value.entranceDate) <= today) {
+        if (new Date(userAd.value.entranceDate) <= new Date()) {
           isValid = false;
           errorMessages.value.entranceDate = "La fecha debe ser en el futuro";
         } else {
@@ -127,6 +151,16 @@ export default {
       }
     };
 
+    onMounted(() => {
+      userAdvertisementId.value = router.currentRoute.value.params.id;
+      if (userAdvertisementId !== null && userAdvertisementId !== undefined) {
+        fetchUserAd();
+      }
+      if (sessionStorage.getItem("authentication") === null) {
+        router.push("/login");
+      }
+    });
+
     return {
       userAd,
       saveUserAd,
@@ -146,15 +180,7 @@ export default {
       <div class="columna" style="flex-grow: 2">
         <form id="form">
           <div class="form-group" style="text-align: left; margin-top: 3vh">
-            <input
-              type="text"
-              class="form-control"
-              id="titulo"
-              v-model="userAd.title"
-              required
-              placeholder="Añadir título..."
-            />
-            <span class="text-danger">{{ errorMessages.title }}</span>
+            <h2 class="mb-4">Crear anuncio de búsqueda de piso</h2>
             <h5>Presupuesto</h5>
             <div class="input-group mb-3 d-flex w-50">
               <div class="d-flex align-items-center">
