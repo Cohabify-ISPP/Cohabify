@@ -66,7 +66,7 @@ export default {
                 </div>
 
                 <div class="subseccion">
-                    <div class="card mb-2" style="padding: 10px;">   
+                    <div class="card mb-2 shadow" style="padding: 10px;">   
                         <div class="card-body">
                             <h4 style="text-align: left;" class="card-title">Descripción</h4>
                             <hr>
