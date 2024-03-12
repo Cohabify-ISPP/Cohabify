@@ -38,4 +38,7 @@ public class AdvertisementHouseRequest {
 
        
     private House house;
+
+    @DBRef
+    private User author;
 }
