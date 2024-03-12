@@ -18,9 +18,6 @@ import lombok.Setter;
 @Document(collection = "userAdvertisements")
 public class UserAdvertisement extends BaseEntity {
 
-    @NotBlank
-    private String title;
-
     private String description;
     
     @NotNull
