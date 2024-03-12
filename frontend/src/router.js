@@ -7,6 +7,7 @@ import CreateHouseAdvertisement from './components/houseAdvertisement/CreateHous
 import HouseAdvertisementList from './components/houseAdvertisement/HouseAdvertisementList.vue';
 import UserAdvertisementDetails from './components/userAdvertisement/UserAdvertisementDetails.vue';
 import CreateUserAdvertisement from './components/userAdvertisement/CreateUserAdvertisement.vue';
+import EditUserAdvertisement from './components/userAdvertisement/EditUserAdvertisement.vue';
 import HouseAdvertisementDetails from './components/houseAdvertisement/HouseAdvertisementDetails.vue';
 import Error from './components/Error.vue';
 
@@ -24,7 +25,7 @@ const routes = [
 
     { path: '/advertisements/users/new', component: CreateUserAdvertisement },
     { path: '/advertisements/houses/new', component: CreateHouseAdvertisement },
-    { path: '/advertisements/users/edit/:id', component: CreateUserAdvertisement },
+    { path: '/advertisements/users/edit/:id', component: EditUserAdvertisement },
     
     { path: '/:pathMatch(.*)*', component: Error }
 

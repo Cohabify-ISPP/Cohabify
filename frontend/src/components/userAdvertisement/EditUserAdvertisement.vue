@@ -1,11 +1,13 @@
 <script>
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 export default {
   setup() {
     const successfulAlert = ref(false);
     const router = useRouter();
+    const route = useRoute();
+    const userAdvertisementId = ref();
 
     const userAd = ref({
       id: "",
@@ -17,6 +19,29 @@ export default {
       exitDate: "",
       maxCohabitants: "",
     });
+    
+    const fetchUserAd = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        },
+                        credentials: "include",
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        userAd.value = data;
+                    } else {
+                        window.location.href = "/404";
+                    }
+
+                } catch (error) {
+                console.error("Error:", error);
+            }
+        };
 
     const saveUserAd = async () => {
       if (!validateForm()) {
@@ -128,9 +153,11 @@ export default {
     };
 
     onMounted(() => {
+      userAdvertisementId.value = router.currentRoute.value.params.id;
       if (sessionStorage.getItem("authentication") === null) {
         router.push("/login");
       }
+      fetchUserAd();
     });
 
     return {
@@ -150,8 +177,7 @@ export default {
       <div class="columna" style="flex-grow: 2">
         <form id="form">
           <div class="form-group" style="text-align: left; margin-top: 3vh">
-            <h2 class="mb-4" v-if="userAd.id === ''">Crear anuncio de búsqueda de piso</h2>
-            <h2 class="mb-4" v-else >Editar anuncio de búsqueda de piso</h2>
+            <h2 class="mb-4">Editar anuncio de búsqueda de piso</h2>
             <h5>Presupuesto</h5>
             <div class="input-group mb-3 d-flex w-50">
               <div class="d-flex align-items-center">
@@ -261,16 +287,6 @@ export default {
               type="button"
               class="btn btn-success"
               @click.prevent="saveUserAd"
-              v-if="userAd.id === ''"
-            >
-              Publicar
-            </button>
-            <button
-              style="margin-right: 10px"
-              type="button"
-              class="btn btn-success"
-              @click.prevent="saveUserAd"
-              v-else
             >
               Editar
             </button>
