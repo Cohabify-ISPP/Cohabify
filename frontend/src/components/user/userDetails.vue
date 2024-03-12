@@ -165,10 +165,6 @@ export default {
     display: block; 
 }
 
-.likes {
-    display: inline-flex;
-}
-
 .botones {
     display: flex;
     justify-content: space-around;
@@ -208,38 +204,6 @@ export default {
     background-color: #28426B;
     color: #FFFFFF; 
     border: none;
-}
-
-.piso {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 7px; 
-    margin-top: 5px;
-    background-color:#859FC4;
-    border-radius: 10px;
-    width: 100%;
-    height: 70%;
-    color: black;
-    border: 2px solid #859FC4;
-}
-
-.img-piso {
-    width: 20%;
-    height: 25%;
-    object-fit: cover;
-    border-radius: 5%;
-    display: block;
-    margin: 1% 1% 1% 1%;
-}
-
-.columna-informacion {
-    flex: 2;
-    padding: 1%;
-    max-height: 20vh;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .fade-enter-active, .fade-leave-active {
