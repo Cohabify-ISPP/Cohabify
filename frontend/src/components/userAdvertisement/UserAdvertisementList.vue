@@ -82,7 +82,7 @@ export default {
         const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
         console.log(selectedDate)
         console.log(advertisementDate)
-        const isDateValid = selectedDate === null || (advertisementDate && selectedDate < advertisementDate);
+        const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
 
         return (budget.value >= a.maxBudget || budget.value == 0) &&
             (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
