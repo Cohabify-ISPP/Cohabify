@@ -4,9 +4,10 @@ import { jwtDecode } from 'jwt-decode'
 
 const isLoggedIn = ref(false)
 const image = ref(null)
+const user = ref("")
 const BACKEND_URL= import.meta.env.VITE_BACKEND_URL
 
-onMounted(() => {
+onMounted(async() => {
   const token = sessionStorage.getItem("authentication")
 
   if (token) {
@@ -14,8 +15,21 @@ onMounted(() => {
     const now = Date.now() / 1000
     image.value = decoded.image.startsWith('/') ? `${BACKEND_URL}${decoded.image}` : decoded.image
     isLoggedIn.value = decoded.exp > now
-  }
 
+    const userFetch = await fetch(
+          import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
+          {
+            method: "POST",
+            headers: {
+              "Authentication":
+                "Bearer " + sessionStorage.getItem("authentication"),
+            },
+          }
+        );
+
+        const userData = await userFetch.json();
+        user.value = userData;
+  }
 })
 
 const logout = () => {
@@ -89,7 +103,7 @@ const logout = () => {
           aria-labelledby="navbarDropdownMenuAvatar"
         >
           <li>
-            <a class="dropdown-item " href="#" >Perfil</a>
+            <a class="dropdown-item " href="/user/" @click.prevent="$router.push('/user/' + user?.id)">Perfil</a>
           </li>
           <li class="d-lg-none">
             <a class="dropdown-item" href="#">Chat <span class="badge rounded-pill badge-notification bg-danger">1</span></a>

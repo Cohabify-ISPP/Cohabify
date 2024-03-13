@@ -126,6 +126,9 @@
       "description": "Descripción para casa 1",
       "price": 1000,
       "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9e"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
       "images":["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
       "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
@@ -137,6 +140,9 @@
       "description": "Descripción para casa 2",
       "price": 900,
       "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9e"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
       "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
@@ -148,6 +154,9 @@
       "description": "Descripción para casa 3",
       "price": 800,
       "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9e"
+      },
       "tenants": [],
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
       "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
@@ -159,6 +168,9 @@
       "description": "Descripción para casa 4",
       "price": 1100,
       "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9e"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
                 "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
