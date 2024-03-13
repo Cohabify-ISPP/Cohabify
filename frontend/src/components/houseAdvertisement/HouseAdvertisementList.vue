@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Navbar from '../Navbar.vue'
 
 const price = ref(0)
@@ -12,6 +12,8 @@ const minBedrooms = ref(null)
 const maxBedrooms = ref(null)
 const errors = ref({})
 const advertisements = ref([])
+const filteredAdvertisements = ref([])
+const filtered = ref(false);
 const fetchError = ref(null)
 const isLoading = ref(true)
 const showFilters = ref(false)
@@ -41,6 +43,9 @@ onMounted(() => {
             isLoading.value = false
             fetchError.value = error
         })
+})
+const currentAdvertisements = computed(() => {
+ return filtered.value ? filteredAdvertisements.value : advertisements.value
 })
 
 const getImageUrl = (image) => {
@@ -117,6 +122,16 @@ const applyFilters = () => {
             errors.value.minRoomsVal = 'Valor mayor que el máximo seleccionado'
         }
     }
+    filteredAdvertisements.value = advertisements.value.filter(a => {
+        return (price.value >= a.price || price.value == 0) &&
+        (meters.value <= a.house.area || meters.value == 0) &&
+        ((empty.value == a.house.empty) || (tenants.value>=a.house.tenants || tenants.value==0)) &&
+        (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
+        (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
+        (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
+        (maxBedrooms.value >= a.house.roomsNumber || maxBedrooms.value == null);
+    })
+    filtered.value = true
 
     console.log(errors.value)
 
@@ -202,7 +217,7 @@ const applyFilters = () => {
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
                         <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar</button>
-                        <button class="btn btn-danger" @click="errors=[]; price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
+                        <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
                     </div>
                 </div>
             </transition>
@@ -229,7 +244,7 @@ const applyFilters = () => {
                     {{ fetchError }}
                 </div>
                 <div class="list-container mt-4" v-else>
-                    <div class="list-item mt-2" v-for="advertisement in advertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
+                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
                         <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">

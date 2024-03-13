@@ -190,7 +190,8 @@ export default {
                         <h4 style=" text-align: left;">Detalles</h4>
                         <hr>
                         <h5 style="color: #5D5E60; text-align: left;"><i class="bi bi-geo-alt" style="margin-left: 5px;"></i> {{ userAdvertisement.desiredLocation }}</h5>
-                        <h5 style="color: #5D5E60; text-align: left;"><i class="bi bi-calendar-week-fill" style="margin-left: 5px;"></i> {{ userAdvertisement.entranceDate }}<span v-if="userAdvertisement.exitDate != null"> a {{ userAdvertisement.exitDate }}</span> </h5> 
+                        <h5 style="color: #5D5E60; text-align: left;"><i class="bi bi-calendar-week-fill" style="margin-left: 5px;"></i> {{ userAdvertisement.entranceDate }}<span v-if="userAdvertisement.exitDate != null"> a {{ userAdvertisement.exitDate }}</span> </h5>
+                        <h5 style="color: #5D5E60; text-align: left;"> Máximo {{ userAdvertisement.maxCohabitants }} compañeros</h5> 
                     </div>
 
                     <div v-if="userAdvertisement.author?.tag.length === 0" style="text-align: left; margin-top: 5%;">
