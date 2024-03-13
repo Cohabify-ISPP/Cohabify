@@ -2,13 +2,20 @@ package org.ispp4.cohabify.userRating;
 
 import java.util.List;
 
+import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.dto.UserRatingRequest;
+import org.ispp4.cohabify.dto.FormItemValidationError;
+import org.ispp4.cohabify.userRating.UserRating;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,8 +39,8 @@ public class UserRatingController {
                 return ResponseEntity.ok(userRatings);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
-        }
-    }
+        } 
+    } 
 
     @GetMapping("/ratedUser/{ratedUserId}")
     public ResponseEntity<List<UserRating>> getAllUserRatingsByRatedUserId(@PathVariable("ratedUserId") ObjectId ratedUserId) {
@@ -78,6 +85,18 @@ public class UserRatingController {
             return ResponseEntity.internalServerError().build();
         }
     }
+    @DeleteMapping("/ratedUser/{ratedUserId}/{userId}")
+    public ResponseEntity<Void> deleteUserRatingsByRatedUserId(@PathVariable("ratedUserId") ObjectId ratedUserId, @PathVariable("userId") ObjectId userId) {
+        try	{
+            List<UserRating> userRatings = userRatingService.findByUserIdAndRatedUserId(ratedUserId, userId);
+            for(UserRating u: userRatings){
+                userRatingService.deleteById(u.getId());
+            }
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
     @DeleteMapping("/user/{userId}")
     public ResponseEntity<Void> deleteUserRatingsByUserId(@PathVariable("userId") ObjectId userId) {
@@ -98,17 +117,27 @@ public class UserRatingController {
             return ResponseEntity.internalServerError().build();
         }
     }
-
+ 
     @PostMapping("")
-    public ResponseEntity<UserRating> createUserRating(@RequestBody @Valid UserRating userRating) {
-        try	{
-            UserRating newUserRating = userRatingService.save(userRating);
-            return ResponseEntity.ok(newUserRating);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
+	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRatingRequest request, BindingResult result) throws BadRequestException {
+		
+		if(result.hasErrors()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+								 .body(result.getFieldErrors()
+										 	 .stream()
+										 	 	.map(fe -> new FormItemValidationError(fe))
+										 	 	.toList());
+		}
+        
 
+		UserRating userRating  = new UserRating();
+		userRating.setComment(request.getComment());
+        userRating.setUser(request.getUser());
+        userRating.setRatedUser(request.getRatedUser());
+        userRating = userRatingService.save(userRating); 
+		return ResponseEntity.status(HttpStatus.CREATED)
+							 .body(userRating);
+	}
     @PutMapping("")
     public ResponseEntity<UserRating> updateUserRating(@Valid @RequestBody UserRating userRating) {
         try	{
@@ -116,6 +145,6 @@ public class UserRatingController {
             return ResponseEntity.ok(updatedUserRating);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
-        }
+        } 
     }   
 }

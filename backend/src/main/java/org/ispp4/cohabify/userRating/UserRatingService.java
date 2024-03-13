@@ -3,6 +3,7 @@ package org.ispp4.cohabify.userRating;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.commentAdvertisement.CommentAdvertisement;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +15,8 @@ public class UserRatingService {
 
     UserRatingRepository userRatingRepository;
 
-    @Transactional
     public UserRating save(UserRating userRating) {
-        return userRatingRepository.save(userRating);
+        return (UserRating) userRatingRepository.save(userRating);
     }
 
     @Transactional
@@ -28,6 +28,7 @@ public class UserRatingService {
     public void deleteByRatedUserId(ObjectId ratedUserId) {
         userRatingRepository.deleteByRatedUserId(ratedUserId);
     }
+    
 
     @Transactional
     public void deleteById(ObjectId id) {
@@ -42,6 +43,11 @@ public class UserRatingService {
     @Transactional
     public List<UserRating> findByUserId(ObjectId userId) {
         return userRatingRepository.findByUserId(userId);
+    }
+    
+    @Transactional
+    public List<UserRating> findByUserIdAndRatedUserId(ObjectId ratedUserId, ObjectId userId) {
+        return userRatingRepository.findByUserIdAndRatedUserId(userId, ratedUserId);
     }
 
     public List<UserRating> findByRatedUserId(ObjectId ratedUserId) {

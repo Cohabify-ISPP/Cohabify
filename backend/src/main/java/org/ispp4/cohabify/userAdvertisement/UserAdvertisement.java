@@ -1,8 +1,10 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.commentAdvertisement.CommentAdvertisement;
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.user.User;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -39,10 +41,10 @@ public class UserAdvertisement extends BaseEntity {
 
     public UserAdvertisement() {
         
-    }
+    } 
 
     public UserAdvertisement(ObjectId id, String description, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, User author) {
-        this.id = id;
+        this.id = id; 
         this.description = description;
         this.maxBudget = maxBudget;
         this.desiredLocation = desiredLocation;
@@ -63,7 +65,7 @@ public class UserAdvertisement extends BaseEntity {
             ", exitDate='" + getExitDate() + "'" +
             ", maxCohabitants='" + getMaxCohabitants() + "'" +
             ", user='" + getAuthor() + "'"+
-            "}";
+            "}";   
     }
 
 }

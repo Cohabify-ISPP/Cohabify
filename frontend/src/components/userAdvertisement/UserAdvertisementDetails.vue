@@ -7,16 +7,30 @@ export default {
     setup() {
 
         const userAdvertisementId = ref(""); 
-        const currentUser = inject('user');
+        const text = ref('');
         const userAdvertisement = ref({});
         const valorations = ref([]);
+        const auth = ref({});
         const hasLike = ref(false)
         const route = useRoute();
         const commonHouses = ref([]);
         const clipboardMessage = ref(false);
 
+
         const fetchAdvertisement = async () => {
             try {
+                const userFetch = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
+                {
+                    method: "POST",
+                    headers: {
+                    "Authentication":
+                        "Bearer " + sessionStorage.getItem("authentication"),
+                    },
+                }
+                );
+
+                const userData = await userFetch.json();
+                auth.value = userData;
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
                     {
                         method: "GET",
@@ -38,6 +52,70 @@ export default {
                 console.error("Error:", error);
             }
         };
+        const deleteComment1 = () => {
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + auth.value.id + '/' + userAdvertisement.value.author.id, {
+                method: 'DELETE',
+                headers: {
+                    'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Comentario eliminado con éxito');
+                    } else {
+                        console.error('Error al eliminar el comentario');
+                    }
+                })
+                .catch(error => console.error('Error al enviar datos al backend:', error));
+        };
+        const deleteComment2 = () => {
+                    fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + auth.value.id + '/' + userAdvertisement.value.author.id, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        },
+                    })
+                        .then(response => {
+                            setTimeout(() => {
+                                window.location.href = "/advertisements/users/"+userAdvertisementId.value;
+                            }, 1000);
+                            if (response.ok) {
+                                console.log('Comentario eliminado con éxito');
+                            } else {
+                                console.error('Error al eliminar el comentario');
+                            }
+                        })
+                        .catch(error => console.error('Error al enviar datos al backend:', error));
+        };
+
+
+        const register = () => {
+            const formData = new FormData();
+            console.log(auth.value);
+            formData.append("string-data", new Blob([JSON.stringify({
+                user: userAdvertisement.value.author,
+                ratedUser: auth.value,
+                comment: text.value
+            })], { type: "application/json" }));
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating', {
+                method: 'POST',
+                headers: {
+                                'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                            },
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(jsonData => {
+                    setTimeout(() => {
+                        window.location.href = "/advertisements/users/"+userAdvertisementId.value;
+                    }, 1000);
+                }
+                
+                
+                )
+                .catch(error => console.error('Error al enviar datos al backend:', error));
+
+        };
 
         const fetchValorations = async () => {
             try {
@@ -55,6 +133,15 @@ export default {
                 console.error("Error:", error);
             }
         };
+        const openModal = () => {
+            deleteComment1();
+            let modal = document.getElementById('loginModal');
+            modal.style.display = "block";
+        }
+        const closeModal = () => {
+            let modal = document.getElementById('loginModal');
+            modal.style.display = "none";
+        }
 
         const toggleLike = async () => {
   
@@ -95,7 +182,11 @@ export default {
         });
         
         return {
-            currentUser,
+            text,
+            closeModal,
+            deleteComment2,
+            openModal,
+            register,
             userAdvertisement,
             commonHouses,
             hasLike,
@@ -111,11 +202,34 @@ export default {
 <template>
 
     <Navbar />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <div class="container d-flex align-items-center justify-content-center text-center mt-5">            
         <div class="panel">
             <div class="columna">
                 <div class="subseccion">
+                    <div id="loginModal" class="modal">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="col">
+                                        <h5 class="modal-title">Nuevo comentario</h5>
+                                    </div>
+                                    <div class="col">
+                                        <span @click="closeModal" class="success-checkmark">X</span>
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    <form @submit.prevent="register">
+                                        <div class="form-group">
+                                            <label for="commentText">Comentario</label>
+                                            <textarea class="form-control" id="text" v-model="text"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Enviar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="imagen-circulo">
                         <img :src="userAdvertisement.author.imageUri" alt = "Imagen de perfil">
                     </div>
@@ -132,14 +246,14 @@ export default {
                             
                             <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author.likes.length }} </span>
                         </div>
-                        <button type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                        <button type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:antiquewhite">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                     </div>
                     </div>
                 </div>
                 
                 <div style="flex-basis: 30%;" class="subseccion">
 
-                    <div class="card mb-2 shadow" style="padding: 10px;">   
+                    <div class="card mb-2" style="padding: 10px;">   
                         <div class="card-body">
                             <h4 style="text-align: left;" class="card-title">Descripción</h4>
                             <hr>
@@ -151,7 +265,8 @@ export default {
                         <div style="margin-top: 5;">
                             <div class="d-flex justify-content-between">
                                 <h4 style=" text-align: left;">Comentarios</h4>
-                                <button type="button" class="button boton" style="padding: 1vh;"><strong>Comentar</strong></button>
+                                <i class="fas fa-trash-alt" @click="deleteComment2" style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;"></i>
+                                <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
                             </div>
                             <hr>
                         </div>
@@ -161,7 +276,7 @@ export default {
                             <div v-for="comentario in valorations" :key="comentario">
                                 <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;"> 
                                     <div class="card-body">
-                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.user.username}}</p>
+                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.ratedUser.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.ratedUser.username}}</p>
                                         <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ comentario.comment }}</p>
                                     </div>
                                 </div>

@@ -12,18 +12,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 @Document(collection = "userRatings")
 public class UserRating extends BaseEntity {
     
     @DBRef
-    @NotNull
     private User user;
 
     @DBRef
-    @NotNull
     private User ratedUser;
 
-    @NotNull
     @Size(max = 400)
     private String comment;
 
