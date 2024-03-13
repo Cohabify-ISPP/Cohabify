@@ -8,6 +8,7 @@ import HouseAdvertisementList from './components/houseAdvertisement/HouseAdverti
 import UserAdvertisementDetails from './components/userAdvertisement/UserAdvertisementDetails.vue';
 import CreateUserAdvertisement from './components/userAdvertisement/CreateUserAdvertisement.vue';
 import HouseAdvertisementDetails from './components/houseAdvertisement/HouseAdvertisementDetails.vue';
+import PlanSelection from './components/PlanSelection.vue';
 import Error from './components/Error.vue';
 
 const routes = [
@@ -24,6 +25,8 @@ const routes = [
 
     { path: '/advertisements/users/new', component: CreateUserAdvertisement },
     { path: '/advertisements/houses/new', component: CreateHouseAdvertisement },
+
+    { path: '/plan', component: PlanSelection },
     
     { path: '/:pathMatch(.*)*', component: Error }
 
