@@ -119,25 +119,30 @@ public class UserRatingController {
     }
  
     @PostMapping("")
-	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRatingRequest request, BindingResult result) throws BadRequestException {
-		
-		if(result.hasErrors()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-								 .body(result.getFieldErrors()
-										 	 .stream()
-										 	 	.map(fe -> new FormItemValidationError(fe))
-										 	 	.toList());
-		}
+    public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRatingRequest request, BindingResult result) throws BadRequestException {
         
-
-		UserRating userRating  = new UserRating();
-		userRating.setComment(request.getComment());
+        if(result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                 .body(result.getFieldErrors()
+                                             .stream()
+                                             .map(fe -> new FormItemValidationError(fe))
+                                             .toList());
+        }
+    
+        // Verificar si el user y el ratedUser son iguales
+        if(request.getUser().getId().equals(request.getRatedUser().getId())) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    
+        UserRating userRating  = new UserRating();
+        userRating.setComment(request.getComment());
         userRating.setUser(request.getUser());
         userRating.setRatedUser(request.getRatedUser());
         userRating = userRatingService.save(userRating); 
-		return ResponseEntity.status(HttpStatus.CREATED)
-							 .body(userRating);
-	}
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(userRating);
+    }
+    
     @PutMapping("")
     public ResponseEntity<UserRating> updateUserRating(@Valid @RequestBody UserRating userRating) {
         try	{

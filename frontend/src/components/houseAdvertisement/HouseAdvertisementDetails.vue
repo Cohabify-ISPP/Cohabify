@@ -59,7 +59,7 @@ const fetchAdvertisement = async () => {
             method: "POST",
             headers: {
             "Authentication":
-                "Bearer " + sessionStorage.getItem("authentication"),
+                "Bearer " + localStorage.getItem("authentication"),
             },
         }
         );
@@ -69,6 +69,8 @@ const fetchAdvertisement = async () => {
 
     } catch (error) {
         console.error("Error:", error);
+        
+
     }
 };
 const openModal = () => {
@@ -84,7 +86,7 @@ const deleteComment1 = () => {
     fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + auth.value.id + '/' + houseAdvertisement.value.author.id, {
         method: 'DELETE',
         headers: {
-            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
         },
     })
         .then(response => {
@@ -100,7 +102,7 @@ const deleteComment2 = () => {
     fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + auth.value.id + '/' + houseAdvertisement.value.author.id, {
         method: 'DELETE',
         headers: {
-            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
         },
     })
         .then(response => {
@@ -128,7 +130,7 @@ const register = () => {
     fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating', {
         method: 'POST',
         headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
         body: formData,
     })
@@ -150,7 +152,7 @@ const fetchValorations = async () => {
                     {
                         method: "GET",
                         headers: {
-                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                         },
                         credentials: "include",
                     });
@@ -212,7 +214,7 @@ onMounted(() => {
                             <h5 class="modal-title">Nuevo comentario</h5>
                         </div>
                         <div class="col">
-                            <span @click="closeModal" class="success-checkmark">X</span>
+                            <span @click="closeModal" class="success-checkmark" style="position: relative; align-items:center; margin: 1vh; padding: 1vh; float: right;">X</span>
                         </div>
                     </div>
                     <div class="modal-body">
@@ -221,7 +223,7 @@ onMounted(() => {
                                 <label for="commentText">Comentario</label>
                                 <textarea class="form-control" id="text" v-model="text"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Enviar</button>
+                            <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:antiquewhite">Enviar</strong></button>
                         </form>
                     </div>
                 </div>
@@ -374,14 +376,12 @@ onMounted(() => {
                     <div style="margin-top: 5;">
                         <div class="d-flex justify-content-between">
                             <h4 style=" text-align: left;">Comentarios</h4>
-                            <div v-if="auth.value.id !== houseAdvertisement.value.author.id">
                                     <i class="fas fa-trash-alt" 
                                         @click="deleteComment2" 
                                         style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;">
                                     </i>
                                     <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
                             </div>
-                        </div>
                         <hr>
                     </div>
                     <div v-if="valorations.length == 0" style="text-align: left;">Aún no hay comentarios...</div>
