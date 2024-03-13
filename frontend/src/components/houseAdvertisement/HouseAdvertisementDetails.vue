@@ -165,7 +165,7 @@ onMounted(() => {
     fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/' + id, {
         method: "GET",
         headers: {
-            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
         },
         credentials: "include"
     })

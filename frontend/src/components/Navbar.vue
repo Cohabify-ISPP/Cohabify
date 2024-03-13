@@ -1,48 +1,53 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { jwtDecode } from 'jwt-decode'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 const isLoggedIn = ref(false)
 const image = ref(null)
-const user = ref("")
+const store = useStore()
+const user = computed(() => store.state.user);
 const BACKEND_URL= import.meta.env.VITE_BACKEND_URL
+const router = useRouter()
+
+
 
 onMounted(async() => {
-  const token = sessionStorage.getItem("authentication")
+  const token = localStorage.getItem("authentication")
 
   if (token) {
+    if (user.value ===null || user.value === undefined || Object.keys(user.value).length === 0) {
+      await store.dispatch('cargarUser')
+    }
+     
     const decoded = jwtDecode(token)
     const now = Date.now() / 1000
-    image.value = decoded.image.startsWith('/') ? `${BACKEND_URL}${decoded.image}` : decoded.image
+    image.value = user.value?.imageUri?.startsWith('/') ? `${BACKEND_URL}${user.value?.imageUri}` : user.value?.imageUri
     isLoggedIn.value = decoded.exp > now
 
-    const userFetch = await fetch(
-          import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
-          {
-            method: "POST",
-            headers: {
-              "Authentication":
-                "Bearer " + sessionStorage.getItem("authentication"),
-            },
-          }
-        );
-
-        const userData = await userFetch.json();
-        user.value = userData;
+    
+    
   }
 })
 
 const logout = () => {
-  sessionStorage.setItem("authentication", "")
+  localStorage.removeItem("authentication")
   isLoggedIn.value = false
+  store.commit('limpiarUser')
+  router.push('/')
 }
 
-</script>
+watch(user, (newValue) => {
+  if (newValue !== null && newValue !== undefined && Object.keys(newValue).length !== 0) { 
+    image.value = newValue.imageUri.startsWith('/') ? `${BACKEND_URL}${newValue.imageUri}` : newValue.imageUri;
+  }
+});
+</script> 
 
 <template>
 <nav class="navbar navbar-expand navbar-dark navbar-custom sticky-top">
   <div class="container-fluid">
-
     <a class="navbar-brand mt-2 mt-lg-0" href="/" @click.prevent="$router.push('/')">
       <img style="max-height: 35px;"
         src="/images/LogoMonoColor.png"
@@ -88,8 +93,17 @@ const logout = () => {
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <img
+          <img v-if="image"
             :src="image"
+            class="rounded-circle"
+            height="40"
+            width="40"
+            alt="avatar"
+            loading="lazy"
+            style="object-fit: cover;"
+          />
+          <img v-else
+            src="https://st4.depositphotos.com/14903220/22197/v/450/depositphotos_221970610-stock-illustration-abstract-sign-avatar-icon-profile.jpg"
             class="rounded-circle"
             height="40"
             width="40"
@@ -115,7 +129,7 @@ const logout = () => {
             <a class="dropdown-item" href="#">Planes</a>
           </li>
           <li>
-            <a class="dropdown-item" @click="logout()">Cerrar sesión</a>
+            <a class="dropdown-item" @click="logout()" style="cursor:pointer">Cerrar sesión</a>
           </li>
         </ul>
       </div>
