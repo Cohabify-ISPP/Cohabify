@@ -16,7 +16,7 @@ export default {
                 {
                     method: "POST",
                     headers: {
-                        "Authentication": "Bearer " + sessionStorage.getItem("authentication"),
+                        "Authentication": "Bearer " + localStorage.getItem("authentication"),
                     },
                 });
 

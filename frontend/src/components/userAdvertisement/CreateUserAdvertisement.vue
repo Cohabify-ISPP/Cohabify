@@ -31,7 +31,7 @@ export default {
             method: "POST",
             headers: {
               "Authentication":
-                "Bearer " + sessionStorage.getItem("authentication"),
+                "Bearer " + localStorage.getItem("authentication"),
             },
           }
         );
@@ -46,7 +46,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
               "Authentication":
-                "Bearer " + sessionStorage.getItem("authentication"),
+                "Bearer " + localStorage.getItem("authentication"),
             },
             body: JSON.stringify(userAd.value),
           }
@@ -128,7 +128,7 @@ export default {
     };
 
     onMounted(() => {
-      if (sessionStorage.getItem("authentication") === null) {
+      if (localStorage.getItem("authentication") === null) {
         router.push("/login");
       }
     });

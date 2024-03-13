@@ -45,12 +45,16 @@
 
 <script>
     import { inject, ref } from 'vue'
+    import { useStore } from 'vuex';
+    
     export default {
         setup() {
             const username = ref('')
             const password = ref('')
             const fetchError = ref(null)
             const user = inject('user')
+            const store = useStore();
+
             const login = () => {
                 const data = {
                     username: username.value,
@@ -78,7 +82,8 @@
                 })
                 .then(data => {
                     user.value = data.user;
-                    sessionStorage.setItem("authentication", data.token)
+                    localStorage.setItem("authentication", data.token)
+                    store.dispatch('cargarUser');
                     // Muestra el modal de inicio de sesión
                     let modal = document.getElementById('loginModal');
                     modal.style.display = "block";

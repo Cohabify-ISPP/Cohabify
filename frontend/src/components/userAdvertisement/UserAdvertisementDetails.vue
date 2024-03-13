@@ -21,7 +21,7 @@ export default {
                     {
                         method: "GET",
                         headers: {
-                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                         },
                         credentials: "include",
                     });
@@ -45,7 +45,7 @@ export default {
                     {
                         method: "GET",
                         headers: {
-                            'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                         },
                         credentials: "include",
                     });
@@ -63,7 +63,7 @@ export default {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
                 });
 
