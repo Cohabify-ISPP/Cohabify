@@ -62,7 +62,7 @@ onMounted(() => {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('No se han podido cargar la vivienda')
+            throw new Error('No se ha podido cargar la vivienda')
         }
         
         return response.json();

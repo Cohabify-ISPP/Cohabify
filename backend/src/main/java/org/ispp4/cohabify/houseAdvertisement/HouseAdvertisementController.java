@@ -59,6 +59,13 @@ public class HouseAdvertisementController {
         }
     }
 
+    @Transactional(readOnly = true)
+    @GetMapping("/owner/{id}")
+    public ResponseEntity<List<HouseAdvertisement>> getAdvertisementsByAuthor(@PathVariable String id) {
+        List<HouseAdvertisement> advertisements = advertisementService.findByAuthorId(new ObjectId(id));
+        return new ResponseEntity<>(advertisements, HttpStatus.OK);
+    }
+
     @PostMapping("")
 	public ResponseEntity<?> createAdvertisement(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
     @RequestPart("images") List<MultipartFile> images) throws BadRequestException {
@@ -119,7 +126,7 @@ public class HouseAdvertisementController {
 	}
 
 
-     @GetMapping("/heating")
+    @GetMapping("/heating")
     public ResponseEntity<List<Heating>> findHeating() {
         try {
             List<Heating> heatings = List.of(Heating.values());
