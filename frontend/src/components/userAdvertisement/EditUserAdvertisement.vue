@@ -172,133 +172,135 @@ export default {
 
 <template>
   <Navbar />
-  <div class="contenedor d-flex align-items-center justify-content-center text-center">
-    <div class="panel">
-      <div class="columna" style="flex-grow: 2">
-        <form id="form">
-          <div class="form-group" style="text-align: left; margin-top: 3vh">
-            <h2 class="mb-4">Editar anuncio de búsqueda de piso</h2>
-            <h5>Presupuesto</h5>
-            <div class="input-group mb-3 d-flex w-50">
-              <div class="d-flex align-items-center">
-                <input
-                  type="number"
-                  min="0"
-                  class="form-control"
-                  aria-label="Cantidad máxima"
-                  v-model="userAd.maxBudget"
-                  required
-                  placeholder="Max..."
-                />
-                <div class="input-group-append">
-                  <span class="input-group-text">€</span>
-                </div>
-              </div>
-              <span class="text-danger">{{ errorMessages.maxBudget }}</span>
-            </div>
-            <div class="input-group mb-3 d-flex w-50">
-              <input
-                type="text"
-                class="form-control"
-                aria-label="Añadir ubicación"
-                v-model="userAd.desiredLocation"
-                required
-                placeholder="Añadir ubicación..."
-              />
-              <div class="input-group-append">
-                <span class="input-group-text"
-                  ><i class="bi bi-geo-alt" style="font-size: inherit"></i
-                ></span>
-              </div>
-            </div>
-            <span class="text-danger">{{ errorMessages.desiredLocation }}</span>
-            <h5>Estancia</h5>
-            <div class="input-group mb-3 d-flex w-75 align-items-center">
-              <div class="input-up">
-                <label for="entrada">Entrada</label>
-                <div class="d-flex align-items-center">
-                  <input
-                    type="date"
-                    id="entrada"
-                    class="form-control"
-                    style="margin-right: 1vw"
-                    aria-label="Cantidad mínima"
-                    v-model="userAd.entranceDate"
-                    required
-                    placeholder="Min..."
-                  />
-                  <h5 style="margin: 0 2vw">-</h5>
-                </div>
-              </div>
-              <div class="input-up">
-                <label for="salida">Salida</label>
-                <input
-                  type="date"
-                  id="salida"
-                  class="form-control"
-                  style="margin-left: 1vw"
-                  aria-label="Cantidad máxima"
-                  v-model="userAd.exitDate"
-                  placeholder="Max..."
-                />
-              </div>
-            </div>
-            <span class="text-danger">{{ errorMessages.entranceDate }}</span>
-            <span class="text-danger">{{ errorMessages.exitDate }}</span>
-            <h5>Inquilinos</h5>
-            <div class="input-group mb-3 d-flex w-75 align-items-center">
-              <div class="input-up">
-                <label for="entrada">Número</label>
+  <div class="container card2" style="margin-top: 40px;margin-bottom: 40px;">
+    <div class="contenedor d-flex align-items-center justify-content-center text-center">
+      <div class="panel">
+        <div class="columna" style="flex-grow: 2">
+          <form id="form">
+            <div class="form-group" style="text-align: left; margin-top: 3vh">
+              <h2 class="mb-4">Editar anuncio de búsqueda de piso</h2>
+              <h5>Presupuesto</h5>
+              <div class="input-group mb-3 d-flex w-50">
                 <div class="d-flex align-items-center">
                   <input
                     type="number"
                     min="0"
-                    id="entrada"
                     class="form-control"
                     aria-label="Cantidad máxima"
-                    v-model="userAd.maxCohabitants"
+                    v-model="userAd.maxBudget"
                     required
                     placeholder="Max..."
                   />
+                  <div class="input-group-append">
+                    <span class="input-group-text">€</span>
+                  </div>
                 </div>
-                <span class="text-danger">{{
-                  errorMessages.maxCohabitants
-                }}</span>
+                <span class="text-danger">{{ errorMessages.maxBudget }}</span>
               </div>
+              <div class="input-group mb-3 d-flex w-50">
+                <input
+                  type="text"
+                  class="form-control"
+                  aria-label="Añadir ubicación"
+                  v-model="userAd.desiredLocation"
+                  required
+                  placeholder="Añadir ubicación..."
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text"
+                    ><i class="bi bi-geo-alt" style="font-size: inherit"></i
+                  ></span>
+                </div>
+              </div>
+              <span class="text-danger">{{ errorMessages.desiredLocation }}</span>
+              <h5>Estancia</h5>
+              <div class="input-group mb-3 d-flex w-75 align-items-center">
+                <div class="input-up">
+                  <label for="entrada">Entrada</label>
+                  <div class="d-flex align-items-center">
+                    <input
+                      type="date"
+                      id="entrada"
+                      class="form-control"
+                      style="margin-right: 1vw"
+                      aria-label="Cantidad mínima"
+                      v-model="userAd.entranceDate"
+                      required
+                      placeholder="Min..."
+                    />
+                    <h5 style="margin: 0 2vw">-</h5>
+                  </div>
+                </div>
+                <div class="input-up">
+                  <label for="salida">Salida</label>
+                  <input
+                    type="date"
+                    id="salida"
+                    class="form-control"
+                    style="margin-left: 1vw"
+                    aria-label="Cantidad máxima"
+                    v-model="userAd.exitDate"
+                    placeholder="Max..."
+                  />
+                </div>
+              </div>
+              <span class="text-danger">{{ errorMessages.entranceDate }}</span>
+              <span class="text-danger">{{ errorMessages.exitDate }}</span>
+              <h5>Inquilinos</h5>
+              <div class="input-group mb-3 d-flex w-75 align-items-center">
+                <div class="input-up">
+                  <label for="entrada">Número</label>
+                  <div class="d-flex align-items-center">
+                    <input
+                      type="number"
+                      min="0"
+                      id="entrada"
+                      class="form-control"
+                      aria-label="Cantidad máxima"
+                      v-model="userAd.maxCohabitants"
+                      required
+                      placeholder="Max..."
+                    />
+                  </div>
+                  <span class="text-danger">{{
+                    errorMessages.maxCohabitants
+                  }}</span>
+                </div>
+              </div>
+              <textarea
+                class="form-control"
+                id="descripcion"
+                rows="3"
+                v-model="userAd.description"
+                placeholder="Añadir descripción..."
+              ></textarea>
             </div>
-            <textarea
-              class="form-control"
-              id="descripcion"
-              rows="3"
-              v-model="userAd.description"
-              placeholder="Añadir descripción..."
-            ></textarea>
-          </div>
-          <div
-            class="alert alert-dark mt-2"
-            role="alert"
-            v-if="successfulAlert"
-          >
-            ¡Anuncio creado correctamente!
-          </div>
-          <div class="mt-3">
-            <button
-              style="margin-right: 10px"
-              type="button"
-              class="btn btn-success"
-              @click.prevent="saveUserAd"
+            <div
+              class="alert alert-dark mt-2"
+              role="alert"
+              v-if="successfulAlert"
             >
-              Editar
-            </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              @click.prevent="onCancel"
-            >
-              Cancelar
-            </button>
-          </div>
-        </form>
+              ¡Anuncio creado correctamente!
+            </div>
+            <div class="mt-3">
+              <button
+                style="margin-right: 10px"
+                type="button"
+                class="btn btn-success"
+                @click.prevent="saveUserAd"
+              >
+                Editar
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click.prevent="onCancel"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -354,4 +356,17 @@ input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
   appearance: textfield;
 }
+
+.card2 {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
+  border: 1px  #28426b30;
+  border-radius: 4px;
+  background-color: #28426bae;
+  box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
 </style>

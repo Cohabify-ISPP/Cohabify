@@ -11,8 +11,6 @@ const user = computed(() => store.state.user);
 const BACKEND_URL= import.meta.env.VITE_BACKEND_URL
 const router = useRouter()
 
-
-
 onMounted(async() => {
   const token = localStorage.getItem("authentication")
 
@@ -26,8 +24,6 @@ onMounted(async() => {
     image.value = user.value?.imageUri?.startsWith('/') ? `${BACKEND_URL}${user.value?.imageUri}` : user.value?.imageUri
     isLoggedIn.value = decoded.exp > now
 
-    
-    
   }
 })
 
@@ -73,6 +69,16 @@ watch(user, (newValue) => {
             <li><a class="dropdown-item" href="/advertisements/users/new" @click.prevent="$router.push('/advertisements/users/new')">Perfil</a></li>
           </ul>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mis anuncios
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" @click.prevent="$router.push('/myAdvertisements/house')">Vivienda</a></li>
+          </ul>
+        </li>
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Buscar

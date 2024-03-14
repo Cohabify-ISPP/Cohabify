@@ -21,18 +21,22 @@ const isLoading = ref(true)
 const showFilters = ref(false)
 const searchTerm = ref('')
 const router = useRouter()
-const user = ref(null)
+const user = computed(() => useStore().state.user)
 
 onMounted(() => {
-    const store = useStore()
-    store.watch(
-        () => store.state.user,
-        (newValue, oldValue) => {
-            user.value = newValue
-            console.log(user.value.id)
-            fetchMyAdvertisements()
-        }
-    )
+
+    if (user) {
+        fetchMyAdvertisements()
+    } else {
+        const store = useStore()
+        store.watch(
+            () => store.state.user,
+            (newValue, oldValue) => {
+                user.value = newValue
+                fetchMyAdvertisements()
+            }
+        )
+    }
 })
 
 const fetchMyAdvertisements = () => {
