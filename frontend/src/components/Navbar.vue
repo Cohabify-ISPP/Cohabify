@@ -62,7 +62,7 @@ watch(user, (newValue) => {
           <a class="nav-link" href="#"><span class="badge rounded-pill badge-notification bg-danger">1</span> Chat</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Planes</a>
+          <a class="nav-link" href="/plan">Planes</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

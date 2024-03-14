@@ -91,7 +91,14 @@ button:focus-visible {
   background-color: #28426B;
   border-color: #28426b;
   transition: 0.1s;
-} 
+}
+
+.btn-plan {
+  color: #fff;
+  background-color: #28426b74;
+  border-color: #28426b66;
+  transition: 0.1s;
+}
 
 .btn-green {
   color: #fff;
