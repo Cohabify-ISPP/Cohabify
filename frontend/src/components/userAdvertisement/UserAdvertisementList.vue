@@ -19,6 +19,7 @@ export default {
     const filteredAdvertisements = ref([]);
     const filtered = ref(false);
     const empty = ref(false);
+    const searchTerm = ref('');
 
     const fetchAdvertisements = async () => {
       try {
@@ -61,34 +62,36 @@ export default {
     };
 
     const applyFilters = () => {
-      const selectedDate = new Date(entranceDate.value);
-      console.log(selectedDate)
-      console.log(entranceDate)
+      
+      const selectedDate = entranceDate.value ? new Date(entranceDate.value) : null;
       if (budget.value < 0 || budget.value > 5000) {
         errors.value.push('budgetVal')
       }
 
-      if (cohabitants.value < 0 || cohabitants.value > 10) {
+      else if (cohabitants.value < 0 || cohabitants.value > 10) {
         errors.value.push('cohabitantsVal')
       }
 
-      if (selectedDate < currentDate) {
+      else if (selectedDate !== null && selectedDate < currentDate ) {
         errors.value.push('entranceDateVal');
       }
-
-      filteredAdvertisements.value = userAds.value.filter(a => {
-
-        const selectedDate = entranceDate.value ? new Date(entranceDate.value) : null;
+      else{
+        filtered.value ? filteredAdvertisements.value = filteredAdvertisements.value.filter(a => {
         const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
-        console.log(selectedDate)
-        console.log(advertisementDate)
         const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
-
         return (budget.value >= a.maxBudget || budget.value == 0) &&
             (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
             isDateValid;
-        })
-    filtered.value = true
+        }):(
+        filteredAdvertisements.value = userAds.value.filter(a => {
+          const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
+          const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
+          return (budget.value >= a.maxBudget || budget.value == 0) &&
+              (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
+              isDateValid;
+        }))
+        filtered.value = true
+      }
     }
 
     const currentAdvertisements = computed(() => {
@@ -124,6 +127,21 @@ export default {
         });
       }
     });
+    
+    const search =  () => {
+      budget.value = 0;
+      cohabitants.value = 0;
+      entranceDate.value = null;
+      filteredAdvertisements.value = userAds.value.filter(a => {
+        if(searchTerm.value === ''){
+          return true;
+        }else{
+          return a.desiredLocation.toLowerCase().includes(searchTerm.value.toLowerCase()) || a.description.toLowerCase().includes(searchTerm.value.toLowerCase());
+        }
+      })
+      filtered.value = true;
+    
+}
 
     onMounted(() => {
       fetchAdvertisements();
@@ -144,7 +162,9 @@ export default {
       filtersVisibility,
       entranceDate,
       empty,
-      filtered
+      filtered,
+      searchTerm,
+      search
     }
   },
 }
@@ -206,11 +226,11 @@ export default {
         <div class="column-4">
           <div class="div-14">
             <div class="search-bar">
-              <form class="d-flex w-100 justify-content-between" onsubmit="searchFunction();">
+              <form class="d-flex w-100 justify-content-between">
                 <div id="searchForm" style="width:95%">
-                  <input class="searchInput" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
+                  <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
                 </div>
-                <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit">
+                <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
                   <img src="/images/search.png" alt="Buscar" />
                 </button>
                 <button @click.prevent="toggleDivVisibility" class="searchButton d-flex align-items-center">

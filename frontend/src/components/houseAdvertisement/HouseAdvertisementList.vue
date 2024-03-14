@@ -52,25 +52,43 @@ const getImageUrl = (image) => {
     return image.startsWith('/') ? import.meta.env.VITE_BACKEND_URL + image : image
 }
 
-const search = () => {
+const search =  () => {
+    price.value = 0;
+    meters.value = 0;
+    empty.value = false;
+    tenants.value = 0;
+    minBathrooms.value = null;
+    maxBathrooms.value = null;
+    minBedrooms.value = null;
+    maxBedrooms.value = null;
+    
+    filteredAdvertisements.value = advertisements.value.filter(a => {
+        if(searchTerm.value === ''){
+            return true;
+        }else{
+            return a.house.location.toLowerCase().includes(searchTerm.value.toLowerCase()) || a.description.toLowerCase().includes(searchTerm.value.toLowerCase()) || a.title.toLowerCase().includes(searchTerm.value.toLowerCase());
+        }
+    })
+    filtered.value = true;
+    console.log(filteredAdvertisements.value)
     console.log(searchTerm.value)
 }
 
 const applyFilters = () => {
 
-    if (price.value < 0 || price.value > 5000) {
+        if (price.value < 0 || price.value > 5000) {
         errors.value.priceVal = 'Precio fuera de rango'
     }
 
-    if (meters.value < 0 || meters.value > 350) {
+    else if (meters.value < 0 || meters.value > 350) {
         errors.value.metersVal = 'Metros cuadrados fuera de rango'
     }
 
-    if (tenants.value < 0 || tenants.value > 10) {
+    else if (tenants.value < 0 || tenants.value > 10) {
         errors.value.tenantsVal = 'Número de inquilinos fuera de rango'
     }
 
-    if (minBathrooms.value !== null) {
+    else if (minBathrooms.value !== null) {
        if (typeof minBathrooms.value !== 'number') {
             errors.value.minBathroomsVal = 'Valor no numérico'
         } else if (minBathrooms.value < 0) {
@@ -80,7 +98,7 @@ const applyFilters = () => {
         }
     } 
 
-    if (maxBathrooms.value !== null) {
+    else if (maxBathrooms.value !== null) {
         if (typeof maxBathrooms.value !== 'number') {
             errors.value.maxBathroomsVal = 'Valor no numérico'
         } else if (maxBathrooms.value < 0) {
@@ -90,14 +108,14 @@ const applyFilters = () => {
         }
     }
 
-    if (minBathrooms.value != null && maxBathrooms.value != null && minBathrooms.value > maxBathrooms.value) {
+    else if (minBathrooms.value != null && maxBathrooms.value != null && minBathrooms.value > maxBathrooms.value) {
         console.log('entra')
         if (!errors.value.minBathroomsVal) {
             errors.value.minBathroomsVal = 'Valor mayor que el máximo seleccionado'
         }
     }
 
-    if (minBedrooms.value !== null) {
+    else if (minBedrooms.value !== null) {
         if (typeof minBedrooms.value !== 'number') {
             errors.value.minRoomsVal = 'Valor no numérico'
         } else if (minBedrooms.value < 0) {
@@ -107,7 +125,7 @@ const applyFilters = () => {
         }
     }
 
-    if (maxBedrooms.value !== null) {
+    else if (maxBedrooms.value !== null) {
         if (typeof maxBedrooms.value !== 'number') {
             errors.value.maxRoomsVal = 'Valor no numérico'
         } else if (maxBedrooms.value < 0) {
@@ -117,34 +135,46 @@ const applyFilters = () => {
         }
     }
 
-    if (minBedrooms.value != null && maxBedrooms.value != null && minBedrooms.value > maxBedrooms.value) {
+    else if (minBedrooms.value != null && maxBedrooms.value != null && minBedrooms.value > maxBedrooms.value) {
         if (!errors.value.minRoomsVal) {
             errors.value.minRoomsVal = 'Valor mayor que el máximo seleccionado'
         }
     }
-    filteredAdvertisements.value = advertisements.value.filter(a => {
-        return (price.value >= a.price || price.value == 0) &&
-        (meters.value <= a.house.area || meters.value == 0) &&
-        ((empty.value == a.house.empty) || (tenants.value>=a.house.tenants || tenants.value==0)) &&
-        (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
-        (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
-        (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
-        (maxBedrooms.value >= a.house.roomsNumber || maxBedrooms.value == null);
-    })
-    filtered.value = true
+
+    else{
+        filtered.value ? (
+        filteredAdvertisements.value = filteredAdvertisements.value.filter(a => {
+            return (price.value >= a.price || price.value == 0) &&
+            (meters.value <= a.house.area || meters.value == 0) &&
+            ((empty.value == a.house.empty) || (tenants.value>=a.house.tenants || tenants.value==0)) &&
+            (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
+            (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
+            (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
+            (maxBedrooms.value >= a.house.roomsNumber || maxBedrooms.value == null);
+        })):(
+        filteredAdvertisements.value = advertisements.value.filter(a => {
+            return (price.value >= a.price || price.value == 0) &&
+            (meters.value <= a.house.area || meters.value == 0) &&
+            ((empty.value == a.house.empty) || (tenants.value>=a.house.tenants || tenants.value==0)) &&
+            (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
+            (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
+            (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
+            (maxBedrooms.value >= a.house.roomsNumber || maxBedrooms.value == null);
+        })
+        )
+        filtered.value = true
+    }
 
     console.log(errors.value)
 
 }
-
-
 
 </script>
 <template>
     <navbar />
         <div class="row h-100">
             <transition name="slide">
-                <div class="col-md-2 filter-column p-4" v-if="showFilters">
+                <div class="col-md-3 filter-column p-4" style="padding: 10px;" v-if="showFilters">
                     <div class="d-flex flex-row-reverse">
                         <button class="btn btn-primary rounded-5" @click.prevent="showFilters=false" style="height: 40px;">
                             <span class="material-symbols-outlined">
@@ -188,7 +218,7 @@ const applyFilters = () => {
                         <!-- Baños -->
                         <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
                             <p>Baños</p>
-                            <b>(Mínimo - Máximo)</b>
+                            <p><b>(Mínimo - Máximo)</b></p>
                         </div>
                         <div class="mt-2">
                             <div class="d-flex">
@@ -206,7 +236,7 @@ const applyFilters = () => {
                         <!-- Habitaciones -->
                         <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
                             <p>Habitaciones</p>
-                            <b>(Mínimo - Máximo)</b>
+                            <p><b>(Mínimo - Máximo)</b></p>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <input type="number" class="form-control" v-model="minBedrooms" min="0" id="minRoomsVal" :class="{'is-invalid': errors.minRoomsVal}">
@@ -224,11 +254,11 @@ const applyFilters = () => {
             <div class="col">
                 <div class="d-flex justify-content-center align-items-center mt-4">
                     <div class="search-bar">
-                        <form class="d-flex w-100 justify-content-between" @submit.prevent="search">
+                        <form class="d-flex w-100 justify-content-between">
                             <div class="w-100 my-auto">
-                                <input class="search-input" v-model="searchTerm" type="text" id="search-input" placeholder="Busco..."/>
+                                <input class="search-input" v-model= "searchTerm" type="text" id="search-input" placeholder="Busco..."/>
                             </div>
-                            <button class="search-button d-flex align-items-center">
+                            <button class="search-button d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
                                 <i class="bi bi-search"></i>
                             </button>
                             <button @click.prevent="showFilters=!showFilters" class="search-button d-flex align-items-center">
