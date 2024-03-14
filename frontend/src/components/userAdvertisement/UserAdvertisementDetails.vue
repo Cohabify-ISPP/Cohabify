@@ -88,7 +88,6 @@ export default {
                         .catch(error => console.error('Error al enviar datos al backend:', error));
         };
 
-
         const register = () => {
             const formData = new FormData();
             console.log(auth.value);
@@ -187,6 +186,7 @@ export default {
             deleteComment2,
             openModal,
             register,
+            auth,
             userAdvertisement,
             commonHouses,
             hasLike,
@@ -265,9 +265,14 @@ export default {
                         <div style="margin-top: 5;">
                             <div class="d-flex justify-content-between">
                                 <h4 style=" text-align: left;">Comentarios</h4>
-                                <i class="fas fa-trash-alt" @click="deleteComment2" style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;"></i>
-                                <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
-                            </div>
+                                <div v-if="auth.value.id !== userAdvertisement.value.author.id">
+                                    <i class="fas fa-trash-alt" 
+                                        @click="deleteComment2" 
+                                        style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;">
+                                    </i>
+                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
+                                    </div>
+                                </div>
                             <hr>
                         </div>
                         <div v-if="valorations.length == 0" style="text-align: left;">Aún no hay comentarios...</div>

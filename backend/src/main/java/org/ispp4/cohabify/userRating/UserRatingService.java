@@ -3,7 +3,6 @@ package org.ispp4.cohabify.userRating;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.ispp4.cohabify.commentAdvertisement.CommentAdvertisement;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

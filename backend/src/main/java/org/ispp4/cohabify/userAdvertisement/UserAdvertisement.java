@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.ispp4.cohabify.commentAdvertisement.CommentAdvertisement;
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.user.User;
 import org.springframework.data.mongodb.core.mapping.DBRef;

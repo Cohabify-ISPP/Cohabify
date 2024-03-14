@@ -374,8 +374,13 @@ onMounted(() => {
                     <div style="margin-top: 5;">
                         <div class="d-flex justify-content-between">
                             <h4 style=" text-align: left;">Comentarios</h4>
-                            <i class="fas fa-trash-alt" @click="deleteComment2" style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;"></i>
-                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
+                            <div v-if="auth.value.id !== houseAdvertisement.value.author.id">
+                                    <i class="fas fa-trash-alt" 
+                                        @click="deleteComment2" 
+                                        style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;">
+                                    </i>
+                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
+                            </div>
                         </div>
                         <hr>
                     </div>
