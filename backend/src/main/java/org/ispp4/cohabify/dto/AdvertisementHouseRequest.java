@@ -2,8 +2,10 @@ package org.ispp4.cohabify.dto;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.user.User;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import jakarta.validation.constraints.NotBlank;
@@ -20,12 +22,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AdvertisementHouseRequest {
+
+    @Id
+    private ObjectId id;
+    @Id
+    private ObjectId houseId;
+
     @NotBlank
-    @Size(max = 64)
+    
 	private String title;
 	
 	@NotBlank
-    @Size(max = 14)
+   
 	private String description;
 
     @NotNull
@@ -41,4 +49,6 @@ public class AdvertisementHouseRequest {
 
     @DBRef
     private User author;
+
+    private List<String> imagesB;
 }
