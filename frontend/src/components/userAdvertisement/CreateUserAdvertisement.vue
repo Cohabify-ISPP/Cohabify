@@ -8,8 +8,6 @@ export default {
     const router = useRouter();
 
     const userAd = ref({
-      id: "",
-      title: "",
       description: "",
       maxBudget: "",
       desiredLocation: "",
@@ -62,7 +60,6 @@ export default {
     };
 
     const errorMessages = ref({
-      title: "",
       maxBudget: "",
       desiredLocation: "",
       entranceDate: "",
@@ -72,13 +69,7 @@ export default {
     const validateForm = () => {
       let isValid = true;
       if (document.getElementById("form").reportValidity()) {
-        if (userAd.value.title.trim() === "") {
-          isValid = false;
-          errorMessages.value.title = "Este campo no puede estar vacío";
-        } else {
-          errorMessages.value.title = "";
-        }
-
+       
         if (!userAd.value.maxBudget || isNaN(userAd.value.maxBudget)) {
           isValid = false;
           errorMessages.value.maxBudget = "Este campo debe ser un número";
@@ -106,11 +97,13 @@ export default {
         } else {
           errorMessages.value.entranceDate = "";
         }
-        if (new Date(userAd.value.entranceDate) > new Date(userAd.value.exitDate)) {
-          isValid = false;
-          errorMessages.value.exitDate = "La fecha de salida no puede ser anterior a la entrada";
-        } else {
-          errorMessages.value.exitDate = "";
+        if (userAd.value.exitDate) {
+          if (new Date(userAd.value.entranceDate) > new Date(userAd.value.exitDate)) {
+            isValid = false;
+            errorMessages.value.exitDate = "La fecha de salida no puede ser anterior a la entrada";
+          } else {
+            errorMessages.value.exitDate = "";
+          }
         }
 
         if (
@@ -261,20 +254,10 @@ export default {
                 style="margin-right: 10px"
                 type="button"
                 class="btn btn-success"
-                @click.prevent="saveUserAd"
-                v-if="userAd.id === ''"
-              >
+                @click.prevent="saveUserAd">
                 Publicar
               </button>
-              <button
-                style="margin-right: 10px"
-                type="button"
-                class="btn btn-success"
-                @click.prevent="saveUserAd"
-                v-else
-              >
-                Editar
-              </button>
+
               <button
                 type="button"
                 class="btn btn-danger"

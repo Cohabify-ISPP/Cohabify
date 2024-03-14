@@ -1,13 +1,14 @@
 <script>
 import { ref, onMounted, onBeforeMount, computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
     
     setup() {
 
         const userAdvertisementId = ref(""); 
-        const currentUser = inject('user');
+        const currentUser = computed(() => useStore().state.user);
         const userAdvertisement = ref({});
         const valorations = ref([]);
         const hasLike = ref(false)

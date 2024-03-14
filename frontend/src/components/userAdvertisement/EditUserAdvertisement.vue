@@ -11,7 +11,6 @@ export default {
 
     const userAd = ref({
       id: "",
-      title: "",
       description: "",
       maxBudget: "",
       desiredLocation: "",
@@ -87,7 +86,6 @@ export default {
     };
 
     const errorMessages = ref({
-      title: "",
       maxBudget: "",
       desiredLocation: "",
       entranceDate: "",
@@ -97,12 +95,6 @@ export default {
     const validateForm = () => {
       let isValid = true;
       if (document.getElementById("form").reportValidity()) {
-        if (userAd.value.title.trim() === "") {
-          isValid = false;
-          errorMessages.value.title = "Este campo no puede estar vacío";
-        } else {
-          errorMessages.value.title = "";
-        }
 
         if (!userAd.value.maxBudget || isNaN(userAd.value.maxBudget)) {
           isValid = false;
