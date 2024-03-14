@@ -78,11 +78,12 @@ public class WebSecurityConfig {
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8080", "ws://localhost:8080",
 													  "http://localhost:5173", "http://localhost:5173/", "ws://localhost:5173",
 													  "https://cohabify.onrender.com", "https://cohabify.onrender.com/",
-													  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com/"));
+													  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com, http://127.0.0.1:5173"));
 		configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080", "http://localhost:8080", "ws://localhost:8080",
 																  "http://localhost:5173", "http://localhost:5173/", "ws://localhost:5173",
 																  "https://cohabify.onrender.com", "https://cohabify.onrender.com/",
-																  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com/"));
+																  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com/",
+																  "http://127.0.0.1:5173", "http://http://127.0.0.1:5173/"));
 		configuration.setAllowedMethods(Arrays.asList("*"));
 		configuration.setAllowedHeaders(Arrays.asList("Authentication", "content-type"));
 		configuration.setAllowCredentials(true);

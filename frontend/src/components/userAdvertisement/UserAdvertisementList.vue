@@ -13,10 +13,13 @@ export default {
     const errors = ref([])
     const userAds = ref([]);
     const tags = ref([]);
-    const entranceDate = ref();
+    const entranceDate = ref(null);
     const currentDate = new Date();
     const filtersVisibility = ref(false);
+    const filteredAdvertisements = ref([]);
+    const filtered = ref(false);
     const empty = ref(false);
+    const searchTerm = ref('');
 
     const fetchAdvertisements = async () => {
       try {
@@ -59,21 +62,41 @@ export default {
     };
 
     const applyFilters = () => {
-      const selectedDate = new Date(entranceDate.value);
-      console.log(selectedDate)
-      console.log(entranceDate)
+      
+      const selectedDate = entranceDate.value ? new Date(entranceDate.value) : null;
       if (budget.value < 0 || budget.value > 5000) {
         errors.value.push('budgetVal')
       }
 
-      if (cohabitants.value < 0 || cohabitants.value > 10) {
+      else if (cohabitants.value < 0 || cohabitants.value > 10) {
         errors.value.push('cohabitantsVal')
       }
 
-      if (selectedDate < currentDate) {
+      else if (selectedDate !== null && selectedDate < currentDate ) {
         errors.value.push('entranceDateVal');
       }
+      else{
+        filtered.value ? filteredAdvertisements.value = filteredAdvertisements.value.filter(a => {
+        const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
+        const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
+        return (budget.value >= a.maxBudget || budget.value == 0) &&
+            (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
+            isDateValid;
+        }):(
+        filteredAdvertisements.value = userAds.value.filter(a => {
+          const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
+          const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
+          return (budget.value >= a.maxBudget || budget.value == 0) &&
+              (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
+              isDateValid;
+        }))
+        filtered.value = true
+      }
     }
+
+    const currentAdvertisements = computed(() => {
+      return filtered.value ? filteredAdvertisements.value : userAds.value
+    })
 
     const toggleTag = (tag) => {
       const index = tagsSeleccionadas.value.indexOf(tag);
@@ -95,15 +118,30 @@ export default {
 
     const filteredUserAdsByTags = computed(() => {
       if (tagsSeleccionadas.value.length === 0) {
-        return userAds.value;
+        return currentAdvertisements.value;
       } else {
-        return userAds.value.filter(ad => {
+        return currentAdvertisements.value.filter(ad => {
           return tagsSeleccionadas.value.every(selectedTag => {
             return ad.author.tag.some(adTag => adTag.tag === selectedTag.tag);
           });
         });
       }
     });
+    
+    const search =  () => {
+      budget.value = 0;
+      cohabitants.value = 0;
+      entranceDate.value = null;
+      filteredAdvertisements.value = userAds.value.filter(a => {
+        if(searchTerm.value === ''){
+          return true;
+        }else{
+          return a.desiredLocation.toLowerCase().includes(searchTerm.value.toLowerCase()) || a.description.toLowerCase().includes(searchTerm.value.toLowerCase());
+        }
+      })
+      filtered.value = true;
+    
+}
 
     onMounted(() => {
       fetchAdvertisements();
@@ -112,7 +150,7 @@ export default {
     });
 
     return {
-      userAds: filteredUserAdsByTags,
+      currentAdvertisements: filteredUserAdsByTags,
       tags,
       errors,
       budget,
@@ -124,6 +162,9 @@ export default {
       filtersVisibility,
       entranceDate,
       empty,
+      filtered,
+      searchTerm,
+      search
     }
   },
 }
@@ -162,7 +203,7 @@ export default {
           <div v-if="!empty">
             <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: 30px;">
               <p class="m-1">Fecha de entrada</p>
-              <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="entranceDate = null" style="width:2vw; height: 2vw;">
+              <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="cohabitants = null" style="width:2vw; height: 2vw;">
                 <i class="bi bi-x-lg"></i>
               </button>
             </div>
@@ -175,7 +216,7 @@ export default {
               <hr>
               <div class="d-flex justify-content-center mb-2" >
                 <button type="button" class="btn btn-primary" style="margin-right:4px" @click.prevent="errors = []; applyFilters()">Aplicar</button>
-                <button class="btn btn-danger ml-2" style="margin-left:4px" @click.prevent="errors = []; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
+                <button class="btn btn-danger ml-2" style="margin-left:4px" @click.prevent="errors = [];filtered=false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
               </div>
         </form>
       </div>
@@ -185,11 +226,11 @@ export default {
         <div class="column-4">
           <div class="div-14">
             <div class="search-bar">
-              <form class="d-flex w-100 justify-content-between" onsubmit="searchFunction();">
+              <form class="d-flex w-100 justify-content-between">
                 <div id="searchForm" style="width:95%">
-                  <input class="searchInput" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
+                  <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
                 </div>
-                <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit">
+                <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
                   <img src="/images/search.png" alt="Buscar" />
                 </button>
                 <button @click.prevent="toggleDivVisibility" class="searchButton d-flex align-items-center">
@@ -210,7 +251,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in userAds" :key="anuncio">
+      <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in currentAdvertisements" :key="anuncio">
         <a style="color: inherit; text-decoration: none; width:100%" :href="'/advertisements/users/' + anuncio?.id">
           <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
             <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario"
@@ -222,6 +263,7 @@ export default {
                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-right: 4vh;">
                 <span>{{ anuncio?.desiredLocation }}</span>
                 <h3><b>{{ anuncio?.maxBudget }}€/mes</b></h3>
+                <h3><b>Máximo {{ anuncio?.maxCohabitants }} inquilinos</b></h3>
               </div>
               <div class="tags-container" style="display: flex; align-items: center;">
                 <span v-for="(tag, index) in anuncio?.author?.tag.slice(0, 8)" :key="index" class="tag selected">
