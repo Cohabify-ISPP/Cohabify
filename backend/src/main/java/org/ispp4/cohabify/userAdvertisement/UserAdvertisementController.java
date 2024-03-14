@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserAdvertisementController {
 
 	private UserAdvertisementService userAdvertisementService;
+	private UserService userService;
 	
-	@Override
-	public String toString() {
-		return "UserAdvertisementController [userAdvertisementService=" + userAdvertisementService + "]";
-	}
-
-	public UserAdvertisementController(UserAdvertisementService userAdvertisementService) {
+	public UserAdvertisementController(UserAdvertisementService userAdvertisementService, UserService userService) {
 		this.userAdvertisementService = userAdvertisementService;
+		this.userService = userService;
 	}
 
 	@Transactional(readOnly = true)
@@ -45,6 +43,29 @@ public class UserAdvertisementController {
 		try {
 			ObjectId objId = new ObjectId(id);
 			userAd = userAdvertisementService.findById(objId);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+        if(userAd.isPresent()){
+            return new ResponseEntity<>(userAd.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+	@GetMapping("/myAdvertisement/{authorId}")
+    public ResponseEntity<UserAdvertisement> getUserAdvertisementByAuthorId(@PathVariable String authorId) {
+
+		if (authorId == null || authorId.isEmpty() || userService.findById(new ObjectId(authorId)).isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		Optional<UserAdvertisement> userAd = Optional.empty();
+
+		try {
+			ObjectId objId = new ObjectId(authorId);
+			userAd = userAdvertisementService.findByAuthorId(objId);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

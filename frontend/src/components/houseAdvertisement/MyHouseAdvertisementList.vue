@@ -77,11 +77,10 @@ const deleteHouseAd = (id) => {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('No se ha podido eliminar la vivienda')
+                throw new Error('No se ha podido eliminar el anuncio de vivienda')
             }
         })
         .then(data => {
-            console.log("Vivienda eliminada correctamente")
             fetchMyAdvertisements()
         })
         .catch(error => {

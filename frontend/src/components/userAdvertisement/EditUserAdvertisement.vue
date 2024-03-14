@@ -1,14 +1,14 @@
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   setup() {
     const successfulAlert = ref(false);
     const router = useRouter();
-    const route = useRoute();
-    const userAdvertisementId = ref();
-
+    const store = useStore();
+    const user = ref(store.state.user);
     const userAd = ref({
       id: "",
       description: "",
@@ -20,49 +20,56 @@ export default {
     });
     
     const fetchUserAd = async () => {
-            try {
-                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
-                    {
-                        method: "GET",
-                        headers: {
-                            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
-                        },
-                        credentials: "include",
-                    });
+      try {
+          const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/myAdvertisement/${user.value.id}`,
+              {
+                  method: "GET",
+                  headers: {
+                      'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                  },
+                  credentials: "include",
+              });
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        userAd.value = data;
-                    } else {
-                        window.location.href = "/404";
-                    }
+              if (response.ok) {
+                  const data = await response.json();
+                  userAd.value = data;
+              } else {
+                if (response.status === 404) {
+                  userAd.value = {
+                    description: "",
+                    maxBudget: "",
+                    desiredLocation: "",
+                    entranceDate: "",
+                    exitDate: "",
+                    maxCohabitants: "",
+                  };
+                } else {
+                  router.push("/404");
+                }
+              }
 
-                } catch (error) {
-                console.error("Error:", error);
-            }
-        };
+          } catch (error) {
+          if (error.response.status === 404) {
+            userAd.value = {
+              description: "",
+              maxBudget: "",
+              desiredLocation: "",
+              entranceDate: "",
+              exitDate: "",
+              maxCohabitants: "",
+            };
+          }else {
+            router.push("/404");
+          }
+      }
+    };
 
     const saveUserAd = async () => {
       if (!validateForm()) {
         return;
       }
-
       try {
-
-        const userFetch = await fetch(
-          import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
-          {
-            method: "POST",
-            headers: {
-              "Authentication":
-                "Bearer " + localStorage.getItem("authentication"),
-            },
-          }
-        );
-
-        const userData = await userFetch.json();
-        userAd.value.author = userData;
-
+        userAd.value.author = user.value;
         const response = await fetch(
           import.meta.env.VITE_BACKEND_URL + "/api/advertisements/users",
           {
@@ -78,7 +85,7 @@ export default {
         const data = await response.json();
         successfulAlert.value = true;
         setTimeout(() => {
-          router.push("/");
+          router.push(`/advertisements/users/${data.id}`);
         }, 2000);
       } catch (error) {
         console.error("Error:", error);
@@ -123,12 +130,15 @@ export default {
         } else {
           errorMessages.value.entranceDate = "";
         }
-        if (new Date(userAd.value.entranceDate) > new Date(userAd.value.exitDate)) {
-          isValid = false;
-          errorMessages.value.exitDate = "La fecha de salida no puede ser anterior a la entrada";
-        } else {
-          errorMessages.value.exitDate = "";
+        if (userAd.value.exitDate){
+          if (new Date(userAd.value.entranceDate) > new Date(userAd.value.exitDate)) {
+            isValid = false;
+            errorMessages.value.exitDate = "La fecha de salida no puede ser anterior a la entrada";
+          } else {
+            errorMessages.value.exitDate = "";
+          }
         }
+       
 
         if (
           !userAd.value.maxCohabitants ||
@@ -144,12 +154,26 @@ export default {
       }
     };
 
+    const onCancel = () => {
+      router.push("/");
+    };
+
     onMounted(() => {
-      userAdvertisementId.value = router.currentRoute.value.params.id;
       if (localStorage.getItem("authentication") === null) {
         router.push("/login");
       }
-      fetchUserAd();
+
+      if (user.value.id !== undefined) {
+        fetchUserAd()
+      } else {
+          store.watch(
+            () => store.state.user,
+            (newValue, oldValue) => {
+                user.value = newValue
+                fetchUserAd()
+            }
+          )
+      }
     });
 
     return {
@@ -157,6 +181,8 @@ export default {
       saveUserAd,
       errorMessages,
       successfulAlert,
+      router,
+      onCancel,
     };
   },
 };
@@ -170,7 +196,7 @@ export default {
         <div class="columna" style="flex-grow: 2">
           <form id="form">
             <div class="form-group" style="text-align: left; margin-top: 3vh">
-              <h2 class="mb-4">Editar anuncio de búsqueda de piso</h2>
+              <h2 class="mb-4">Crear/Editar anuncio de búsqueda de piso</h2>
               <h5>Presupuesto</h5>
               <div class="input-group mb-3 d-flex w-50">
                 <div class="d-flex align-items-center">
@@ -272,7 +298,7 @@ export default {
               role="alert"
               v-if="successfulAlert"
             >
-              ¡Anuncio creado correctamente!
+              ¡Anuncio publicado correctamente!
             </div>
             <div class="mt-3">
               <button
@@ -281,7 +307,7 @@ export default {
                 class="btn btn-success"
                 @click.prevent="saveUserAd"
               >
-                Editar
+                Publicar
               </button>
               <button
                 type="button"

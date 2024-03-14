@@ -179,22 +179,20 @@
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
                 "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
                 "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
-
-
     }
   ],
   
   "userRatings":[
     {
       "id": "65e305e4597c9969f3b36f10",
-      "user": {"id" : "60d5ec9af682fbd39a1b8b9d"},
-      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
+      "user": {"id" : "60d5ec9af682fbd39a1b8b9e"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
       "comment": "He convivido con este usuario y es muy interesante, además de ordenado."
     },
     {
       "id": "65e305e4597c9969f3b36f11",
-      "user": {"id": "60d5ec9af682fbd39a1b8b9e"},
-      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
+      "user": {"id": "60d5ec9af682fbd39a1b8b9d"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
       "comment": "Aunque parezca que pueda hacer mucho ruido, es una persona tranquila para convivir."
     }
   ],
@@ -204,8 +202,8 @@
       "description": "Busco 2 compañeros organizados por Avenida Reina Mercedes",
       "maxBudget": 600,
       "desiredLocation": "Avenida Reina Mercedes, Sevilla",
-      "entranceDate": "2024-03-01",
-      "exitDate": "2024-06-30",
+      "entranceDate": "2025-03-01",
+      "exitDate": "2025-06-30",
       "maxCohabitants": 2,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9e"
@@ -216,8 +214,8 @@
       "description": "Busco 2 compañeros organizados por Calle Awawa",
       "maxBudget": 444,
       "desiredLocation": "Calle Awawa, Sevilla",
-      "entranceDate": "2022-03-01",
-      "exitDate": "2022-06-30",
+      "entranceDate": "2025-03-01",
+      "exitDate": "2025-06-30",
       "maxCohabitants": 4,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9d"
