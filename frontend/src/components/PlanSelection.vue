@@ -62,16 +62,16 @@
                     <p class="fw-bold"><em>Para nuevos usuarios</em></p>
                     <div class="modal-body">
                         
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"></img><span > Ver publicaciones ilimitadas</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"></img><span > Ver publicaciones ilimitadas</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span > 3 chats en paralelo</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span > 3 chats en paralelo</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span > Perfil personalizado</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span > Perfil personalizado</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span > Hacer publicación</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span > Hacer publicación</span>
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> Gratis</h2>
@@ -88,16 +88,16 @@
                     <p class="fw-bold"><em>Para los más exigentes</em></p>
                     <div class="modal-body">
                         
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span > Ver publicaciones ilimitadas</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span > Ver publicaciones ilimitadas</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold" > Chats ilimitados</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold" > Chats ilimitados</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Perfil verificado</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Perfil verificado</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Acceso anticipado</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Acceso anticipado</span>
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> 5€</h2>
@@ -114,16 +114,16 @@
                     <p class="fw-bold"><em>Para nuestros propietarios</em></p>
                     <div class="modal-body">
                        
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Publicar viviendas</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Publicar viviendas</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold" > Chats ilimitados</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold" > Chats ilimitados</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Promociones de pisos ilimitadas</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Promociones de pisos ilimitadas</span>
                             <br>
                             <br>
-                            <img src="/public/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Estadísticas</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Estadísticas</span>
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> 15€ + 5€*</h2>
