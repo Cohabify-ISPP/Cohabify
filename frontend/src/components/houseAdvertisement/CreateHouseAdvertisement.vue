@@ -100,12 +100,6 @@
                 <div class="row justify-content-center" >  
                   <button type="button" class="btn-primary col-md-3" style="margin-top: 20px;" @click.prevent="fetchUser">Buscar</button>
                 </div>
-              <div style="max-height: 60px; overflow-y: auto;">
-                <div v-for="(tenant, index) in filteredTenants" :key="index">
-                  <input type="checkbox" :id="tenant.username" :value="tenant" v-model="selectedTenants">
-                  <label :for="tenant.username">{{ tenant.username }}</label>
-                </div>
-              </div>
               <p class="text-white text-start"><strong>Inquilinos seleccionados:</strong></p>
               <div class="text-start mb-3" v-if="selectedTenants.length > 0">
                 <div style="max-height: 60px; overflow-y: auto;">
@@ -241,7 +235,7 @@ export default {
           {
             method: "POST",
             headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                         'Content-Type': 'application/json'
                     },
             credentials: "include",
@@ -270,7 +264,7 @@ export default {
           {
             method: "GET",
             headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
             credentials: "include",
           });
@@ -297,7 +291,7 @@ export default {
             method: "POST",
             headers: {
               "Authentication":
-                "Bearer " + sessionStorage.getItem("authentication"),
+                "Bearer " + localStorage.getItem("authentication"),
             },
           }
         );
@@ -309,7 +303,7 @@ export default {
           {
             method: "GET",
             headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
             credentials: "include",
           });
@@ -364,7 +358,7 @@ export default {
       fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses', {
         method: 'POST',
         headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
         body: formData,
       })
@@ -409,6 +403,7 @@ export default {
       toggleTag,
       success,
       auth,
+      
     }
   },
   watch: {

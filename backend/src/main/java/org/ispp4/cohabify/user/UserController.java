@@ -1,8 +1,10 @@
 package org.ispp4.cohabify.user;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.types.ObjectId;
@@ -117,6 +119,27 @@ public class UserController {
             _user.setLikes(user.getLikes());
 
             return new ResponseEntity<>(userService.save(_user), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("update/plan/{plan}/{id}")
+    public ResponseEntity<User> updateUserPlan(@PathVariable("id") ObjectId id,@PathVariable("plan") String plan) {
+        Optional<User> userData = userService.findById(id);  
+        if (userData.isPresent()) {
+            User _user = userData.get();
+            if(plan.equals("basic")){
+                _user.setPlan(Plan.BASIC);
+            }else if(plan.equals("explorer")){
+                _user.setPlan(Plan.EXPLORER);
+            }else if(plan.equals("owner")){
+                _user.setPlan(Plan.OWNER);
+            }else{
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            
+            return new ResponseEntity<User>(userService.save(_user), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
