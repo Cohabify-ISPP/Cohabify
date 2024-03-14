@@ -27,6 +27,10 @@ public class HouseAdvertisementService {
         return advertisementRepository.findById(id);
     }
 
+    public HouseAdvertisement findAdById(ObjectId id) {
+        return advertisementRepository.findById(id).orElse(null);
+    }
+
     public HouseAdvertisement save(HouseAdvertisement advertisement) {
         return (HouseAdvertisement) advertisementRepository.save(advertisement);
     }
