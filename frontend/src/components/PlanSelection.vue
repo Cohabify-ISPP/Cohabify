@@ -1,28 +1,13 @@
 <script>
-    import { ref, onMounted } from 'vue'
+    import { ref, onMounted, computed } from 'vue'
+    import { useStore } from 'vuex'
+
     export default {
         setup() {
-            const currentUser = ref(null);
-            const plan = ref('');
-
-            onMounted(() => {
-                const fetchUser = async () => {
-                    const response = await fetch(
-                        import.meta.env.VITE_BACKEND_URL + '/auth/getUser',
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Authentication': 'Bearer ' + sessionStorage.getItem('authentication')
-                            }
-                        }
-                    )
-                    const data = await response.json()
-                    currentUser.value = data
-                    plan.value = data.plan
-                }
-                fetchUser()
-                
-            });
+            //const currentUser = ref(null);
+            const store = useStore()
+            const currentUser = computed(() => store.state.user);
+            const plan = computed(() => currentUser.value.plan);
 
             //Cambiar el plan del usuario
             const changePlan = async (newPlan) => {
@@ -31,13 +16,11 @@
                     {
                         method: 'PUT',
                         headers: {
-                            'Authentication': 'Bearer ' + sessionStorage.getItem('authentication')
+                            'Authentication': 'Bearer ' + localStorage.getItem('authentication')
                         },
                     }
                 )
-                const data = await response.json()
-                currentUser.value = data
-                plan.value = data.plan
+                store.dispatch('cargarUser')
             }
         
             return { 

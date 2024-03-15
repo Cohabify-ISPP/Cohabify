@@ -108,7 +108,7 @@ watch(user, (newValue) => {
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" @click.prevent="$router.push('/myAdvertisements/house')">Ver publicados</a></li>
-            <li><a class="dropdown-item" href="/advertisements/houses/new" @click.prevent="$router.push('/advertisements/houses/new')">Publicar</a></li>           
+            <li v-if="user?.plan === 'owner'"><a class="dropdown-item" href="/advertisements/houses/new" @click.prevent="$router.push('/advertisements/houses/new')">Publicar</a></li>           
           </ul>
         </li>
 
@@ -124,9 +124,9 @@ watch(user, (newValue) => {
         
       </ul>
       
-      <div class="dropdown" style="margin-left: 1vw; margin-right: 1vw;">
+      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw;">
         <a
-          class="dropdown-toggle d-flex align-items-center hidden-arrow"
+          class="nav-link dropdown-toggle d-flex align-items-center hidden-arrow"
           href="#"
           id="navbarDropdownMenuAvatar"
           role="button"
@@ -150,6 +150,12 @@ watch(user, (newValue) => {
             alt="avatar"
             loading="lazy"
             style="object-fit: cover;"
+          />
+          <h5 style="margin-left: 10px !important; margin-right: 6px !important;">{{ user?.username }}</h5>
+          <img v-if="user?.plan === 'explorer'" 
+            style="max-height: 35px;"
+            src="/images/verificado.png"
+            loading="lazy"
           />
         </a>
         <ul

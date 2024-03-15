@@ -1,7 +1,9 @@
 package org.ispp4.cohabify.houseAdvertisement;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +15,14 @@ import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.house.HouseService;
 import org.ispp4.cohabify.storage.StorageService;
+import org.ispp4.cohabify.user.Plan;
+import org.ispp4.cohabify.user.User;
+import org.ispp4.cohabify.user.UserService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,11 +46,22 @@ public class HouseAdvertisementController {
     private HouseAdvertisementService advertisementService;
     private HouseService houseService;
     private StorageService storageService;
+    private UserService userService;
 
     @Transactional(readOnly = true)
     @GetMapping("")
-    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements() {
+    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(@Nullable Principal principal) {
         List<HouseAdvertisement> advertisements = advertisementService.findAll();
+        if(principal != null) {
+            User user = userService.getUserByUsername(principal.getName());
+            if(user.getPlan().equals(Plan.BASIC)) {
+                advertisements = advertisements.stream() 
+                                                // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+                                            .filter(a -> a.getAuthor().getId().equals(user.getId()) ||
+                                                            System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+                                            .toList();
+            }
+        }
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 

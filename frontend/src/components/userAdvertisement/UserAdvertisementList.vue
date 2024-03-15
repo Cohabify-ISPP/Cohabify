@@ -258,7 +258,11 @@ export default {
               style="margin-right: 10px;">
 
             <div class="columna-informacion" style="flex: 1;">
-              <div class="user-name" style="text-align: left;">{{ anuncio?.author?.username }}</div>
+              <div class="user-name" style="text-align: left;">{{ anuncio?.author?.username }}<img v-if="anuncio?.author?.plan === 'explorer'" 
+                style="margin-left: 6px; max-height: 35px;"
+                src="/images/verificado.png"
+                loading="lazy"
+              /></div>
               <div class="text-truncate"
                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-right: 4vh;">
                 <span>{{ anuncio?.desiredLocation }}</span>
