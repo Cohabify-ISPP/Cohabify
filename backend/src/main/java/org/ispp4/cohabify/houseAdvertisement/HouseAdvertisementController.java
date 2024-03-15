@@ -1,7 +1,9 @@
 package org.ispp4.cohabify.houseAdvertisement;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +15,13 @@ import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.house.HouseService;
 import org.ispp4.cohabify.storage.StorageService;
+import org.ispp4.cohabify.user.Plan;
+import org.ispp4.cohabify.user.User;
+import org.ispp4.cohabify.user.UserService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +29,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,12 +45,28 @@ public class HouseAdvertisementController {
     private HouseAdvertisementService advertisementService;
     private HouseService houseService;
     private StorageService storageService;
+    private UserService userService;
 
     @Transactional(readOnly = true)
     @GetMapping("")
-    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements() {
+    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
         List<HouseAdvertisement> advertisements = advertisementService.findAll();
+        if(user.getPlan().equals(Plan.BASIC)) {
+            advertisements = advertisements.stream()
+                                            // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+                                           .filter(a -> a.getAuthor().equals(user) ||
+                                                        System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+                                           .toList();
+        }
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true) 
+    @GetMapping("/author/{userId}")
+    public ResponseEntity<List<HouseAdvertisement>> getAuthorAdvertisements(@PathVariable("userId") ObjectId id) {
+        List<HouseAdvertisement> advertisements = advertisementService.findByAuthorId(id);
+        return ResponseEntity.ok().body(advertisements);
     }
 
     @Transactional(readOnly = true)

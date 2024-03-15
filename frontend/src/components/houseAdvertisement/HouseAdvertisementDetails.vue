@@ -200,6 +200,11 @@ onMounted(() => {
                                             <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px;">
                                                 <div class ="d-flex" style="margin-bottom: 5px;  align-items: center;">
                                                     <h5 style="text-align: left;" class="card-title">{{ tenant.username }}</h5>
+                                                    <img v-if="tenant.plan === 'explorer'" 
+                                                        style="margin-left: 5px; max-height: 35px;"
+                                                        src="/images/verificado.png"
+                                                        loading="lazy"
+                                                    />
                                                     <i class="bi bi-gender-female" style="margin-left: 5px;" v-if="tenant.gender == 'FEMENINO'"></i>
                                                     <i class="bi bi-gender-male" style="margin-left: 5px;" v-if="tenant.gender == 'MASCULINO'"></i>
                                                     <i class="bi bi-gender-ambiguous" style="margin-left: 5px;" v-if="tenant.gender == 'OTRO'"></i>

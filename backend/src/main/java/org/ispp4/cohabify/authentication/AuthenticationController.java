@@ -9,6 +9,7 @@ import org.ispp4.cohabify.dto.JwtTokenDto;
 import org.ispp4.cohabify.dto.LoginRequest;
 import org.ispp4.cohabify.dto.UserRegisterRequest;
 import org.ispp4.cohabify.storage.StorageService;
+import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -73,6 +74,7 @@ public class AuthenticationController {
 		user.setTag(request.getTag());
 		user.setGender(request.getGender());
 		user.setAuthorities(List.of("User"));
+		user.setPlan(Plan.BASIC);
 		user = userService.save(user);
 		// TODO: Add the user full name when it is fixed in the model
 		

@@ -156,6 +156,9 @@
               <button style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
               <button type="submit" class="btn btn-danger" @click="onCancel">Cancelar</button>
             </div>
+            <div class="mt-3" v-if="authorAdvertisementsNumber > 0">
+              <strong>El propietario deberá pagar 5€ por publicar esta nueva vivienda.</strong>
+            </div>
           </div>
           </div>
       </div>
@@ -164,45 +167,64 @@
 </template>
 
 <script>
-import { ref, onBeforeMount} from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   setup() {
-    var isDragging = ref(false)
-    const roomsNumber = ref(1)
-    const bathroomsNumber = ref(1)
-    const floor = ref()
-    const area = ref()
-    const location = ref('')
-    const cadastre = ref('')
-    const heating = ref('')
-    const heatingSelect = ref([])
-    const selectedTags = ref([])
-    const tags = ref([])
-    const success = ref(false)
+    var isDragging = ref(false);
+    const roomsNumber = ref(1);
+    const bathroomsNumber = ref(1);
+    const floor = ref();
+    const area = ref();
+    const location = ref('');
+    const cadastre = ref('');
+    const heating = ref('');
+    const heatingSelect = ref([]);
+    const selectedTags = ref([]);
+    const tags = ref([]);
+    const success = ref(false);
     
 
     //ADVERTISEMENT
-    const userSearch = ref('')
-    const phoneSearch = ref('')
-    const title = ref('')
-    const description = ref('')
-    const price = ref()
-    const tenants = ref([])
-    const tenantsSelect = ref([])
-    const selectedTenants = ref([])
-    const imagesUrl = ref([])
-    const images = ref([])
-    const auth = ref()
-  
+    const userSearch = ref('');
+    const phoneSearch = ref('');
+    const title = ref('');
+    const description = ref('');
+    const price = ref();
+    const tenants = ref([]);
+    const tenantsSelect = ref([]);
+    const selectedTenants = ref([]);
+    const imagesUrl = ref([]);
+    const images = ref([]);
+    const auth = ref();
+    const authorAdvertisementsNumber = ref([]);
 
-
-  
-
+    const store = useStore()
+    const user = computed(() => store.state.user);
 
     onBeforeMount(() => {
-      fetchTags()
+      fetchTags();
     });
+
+    const fetchAuthorAdvertisements = async () => {
+      fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/author/' + user.value.id, {
+        method: "GET",
+        headers: {
+          'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+        credentials: "include",
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        authorAdvertisementsNumber.value = json.length;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
 
     const toggleTag = (tag) => {
       const index = selectedTags.value.indexOf(tag);
@@ -212,8 +234,6 @@ export default {
         selectedTags.value.push(tag);
       }
     };
-
- 
 
     const fetchUser = async () => {
       try {
@@ -273,6 +293,7 @@ export default {
           const data = await response.json();
           tags.value = data;
           await fetchHeating()
+          fetchAuthorAdvertisements();
 
         } else {
           window.location.href = "/404";
@@ -403,7 +424,7 @@ export default {
       toggleTag,
       success,
       auth,
-      
+      authorAdvertisementsNumber
     }
   },
   watch: {

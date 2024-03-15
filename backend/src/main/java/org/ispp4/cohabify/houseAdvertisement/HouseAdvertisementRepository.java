@@ -10,6 +10,8 @@ public interface HouseAdvertisementRepository extends MongoRepository<HouseAdver
     
     Optional<HouseAdvertisement> findById(ObjectId id);
 
+    List<HouseAdvertisement> findByAuthorId(ObjectId authorId);
+
     List<HouseAdvertisement> findAll();
 
     void deleteById(ObjectId id);
