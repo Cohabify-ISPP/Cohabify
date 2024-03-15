@@ -35,7 +35,9 @@ const routes = [
 
     { path: '/advertisements/users/myAdvertisement', component: EditUserAdvertisement },
     { path: '/advertisements/houses/edit/:id', component: UpdateHouseAdvertisement},
+
     
+    { path: '/advertisements/users/edit/:id', component: EditUserAdvertisement },
     { path: '/:pathMatch(.*)*', component: Error }
 
 ];
