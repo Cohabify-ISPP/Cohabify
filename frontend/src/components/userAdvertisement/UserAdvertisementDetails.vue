@@ -8,6 +8,7 @@ export default {
 
         const userAdvertisementId = ref(""); 
         const text = ref('');
+        const errorComentario = ref(null);
         const userAdvertisement = ref({});
         const valorations = ref([]);
         const auth = ref({});
@@ -113,7 +114,10 @@ export default {
                 
                 
                 )
-                .catch(error => console.error('Error al enviar datos al backend:', error));
+                .catch(error => {
+                        console.error('Error al enviar datos al backend:', error);
+                        errorComentario.value = 'No puedes ponerte una reseña a ti mismo.';
+                    });
 
         };
 
@@ -138,6 +142,7 @@ export default {
             let modal = document.getElementById('loginModal');
             modal.style.display = "block";
         }
+
         const closeModal = () => {
             let modal = document.getElementById('loginModal');
             modal.style.display = "none";
@@ -180,8 +185,8 @@ export default {
             userAdvertisementId.value = route.params.id;
             fetchAdvertisement();
         });
-        
         return {
+            errorComentario,
             text,
             closeModal,
             deleteComment2,
@@ -223,7 +228,11 @@ export default {
                                     <form @submit.prevent="register">
                                         <div class="form-group">
                                             <label for="commentText">Comentario</label>
+                                            <div class="alert alert-danger" role="alert" v-if="errorComentario">
+                                                <i class="fas fa-exclamation-triangle"></i> {{ errorComentario }}
+                                            </div>
                                             <textarea class="form-control" id="text" v-model="text"></textarea>
+
                                         </div>
                                         <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:antiquewhite">Enviar</strong></button>
                                     </form>

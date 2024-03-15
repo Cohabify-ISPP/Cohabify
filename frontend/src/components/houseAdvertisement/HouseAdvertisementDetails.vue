@@ -11,7 +11,7 @@ const clipboardMessage = ref(false);
 const auth = ref();
 const valorations = ref([]);
 const isLoading = ref(true);
-
+const errorComentario = ref(null);
 const fetchError = ref(null);
 
 const truncateDescription = (description) => {
@@ -143,7 +143,10 @@ const register = () => {
         
         
         )
-        .catch(error => console.error('Error al enviar datos al backend:', error));
+        .catch(error => {
+                        console.error('Error al enviar datos al backend:', error);
+                        errorComentario.value = 'No puedes ponerte una reseña a ti mismo.';
+                    });
 
 };
 const fetchValorations = async () => {
@@ -221,6 +224,9 @@ onMounted(() => {
                         <form @submit.prevent="register">
                             <div class="form-group">
                                 <label for="commentText">Comentario</label>
+                                <div class="alert alert-danger" role="alert" v-if="errorComentario">
+                                    <i class="fas fa-exclamation-triangle"></i> {{ errorComentario }}
+                                </div>
                                 <textarea class="form-control" id="text" v-model="text"></textarea>
                             </div>
                             <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:antiquewhite">Enviar</strong></button>
