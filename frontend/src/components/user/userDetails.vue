@@ -1,6 +1,6 @@
 <script>
 import { ref, onBeforeMount } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
     
@@ -9,6 +9,7 @@ export default {
         const userId = ref("");
         const user = ref(""); 
         const route = useRoute();
+        const router = useRouter();
 
         const fetchUser = async () => {
             try {
@@ -32,6 +33,10 @@ export default {
             }
         };
 
+        const navigateToUser = () => {
+            router.push('/user/edit/' + userId.value);
+        };
+
         onBeforeMount(() => {
             userId.value = route.params.id;
             fetchUser();
@@ -39,6 +44,7 @@ export default {
         
         return {
             user,
+            navigateToUser
         }
     }
 }
@@ -60,7 +66,7 @@ export default {
 
                     <div class= "botones" style="margin-top: 3%;">
                         <div class="d-flex justify-content-center align-items-center">
-                            <button type="button" class="button boton" style="text-wrap: nowrap; width:100%;"><strong>Editar perfil <i class="bi bi-pencil-square" style="margin-left: 5px;"></i></strong></button>
+                            <button @click.prevent="navigateToUser" type="button" class="button boton" style="text-wrap: nowrap; width:100%;"><strong>Editar perfil <i class="bi bi-pencil-square" style="margin-left: 5px;"></i></strong></button>
                         </div>
                     </div>
                 </div>
@@ -180,6 +186,7 @@ export default {
     border-radius: 10px;
     width: 27%;
     height: 5vh;
+    color:white;
 }
 
 .boton strong {

@@ -1,5 +1,6 @@
 package org.ispp4.cohabify.user;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.lang.Nullable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.ispp4.cohabify.dto.UserUpdateRequest;
+import org.ispp4.cohabify.storage.StorageService;
+import org.ispp4.cohabify.authentication.JwtService;
+import org.ispp4.cohabify.dto.FormItemValidationError;
+import org.ispp4.cohabify.dto.JwtTokenDto;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -28,6 +40,9 @@ import lombok.AllArgsConstructor;
 public class UserController {
 
     private UserService userService;
+    private JwtService jwtService;
+    private PasswordEncoder passwordEncoder;
+    private StorageService storageService;
 
     @PostMapping("/add")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
@@ -98,45 +113,79 @@ public class UserController {
         }
     }
 
+    @Transactional
     @PutMapping("update/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") ObjectId id, @Valid @RequestBody User user) {
-        Optional<User> userData = userService.findById(id);
+    public ResponseEntity<?> updateUser(@PathVariable("id") ObjectId id, @Valid @RequestPart("string-data") UserUpdateRequest request, 
+                                        BindingResult result, @Nullable @RequestPart("profile-pic") MultipartFile image) throws IOException {
+        if(result.hasErrors()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+								 .body(result.getFieldErrors()
+										 	 .stream()
+										 	 	.map(fe -> new FormItemValidationError(fe))
+										 	 	.toList());
+		}
 
-        if (userData.isPresent()) {
-            User _user = userData.get();
-            _user.setUsername(user.getUsername());
-            _user.setPassword(user.getPassword());
-            _user.setIsOwner(user.getIsOwner());
-            _user.setPhone(user.getPhone());
-            _user.setEmail(user.getEmail());
-            _user.setTag(user.getTag());
-            _user.setDescription(user.getDescription());
-            _user.setPlan(user.getPlan());
-            _user.setIsVerified(user.getIsVerified());
-            _user.setAuthorities(user.getAuthorities());
-            _user.setLikes(user.getLikes());
+        User _user = userService.getUserById(id);
 
-            return new ResponseEntity<>(userService.save(_user), HttpStatus.OK);
+        if (_user != null) {
+            User user = userService.getUserByUsername(request.getUsername());
+            if(user != null && !user.getId().equals(_user.getId())) {
+                FormItemValidationError error = new FormItemValidationError();
+                error.setField("username");
+                error.setCode("AlreadyExists");
+                error.setMessage("An user with this username already exists.");
+                error.setRejectedValue(request.getUsername());
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(error);
+            }
+
+            _user.setUsername(request.getUsername());
+            _user.setPhone(request.getPhone());
+            _user.setEmail(request.getEmail());
+            _user.setGender(request.getGender());
+            _user.setTag(request.getTag());
+            _user.setDescription(request.getDescription());
+
+            if(request.getPassword() != null && !request.getPassword().isBlank()) {
+                _user.setPassword(passwordEncoder.encode(request.getPassword()));
+            } 
+
+            if(request.getChangedImage()) {
+                // Save the image and add the static uri to the user
+                String[] filename_split = image.getOriginalFilename().split("\\.");
+                String filename = _user.getJsonId() + "." + filename_split[filename_split.length-1];
+                String static_path;
+                static_path = storageService.saveImage(filename, image); 
+                
+                _user.setImageUri(static_path);
+                _user = userService.save(_user);
+            }
+
+            String jwt = jwtService.generateToken(_user);
+
+            return ResponseEntity.status(HttpStatus.OK)
+							 .body(JwtTokenDto.builder().user(userService.save(_user)).token(jwt).build());
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        
     }
 
     @PutMapping("update/plan/{plan}/{id}")
-    public ResponseEntity<User> updateUserPlan(@PathVariable("id") ObjectId id,@PathVariable("plan") String plan) {
-        Optional<User> userData = userService.findById(id);  
+    public ResponseEntity<User> updateUserPlan(@PathVariable("id") ObjectId id, @PathVariable("plan") String plan) {
+        Optional<User> userData = userService.findById(id);
         if (userData.isPresent()) {
             User _user = userData.get();
-            if(plan.equals("basic")){
+            if (plan.equals("basic")) {
                 _user.setPlan(Plan.BASIC);
-            }else if(plan.equals("explorer")){
+            } else if (plan.equals("explorer")) {
                 _user.setPlan(Plan.EXPLORER);
-            }else if(plan.equals("owner")){
+            } else if (plan.equals("owner")) {
                 _user.setPlan(Plan.OWNER);
-            }else{
+            } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            
+
             return new ResponseEntity<User>(userService.save(_user), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

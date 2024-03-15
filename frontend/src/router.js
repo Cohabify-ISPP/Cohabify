@@ -11,6 +11,7 @@ import HouseAdvertisementDetails from './components/houseAdvertisement/HouseAdve
 import UpdateHouseAdvertisement from './components/houseAdvertisement/UpdateHouseAdvertisement.vue';
 import PlanSelection from './components/PlanSelection.vue';
 import userDetails from './components/user/userDetails.vue';
+import updateUserDetails from './components/user/updateUserDetails.vue';
 import Error from './components/Error.vue';
 import MyHouseAdvertisementList from './components/houseAdvertisement/MyHouseAdvertisementList.vue';
 
@@ -27,7 +28,9 @@ const routes = [
     { path: '/myAdvertisements/house', component: MyHouseAdvertisementList},
     { path: '/advertisements/users/:id', component: UserAdvertisementDetails },
     { path: '/advertisements/houses/:id', component: HouseAdvertisementDetails },
+    
     { path: "/user/:id", component: userDetails },
+    { path: '/user/edit/:id', component: updateUserDetails },
 
     { path: '/advertisements/houses/new', component: CreateHouseAdvertisement },
 
