@@ -59,11 +59,12 @@
     {
       "id": "60d5ec9af682fbd39a1b8b9f",
       "location":"Zona desconocida", 
-      "roomsNumber":"20", 
+      "roomsNumber":"5", 
       "bathroomsNumber":"1",
       "area":"10", 
       "heating":"CENTRAL_HEATING", 
-      "floor":"1",  
+      "floor":"1",
+      "cadastre": "12345678901234567890",  
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": -2.6637, 
@@ -78,6 +79,7 @@
       "area":"105", 
       "heating":"AIR_CONDITIONING", 
       "floor":"9",  
+      "cadastre": "12345678901234567891", 
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 40.3437, 
@@ -91,7 +93,8 @@
       "bathroomsNumber":"2",
       "area":"120", 
       "heating":"NATURAL_GAS", 
-      "floor":"9",  
+      "floor":"9", 
+      "cadastre": "12345678901234567892",  
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 38.184049, 
@@ -113,6 +116,7 @@
       "area":"70", 
       "heating":"RADIATOR", 
       "floor":"0",  
+      "cadastre": "12345678901234567893", 
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 37.471815, 
