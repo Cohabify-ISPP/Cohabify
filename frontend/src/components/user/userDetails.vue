@@ -186,6 +186,7 @@ export default {
     border-radius: 10px;
     width: 27%;
     height: 5vh;
+    color:white;
 }
 
 .boton strong {

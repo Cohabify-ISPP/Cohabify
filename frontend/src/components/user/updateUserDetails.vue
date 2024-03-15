@@ -277,7 +277,7 @@ export default {
                         </div>
                         <div class="d-flex justify-content-center align-items-center" style="margin-top:10px;">
                             <button @click.prevent="deleteFile" type="button" class="button boton"
-                                    style="text-wrap: wrap; width:auto; border-radius:100%; "><strong>&times;</strong>
+                                    style="text-wrap: wrap;height: 5vh;width:5vh; border-radius:100%; margin-left:0 "><strong>&times;</strong>
                             </button>
                         </div>       
                             <div class="drag-area" @dragover.prevent="onDragover($event)" @dragleave.prevent="onDragLeave($event)" @drop.prevent="onDrop($event)">
@@ -295,7 +295,7 @@ export default {
                     <div class="botones" style="margin-top: 5%;">
                         <div class="d-flex justify-content-center align-items-center">
                             <button @click.prevent="updateUserProfile" type="button" class="button boton"
-                                style="text-wrap: nowrap; width:100%;"><strong>Guardar cambios <i class="bi bi-check"
+                                style="text-wrap: nowrap; width:100%"><strong>Guardar cambios <i class="bi bi-check"
                                         style="margin-left: 5px;"></i></strong></button>
                             <button @click.prevent="cancelChanges" type="button" class="button boton-cancelar"
                                 style="text-wrap: nowrap; width:100%;"><strong>Cancelar cambios <i
@@ -317,7 +317,7 @@ export default {
                         <div class="card-body">
                             <h4 style="text-align: left;" class="card-title">Descripción</h4>
                             <hr>
-                            <textarea v-model="user.description" style="text-align: justify; word-wrap: break-word"
+                            <textarea v-model="user.description" style="text-align: justify; word-wrap: break-word; height:15vh; resize: none;" 
                                 maxlength="255" required class="form-control" id="description" placeholder="Descripción."></textarea>
                         </div>
                     </div>
@@ -449,6 +449,7 @@ export default {
     border-radius: 10px;
     width: 27%;
     height: 5vh;
+    color:white;
 }
 
 .boton-cancelar {
