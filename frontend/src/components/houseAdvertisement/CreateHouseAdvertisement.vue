@@ -208,7 +208,7 @@ export default {
     });
 
     const fetchAuthorAdvertisements = async () => {
-      fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/author/' + user.value.id, {
+      fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/owner/' + user.value.id, {
         method: "GET",
         headers: {
           'Authentication': 'Bearer ' + localStorage.getItem("authentication"),

@@ -44,6 +44,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/api/tag/types/USER_TAG").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").anonymous()
 					.requestMatchers(HttpMethod.POST, "/auth/getUser").authenticated()
+					.requestMatchers(HttpMethod.GET, "/api/advertisements/houses", "/api/advertisements/users").permitAll()
 					.requestMatchers("/api/**").authenticated()
 					.anyRequest().denyAll() 
 			)

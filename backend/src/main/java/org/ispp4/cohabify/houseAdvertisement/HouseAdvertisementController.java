@@ -21,6 +21,7 @@ import org.ispp4.cohabify.user.UserService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -49,24 +50,19 @@ public class HouseAdvertisementController {
 
     @Transactional(readOnly = true)
     @GetMapping("")
-    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(Principal principal) {
-        User user = userService.getUserByUsername(principal.getName());
+    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(@Nullable Principal principal) {
         List<HouseAdvertisement> advertisements = advertisementService.findAll();
-        if(user.getPlan().equals(Plan.BASIC)) {
-            advertisements = advertisements.stream()
-                                            // Filter advertisements to leave the ones that are owned or that were created at least a day before now
-                                           .filter(a -> a.getAuthor().equals(user) ||
-                                                        System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
-                                           .toList();
+        if(principal != null) {
+            User user = userService.getUserByUsername(principal.getName());
+            if(user.getPlan().equals(Plan.BASIC)) {
+                advertisements = advertisements.stream() 
+                                                // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+                                            .filter(a -> a.getAuthor().getId().equals(user.getId()) ||
+                                                            System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+                                            .toList();
+            }
         }
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
-    }
-
-    @Transactional(readOnly = true) 
-    @GetMapping("/author/{userId}")
-    public ResponseEntity<List<HouseAdvertisement>> getAuthorAdvertisements(@PathVariable("userId") ObjectId id) {
-        List<HouseAdvertisement> advertisements = advertisementService.findByAuthorId(id);
-        return ResponseEntity.ok().body(advertisements);
     }
 
     @Transactional(readOnly = true)

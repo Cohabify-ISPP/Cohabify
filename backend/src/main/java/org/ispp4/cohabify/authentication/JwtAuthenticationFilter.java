@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String jwt = null;
 		String username;
 
-		if (!StringUtils.hasText(authHeader) || !StringUtils.startsWithIgnoreCase(authHeader, "Bearer ")) {
+		if (!StringUtils.hasText(authHeader) || !StringUtils.startsWithIgnoreCase(authHeader, "Bearer ") || authHeader.substring(7).equals("null")) {
 			filterChain.doFilter(request, response);
 			return;
 		}

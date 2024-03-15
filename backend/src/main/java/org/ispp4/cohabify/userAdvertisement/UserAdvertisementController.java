@@ -42,8 +42,7 @@ public class UserAdvertisementController {
 			if(user.getPlan().equals(Plan.BASIC)) {
 				userAdvertisements = userAdvertisements.stream()
 														// Filter advertisements to leave the ones that are owned or that were created at least a day before now
-														.filter(a -> a.getAuthor().equals(user) ||
-																System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+														.filter(a -> a.getAuthor().getId().equals(user.getId()) || System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
 														.toList();
 			}
 		}
@@ -105,6 +104,11 @@ public class UserAdvertisementController {
 	@PostMapping("")
 	public ResponseEntity<UserAdvertisement> processCreationForm(@RequestBody UserAdvertisement userAdvertisement) {		
 		try {
+			Optional<UserAdvertisement> advertisement = userAdvertisementService.findByAuthorId(userAdvertisement.getAuthor().getId());
+			if(advertisement.isPresent()) {
+				throw new Exception("User already has an advertisement created");
+			}
+
 			UserAdvertisement res = userAdvertisementService.save(userAdvertisement);
 			return new ResponseEntity<UserAdvertisement>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
