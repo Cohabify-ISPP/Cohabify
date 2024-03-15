@@ -1,23 +1,27 @@
 <script>
 import { ref, onMounted, onBeforeMount, computed, inject } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
     
     setup() {
 
         const userAdvertisementId = ref(""); 
-        const text = ref('');
+        const store = useStore();
         const errorComentario = ref(null);
+        const text = ref('');
+        const currentUser = computed(() => store.state.user);
         const userAdvertisement = ref({});
         const valorations = ref([]);
         const auth = ref({});
         const hasLike = ref(false)
         const route = useRoute();
+        const router = useRouter();
         const commonHouses = ref([]);
         const clipboardMessage = ref(false);
-        const currentUser = ref('');
         const addUser = ref('');
+        const currentUser1 = ref('');
         const equals = ref(false);
 
 
@@ -35,7 +39,7 @@ export default {
 
                 const userData = await userFetch.json();
                 auth.value = userData;
-                currentUser.value = userData.username;
+                currentUser1.value = userData.username;
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
                     {
                         method: "GET",
@@ -49,10 +53,10 @@ export default {
                         const data = await response.json();
                         userAdvertisement.value = data;
                         addUser.value = data.author.username;
-                        equals.value = addUser.value === currentUser.value;
+                        equals.value = addUser.value === currentUser1.value;
                         await fetchValorations()
                     } else {
-                        window.location.href = "/404";
+                        router.push(`/404`);
                     }
 
                 } catch (error) {
@@ -153,6 +157,28 @@ export default {
             modal.style.display = "none";
         }
 
+        const deleteUserAd = () => {
+    
+            fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/users/' + userAdvertisement.value.id, {
+                method: "DELETE",
+                headers: {
+                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                },
+                credentials: "include"
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('No se ha podido eliminar el anuncio de usuario')
+                    }
+                })
+                .then(data => {
+                    router.push(`/`);
+                })
+                .catch(() => {
+                    router.push(`/404`);
+                })
+        }
+
         const toggleLike = async () => {
   
             try {
@@ -249,23 +275,29 @@ export default {
                         </div>
                     </div>
                     <div class="imagen-circulo">
-                        <img :src="userAdvertisement.author.imageUri" alt = "Imagen de perfil">
+                        <img :src="userAdvertisement.author?.imageUri" alt = "Imagen de perfil">
                     </div>
 
                     <div class= "botones" style="margin-top: 3%;">
                         <div class="d-flex justify-content-center align-items-center">
-                        <div class="likes" style="margin-right: 1vw;">
-                            <div v-if="hasLike" @click="toggleLike" style="cursor:pointer">
-                                <i class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878"></i>
-                            </div>
-                            <div v-else>
-                                <i class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                            <div class="likes" style="margin-right: 1vw;">
+                                <div v-if="hasLike" @click="toggleLike" style="cursor:pointer">
+                                    <i class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878"></i>
+                                </div>
+                                <div v-else>
+                                    <i class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                                </div>
+                                
+                                <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
                             </div>
                             
-                            <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author.likes.length }} </span>
+                            <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:antiquewhite">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                            <div class="d-flex col" v-else>
+                                <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
+                                <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
+                            </div>
                         </div>
-                        <button type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:antiquewhite">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
-                    </div>
+
                     </div>
                 </div>
                 

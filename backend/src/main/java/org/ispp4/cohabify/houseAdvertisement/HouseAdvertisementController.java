@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,6 +56,13 @@ public class HouseAdvertisementController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/owner/{id}")
+    public ResponseEntity<List<HouseAdvertisement>> getAdvertisementsByAuthor(@PathVariable String id) {
+        List<HouseAdvertisement> advertisements = advertisementService.findByAuthorId(new ObjectId(id));
+        return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -114,7 +120,7 @@ public class HouseAdvertisementController {
     
 
 
-     @GetMapping("/heating")
+    @GetMapping("/heating")
     public ResponseEntity<List<Heating>> findHeating() {
         try {
             List<Heating> heatings = List.of(Heating.values());

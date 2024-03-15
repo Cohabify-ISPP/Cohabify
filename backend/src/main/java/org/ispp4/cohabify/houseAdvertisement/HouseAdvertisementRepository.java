@@ -12,5 +12,7 @@ public interface HouseAdvertisementRepository extends MongoRepository<HouseAdver
 
     List<HouseAdvertisement> findAll();
 
+    List<HouseAdvertisement> findByAuthorId(ObjectId authorId);
+
     void deleteById(ObjectId id);
 }

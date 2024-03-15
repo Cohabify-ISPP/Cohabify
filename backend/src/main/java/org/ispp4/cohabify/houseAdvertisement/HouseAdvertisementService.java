@@ -19,6 +19,10 @@ public class HouseAdvertisementService {
         return advertisementRepository.findAll();
     }
 
+    public List<HouseAdvertisement> findByAuthorId(ObjectId authorId) {
+        return advertisementRepository.findByAuthorId(authorId);
+    }
+
     public Optional<HouseAdvertisement> findById(ObjectId id) {
         return advertisementRepository.findById(id);
     }
