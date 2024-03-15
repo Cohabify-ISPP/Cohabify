@@ -232,6 +232,7 @@ export default {
             clipboardMessage,
             valorations,
             addUser,
+            deleteUserAd,
             currentUser,
             equals
         }
