@@ -16,6 +16,9 @@ export default {
         const route = useRoute();
         const commonHouses = ref([]);
         const clipboardMessage = ref(false);
+        const currentUser = ref('');
+        const addUser = ref('');
+        const equals = ref(false);
 
 
         const fetchAdvertisement = async () => {
@@ -32,6 +35,7 @@ export default {
 
                 const userData = await userFetch.json();
                 auth.value = userData;
+                currentUser.value = userData.username;
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
                     {
                         method: "GET",
@@ -44,6 +48,8 @@ export default {
                     if (response.ok) {
                         const data = await response.json();
                         userAdvertisement.value = data;
+                        addUser.value = data.author.username;
+                        equals.value = addUser.value === currentUser.value;
                         await fetchValorations()
                     } else {
                         window.location.href = "/404";
@@ -92,7 +98,6 @@ export default {
 
         const register = () => {
             const formData = new FormData();
-            console.log(auth.value);
             formData.append("string-data", new Blob([JSON.stringify({
                 user: userAdvertisement.value.author,
                 ratedUser: auth.value,
@@ -200,6 +205,9 @@ export default {
             copyToClipboard,
             clipboardMessage,
             valorations,
+            addUser,
+            currentUser,
+            equals
         }
     }
 }
@@ -277,9 +285,9 @@ export default {
                                 <h4 style=" text-align: left;">Comentarios</h4>
                                     <i class="fas fa-trash-alt" 
                                         @click="deleteComment2" 
-                                        style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;">
+                                        style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="!equals">
                                     </i>
-                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
+                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="!equals"><strong style="color:antiquewhite">Comentar</strong></button>
                                     </div>
                             <hr>
                         </div>
