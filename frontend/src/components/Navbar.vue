@@ -11,8 +11,6 @@ const user = computed(() => store.state.user);
 const BACKEND_URL= import.meta.env.VITE_BACKEND_URL
 const router = useRouter()
 
-
-
 onMounted(async() => {
   const token = localStorage.getItem("authentication")
 
@@ -36,6 +34,38 @@ const logout = () => {
   router.push('/')
 }
 
+const findMyUserAd = async () => {
+  try {
+    const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/myAdvertisement/${user.value.id}`,
+        {
+            method: "GET",
+            headers: {
+                'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+            },
+            credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          router.push(`/advertisements/users/${data.id}`);
+        } else{
+          if (response.status === 404){
+          router.push("/advertisements/users/myAdvertisement")
+          } else {
+            console.error("Error:", response);
+          }
+        }
+
+    } catch (error) {
+    if (error.response.status === 404) {
+      router.push("/advertisements/users/myAdvertisement")
+    } else {
+        console.error("Error:", error);
+    }
+  }
+}
+
+
 watch(user, (newValue) => {
   if (newValue !== null && newValue !== undefined && Object.keys(newValue).length !== 0) { 
     image.value = newValue.imageUri.startsWith('/') ? `${BACKEND_URL}${newValue.imageUri}` : newValue.imageUri;
@@ -56,20 +86,9 @@ watch(user, (newValue) => {
 
     <div class="d-flex align-items-center" v-if="isLoggedIn">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
+        
         <li class="nav-item">
           <a class="nav-link" href="#"><span class="badge rounded-pill badge-notification bg-danger">1</span> Chat</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/plan">Planes</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Publicar Anuncio
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li v-if="user?.plan === 'owner'"><a class="dropdown-item" href="/advertisements/houses/new" @click.prevent="$router.push('/advertisements/houses/new')">Vivienda</a></li>
-            <li><a class="dropdown-item" href="/advertisements/users/new" @click.prevent="$router.push('/advertisements/users/new')">Anuncio</a></li>
-          </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -80,6 +99,29 @@ watch(user, (newValue) => {
             <li><a class="dropdown-item" href="/advertisements/users" @click.prevent="$router.push('/advertisements/users')">Compañeros</a></li>
           </ul>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/plan">Planes</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Anuncios de vivienda
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" @click.prevent="$router.push('/myAdvertisements/house')">Ver publicados</a></li>
+            <li v-if="user?.plan === 'owner'"><a class="dropdown-item" href="/advertisements/houses/new" @click.prevent="$router.push('/advertisements/houses/new')">Publicar</a></li>           
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Anuncios de compañero
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" @click.prevent="findMyUserAd">Ver publicado</a></li>
+            <li><a class="dropdown-item" href="/advertisements/users/new" @click.prevent="$router.push('/advertisements/users/myAdvertisement')">Publicar/Editar</a></li>
+          </ul>
+        </li>
+        
       </ul>
       
       <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw;">

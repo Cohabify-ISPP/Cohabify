@@ -1,22 +1,45 @@
 <script>
 import { ref, onMounted, onBeforeMount, computed, inject } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
     
     setup() {
 
         const userAdvertisementId = ref(""); 
-        const currentUser = inject('user');
+        const store = useStore();
+        const errorComentario = ref(null);
+        const text = ref('');
+        const currentUser = computed(() => store.state.user);
         const userAdvertisement = ref({});
         const valorations = ref([]);
+        const auth = ref({});
         const hasLike = ref(false)
         const route = useRoute();
+        const router = useRouter();
         const commonHouses = ref([]);
         const clipboardMessage = ref(false);
+        const addUser = ref('');
+        const currentUser1 = ref('');
+        const equals = ref(false);
+
 
         const fetchAdvertisement = async () => {
             try {
+                const userFetch = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
+                {
+                    method: "POST",
+                    headers: {
+                    "Authentication":
+                        "Bearer " + localStorage.getItem("authentication"),
+                    },
+                }
+                );
+
+                const userData = await userFetch.json();
+                auth.value = userData;
+                currentUser1.value = userData.username;
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/${userAdvertisementId.value}`,
                     {
                         method: "GET",
@@ -29,14 +52,82 @@ export default {
                     if (response.ok) {
                         const data = await response.json();
                         userAdvertisement.value = data;
+                        addUser.value = data.author.username;
+                        equals.value = addUser.value === currentUser1.value;
                         await fetchValorations()
                     } else {
-                        window.location.href = "/404";
+                        router.push(`/404`);
                     }
 
                 } catch (error) {
                 console.error("Error:", error);
+                
             }
+        };
+        const deleteComment1 = () => {
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + auth.value.id + '/' + userAdvertisement.value.author.id, {
+                method: 'DELETE',
+                headers: {
+                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Comentario eliminado con éxito');
+                    } else {
+                        console.error('Error al eliminar el comentario');
+                    }
+                })
+                .catch(error => console.error('Error al enviar datos al backend:', error));
+        };
+        const deleteComment2 = () => {
+                    fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + auth.value.id + '/' + userAdvertisement.value.author.id, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                        },
+                    })
+                        .then(response => {
+                            setTimeout(() => {
+                                window.location.href = "/advertisements/users/"+userAdvertisementId.value;
+                            }, 1000);
+                            if (response.ok) {
+                                console.log('Comentario eliminado con éxito');
+                            } else {
+                                console.error('Error al eliminar el comentario');
+                            }
+                        })
+                        .catch(error => console.error('Error al enviar datos al backend:', error));
+        };
+
+        const register = () => {
+            const formData = new FormData();
+            formData.append("string-data", new Blob([JSON.stringify({
+                user: userAdvertisement.value.author,
+                ratedUser: auth.value,
+                comment: text.value
+            })], { type: "application/json" }));
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating', {
+                method: 'POST',
+                headers: {
+                                'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                            },
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(jsonData => {
+                    setTimeout(() => {
+                        window.location.href = "/advertisements/users/"+userAdvertisementId.value;
+                    }, 1000);
+                }
+                
+                
+                )
+                .catch(error => {
+                        console.error('Error al enviar datos al backend:', error);
+                        errorComentario.value = 'No puedes ponerte una reseña a ti mismo.';
+                    });
+
         };
 
         const fetchValorations = async () => {
@@ -55,6 +146,38 @@ export default {
                 console.error("Error:", error);
             }
         };
+        const openModal = () => {
+            deleteComment1();
+            let modal = document.getElementById('loginModal');
+            modal.style.display = "block";
+        }
+
+        const closeModal = () => {
+            let modal = document.getElementById('loginModal');
+            modal.style.display = "none";
+        }
+
+        const deleteUserAd = () => {
+    
+            fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/users/' + userAdvertisement.value.id, {
+                method: "DELETE",
+                headers: {
+                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                },
+                credentials: "include"
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('No se ha podido eliminar el anuncio de usuario')
+                    }
+                })
+                .then(data => {
+                    router.push(`/`);
+                })
+                .catch(() => {
+                    router.push(`/404`);
+                })
+        }
 
         const toggleLike = async () => {
   
@@ -93,9 +216,14 @@ export default {
             userAdvertisementId.value = route.params.id;
             fetchAdvertisement();
         });
-        
         return {
-            currentUser,
+            errorComentario,
+            text,
+            closeModal,
+            deleteComment2,
+            openModal,
+            register,
+            auth,
             userAdvertisement,
             commonHouses,
             hasLike,
@@ -103,6 +231,10 @@ export default {
             copyToClipboard,
             clipboardMessage,
             valorations,
+            addUser,
+            deleteUserAd,
+            currentUser,
+            equals
         }
     }
 }
@@ -111,35 +243,68 @@ export default {
 <template>
 
     <Navbar />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <div class="container d-flex align-items-center justify-content-center text-center mt-5">            
         <div class="panel">
             <div class="columna">
                 <div class="subseccion">
+                    <div id="loginModal" class="modal">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="col">
+                                        <h5 class="modal-title">Nuevo comentario</h5>
+                                    </div>
+                                    <div class="col">
+                                        <span @click="closeModal" class="success-checkmark" style="position: relative; align-items:center; margin: 1vh; padding: 1vh; float: right;">X</span>
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    <form @submit.prevent="register">
+                                        <div class="form-group">
+                                            <label for="commentText">Comentario</label>
+                                            <div class="alert alert-danger" role="alert" v-if="errorComentario">
+                                                <i class="fas fa-exclamation-triangle"></i> {{ errorComentario }}
+                                            </div>
+                                            <textarea class="form-control" id="text" v-model="text"></textarea>
+
+                                        </div>
+                                        <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:antiquewhite">Enviar</strong></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="imagen-circulo">
-                        <img :src="userAdvertisement.author.imageUri" alt = "Imagen de perfil">
+                        <img :src="userAdvertisement.author?.imageUri" alt = "Imagen de perfil">
                     </div>
 
                     <div class= "botones" style="margin-top: 3%;">
                         <div class="d-flex justify-content-center align-items-center">
-                        <div class="likes" style="margin-right: 1vw;">
-                            <div v-if="hasLike" @click="toggleLike" style="cursor:pointer">
-                                <i class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878"></i>
-                            </div>
-                            <div v-else>
-                                <i class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                            <div class="likes" style="margin-right: 1vw;">
+                                <div v-if="hasLike" @click="toggleLike" style="cursor:pointer">
+                                    <i class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878"></i>
+                                </div>
+                                <div v-else>
+                                    <i class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                                </div>
+                                
+                                <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
                             </div>
                             
-                            <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author.likes.length }} </span>
+                            <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:antiquewhite">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                            <div class="d-flex col" v-else>
+                                <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
+                                <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
+                            </div>
                         </div>
-                        <button type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
-                    </div>
+
                     </div>
                 </div>
                 
                 <div style="flex-basis: 30%;" class="subseccion">
 
-                    <div class="card mb-2 shadow" style="padding: 10px;">   
+                    <div class="card mb-2" style="padding: 10px;">   
                         <div class="card-body">
                             <h4 style="text-align: left;" class="card-title">Descripción</h4>
                             <hr>
@@ -151,8 +316,12 @@ export default {
                         <div style="margin-top: 5;">
                             <div class="d-flex justify-content-between">
                                 <h4 style=" text-align: left;">Comentarios</h4>
-                                <button type="button" class="button boton" style="padding: 1vh;"><strong>Comentar</strong></button>
-                            </div>
+                                    <i class="fas fa-trash-alt" 
+                                        @click="deleteComment2" 
+                                        style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="!equals">
+                                    </i>
+                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="!equals"><strong style="color:antiquewhite">Comentar</strong></button>
+                                    </div>
                             <hr>
                         </div>
                         <div v-if="valorations.length == 0" style="text-align: left;">Aún no hay comentarios...</div>
@@ -161,7 +330,7 @@ export default {
                             <div v-for="comentario in valorations" :key="comentario">
                                 <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;"> 
                                     <div class="card-body">
-                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.user.username}}</p>
+                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.ratedUser.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.ratedUser.username}}</p>
                                         <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ comentario.comment }}</p>
                                     </div>
                                 </div>

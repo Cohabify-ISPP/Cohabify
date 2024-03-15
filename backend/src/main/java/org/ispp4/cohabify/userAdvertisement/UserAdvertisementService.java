@@ -29,6 +29,10 @@ public class UserAdvertisementService {
     public Optional<UserAdvertisement> findById(ObjectId id) {
         return userAdvertisementRepository.findById(id);
     }
+
+    public Optional<UserAdvertisement> findByAuthorId(ObjectId authorId) {
+        return userAdvertisementRepository.findByAuthorId(authorId);
+    }
     
     @Transactional
     public void deleteUserAdvertisementById(ObjectId advertisementId) {

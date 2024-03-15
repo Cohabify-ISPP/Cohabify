@@ -19,21 +19,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
-
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/advertisements/users")
-@AllArgsConstructor
 public class UserAdvertisementController {
 
 	private UserAdvertisementService userAdvertisementService;
 	private UserService userService;
 	
-	@Override
-	public String toString() {
-		return "UserAdvertisementController [userAdvertisementService=" + userAdvertisementService + "]";
+	public UserAdvertisementController(UserAdvertisementService userAdvertisementService, UserService userService) {
+		this.userAdvertisementService = userAdvertisementService;
+		this.userService = userService;
 	}
 
 	@Transactional(readOnly = true)
@@ -61,6 +58,29 @@ public class UserAdvertisementController {
 		try {
 			ObjectId objId = new ObjectId(id);
 			userAd = userAdvertisementService.findById(objId);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+        if(userAd.isPresent()){
+            return new ResponseEntity<>(userAd.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+	@GetMapping("/myAdvertisement/{authorId}")
+    public ResponseEntity<UserAdvertisement> getUserAdvertisementByAuthorId(@PathVariable String authorId) {
+
+		if (authorId == null || authorId.isEmpty() || userService.findById(new ObjectId(authorId)).isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		Optional<UserAdvertisement> userAd = Optional.empty();
+
+		try {
+			ObjectId objId = new ObjectId(authorId);
+			userAd = userAdvertisementService.findByAuthorId(objId);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

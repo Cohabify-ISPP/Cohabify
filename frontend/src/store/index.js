@@ -7,7 +7,6 @@ const store = createStore({
   mutations: {
     cargarUser(state, user) {
       state.user = user;
-      console.log(state.user)
     },
     limpiarUser(state) {
       state.user = {};

@@ -235,7 +235,7 @@ export default {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/' + id, {
             method: 'GET',
             headers: {
-                'Authentication': 'Bearer ' + sessionStorage.getItem('authentication'),
+                'Authentication': 'Bearer ' + localStorage.getItem('authentication'),
             },
         });
         ad.value = await response.json();
@@ -280,7 +280,7 @@ export default {
           {
             method: "POST",
             headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                         'Content-Type': 'application/json'
                     },
             credentials: "include",
@@ -309,7 +309,7 @@ export default {
           {
             method: "GET",
             headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
             credentials: "include",
           });
@@ -336,7 +336,7 @@ export default {
             method: "POST",
             headers: {
               "Authentication":
-                "Bearer " + sessionStorage.getItem("authentication"),
+                "Bearer " + localStorage.getItem("authentication"),
             },
           }
         );
@@ -348,7 +348,7 @@ export default {
           {
             method: "GET",
             headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
             credentials: "include",
           });
@@ -413,7 +413,7 @@ export default {
       fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/'+id, {
         method: 'PUT',
         headers: {
-                        'Authentication': 'Bearer ' + sessionStorage.getItem("authentication"),
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
         body: formData,
       })

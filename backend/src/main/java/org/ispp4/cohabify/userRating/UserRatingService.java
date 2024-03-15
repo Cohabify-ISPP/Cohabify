@@ -14,9 +14,8 @@ public class UserRatingService {
 
     UserRatingRepository userRatingRepository;
 
-    @Transactional
     public UserRating save(UserRating userRating) {
-        return userRatingRepository.save(userRating);
+        return (UserRating) userRatingRepository.save(userRating);
     }
 
     @Transactional
@@ -28,6 +27,7 @@ public class UserRatingService {
     public void deleteByRatedUserId(ObjectId ratedUserId) {
         userRatingRepository.deleteByRatedUserId(ratedUserId);
     }
+    
 
     @Transactional
     public void deleteById(ObjectId id) {
@@ -42,6 +42,11 @@ public class UserRatingService {
     @Transactional
     public List<UserRating> findByUserId(ObjectId userId) {
         return userRatingRepository.findByUserId(userId);
+    }
+    
+    @Transactional
+    public List<UserRating> findByUserIdAndRatedUserId(ObjectId ratedUserId, ObjectId userId) {
+        return userRatingRepository.findByUserIdAndRatedUserId(userId, ratedUserId);
     }
 
     public List<UserRating> findByRatedUserId(ObjectId ratedUserId) {

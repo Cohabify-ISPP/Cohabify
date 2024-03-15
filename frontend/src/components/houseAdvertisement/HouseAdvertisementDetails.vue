@@ -8,9 +8,10 @@ const houseAdvertisement = ref(null);
 const selectedImage = ref(0)
 
 const clipboardMessage = ref(false);
-
+const auth = ref();
+const valorations = ref([]);
 const isLoading = ref(true);
-
+const errorComentario = ref(null);
 const fetchError = ref(null);
 
 const truncateDescription = (description) => {
@@ -51,8 +52,121 @@ function copyToClipboard() {
             console.error("Error al copiar al portapapeles: ", error);
         });
 }
+const fetchAdvertisement = async () => {
+    try {
+        const userFetch = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
+        {
+            method: "POST",
+            headers: {
+            "Authentication":
+                "Bearer " + localStorage.getItem("authentication"),
+            },
+        }
+        );
 
+        const userData = await userFetch.json();
+        auth.value = userData;
+
+    } catch (error) {
+        console.error("Error:", error);
+        
+
+    }
+};
+const openModal = () => {
+    deleteComment1();
+    let modal = document.getElementById('loginModal');
+    modal.style.display = "block";
+}
+const closeModal = () => {
+    let modal = document.getElementById('loginModal');
+    modal.style.display = "none";
+}
+const deleteComment1 = () => {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + auth.value.id + '/' + houseAdvertisement.value.author.id, {
+        method: 'DELETE',
+        headers: {
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log('Comentario eliminado con éxito');
+            } else {
+                console.error('Error al eliminar el comentario');
+            }
+        })
+        .catch(error => console.error('Error al enviar datos al backend:', error));
+};
+const deleteComment2 = () => {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + auth.value.id + '/' + houseAdvertisement.value.author.id, {
+        method: 'DELETE',
+        headers: {
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+    })
+        .then(response => {
+            setTimeout(() => {
+                window.location.href = "/advertisements/houses/"+houseAdvertisement.value.id;
+            }, 1000);
+            if (response.ok) {
+                console.log('Comentario eliminado con éxito');
+            } else {
+                console.error('Error al eliminar el comentario');
+            }
+        })
+        .catch(error => console.error('Error al enviar datos al backend:', error));
+};
+
+
+const register = () => {
+    const formData = new FormData();
+    console.log(auth.value);
+    formData.append("string-data", new Blob([JSON.stringify({
+        user: houseAdvertisement.value.author,
+        ratedUser: auth.value,
+        comment: text.value
+    })], { type: "application/json" }));
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating', {
+        method: 'POST',
+        headers: {
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                    },
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(jsonData => {
+            setTimeout(() => {
+                window.location.href = "/advertisements/houses/"+houseAdvertisement.value.id;
+            }, 1000);
+        }
+        
+        
+        )
+        .catch(error => {
+                        console.error('Error al enviar datos al backend:', error);
+                        errorComentario.value = 'No puedes ponerte una reseña a ti mismo.';
+                    });
+
+};
+const fetchValorations = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + "/api/userRating/user/"+houseAdvertisement.value.author.id,
+                    {
+                        method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                        },
+                        credentials: "include",
+                    });
+                const data = await response.json();
+                valorations.value = data;
+            } catch (error) {
+                console.error("Error:", error);
+            }
+};
 onMounted(() => {
+    fetchAdvertisement();
     fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/' + id, {
         method: "GET",
         headers: {
@@ -62,7 +176,7 @@ onMounted(() => {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('No se han podido cargar la vivienda')
+            throw new Error('No se ha podido cargar la vivienda')
         }
         
         return response.json();
@@ -70,6 +184,7 @@ onMounted(() => {
     }).then(data => {
         isLoading.value = false
         houseAdvertisement.value = data
+        fetchValorations();
         nextTick(() => {
             const carousel = document.getElementById('imgCarousel');
             
@@ -86,15 +201,40 @@ onMounted(() => {
         fetchError.value = error.message
     });
 });
-        
-        
+         
     
 </script>
 <template>
 
     <Navbar />
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <div class="container" >
+        <div id="loginModal" class="modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="col">
+                            <h5 class="modal-title">Nuevo comentario</h5>
+                        </div>
+                        <div class="col">
+                            <span @click="closeModal" class="success-checkmark" style="position: relative; align-items:center; margin: 1vh; padding: 1vh; float: right;">X</span>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="register">
+                            <div class="form-group">
+                                <label for="commentText">Comentario</label>
+                                <div class="alert alert-danger" role="alert" v-if="errorComentario">
+                                    <i class="fas fa-exclamation-triangle"></i> {{ errorComentario }}
+                                </div>
+                                <textarea class="form-control" id="text" v-model="text"></textarea>
+                            </div>
+                            <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:antiquewhite">Enviar</strong></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div v-if="isLoading" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
@@ -230,6 +370,7 @@ onMounted(() => {
                     <img src="https://motor.elpais.com/wp-content/uploads/2022/01/google-maps-22-1046x616.jpg" class="rounded-4" style="max-width:100%; max-height:100%;">
                 </div>
             </div>
+            
 
             <div class="col-6 mb-4 mt-5" style="padding-left: 5%; padding-right: 5%;">   
                 <div class="card mb-3 shadow " style="padding: 10px;">   
@@ -241,6 +382,31 @@ onMounted(() => {
                 </div>  
                 <div class="d-flex justify-content-center">
                     <button type="button" class="boton"><strong>Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                </div>
+                <div style="margin-top: 5%;"> 
+                    <div style="margin-top: 5;">
+                        <div class="d-flex justify-content-between">
+                            <h4 style=" text-align: left;">Comentarios</h4>
+                                    <i class="fas fa-trash-alt" 
+                                        @click="deleteComment2" 
+                                        style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;">
+                                    </i>
+                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
+                            </div>
+                        <hr>
+                    </div>
+                    <div v-if="valorations.length == 0" style="text-align: left;">Aún no hay comentarios...</div>
+
+                    <div v-else style="overflow-y: auto; max-height: 50vh;">
+                        <div v-for="comentario in valorations" :key="comentario">
+                            <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;"> 
+                                <div class="card-body">
+                                    <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.ratedUser.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.ratedUser.username}}</p>
+                                    <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ comentario.comment }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
