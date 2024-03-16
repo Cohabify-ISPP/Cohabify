@@ -3,7 +3,6 @@ package org.ispp4.cohabify.houseAdvertisement;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +21,6 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -234,4 +232,3 @@ public class HouseAdvertisementController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-

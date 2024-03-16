@@ -21,7 +21,6 @@ import org.ispp4.cohabify.user.User;
 @Document(collection = "houseAdvertisements")
 public class HouseAdvertisement extends BaseEntity {
 
-
     @NotBlank
     @Size(min = 1, max = 100)
     private String title;
@@ -34,7 +33,6 @@ public class HouseAdvertisement extends BaseEntity {
     @PositiveOrZero
     private Double price;
 
-  
     @DBRef
     private List<User> tenants;
 
@@ -45,4 +43,5 @@ public class HouseAdvertisement extends BaseEntity {
 
     @DBRef
     private User author;
+
 }

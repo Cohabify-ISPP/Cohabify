@@ -6,7 +6,6 @@ import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.UserRatingRequest;
 import org.ispp4.cohabify.dto.FormItemValidationError;
-import org.ispp4.cohabify.userRating.UserRating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

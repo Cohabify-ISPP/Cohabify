@@ -1,11 +1,6 @@
 package org.ispp4.cohabify.dto;
-import org.bson.types.ObjectId;
 import org.ispp4.cohabify.tag.Tag;
 import org.ispp4.cohabify.user.Gender;
-import org.ispp4.cohabify.user.Plan;
-import org.ispp4.cohabify.user.User;
-
-import java.util.ArrayList;
 import java.util.List;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

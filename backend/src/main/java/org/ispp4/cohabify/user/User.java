@@ -78,7 +78,6 @@ public class User extends BaseEntity {
     @DBRef
     private List<User> likes = new ArrayList<User>();
     
-
     public Boolean isAdmin() {
         return this.authorities.contains("Admin");
     }

@@ -220,9 +220,9 @@ public class UserController {
                 } else {
                     User raterUser = optionalRaterUser.get();
                     List<User> positiveRaters = user.getLikes();
-
-                    if (positiveRaters.contains(raterUser)) {
-                        positiveRaters.remove(raterUser);
+                    Optional<User> foundUser = positiveRaters.stream().filter(x-> x.getId().equals(raterId)).findFirst();
+                    if (foundUser.isPresent()) {
+                        positiveRaters.remove(foundUser.get());
                     } else {
                         positiveRaters.add(raterUser);
                     }
