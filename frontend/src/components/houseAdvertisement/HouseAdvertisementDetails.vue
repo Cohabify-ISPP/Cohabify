@@ -725,12 +725,6 @@ onMounted(() => {
     display: inline-flex;
 }
 
-.botones {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
 .boton {
     display: flex;
     justify-content: center;
