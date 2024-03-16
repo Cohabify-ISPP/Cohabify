@@ -40,7 +40,6 @@ export default {
 
                 } catch (error) {
                 console.error("Error:", error);
-                
             }
         };
 
@@ -283,23 +282,21 @@ export default {
                         <div class="card-body">
                             <h4 style="text-align: left;" class="card-title">Descripción</h4>
                             <hr>
-                            <p v-if="userAdvertisement.description === ''" style="text-align: left;">Este usuario no ha establecido una descripción</p>
+                            <p v-if="userAdvertisement.description === ''" style="text-align: justify; word-wrap: break-word" class="card-text">Este usuario no ha establecido una descripción</p>
                             <p v-else style="text-align: justify; word-wrap: break-word" class="card-text">{{ userAdvertisement.description }}</p>
                         </div>
                     </div>
 
                     <div style="margin-top: 5%;"> 
-                        <div style="margin-top: 5;">
-                            <div class="d-flex justify-content-between">
-                                <h4 style=" text-align: left;">Comentarios</h4>
-                                <i class="fas fa-trash-alt" 
-                                    @click="deleteComment2" 
-                                    style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="userAdvertisement.author?.username !== currentUser.username">
-                                </i>
-                                <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="userAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
-                            </div>
-                            <hr>
+                        <div class="d-flex justify-content-between">
+                            <h4 style=" text-align: left;">Comentarios</h4>
+                            <i class="fas fa-trash-alt" @click="deleteComment2" 
+                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="userAdvertisement.author?.username !== currentUser.username">
+                            </i>
+                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="userAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
                         </div>
+                        <hr>
+                        
                         <div v-if="valorations.length == 0" style="text-align: left;">Aún no hay comentarios...</div>
 
                         <div v-else style="overflow-y: auto; max-height: 50vh;">

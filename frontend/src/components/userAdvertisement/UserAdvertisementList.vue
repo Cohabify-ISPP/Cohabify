@@ -252,7 +252,7 @@ export default {
         </div>
       </div>
       <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in currentAdvertisements" :key="anuncio">
-        <a style="color: inherit; text-decoration: none; width:100%" :href="'/advertisements/users/' + anuncio?.id">
+        <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + anuncio?.id)">
           <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
             <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario"
               style="margin-right: 10px;">

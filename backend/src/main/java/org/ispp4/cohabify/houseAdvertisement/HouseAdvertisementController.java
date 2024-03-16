@@ -232,4 +232,3 @@ public class HouseAdvertisementController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-

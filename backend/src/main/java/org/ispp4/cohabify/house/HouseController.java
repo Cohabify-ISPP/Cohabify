@@ -1,18 +1,23 @@
 package org.ispp4.cohabify.house;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
-import org.ispp4.cohabify.dto.HouseRequest;
 import org.ispp4.cohabify.dto.FormItemValidationError;
+import org.ispp4.cohabify.dto.HouseRequest;
+import org.ispp4.cohabify.user.User;
+import org.ispp4.cohabify.user.UserService;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,9 +29,11 @@ import jakarta.validation.Valid;
 public class HouseController {
     
     private final HouseService houseService;
+    private final UserService userService;
 
-    public HouseController(HouseService houseService) {
+    public HouseController(HouseService houseService, UserService userService) {
         this.houseService = houseService;
+        this.userService = userService;
     }
 
     @Transactional(readOnly = true)
@@ -72,6 +79,40 @@ public class HouseController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(house, HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/houses/like/{id}/{raterId}")
+    public ResponseEntity<House> modifyRaters(@PathVariable("id") ObjectId id,
+            @PathVariable("raterId") ObjectId raterId) {
+
+            House house = houseService.findById(id);
+        try {
+            if (house == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            
+            } else {    
+                Optional<User> optionalRaterUser = userService.findById(raterId);
+                if (optionalRaterUser.isPresent() == false) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+                } else {
+                    User raterUser = optionalRaterUser.get();
+                    List<User> raters = house.getLikes();
+                    Optional<User> foundUser = raters.stream().filter(x-> x.getId().equals(raterId)).findFirst();
+                    
+                    if (foundUser.isPresent()) {
+                        raters.remove(foundUser.get());
+                    } else {
+                        raters.add(raterUser);
+                    }
+                    house.setLikes(raters);
+                    house = houseService.save(house);
+                    return new ResponseEntity<House>(house, HttpStatus.OK);
+                }
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

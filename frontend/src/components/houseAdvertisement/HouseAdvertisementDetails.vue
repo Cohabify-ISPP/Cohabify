@@ -1,18 +1,21 @@
 <script setup>
-import { nextTick } from "vue";
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onMounted, nextTick, computed } from "vue";
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
+const route = useRoute();
+const router = useRouter();
+const id = route.params.id;
 const houseAdvertisement = ref(null);
-
 const selectedImage = ref(0);
-
 const clipboardMessage = ref(false);
-const auth = ref();
+const store = useStore();
+const currentUser = computed(() => store.state.user);
 const valorations = ref([]);
 const isLoading = ref(true);
 const errorComentario = ref(null);
 const fetchError = ref(null);
+const text = ref("");
 
 const truncateDescription = (description) => {
   const words = description.split(" ");
@@ -22,9 +25,6 @@ const truncateDescription = (description) => {
     return description;
   }
 };
-
-const route = useRoute();
-const id = route.params.id;
 
 function parseHeating(heating) {
   if (heating === "CENTRAL_HEATING") {
@@ -51,24 +51,7 @@ function copyToClipboard() {
       console.error("Error al copiar al portapapeles: ", error);
     });
 }
-const fetchAdvertisement = async () => {
-  try {
-    const userFetch = await fetch(
-      import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
-      {
-        method: "POST",
-        headers: {
-          Authentication: "Bearer " + localStorage.getItem("authentication"),
-        },
-      }
-    );
 
-    const userData = await userFetch.json();
-    auth.value = userData;
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
 const openModal = () => {
   deleteComment1();
   let modal = document.getElementById("loginModal");
@@ -78,11 +61,12 @@ const closeModal = () => {
   let modal = document.getElementById("loginModal");
   modal.style.display = "none";
 };
+
 const deleteComment1 = () => {
   fetch(
     import.meta.env.VITE_BACKEND_URL +
       "/api/userRating/ratedUser/" +
-      auth.value.id +
+      currentUser.value.id +
       "/" +
       houseAdvertisement.value.author.id,
     {
@@ -103,11 +87,12 @@ const deleteComment1 = () => {
       console.error("Error al enviar datos al backend:", error)
     );
 };
+
 const deleteComment2 = () => {
   fetch(
     import.meta.env.VITE_BACKEND_URL +
       "/api/userRating/ratedUser/" +
-      auth.value.id +
+      currentUser.value.id +
       "/" +
       houseAdvertisement.value.author.id,
     {
@@ -135,14 +120,14 @@ const deleteComment2 = () => {
 
 const register = () => {
   const formData = new FormData();
-  console.log(auth.value);
+  console.log(currentUser.value);
   formData.append(
     "string-data",
     new Blob(
       [
         JSON.stringify({
           user: houseAdvertisement.value.author,
-          ratedUser: auth.value,
+          ratedUser: currentUser.value,
           comment: text.value,
         }),
       ],
@@ -168,6 +153,7 @@ const register = () => {
       errorComentario.value = "No puedes ponerte una reseña a ti mismo.";
     });
 };
+
 const fetchValorations = async () => {
   try {
     const response = await fetch(
@@ -188,9 +174,55 @@ const fetchValorations = async () => {
     console.error("Error:", error);
   }
 };
-onMounted(() => {
-  fetchAdvertisement();
-  fetch(import.meta.env.VITE_BACKEND_URL + "/api/advertisements/houses/" + id, {
+
+const toggleLike = async () => {
+    
+    try {
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/houses/like/${houseAdvertisement.value.house.id}/${currentUser.value.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+            },
+        });
+
+        if (response.ok) {
+            if (houseAdvertisement.value.house.likes.some((like) => like.id === currentUser.value.id)) {
+                houseAdvertisement.value.house.likes = houseAdvertisement.value.house.likes.filter((like) => like.id !== currentUser.value.id);
+            } else {
+                houseAdvertisement.value.house.likes.push(currentUser.value);
+            }
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
+
+const deleteHouseAd = (id) => {
+    
+    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/' + id, {
+        method: "DELETE",
+        headers: {
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+        credentials: "include"
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se ha podido eliminar el anuncio de vivienda')
+            }
+        })
+        .then(data => {
+            router.push(`/advertisements/houses`);
+        })
+        .catch(error => {
+            fetchError.value = error
+        })
+}
+
+const fetchHouseAdvertisement = () => {
+    fetch(import.meta.env.VITE_BACKEND_URL + "/api/advertisements/houses/" + id, {
     method: "GET",
     headers: {
       Authentication: "Bearer " + localStorage.getItem("authentication"),
@@ -225,10 +257,17 @@ onMounted(() => {
       isLoading.value = false;
       fetchError.value = error.message;
     });
+}
+
+onMounted(() => {
+    fetchHouseAdvertisement();
 });
 </script>
+
 <template>
+
   <Navbar />
+
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
@@ -342,6 +381,7 @@ onMounted(() => {
               </button>
             </div>
           </div>
+
           <div class="container w-75">
             <div class="row align-items-center">
               <div
@@ -361,14 +401,9 @@ onMounted(() => {
             </div>
           </div>
         </div>
+
         <div class="col px-6" style="padding-left: 5%; padding-right: 5%">
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            "
-          >
+          <div style="display: flex; align-items: center; justify-content: space-between;">
             <h1 style="text-align: left">{{ houseAdvertisement.title }}</h1>
             <button class="btn btn-share" @click="copyToClipboard()">
               <i class="bi bi-share-fill"></i>
@@ -513,9 +548,8 @@ onMounted(() => {
                             v-if="tenant.gender == 'OTRO'"
                           ></i>
                         </div>
-                        <p style="text-align: justify" class="card-text">
-                          {{ truncateDescription(tenant.description) }}
-                        </p>
+                            <p v-if="houseAdvertisement.description === ''" style="text-align: justify; word-wrap: break-word" class="card-text">Esta vivienda tiene establecida descripción</p>
+                            <p v-else style="text-align: justify; word-wrap: break-word" class="card-text">{{ truncateDescription(tenant.description) }}</p>
                       </div>
                     </div>
                   </div>
@@ -548,47 +582,39 @@ onMounted(() => {
             <div class="card-body">
               <h4 style="text-align: left" class="card-title">Descripción</h4>
               <hr />
-              <p style="text-align: justify" class="card-text">
-                {{ houseAdvertisement.description }}
-              </p>
+                <p v-if="houseAdvertisement.description === ''" style="text-align: justify; word-wrap: break-word" class="card-text">Este usuario no ha establecido una descripción</p>
+                <p v-else style="text-align: justify; word-wrap: break-word" class="card-text"> {{ houseAdvertisement.description }}</p>               
             </div>
           </div>
+
           <div class="d-flex justify-content-center">
-            <button type="button" class="boton">
-              <strong
-                >Iniciar chat <i class="bi bi-chat" style="margin-left: 5px"></i
-              ></strong>
-            </button>
+            <div class="d-flex justify-content-center align-items-center">
+                    <div class="likes" style="margin-right: 1vw;">
+                        <div @click="toggleLike" style="cursor: pointer">
+                            <i v-if="houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878" ></i>
+                            <i v-else class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                        </div>
+                                 
+                        <span style="font-weight: bold; font-size: large; color:#28426B"> {{ houseAdvertisement.house?.likes.length }} </span>
+                    </div>
+                            
+                    <button v-if="currentUser.id !== houseAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                    <div class="d-flex col" v-else>
+                        <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/houses/edit/${houseAdvertisement.id}`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
+                        <button type="button" class="btn btn-danger"  @click="deleteHouseAd(houseAdvertisement.id)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
+                    </div>
+                </div>
           </div>
-          <div style="margin-top: 5%">
-            <div style="margin-top: 5">
-              <div class="d-flex justify-content-between">
-                <h4 style="text-align: left">Comentarios</h4>
-                <i
-                  class="fas fa-trash-alt"
-                  @click="deleteComment2"
-                  style="
-                    cursor: pointer;
-                    width: 38px;
-                    height: 38px;
-                    border: 0.2em solid black;
-                    border-radius: 50%;
-                    padding: 0.5em;
-                    background-color: #f2f2f2;
-                  "
-                >
-                </i>
-                <button
-                  type="button"
-                  @click="openModal"
-                  class="button boton"
-                  style="padding: 1vh"
-                >
-                  <strong style="color: white">Comentar</strong>
-                </button>
-              </div>
-              <hr />
-            </div>
+
+          <div style="margin-top: 5%;"> 
+                <div class="d-flex justify-content-between">
+                    <h4 style=" text-align: left;">Comentarios</h4>
+                        <i class="fas fa-trash-alt" @click="deleteComment2" 
+                            style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="houseAdvertisement.author?.username !== currentUser.username">
+                        </i>
+                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="houseAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
+                </div>
+                <hr>
             <div v-if="valorations.length == 0" style="text-align: left">
               Aún no hay comentarios...
             </div>
@@ -693,5 +719,31 @@ onMounted(() => {
 
 .card-user {
   border-top: 1vh solid #28426b;
+}
+
+.likes {
+    display: inline-flex;
+}
+
+.botones {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.boton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1%; 
+    background-color:#28426B;
+    border-radius: 10px;
+    width: 27%;
+    height: 5vh;
+}
+
+.boton strong {
+    display: flex;
+    align-items: center;
 }
 </style>
