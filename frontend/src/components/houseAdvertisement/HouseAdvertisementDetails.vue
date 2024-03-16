@@ -217,7 +217,7 @@ onMounted(() => {
                             <h5 class="modal-title">Nuevo comentario</h5>
                         </div>
                         <div class="col">
-                            <span @click="closeModal" class="success-checkmark" style="position: relative; align-items:center; margin: 1vh; padding: 1vh; float: right;">X</span>
+                            <span @click="closeModal" class="success-checkmark" style="position: relative; align-items:center; margin: 1vh; padding: 1vh; float: right; cursor: pointer">X</span>
                         </div>
                     </div>
                     <div class="modal-body">
@@ -229,7 +229,7 @@ onMounted(() => {
                                 </div>
                                 <textarea class="form-control" id="text" v-model="text"></textarea>
                             </div>
-                            <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:antiquewhite">Enviar</strong></button>
+                            <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:white">Enviar</strong></button>
                         </form>
                     </div>
                 </div>
@@ -391,7 +391,7 @@ onMounted(() => {
                                         @click="deleteComment2" 
                                         style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;">
                                     </i>
-                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:antiquewhite">Comentar</strong></button>
+                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;"><strong style="color:white">Comentar</strong></button>
                             </div>
                         <hr>
                     </div>

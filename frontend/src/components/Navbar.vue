@@ -124,7 +124,7 @@ watch(user, (newValue) => {
         
       </ul>
       
-      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw;">
+      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center hidden-arrow"
           href="#"
@@ -140,7 +140,7 @@ watch(user, (newValue) => {
             width="40"
             alt="avatar"
             loading="lazy"
-            style="object-fit: cover;"
+            style="object-fit: cover; margin-right: 0.6vw;"
           />
           <img v-else
             src="https://st4.depositphotos.com/14903220/22197/v/450/depositphotos_221970610-stock-illustration-abstract-sign-avatar-icon-profile.jpg"
@@ -149,9 +149,9 @@ watch(user, (newValue) => {
             width="40"
             alt="avatar"
             loading="lazy"
-            style="object-fit: cover;"
+            style="object-fit: cover; margin-right: 0.6vw;"
           />
-          <h5 style="margin-left: 10px !important; margin-right: 6px !important;">{{ user?.username }}</h5>
+          {{ user?.username }}
           <img v-if="user?.plan === 'explorer'" 
             style="max-height: 35px;"
             src="/images/verificado.png"
@@ -163,7 +163,7 @@ watch(user, (newValue) => {
           aria-labelledby="navbarDropdownMenuAvatar"
         >
           <li>
-            <a class="dropdown-item " href="/user/" @click.prevent="$router.push('/user/' + user?.id)">Perfil</a>
+            <a class="dropdown-item" href="/user/" @click.prevent="$router.push('/user/' + user?.id)">Perfil</a>
           </li>
           <li class="d-lg-none">
             <a class="dropdown-item" href="#">Chat <span class="badge rounded-pill badge-notification bg-danger">1</span></a>
@@ -190,12 +190,23 @@ watch(user, (newValue) => {
 <style scoped>
 
  .dropdown-toggle::after {
-  border-top-color: white; /* Cambia esto al color que prefieras */
-  border-width: 0.3em; /* Cambia esto al tamaño que prefieras */
+  border-top-color: white;
+  border-width: 0.3em;
 }
 
 .dropdown-toggle:hover::after {
-  border-top-color: #a4c7ff; /* Cambia esto al color que prefieras */
+  border-top-color: #a4c7ff;
   transition: 0.2s;
 }
+
+.dropdown::after {
+  border-top-color: white;
+  border-width: 0.3em;
+}
+
+.dropdown:hover::after {
+  border-top-color: #a4c7ff;
+  transition: 0.2s;
+}
+
 </style>

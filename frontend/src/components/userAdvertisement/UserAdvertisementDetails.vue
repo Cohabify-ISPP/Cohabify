@@ -256,7 +256,7 @@ export default {
                                         <h5 class="modal-title">Nuevo comentario</h5>
                                     </div>
                                     <div class="col">
-                                        <span @click="closeModal" class="success-checkmark" style="position: relative; align-items:center; margin: 1vh; padding: 1vh; float: right;">X</span>
+                                        <span @click="closeModal" class="success-checkmark" style="position: relative; align-items:center; margin: 1vh; padding: 1vh; float: right; cursor: pointer;">X</span>
                                     </div>
                                 </div>
                                 <div class="modal-body">
@@ -269,7 +269,7 @@ export default {
                                             <textarea class="form-control" id="text" v-model="text"></textarea>
 
                                         </div>
-                                        <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:antiquewhite">Enviar</strong></button>
+                                        <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:white">Enviar</strong></button>
                                     </form>
                                 </div>
                             </div>
@@ -292,7 +292,7 @@ export default {
                                 <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
                             </div>
                             
-                            <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:antiquewhite">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                            <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                             <div class="d-flex col" v-else>
                                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
                                 <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
@@ -320,7 +320,7 @@ export default {
                                         @click="deleteComment2" 
                                         style="width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="!equals">
                                     </i>
-                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="!equals"><strong style="color:antiquewhite">Comentar</strong></button>
+                                    <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="!equals"><strong style="color:white">Comentar</strong></button>
                                     </div>
                             <hr>
                         </div>
