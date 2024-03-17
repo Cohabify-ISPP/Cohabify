@@ -1,9 +1,9 @@
 <template>
   <Navbar />
-  <h1 class="text-center mt-4">Anuncio de vivienda</h1>
+  <h1 class="text-center mt-4">Anuncio de vivienda (Editar)</h1>
   <div class="container card2" style="margin-top: 40px;margin-bottom: 40px;">
     <div v-show="success" class="alert alert-success alert-dismissible fade show" role="alert">
-        Anuncio creado con éxito.
+        Anuncio editado con éxito.
       </div>
     <form @submit.prevent="register">
       <div class="row mt-2 justify-content-center">
@@ -24,33 +24,17 @@
               <label for="cadastre" class="form-label text-white"><strong>Catastro</strong></label>
               <input type="text" class="form-control" id="cadastre" v-model="cadastre" required
                 placeholder="12345678901234567890..." minlength="20" maxlength="20">
-          
             </div>
             <div class="mb-3  text-start col">
               <label for="location" class="form-label text-white"><strong>Ubicación</strong></label>
-              <input type="text" readonly class="form-control" id="location"  maxlength="100" v-model="location" required placeholder="C/...">
-            </div>
-          </div>
-          <div class="row  mb-3">
-            <div class="mb-3  text-start col" style="display: flex; justify-content: center;">
-              <button
-              style="margin-right: 10px; max-height: 36px;"
-              type="button"
-              class="btn btn-success"
-              @click.prevent="fetchCadastre"
-            >
-              Buscar
-            </button>
-            </div>
-            <div class="mb-3  text-start col">
-              <label for="location" class="form-label text-white"><strong>Seleccionado: {{ selectedCadastre }}</strong></label>
+              <input type="text" class="form-control" id="location"  maxlength="100" v-model="location" required placeholder="C/...">
             </div>
           </div>
           <div class="row  mb-3">
             <div class="col text-start">
               <label for="area" class="form-label text-white"><strong>Superficie</strong></label>
               <div class="input-group">
-                <input type="number" readonly class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
+                <input type="number" class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
                 <span class="input-group-text" style="color: grey;">m²</span>
               </div>
 
@@ -116,6 +100,12 @@
                 <div class="row justify-content-center" >  
                   <button type="button" class="btn-primary col-md-3" style="margin-top: 20px;" @click.prevent="fetchUser">Buscar</button>
                 </div>
+              <div style="max-height: 60px; overflow-y: auto;">
+                <div v-for="(tenant, index) in filteredTenants" :key="index">
+                  <input type="checkbox" :id="tenant.username" :value="tenant" v-model="selectedTenants">
+                  <label :for="tenant.username">{{ tenant.username }}</label>
+                </div>
+              </div>
               <p class="text-white text-start"><strong>Inquilinos seleccionados:</strong></p>
               <div class="text-start mb-3" v-if="selectedTenants.length > 0">
                 <div style="max-height: 60px; overflow-y: auto;">
@@ -136,7 +126,7 @@
             <div class="btn-group" role="group"  style="max-height: 60px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
               <div class="tags-container">
               <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
-                :class="{ 'selected': selectedTags.includes(tag), 'unselected': !selectedTags.includes(tag) }">
+              :class="{ 'selected': selectedTags.some(selectedTag => selectedTag.id === tag.id), 'unselected': !selectedTags.some(selectedTag => selectedTag.id === tag.id) }">
                 {{ tag.tag }}
               </span>
               </div>
@@ -165,15 +155,16 @@
                   <span class="delete" @click="deleteImage(index)">&times;</span>
                   <img :src="image.url" />
                 </div>
+                <div class="image" v-for="(imageBackend, index) in imagesBack" :key="index">
+                  <span class="delete" @click="deleteImageBackend(index)">&times;</span>
+                  <img :src="getImageUrl(imageBackend)" />
+                </div>
               </div>
             </div>
             <!--Success-->
             <div class="mt-3">
               <button style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
               <button type="submit" class="btn btn-danger" @click="onCancel">Cancelar</button>
-            </div>
-            <div class="mt-3" v-if="authorAdvertisementsNumber > 0">
-              <strong>El propietario deberá pagar 5€ por publicar esta nueva vivienda.</strong>
             </div>
           </div>
           </div>
@@ -183,12 +174,14 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, computed } from 'vue'
-import { useStore } from 'vuex'
+import { ref, onBeforeMount, h} from 'vue'
+import { useRoute } from 'vue-router';
 
 export default {
   setup() {
-
+    const route = useRoute();
+    const id = route.params.id;
+    const houseId = ref()
     var isDragging = ref(false)
     const roomsNumber = ref(1)
     const bathroomsNumber = ref(1)
@@ -201,8 +194,6 @@ export default {
     const selectedTags = ref([])
     const tags = ref([])
     const success = ref(false)
-    const filteredTenants = ref([])
-    const selectedCadastre = ref('')
     
 
     //ADVERTISEMENT
@@ -215,45 +206,59 @@ export default {
     const tenantsSelect = ref([])
     const selectedTenants = ref([])
     const imagesUrl = ref([])
+    const imagesBack= ref([])
     const images = ref([])
-    const auth = ref();
-    const authorAdvertisementsNumber = ref([]);
+    const auth = ref()
+    const ad = ref()
+  
 
-    const store = useStore()
-    const user = computed(() => store.state.user);
+
+  
 
 
     onBeforeMount(() => {
-      fetchTags();
+      fetchAd(),
+      fetchTags()
     });
 
-    const fetchAuthorAdvertisements = async () => {
-      fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/owner/' + user.value.id, {
-        method: "GET",
-        headers: {
-          'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
-        },
-        credentials: "include",
-      })
-      .then((response) => {
-        return response.json();
-      })
-      .then((json) => {
-        authorAdvertisementsNumber.value = json.length;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    }
-
     const toggleTag = (tag) => {
-      const index = selectedTags.value.indexOf(tag);
-      if (index !== -1) {
+    const index = selectedTags.value.findIndex(selectedTag => selectedTag.id === tag.id);
+    if (index !== -1) {
         selectedTags.value.splice(index, 1);
-      } else {
+    } else {
         selectedTags.value.push(tag);
-      }
-    };
+    }
+};
+
+    const fetchAd = async () => {
+       
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/' + id, {
+            method: 'GET',
+            headers: {
+                'Authentication': 'Bearer ' + localStorage.getItem('authentication'),
+            },
+        });
+        ad.value = await response.json();
+        title.value = ad.value.title;
+        description.value = ad.value.description;
+        price.value = ad.value.price;
+        selectedTenants.value = ad.value.tenants;
+        roomsNumber.value = ad.value.house.roomsNumber;
+        bathroomsNumber.value = ad.value.house.bathroomsNumber;
+        floor.value = ad.value.house.floor;
+        area.value = ad.value.house.area;
+        location.value = ad.value.house.location;
+        cadastre.value = ad.value.house.cadastre;
+        heating.value = ad.value.house.heating;
+        houseId.value = ad.value.house.id;
+        for (let i = 0; i < ad.value.house.tags.length; i++) {
+          toggleTag(ad.value.house.tags[i]);
+        }
+        imagesBack.value = ad.value.images;
+        
+        
+        
+    }
 
     const fetchUser = async () => {
       try {
@@ -313,7 +318,6 @@ export default {
           const data = await response.json();
           tags.value = data;
           await fetchHeating()
-          fetchAuthorAdvertisements();
 
         } else {
           window.location.href = "/404";
@@ -362,30 +366,15 @@ export default {
       }
     };
 
-    const fetchCadastre = async () => {
-      try{
-        const response = await fetch(`https://ovc.catastro.meh.es/OVCServWeb/OVCWcfCallejero/COVCCallejeroCodigos.svc/json/Consulta_DNPRC_Codigos?RefCat=${cadastre.value}`)
-        if (response.ok) {
-          const data = await response.json();
-          if (data.consulta_dnprcResult.control.cuerr){
-           console.error(data.consulta_dnprcResult.lerr[0].des);
-          }
-          location.value = data.consulta_dnprcResult.bico.bi.ldt;
-          area.value = data.consulta_dnprcResult.bico.bi.debi.sfc;
-          selectedCadastre.value = cadastre.value;
-
-        } else {
-          window.location.href = "/404";
+    const getImageUrl = (image) => {
+          return image.startsWith('/') ? import.meta.env.VITE_BACKEND_URL + image : image
         }
-      }catch (error){
-        console.error("Error:", error);
-      }
-    }
+
     
 
     const register = () => {
 
-      if (images.value.length === 0) {
+      if (images.value.length === 0 && imagesBack.value.length === 0) {
         alert("Selecciona al menos una imagen");
         return;
       }
@@ -396,37 +385,44 @@ export default {
       
       const formData = new FormData();
       formData.append("string-data", new Blob([JSON.stringify({
+        id: ad.value.id,
+        houseId: houseId.value,
         title:title.value,
         description: description.value,
         price: price.value,
         tenants: selectedTenants.value,
         author: auth.value,
+        imagesB: imagesBack.value,
         house: {
           roomsNumber: roomsNumber.value,
           bathroomsNumber: bathroomsNumber.value,
           floor: floor.value,
           area: area.value,
           location: location.value,
-          cadastre: selectedCadastre.value,
+          cadastre: cadastre.value,
           heating: heating.value,
           tags: selectedTags.value
         }
+        
       })], { type: "application/json" }));
-      for (let i = 0; i < images.value.length; i++) {
-        formData.append("images", images.value[i]);
+      if (images.value.length > 0) {
+        for (let i = 0; i < images.value.length; i++) {
+          formData.append("images", images.value[i]);
+        }
       }
-      fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses', {
-        method: 'POST',
+      fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/'+id, {
+        method: 'PUT',
         headers: {
                         'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                     },
         body: formData,
       })
-        .then(response => response.json())
+        
+        .then(response => console.log(response.json()))
         .then(jsonData => {
           success.value = true;
           setTimeout(() => {
-            window.location.href = "/";
+          window.location.href = "/";
           }, 1000);
         }
         
@@ -462,11 +458,10 @@ export default {
       fetchUser,
       toggleTag,
       success,
-      filteredTenants,
-      fetchCadastre,
-      selectedCadastre,
       auth,
-      authorAdvertisementsNumber
+      ad,
+      imagesBack,
+      getImageUrl
 
     }
   },
@@ -489,7 +484,7 @@ export default {
 
     onFileSelect(event) {
       const files = event.target.files
-      if (this.imagesUrl.length + files.length > 10) {
+      if (this.imagesUrl.length + files.length + this.imagesBack.length > 10) {
         alert("Selecciona 10 imágenes máximo")
         return
       }
@@ -503,6 +498,7 @@ export default {
           if (!this.images.some((e) => e.name === files[i].name)) {
             this.images.push(files[i])
             this.imagesUrl.push({ name: files[i].name, url: URL.createObjectURL(files[i]) })
+            console.log(this.images)
           }
         }
       }
@@ -511,6 +507,9 @@ export default {
     deleteImage(index) {
       this.images.splice(index, 1)
       this.imagesUrl.splice(index, 1)
+    },
+    deleteImageBackend(index) {
+      this.imagesBack.splice(index, 1)
     },
     onDragover(event) {
       event.preventDefault()
@@ -525,7 +524,7 @@ export default {
       event.preventDefault()
       this.isDragging = false
       const files = event.dataTransfer.files
-      if (this.imagesUrl.length + files.length > 10) {
+      if (this.imagesUrl.length + files.length + this.imagesBack.length> 10) {
         alert("Selecciona 10 imágenes máximo")
         return
       }

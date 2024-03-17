@@ -1,9 +1,6 @@
 package org.ispp4.cohabify.authentication;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.coyote.BadRequestException;
@@ -11,6 +8,8 @@ import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.dto.JwtTokenDto;
 import org.ispp4.cohabify.dto.LoginRequest;
 import org.ispp4.cohabify.dto.UserRegisterRequest;
+import org.ispp4.cohabify.storage.StorageService;
+import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -41,6 +40,7 @@ public class AuthenticationController {
 	private JwtService jwtService;
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
+	private StorageService storageService;
 	
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
@@ -74,17 +74,16 @@ public class AuthenticationController {
 		user.setTag(request.getTag());
 		user.setGender(request.getGender());
 		user.setAuthorities(List.of("User"));
+		user.setPlan(Plan.BASIC);
 		user = userService.save(user);
 		// TODO: Add the user full name when it is fixed in the model
 		
 		// Save the image and add the static uri to the user
 		String[] filename_split = image.getOriginalFilename().split("\\.");
 		String filename = user.getJsonId() + "." + filename_split[filename_split.length-1];
-		String static_path = "/uploads/saved-images/user-profile-pictures/" + filename;
-		Path path = Paths.get("src/main/resources/static/uploads/saved-images/user-profile-pictures", filename);
+		String static_path;
 		try {
-			Files.createDirectories(path.getParent());
-			Files.write(path, image.getBytes());
+			static_path = storageService.saveImage(filename, image);
 		} catch (IOException e) {
 			userService.deleteById(user.getId());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

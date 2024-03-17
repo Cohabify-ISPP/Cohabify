@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import Navbar from '../Navbar.vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex';
 
 const price = ref(0)
 const meters = ref(0)
@@ -18,9 +20,27 @@ const fetchError = ref(null)
 const isLoading = ref(true)
 const showFilters = ref(false)
 const searchTerm = ref('')
+const router = useRouter()
+const user = computed(() => useStore().state.user)
 
 onMounted(() => {
-    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses', {
+
+    if (user) {
+        fetchMyAdvertisements()
+    } else {
+        const store = useStore()
+        store.watch(
+            () => store.state.user,
+            (newValue, oldValue) => {
+                user.value = newValue
+                fetchMyAdvertisements()
+            }
+        )
+    }
+})
+
+const fetchMyAdvertisements = () => {
+    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/owner/' + user.value.id, {
         method: "GET",
         headers: {
             'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
@@ -43,7 +63,36 @@ onMounted(() => {
             isLoading.value = false
             fetchError.value = error
         })
-})
+}
+
+const deleteHouseAd = (id) => {
+    
+    event.stopPropagation();
+    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/' + id, {
+        method: "DELETE",
+        headers: {
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+        credentials: "include"
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se ha podido eliminar el anuncio de vivienda')
+            }
+        })
+        .then(data => {
+            fetchMyAdvertisements()
+        })
+        .catch(error => {
+            fetchError.value = error
+        })
+}
+
+const goToEdit = (id) => {
+    event.stopPropagation();
+    router.push(`/advertisements/houses/edit/${id}`)
+}
+
 const currentAdvertisements = computed(() => {
  return filtered.value ? filteredAdvertisements.value : advertisements.value
 })
@@ -282,22 +331,38 @@ const applyFilters = () => {
                                 <h3><b>{{ advertisement.price }}€/mes</b></h3>
                             </div>
                             <b>{{ advertisement.house.location }}</b>
-                            <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">bed</span>
-                                    <p>{{ advertisement.house.roomsNumber }} dorm.</p>
+                            <div class="d-flex justify-content-between align-items-center w-100">
+
+                                <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">bed</span>
+                                        <p>{{ advertisement.house.roomsNumber }} dorm.</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">shower</span>
+                                        <p>{{ advertisement.house.bathroomsNumber }} baños</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">square_foot</span>
+                                        <p>{{ advertisement.house.area }} m²</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-symbols-outlined">floor</span>
+                                        <p>Planta {{ advertisement.house.floor }}</p>
+                                    </div>
                                 </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">shower</span>
-                                    <p>{{ advertisement.house.bathroomsNumber }} baños</p>
-                                </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">square_foot</span>
-                                    <p>{{ advertisement.house.area }} m²</p>
-                                </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-symbols-outlined">floor</span>
-                                    <p>Planta {{ advertisement.house.floor }}</p>
+
+                                <div class="d-flex justify-content-end w-50 mt-5 h-100 align-items-center">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <button class="btn btn-success" style="margin-right: 1vw; height: 5.5vh;" @click="goToEdit(advertisement.id)">
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <button class="btn btn-danger" style="height: 5.5vh;" @click="deleteHouseAd(advertisement.id)">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

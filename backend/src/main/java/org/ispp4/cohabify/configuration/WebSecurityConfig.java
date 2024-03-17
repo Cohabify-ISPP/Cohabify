@@ -39,9 +39,12 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(requests -> requests
 					.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE).permitAll()
 					.requestMatchers(HttpMethod.OPTIONS).permitAll()
+					.requestMatchers("/**").permitAll()
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**", "/static/**").permitAll()
+					.requestMatchers("/api/tag/types/USER_TAG").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").anonymous()
 					.requestMatchers(HttpMethod.POST, "/auth/getUser").authenticated()
+					.requestMatchers(HttpMethod.GET, "/api/advertisements/houses", "/api/advertisements/users").permitAll()
 					.requestMatchers("/api/**").authenticated()
 					.anyRequest().denyAll() 
 			)
@@ -76,11 +79,12 @@ public class WebSecurityConfig {
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8080", "ws://localhost:8080",
 													  "http://localhost:5173", "http://localhost:5173/", "ws://localhost:5173",
 													  "https://cohabify.onrender.com", "https://cohabify.onrender.com/",
-													  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com/"));
+													  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com, http://127.0.0.1:5173"));
 		configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080", "http://localhost:8080", "ws://localhost:8080",
 																  "http://localhost:5173", "http://localhost:5173/", "ws://localhost:5173",
 																  "https://cohabify.onrender.com", "https://cohabify.onrender.com/",
-																  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com/"));
+																  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com/",
+																  "http://127.0.0.1:5173", "http://http://127.0.0.1:5173/"));
 		configuration.setAllowedMethods(Arrays.asList("*"));
 		configuration.setAllowedHeaders(Arrays.asList("Authentication", "content-type"));
 		configuration.setAllowCredentials(true);

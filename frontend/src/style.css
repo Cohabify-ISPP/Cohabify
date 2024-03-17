@@ -91,7 +91,14 @@ button:focus-visible {
   background-color: #28426B;
   border-color: #28426b;
   transition: 0.1s;
-} 
+}
+
+.btn-plan {
+  color: #fff;
+  background-color: #28426b74;
+  border-color: #28426b66;
+  transition: 0.1s;
+}
 
 .btn-green {
   color: #fff;
@@ -227,6 +234,36 @@ input[type=range]::-ms-fill-upper {
   align-items: start;
   padding: 20px;
   width: 100%;
+}
+
+.search-bar {
+  border: 2px solid #000;
+  border-radius: 50px;
+  background-color: #fff;
+  justify-content: space-between;
+  font-size: 24px;
+  width: 60%;
+  height: 70px;
+}
+
+.search-input {
+  background-color: #ffff;
+  border: none;
+  border-radius: 5px;
+  width: 90%;
+  margin-right: 10px;
+  color: black;
+}
+
+.search-button {
+  background-color: transparent;
+  border-radius: 50px;
+  color: black;
+  border: none;
+}
+
+.search-button:hover {
+  background-color: #dddddd;
 }
 
 #app {

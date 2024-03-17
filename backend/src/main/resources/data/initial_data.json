@@ -59,11 +59,12 @@
     {
       "id": "60d5ec9af682fbd39a1b8b9f",
       "location":"Zona desconocida", 
-      "roomsNumber":"20", 
+      "roomsNumber":"5", 
       "bathroomsNumber":"1",
       "area":"10", 
       "heating":"CENTRAL_HEATING", 
-      "floor":"1",  
+      "floor":"1",
+      "cadastre": "12345678901234567890",  
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": -2.6637, 
@@ -78,6 +79,7 @@
       "area":"105", 
       "heating":"AIR_CONDITIONING", 
       "floor":"9",  
+      "cadastre": "12345678901234567891", 
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 40.3437, 
@@ -91,7 +93,8 @@
       "bathroomsNumber":"2",
       "area":"120", 
       "heating":"NATURAL_GAS", 
-      "floor":"9",  
+      "floor":"9", 
+      "cadastre": "12345678901234567892",  
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 38.184049, 
@@ -113,6 +116,7 @@
       "area":"70", 
       "heating":"RADIATOR", 
       "floor":"0",  
+      "cadastre": "12345678901234567893", 
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 37.471815, 
@@ -126,6 +130,9 @@
       "description": "Descripción para casa 1",
       "price": 1000,
       "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9e"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
       "images":["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
       "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
@@ -137,6 +144,9 @@
       "description": "Descripción para casa 2",
       "price": 900,
       "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9d"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
       "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
@@ -148,6 +158,9 @@
       "description": "Descripción para casa 3",
       "price": 800,
       "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9d"
+      },
       "tenants": [],
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
       "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
@@ -159,26 +172,27 @@
       "description": "Descripción para casa 4",
       "price": 1100,
       "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9d"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
       "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
                 "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
                 "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
-
-
     }
   ],
   
   "userRatings":[
     {
       "id": "65e305e4597c9969f3b36f10",
-      "user": {"id" : "60d5ec9af682fbd39a1b8b9d"},
-      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
+      "user": {"id" : "60d5ec9af682fbd39a1b8b9e"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
       "comment": "He convivido con este usuario y es muy interesante, además de ordenado."
     },
     {
       "id": "65e305e4597c9969f3b36f11",
-      "user": {"id": "60d5ec9af682fbd39a1b8b9e"},
-      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
+      "user": {"id": "60d5ec9af682fbd39a1b8b9d"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
       "comment": "Aunque parezca que pueda hacer mucho ruido, es una persona tranquila para convivir."
     }
   ],
@@ -188,8 +202,8 @@
       "description": "Busco 2 compañeros organizados por Avenida Reina Mercedes",
       "maxBudget": 600,
       "desiredLocation": "Avenida Reina Mercedes, Sevilla",
-      "entranceDate": "2024-03-01",
-      "exitDate": "2024-06-30",
+      "entranceDate": "2025-03-01",
+      "exitDate": "2025-06-30",
       "maxCohabitants": 2,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9e"
@@ -200,8 +214,8 @@
       "description": "Busco 2 compañeros organizados por Calle Awawa",
       "maxBudget": 444,
       "desiredLocation": "Calle Awawa, Sevilla",
-      "entranceDate": "2022-03-01",
-      "exitDate": "2022-06-30",
+      "entranceDate": "2025-03-01",
+      "exitDate": "2025-06-30",
       "maxCohabitants": 4,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9d"

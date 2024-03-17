@@ -2,32 +2,37 @@ package org.ispp4.cohabify.dto;
 
 import java.util.List;
 
-
+import org.bson.types.ObjectId;
 import org.ispp4.cohabify.house.House;
+import org.ispp4.cohabify.user.User;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ispp4.cohabify.user.User;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class AdvertisementHouseRequest {
+
+    @Id
+    private ObjectId id;
+    @Id
+    private ObjectId houseId;
+
     @NotBlank
-    @Size(max = 64)
+    
 	private String title;
 	
 	@NotBlank
-    @Size(max = 14)
+   
 	private String description;
 
     @NotNull
@@ -40,4 +45,9 @@ public class AdvertisementHouseRequest {
 
        
     private House house;
+
+    @DBRef
+    private User author;
+
+    private List<String> imagesB;
 }
