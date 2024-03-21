@@ -75,7 +75,7 @@
                 <label for="roomsNumber" class="form-label text-white"><strong>Habitaciones</strong></label>
                 <div class="input-group d-flex align-items-center justify-content-center " style="background-color: aliceblue; border-radius: 4px;">
                   <button class=" btn-primary" type="button" @click="decreaseRoomsNumber()">-</button>
-                  <p  style="margin: auto;">{{ roomsNumber }}</p>
+                  <p  style="margin: auto;color:black">{{ roomsNumber }}</p>
                   <button class="btn-primary" type="button" @click="increaseRoomsNumber()">+</button>
                 </div>
               </div>
@@ -85,7 +85,7 @@
                 <label for="bathroomsNumber" class="form-label text-white"><strong>Baños</strong></label>
                 <div class="input-group d-flex align-items-center justify-content-center" style="background-color: aliceblue; border-radius: 4px;">
                   <button class="btn-primary" type="button" @click=" decreaseBathoomsNumber()">-</button>
-                  <p  style=" margin: auto;">{{ bathroomsNumber }}</p>
+                  <p  style=" margin: auto;color:black">{{ bathroomsNumber }}</p>
                   <button class="btn-primary" type="button" @click="increaseBathroomsNumber()">+</button>
                 </div>
               </div>
