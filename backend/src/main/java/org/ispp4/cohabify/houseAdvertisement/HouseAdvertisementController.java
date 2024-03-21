@@ -169,7 +169,7 @@ public class HouseAdvertisementController {
 		}
 
             
-            House house = houseService.findById(request.getHouseId());
+            House house = houseService.findById(request.getHouseId()).get();
             house.setRoomsNumber(request.getHouse().getRoomsNumber());
             house.setBathroomsNumber(request.getHouse().getBathroomsNumber());
             house.setArea(request.getHouse().getArea());
