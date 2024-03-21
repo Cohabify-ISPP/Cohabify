@@ -67,7 +67,7 @@ public class UserAdvertisementControllerTest {
         newAd.setDesiredLocation("Test Location");
         newAd.setEntranceDate(LocalDate.now());
         newAd.setMaxCohabitants(2);
-
+        
         ResponseEntity<UserAdvertisement> response = userAdvertisementController.processCreationForm(newAd);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
