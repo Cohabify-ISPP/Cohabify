@@ -24,4 +24,6 @@ logging.level.org.springframework=INFO
 ## Debug
 #debug=true
 
-
+## Google
+spring.security.oauth2.client.registration.google.clientId=googleClientId
+spring.security.oauth2.client.registration.google.clientSecret=googleClientSecret

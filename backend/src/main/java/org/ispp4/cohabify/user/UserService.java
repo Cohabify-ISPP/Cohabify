@@ -48,5 +48,8 @@ public class UserService {
 	  return userRepository.findByIsOwner(owner);
 	}
 
+    public Optional<User> getUserByGoogleOAuthToken(Double googleAuthToken) {
+        return userRepository.findBygoogleOAuthToken(googleAuthToken);
+    }
 
 }

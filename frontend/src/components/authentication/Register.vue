@@ -26,7 +26,7 @@
           <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
             <div class="form-group" style="padding: 20px;">
               <label for="username" class="form-label text-white fw-bold">Nombre de usuario</label>
-              <input type="text" maxlength="14" required class="form-control" id="username" v-model="username" placeholder="Nombre de usuario">
+              <input type="text" maxlength="50" required class="form-control" id="username" v-model="username" placeholder="Nombre de usuario">
             </div>
             <div class="form-group" style="padding: 20px;">
               <label for="email" class="form-label text-white fw-bold">Email</label>

@@ -29,7 +29,7 @@ import lombok.Setter;
 public class User extends BaseEntity {
 
     @NotNull
-    @Size(max = 14)
+    @Size(max = 50)
     private String username;
     
     @NotNull
@@ -74,6 +74,8 @@ public class User extends BaseEntity {
 
     @NotNull
     private List<String> authorities;
+
+    private Double googleOAuthToken;
 
     @DBRef
     private List<User> likes = new ArrayList<User>();

@@ -1,6 +1,7 @@
 package org.ispp4.cohabify.authentication;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.coyote.BadRequestException;
@@ -12,17 +13,19 @@ import org.ispp4.cohabify.storage.StorageService;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
+import org.ispp4.cohabify.utils.Global;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +44,7 @@ public class AuthenticationController {
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
 	private StorageService storageService;
+	private Global global;
 	
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
@@ -110,6 +114,19 @@ public class AuthenticationController {
 		
 		return ResponseEntity.status(HttpStatus.OK)
 							 .body(JwtTokenDto.builder().user(user).token(jwt).build());
+	}
+
+	@PostMapping("/login/google")
+	public ResponseEntity<JwtTokenDto> loginGoog(@RequestBody LoginRequest request) {
+		authenticationManager.authenticate(new GoogleAuthenticationToken(request.toString(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
+		User user = global.getCurrentUser();
+		
+		if (user == null)
+			throw new BadCredentialsException("Invalid username or password.");
+		
+		String jwt = jwtService.generateToken(user);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(JwtTokenDto.builder().user(user).token(jwt).build());
 	}
 	
 	@PostMapping("/getUser")
