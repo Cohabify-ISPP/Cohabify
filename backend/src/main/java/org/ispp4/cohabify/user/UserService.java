@@ -1,5 +1,6 @@
 package org.ispp4.cohabify.user;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +48,11 @@ public class UserService {
 	public List<User> findByIsOwner(Boolean owner) {
 	  return userRepository.findByIsOwner(owner);
 	}
+
+    public Boolean isUserPlanValid(User user){
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.isBefore(user.getExpirationDate());
+    }
 
 
 }

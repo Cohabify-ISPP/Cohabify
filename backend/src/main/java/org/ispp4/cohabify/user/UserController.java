@@ -1,6 +1,7 @@
 package org.ispp4.cohabify.user;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -180,8 +181,12 @@ public class UserController {
                 _user.setPlan(Plan.BASIC);
             } else if (plan.equals("explorer")) {
                 _user.setPlan(Plan.EXPLORER);
+                LocalDate expirationDate = LocalDate.now().plusMonths(1);
+                _user.setExpirationDate(expirationDate);
             } else if (plan.equals("owner")) {
                 _user.setPlan(Plan.OWNER);
+                LocalDate expirationDate = LocalDate.now().plusMonths(1);
+                _user.setExpirationDate(expirationDate);
             } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
