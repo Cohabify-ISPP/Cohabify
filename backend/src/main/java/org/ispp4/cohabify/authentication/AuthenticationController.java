@@ -121,6 +121,10 @@ public class AuthenticationController {
 		if (user == null)
 			throw new BadCredentialsException("Invalid username or password.");
 		
+		if (!userService.isUserPlanValid(user)){
+			user.setPlan(Plan.BASIC);
+			userService.save(user);
+		}
 		String jwt = jwtService.generateToken(user);
 		
 		return ResponseEntity.status(HttpStatus.OK)

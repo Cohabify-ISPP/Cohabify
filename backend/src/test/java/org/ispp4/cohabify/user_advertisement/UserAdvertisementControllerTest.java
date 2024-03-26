@@ -55,7 +55,7 @@ public class UserAdvertisementControllerTest {
     public void testCreateNewUserAdvertisementWithCorrectData() {
         List<String> authorities = new ArrayList<String>();
         authorities.add("User");
-        User user = new User("test", "test", null, null, "test@gmail.com", null, "descripcion test", Plan.BASIC, Gender.FEMENINO, null, true, authorities, null);
+        User user = new User("test", "test", null, null, "test@gmail.com", null, "descripcion test", Plan.BASIC, Gender.FEMENINO, null, true, authorities, null, null);
         user.setIsOwner(false);
         user.setPhone("666777666");
         userService.save(user);
@@ -67,7 +67,7 @@ public class UserAdvertisementControllerTest {
         newAd.setDesiredLocation("Test Location");
         newAd.setEntranceDate(LocalDate.now());
         newAd.setMaxCohabitants(2);
-
+        
         ResponseEntity<UserAdvertisement> response = userAdvertisementController.processCreationForm(newAd);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());

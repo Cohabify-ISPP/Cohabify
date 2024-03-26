@@ -1,5 +1,6 @@
 package org.ispp4.cohabify.user;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,11 @@ public class UserService {
 
     public Optional<User> getUserByGoogleOAuthToken(Double googleAuthToken) {
         return userRepository.findBygoogleOAuthToken(googleAuthToken);
+    }
+
+    public Boolean isUserPlanValid(User user){
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.isBefore(user.getExpirationDate());
     }
 
 }

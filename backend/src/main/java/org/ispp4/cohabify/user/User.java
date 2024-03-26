@@ -1,5 +1,6 @@
 package org.ispp4.cohabify.user;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +80,8 @@ public class User extends BaseEntity {
     private List<String> authorities;
 
     private Double googleOAuthToken;
+
+    private LocalDate expirationDate;
 
     @DBRef
     private List<User> likes = new ArrayList<User>();

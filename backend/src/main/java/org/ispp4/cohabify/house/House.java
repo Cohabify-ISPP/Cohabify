@@ -7,6 +7,7 @@ import org.ispp4.cohabify.tag.Tag;
 import org.ispp4.cohabify.user.User;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -23,6 +24,10 @@ import lombok.Setter;
 @Setter
 @Document(collection = "houses")
 public class House extends BaseEntity{
+
+    public House(){
+        
+    }
 
     @NotNull
     @Min(1)
@@ -53,6 +58,7 @@ public class House extends BaseEntity{
     
     @NotNull
     @Size(min=20, max = 20)
+    @Indexed(unique = true)
     private String cadastre;
 
     @NotNull
