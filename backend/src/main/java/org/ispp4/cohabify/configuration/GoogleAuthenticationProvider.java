@@ -2,7 +2,6 @@ package org.ispp4.cohabify.configuration;
 
 import org.ispp4.cohabify.authentication.GoogleAuthenticationToken;
 import org.ispp4.cohabify.user.CustomUserDetailsService;
-import org.ispp4.cohabify.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;

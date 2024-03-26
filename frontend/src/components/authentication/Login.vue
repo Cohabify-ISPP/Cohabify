@@ -36,19 +36,16 @@
                         <div v-if="fetchError" class="alert alert-danger" role="alert">
                             {{ fetchError }}
                         </div>
-                        <div class="form-group" style="padding: 20px;">
-                            <div id="g_id_onload"
-                                :data-client_id="clientId"
-                                data-callback="handleGoogleOauth">
-                            </div>
-                            <div class="g_id_signin" data-type="standard"></div>
+                        <div id="g_id_onload"
+                            :data-client_id="clientId"
+                            data-callback="handleGoogleOauth">
                         </div>
+                        <div class="g_id_signin" data-type="standard"></div>
                     </div>
                 </form>
             </div>
             <div>
-                <h3 style="color: rgb(0, 0, 0); padding-top: 10%;">¿No tienes cuenta? <router-link
-                        to="/register">Regístrate</router-link></h3>
+                <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿No tienes cuenta? <button type="button" class="text-clickable" @click="moveToRegister">Regístrate</button></h3>
             </div>
         </div>
     </div>
@@ -56,18 +53,20 @@
 
 <script>
 import { inject, ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+
 export default {
     setup() {
         const username = ref('');
         const password = ref('');
         const fetchError = ref(null);
-        const user = inject('user');
         const googleOauth = inject('Vue3GoogleOauth');
         const store = useStore();
         const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+        const router = useRouter();
 
-        const login = () => {
+        const login = async () => {
             const data = {
                 username: username.value,
                 password: password.value,
@@ -93,7 +92,6 @@ export default {
                     }
                 })
                 .then(data => {
-                    user.value = data.user;
                     localStorage.setItem("authentication", data.token);
                     store.dispatch('cargarUser');
                     let modal = document.getElementById('loginModal');
@@ -104,9 +102,13 @@ export default {
                 })
                 .catch(error => fetchError.value = error.message);
         };
+        const moveToRegister = async () => {
+            await store.commit('cargarGoogleUser', "");
+            window.location.href='/register';
+        };
+        
 
-        const handleGoogleOauth = async (data) => {
-            console.log(data);
+        const handleGoogleOauth = async (googleData) => {
             await fetch (import.meta.env.VITE_BACKEND_URL + '/auth/login/google', {
                 method: 'POST',
                 headers: {
@@ -114,18 +116,21 @@ export default {
                 },
                 credentials: 'include',
                 body: JSON.stringify({
-                    token: data
+                    token: googleData
                 })
             })
             .then(response => {
                 if (response.status === 200) {
                     return response.json();
+                } else if (response.status === 404) {
+                    store.commit("cargarGoogleUser", JSON.stringify(googleData));
+                    router.push('/register');
+                    throw new Error('No hay ninguna cuenta con este usuario de Google');
                 } else {
                     throw new Error('Error al iniciar sesión con Google');
                 }
             })
             .then(data => {
-                user.value = data.user;
                 localStorage.setItem("authentication", data.token);
                 store.dispatch('cargarUser');
                 let modal = document.getElementById('loginModal');
@@ -153,7 +158,8 @@ export default {
             googleOauth,
             clientId,
             handleGoogleOauth,
-            login
+            login,
+            moveToRegister
         };
 
     }
@@ -231,4 +237,16 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+.text-clickable {
+    padding: 0;
+    color: #0056b3;
+    cursor: pointer;
+    background-color: transparent;
+}
+.text-clickable:hover {
+    text-decoration: underline;
+    background-color: transparent;
+}
+
 </style>

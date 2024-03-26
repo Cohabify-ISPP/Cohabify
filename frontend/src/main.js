@@ -18,5 +18,4 @@ app.use(gAuthPlugin, {
   scope: 'profile email',
   prompt: 'consent'
   });
-app.provide("user", {});
 app.mount('#app');

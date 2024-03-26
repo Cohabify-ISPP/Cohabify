@@ -29,10 +29,13 @@ import lombok.Setter;
 public class User extends BaseEntity {
 
     @NotNull
+    @Size(max = 100)
+    private String name;
+
+    @NotNull
     @Size(max = 50)
     private String username;
     
-    @NotNull
     @Size(max = 255)
     @JsonProperty(access = Access.WRITE_ONLY)
     @NotBlank(message = "La contraseña es obligatoria")

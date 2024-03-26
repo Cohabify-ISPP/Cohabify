@@ -107,7 +107,6 @@ export default {
                         }
                     })
                     .then(jsonData => {
-                        console.log(jsonData)
                         localStorage.setItem("authentication", jsonData.token)
                         store.dispatch('cargarUser');
                         successfulAlert.value = true;
@@ -190,17 +189,14 @@ export default {
       };
 
         const validatePassword = () => {
-            console.log("Validando contraseña...");
             const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
             if(password.value.length != 0 && !passwordRegex.test(password.value)) {
                 passwordError.value = 'Contraseña no segura: la contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial  (!@#$%^&*).';
                 isPasswordSafe.value = false;
-                console.log('Password error:', passwordError.value);
             } else {
                 passwordError.value = '';
                 isPasswordSafe.value = true;
             }
-            console.log("Contraseña válida:", !passwordError.value);
         };
 
         const fetchTags = async () => {

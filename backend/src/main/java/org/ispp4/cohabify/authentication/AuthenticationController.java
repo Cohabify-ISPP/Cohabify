@@ -59,14 +59,12 @@ public class AuthenticationController {
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
 									  @RequestPart("profile-pic") MultipartFile image) throws BadRequestException {
-		
-										
 		if(result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-								 .body(result.getFieldErrors()
-										 	 .stream()
-										 	 	.map(fe -> new FormItemValidationError(fe))
-										 	 	.toList());
+								.body(result.getFieldErrors()
+											.stream()
+											.map(fe -> new FormItemValidationError(fe))
+											.toList());
 		}
 		
 		User user = userService.getUserByUsername(request.getUsername());
@@ -82,15 +80,18 @@ public class AuthenticationController {
 		
 		user = new User();
 		user.setUsername(request.getUsername());
-		user.setPassword(passwordEncoder.encode(request.getPassword()));
+		user.setName(request.getName());
+		if (request.getGoogleOAuthToken() != null) {
+			user.setPassword(passwordEncoder.encode(request.getPassword()));
+		}
 		user.setEmail(request.getEmail());
 		user.setPhone(request.getPhone().replaceAll("-", ""));
 		user.setTag(request.getTag());
 		user.setGender(request.getGender());
 		user.setAuthorities(List.of("User"));
 		user.setPlan(Plan.BASIC);
+		user.setGoogleOAuthToken(request.getGoogleOAuthToken());
 		user = userService.save(user);
-		// TODO: Add the user full name when it is fixed in the model
 		
 		// Save the image and add the static uri to the user
 		String[] filename_split = image.getOriginalFilename().split("\\.");
@@ -127,13 +128,17 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/login/google")
-	public ResponseEntity<JwtTokenDto> loginGoog(@RequestBody String request) {
-		UserDetails userDetails = (UserDetails) authenticationManager.authenticate(new GoogleAuthenticationToken(request, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")),googlePublicKey)).getPrincipal();
-
+	public ResponseEntity<?> loginGoogle(@RequestBody String request) {
+		UserDetails userDetails;
+		try {
+			userDetails = (UserDetails) authenticationManager.authenticate(new GoogleAuthenticationToken(request, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")),googlePublicKey)).getPrincipal();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 		User user = userService.getUserByUsername(userDetails.getUsername());
 		if (user == null)
-			throw new BadCredentialsException("Invalid username or password.");
-		
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			
 		String jwt = jwtService.generateToken(user);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(JwtTokenDto.builder().user(user).token(jwt).build());

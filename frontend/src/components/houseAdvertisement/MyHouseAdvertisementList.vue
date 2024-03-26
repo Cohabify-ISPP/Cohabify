@@ -119,8 +119,6 @@ const search =  () => {
         }
     })
     filtered.value = true;
-    console.log(filteredAdvertisements.value)
-    console.log(searchTerm.value)
 }
 
 const applyFilters = () => {
@@ -158,7 +156,6 @@ const applyFilters = () => {
     }
 
     else if (minBathrooms.value != null && maxBathrooms.value != null && minBathrooms.value > maxBathrooms.value) {
-        console.log('entra')
         if (!errors.value.minBathroomsVal) {
             errors.value.minBathroomsVal = 'Valor mayor que el máximo seleccionado'
         }
@@ -213,8 +210,6 @@ const applyFilters = () => {
         )
         filtered.value = true
     }
-
-    console.log(errors.value)
 
 }
 
