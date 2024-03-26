@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.coyote.BadRequestException;
+import org.ispp4.cohabify.configuration.CustomAuthenticationManager;
 import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.dto.JwtTokenDto;
 import org.ispp4.cohabify.dto.LoginRequest;
@@ -13,14 +14,14 @@ import org.ispp4.cohabify.storage.StorageService;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
-import org.ispp4.cohabify.utils.Global;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,19 +33,28 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
-@AllArgsConstructor
 public class AuthenticationController {
 
 	private UserService userService;
 	private JwtService jwtService;
-	private AuthenticationManager authenticationManager;
+	private CustomAuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
 	private StorageService storageService;
-	private Global global;
+
+	public AuthenticationController(UserService userService, JwtService jwtService, CustomAuthenticationManager authenticationManager,
+									PasswordEncoder passwordEncoder, StorageService storageService) {
+		this.userService = userService;
+		this.jwtService = jwtService;
+		this.authenticationManager = authenticationManager;
+		this.passwordEncoder = passwordEncoder;
+		this.storageService = storageService;
+	}
+
+	@Value("${google.public.key}")
+	private String googlePublicKey;
 	
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
@@ -117,10 +127,10 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/login/google")
-	public ResponseEntity<JwtTokenDto> loginGoog(@RequestBody LoginRequest request) {
-		authenticationManager.authenticate(new GoogleAuthenticationToken(request.toString(), Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
-		User user = global.getCurrentUser();
-		
+	public ResponseEntity<JwtTokenDto> loginGoog(@RequestBody String request) {
+		UserDetails userDetails = (UserDetails) authenticationManager.authenticate(new GoogleAuthenticationToken(request, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")),googlePublicKey)).getPrincipal();
+
+		User user = userService.getUserByUsername(userDetails.getUsername());
 		if (user == null)
 			throw new BadCredentialsException("Invalid username or password.");
 		
