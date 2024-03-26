@@ -19,6 +19,7 @@
     {
       "id": "60d5ec9af682fbd39a1b8b9d",
       "username": "admin",
+      "name": "Javier García Aguado", 
       "password": "$2a$10$S/9Tn47FJ68fR7.tCKLqhelXOQbZbXmBOnzQqKqC97TPUHeIhOoim",
       "isOwner": true,
       "phone": "123456789",
@@ -37,6 +38,7 @@
     {
       "id": "60d5ec9af682fbd39a1b8b9e",
       "username": "usuario 2",
+      "name": "Manuela Lovato Pérez",
       "password": "$2a$10$PcN/V6liOTDpfQqjh0s6weo7vi8BGKXqYjtIYzp/m9ciP60CyCsQa",
       "isOwner": false,
       "phone": "987654321",
@@ -58,7 +60,7 @@
   "houses": [
     {
       "id": "60d5ec9af682fbd39a1b8b9f",
-      "location":"Zona desconocida", 
+      "location":"Triana, Sevilla", 
       "roomsNumber":"5", 
       "bathroomsNumber":"1",
       "area":"10", 
@@ -106,7 +108,7 @@
       "location":"Cabra, Córdoba", 
       "roomsNumber":"3", 
       "bathroomsNumber":"1",
-      "area":"70", 
+      "area":"200", 
       "heating":"RADIATOR", 
       "floor":"0",  
       "cadastre": "12345678901234567893", 
@@ -119,8 +121,8 @@
   ],"houseAdvertisements": [
     {
       "id": "60d5ec9af682fbd39a1b8b1a",
-      "title": "Casa 1",
-      "description": "Descripción para casa 1",
+      "title": "Bonito y amplio piso en Triana",
+      "description": "Se busca compañero de piso para compartir gastos. El piso está a 5 minutos de una parada de metro y tiene varios establecimientos cercanos. ",
       "price": 1000,
       "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
       "author": {
@@ -133,8 +135,8 @@
     },
     {
       "id": "60d5ec9af682fbd39a1b8b2a",
-      "title": "Casa 2",
-      "description": "Descripción para casa 2",
+      "title": "Amplio piso en Vallecas",
+      "description": "El piso se encuentra recién reformado y amueblado. Es muy luminoso y tiene una terraza con vistas a la ciudad.",
       "price": 900,
       "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
       "author": {
@@ -147,9 +149,9 @@
     },
     {
       "id": "60d5ec9af682fbd39a1b8b3a",
-      "title": "Casa 3",
-      "description": "Descripción para casa 3",
-      "price": 800,
+      "title": "Acogedor estudio en Guarromán",
+      "description": "Estudio en buena localización de Guarromán. EL precio incluye los gastos de comunidad, pero no los suministros.",
+      "price": 200,
       "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9d"
@@ -161,9 +163,9 @@
     },
     {
       "id": "60d5ec9af682fbd39a1b8b4a",
-      "title": "Casa 4",
-      "description": "Descripción para casa 4",
-      "price": 1100,
+      "title": "Casa amplia en Cabra",
+      "description": "La casa tiene un jardín y está cerca de un parque. Además, dispone de un garaje espacioso para un coche.",
+      "price": 350,
       "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9d"
@@ -204,9 +206,9 @@
     },
     {
       "id": "65e326184510d9c9a7c48174",
-      "description": "Busco 2 compañeros organizados por Calle Awawa",
+      "description": "Busco 2 compañeros organizados por Calle Vencejo",
       "maxBudget": 444,
-      "desiredLocation": "Calle Awawa, Sevilla",
+      "desiredLocation": "Calle Vencejo, Sevilla",
       "entranceDate": "2025-03-01",
       "exitDate": "2025-06-30",
       "maxCohabitants": 4,
