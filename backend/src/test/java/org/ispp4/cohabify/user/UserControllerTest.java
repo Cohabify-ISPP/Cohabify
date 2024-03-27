@@ -42,8 +42,18 @@ public class UserControllerTest {
 
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "Test_1512*123oa", true, "666666666", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
+
         ResponseEntity<User> response = userController.createUser(user);
         assertEquals(new ResponseEntity<>(user, HttpStatus.CREATED), response);
         userService.deleteById(user.getId());
@@ -53,10 +63,21 @@ public class UserControllerTest {
     void shouldNotCreateUser(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test000000000000000000000000000000000000000000000000000000", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test000000000000000000000000000000000000000000000000000000");
+        user.setPassword("test");
+        user.setIsOwner(true);
+        user.setPhone("test");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);    
+
         try{
             userController.createUser(user);
+            userService.deleteById(user.getId());
         }catch(Exception e){
             assertEquals(e.getClass(), 
             ConstraintViolationException.class);
@@ -88,8 +109,17 @@ public class UserControllerTest {
         String requestBody = "{\"username\":\"test\",\"phone\":\"1234567890\"}";
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "1234567890", "test@gmail.com", null, "test description",
-        Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("1234567890");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         user = userService.save(user);
 
         ResponseEntity<User> response = userController.secureSearch(requestBody);
@@ -125,8 +155,17 @@ public class UserControllerTest {
     void shoudlUpdateUser(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         userService.save(user);
 
         List<Tag> tags = new ArrayList<>();
@@ -147,8 +186,17 @@ public class UserControllerTest {
     void shouldNotUpdateUserConflictUsername(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         userService.save(user);
 
         List<Tag> tags = new ArrayList<>();
@@ -168,8 +216,17 @@ public class UserControllerTest {
     void shouldNotUpdateUserInvalid(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         userService.save(user);
 
         try {
@@ -188,9 +245,19 @@ public class UserControllerTest {
     void shouldNotFindUserToUpdate(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         user.setId( new ObjectId("69d5ec9af682fbd39a1b8b9d"));
+
         List<Tag> tags = new ArrayList<>();
         tags.add(tagService.findAll().get(0));
         UserUpdateRequest request = new UserUpdateRequest("x","test2","Test_1512-ao",tags,user.getDescription(),user.getEmail(),"666666666",user.getGender(),false);
@@ -207,21 +274,40 @@ public class UserControllerTest {
     void shouldUpdatePlan(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         userService.save(user);
 
         ResponseEntity<User> response = userController.updateUserPlan(user.getId(), "basic");
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertEquals(user.getId(), response.getBody().getId());
+        userService.deleteById(user.getId());
     }
 
     @Test
     void shouldNotUpdatePlan(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         userService.save(user);
 
         ResponseEntity<User> response = userController.updateUserPlan(user.getId(), "error");
@@ -237,8 +323,17 @@ public class UserControllerTest {
     void shouldDeleteUser(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         userService.save(user);
 
         ResponseEntity<HttpStatus> response = userController.deleteUser(user.getId());
@@ -249,11 +344,30 @@ public class UserControllerTest {
     void shouldModifyRaters(){
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         userService.save(user);
-        User user2 = new User("test2", "test", true, "test", "test@gmail.com", null, "test description",
-             Plan.BASIC, Gender.FEMENINO, null, false,  authorities, null);
+        
+        User user2 = new User();
+        user.setUsername("test2");
+        user.setPassword("Test_1512*123oa");
+        user.setIsOwner(true);
+        user.setPhone("666666666");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities);
         userService.save(user2);
 
         ResponseEntity<User> response = userController.modifyRaters(user.getId(), user2.getId());
