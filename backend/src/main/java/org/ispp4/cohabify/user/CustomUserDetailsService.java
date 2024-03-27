@@ -36,4 +36,20 @@ public class CustomUserDetailsService implements UserDetailsService {
                 true, true, true,
                 authorities);
     }
+
+    public UserDetails loadUserByGoogleToken(String googleToken) throws UsernameNotFoundException {
+        User user = userRepository.findBygoogleOAuthToken((Double.valueOf(googleToken) ))
+                	.orElseThrow(() -> new UsernameNotFoundException("User not found with token: " + googleToken));
+
+        List<GrantedAuthority> authorities = user.getAuthorities().stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                true, // TODO: Add attribute isEnabled to user and put user.isEnabled() here
+                true, true, true,
+                authorities);
+    }
 }

@@ -24,4 +24,5 @@ logging.level.org.springframework=INFO
 ## Debug
 #debug=true
 
-
+## Google
+google.public.key=googlePublicKey

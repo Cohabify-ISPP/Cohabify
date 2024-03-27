@@ -498,7 +498,6 @@ export default {
           if (!this.images.some((e) => e.name === files[i].name)) {
             this.images.push(files[i])
             this.imagesUrl.push({ name: files[i].name, url: URL.createObjectURL(files[i]) })
-            console.log(this.images)
           }
         }
       }

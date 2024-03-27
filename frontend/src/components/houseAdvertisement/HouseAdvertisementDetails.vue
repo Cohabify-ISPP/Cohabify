@@ -78,7 +78,7 @@ const deleteComment1 = () => {
   )
     .then((response) => {
       if (response.ok) {
-        console.log("Comentario eliminado con éxito");
+        
       } else {
         console.error("Error al eliminar el comentario");
       }
@@ -108,7 +108,7 @@ const deleteComment2 = () => {
           "/advertisements/houses/" + houseAdvertisement.value.id;
       }, 1000);
       if (response.ok) {
-        console.log("Comentario eliminado con éxito");
+        
       } else {
         console.error("Error al eliminar el comentario");
       }
@@ -120,7 +120,6 @@ const deleteComment2 = () => {
 
 const register = () => {
   const formData = new FormData();
-  console.log(currentUser.value);
   formData.append(
     "string-data",
     new Blob(

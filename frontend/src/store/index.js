@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 const store = createStore({
   state: {
     user: {},
+    googleUser: {},
   },
   mutations: {
     cargarUser(state, user) {
@@ -10,7 +11,10 @@ const store = createStore({
     },
     limpiarUser(state) {
       state.user = {};
-    }
+    },
+    cargarGoogleUser(state, googleUser) {
+      state.googleUser = googleUser;
+    },
   },
   actions: {
     cargarUser({ commit }) {
@@ -27,7 +31,7 @@ const store = createStore({
             ).then(response => response.json().then(data =>commit('cargarUser', data)));
             
         } catch (error) {
-            console.log(error);
+            console.errror(error);
         }
     },
   },
