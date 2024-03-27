@@ -5,7 +5,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import org.ispp4.cohabify.utils.Global;
 import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.AdvertisementHouseRequest;
@@ -45,6 +45,7 @@ public class HouseAdvertisementController {
     private HouseService houseService;
     private StorageService storageService;
     private UserService userService;
+    private Global global;
 
     @Transactional(readOnly = true)
     @GetMapping("")
@@ -84,8 +85,8 @@ public class HouseAdvertisementController {
     @PostMapping("")
 	public ResponseEntity<?> createAdvertisement(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
     @RequestPart(value = "images",required = false) List<MultipartFile> images) throws BadRequestException {
-            
-       
+
+        if(request.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
             House house = new House();
             house.setRoomsNumber(request.getHouse().getRoomsNumber());
             house.setBathroomsNumber(request.getHouse().getBathroomsNumber());
@@ -130,7 +131,13 @@ public class HouseAdvertisementController {
                 advertisement = advertisementService.save(advertisement);
             }
             return ResponseEntity.status(HttpStatus.CREATED)
-							 .body(advertisement);
+							 .body(advertisement);  
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                .body("You can't create an advertisement for yourself");
+        } 
+       
+
     }
 		
     
@@ -167,7 +174,7 @@ public class HouseAdvertisementController {
 										 	 	.map(fe -> new FormItemValidationError(fe))
 										 	 	.toList());
 		}
-
+        if(request.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
             
             House house = houseService.findById(request.getHouseId()).get();
             house.setRoomsNumber(request.getHouse().getRoomsNumber());
@@ -224,11 +231,20 @@ public class HouseAdvertisementController {
             
             return ResponseEntity.status(HttpStatus.CREATED)
                                 .body(advertisement);
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                .body("You can't update an advertisement for yourself");
         }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAdvertisement(@PathVariable ObjectId id) {
-        advertisementService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if(!advertisementService.findAdById(id).getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }else{
+            advertisementService.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
     }
 }

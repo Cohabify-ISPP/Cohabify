@@ -3,7 +3,7 @@ package org.ispp4.cohabify.userAdvertisement;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-
+import org.ispp4.cohabify.utils.Global;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
@@ -27,10 +27,12 @@ public class UserAdvertisementController {
 
 	private UserAdvertisementService userAdvertisementService;
 	private UserService userService;
+	private Global global;
 	
-	public UserAdvertisementController(UserAdvertisementService userAdvertisementService, UserService userService) {
+	public UserAdvertisementController(UserAdvertisementService userAdvertisementService, UserService userService , Global global) {
 		this.userAdvertisementService = userAdvertisementService;
 		this.userService = userService;
+		this.global = global;
 	}
 
 	@Transactional(readOnly = true)
@@ -94,8 +96,13 @@ public class UserAdvertisementController {
 	@DeleteMapping("/{Id}")
 	public ResponseEntity<HttpStatus> deleteUserAdvertisement(@PathVariable("Id") ObjectId userAdvertisementId) {
 		try {
-			userAdvertisementService.deleteUserAdvertisementById(userAdvertisementId);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			UserAdvertisement userAdvertisement = userAdvertisementService.findById(userAdvertisementId).get();
+			if(userAdvertisement.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
+				userAdvertisementService.deleteUserAdvertisementById(userAdvertisementId);
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			} else {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
 		} catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -104,13 +111,17 @@ public class UserAdvertisementController {
 	@PostMapping("")
 	public ResponseEntity<UserAdvertisement> processCreationForm(@RequestBody UserAdvertisement userAdvertisement) {		
 		try {
-			Optional<UserAdvertisement> advertisement = userAdvertisementService.findByAuthorId(userAdvertisement.getAuthor().getId());
-			if(advertisement.isPresent()) {
-				throw new Exception("User already has an advertisement created");
-			}
+			if(userAdvertisement.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
+				Optional<UserAdvertisement> advertisement = userAdvertisementService.findByAuthorId(userAdvertisement.getAuthor().getId());
+				if(advertisement.isPresent()) {
+					throw new Exception("User already has an advertisement created");
+				}
 
-			UserAdvertisement res = userAdvertisementService.save(userAdvertisement);
-			return new ResponseEntity<UserAdvertisement>(res, HttpStatus.CREATED);
+				UserAdvertisement res = userAdvertisementService.save(userAdvertisement);
+				return new ResponseEntity<UserAdvertisement>(res, HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
