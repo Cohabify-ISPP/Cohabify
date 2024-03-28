@@ -55,6 +55,8 @@ public class UserService {
 
     public Boolean isUserPlanValid(User user){
         LocalDate currentDate = LocalDate.now();
+        if (user.getExpirationDate() == null)
+            return false;
         return currentDate.isBefore(user.getExpirationDate());
     }
 
