@@ -42,6 +42,7 @@ local.properties
 .target
 */target/
 
+
 # Tern plugin
 .tern-project
 
@@ -246,6 +247,8 @@ dist
 */node_modules/
 */package-lock.json
 */package.json
+package-lock.json
+package.json
 */manifest.json
 
 # Uploaded files

@@ -49,10 +49,13 @@ public class UserService {
 	  return userRepository.findByIsOwner(owner);
 	}
 
+    public Optional<User> getUserByGoogleOAuthToken(Double googleAuthToken) {
+        return userRepository.findBygoogleOAuthToken(googleAuthToken);
+    }
+
     public Boolean isUserPlanValid(User user){
         LocalDate currentDate = LocalDate.now();
         return currentDate.isBefore(user.getExpirationDate());
     }
-
 
 }

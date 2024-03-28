@@ -28,8 +28,6 @@ public class UserRegisterRequest {
     @Size(max = 14)
 	private String username;
 	
-	@NotBlank
-    @Size(max = 255)
 	private String password;
 
     @NotNull
@@ -47,5 +45,7 @@ public class UserRegisterRequest {
     
     @NotNull
     private Gender gender;
+
+    private Double googleOAuthToken;
     
 }
