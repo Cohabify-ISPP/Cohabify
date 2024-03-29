@@ -37,12 +37,7 @@ public class User extends BaseEntity {
     @Size(max = 50)
     private String username;
     
-    @Size(max = 255)
     @JsonProperty(access = Access.WRITE_ONLY)
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$",
-             message = "La contraseña debe contener al menos una letra mayúscula, una minúscula, un número y un carácter especial")
     private String password;
 
     @NotNull

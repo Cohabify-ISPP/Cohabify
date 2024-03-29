@@ -13,7 +13,7 @@ const store = useStore();
 const currentUser = computed(() => store.state.user);
 const valorations = ref([]);
 const isLoading = ref(true);
-const errorComentario = ref(null);
+const erroresComentario = ref([]);
 const fetchError = ref(null);
 const text = ref("");
 const currentUserHouseAdvertisementRating = ref(null);
@@ -134,16 +134,23 @@ const createHouseAdvertisementRating = () => {
       rating: rating.value,
     }),
   })
-    .then((response) => response.json())
-    .then((jsonData) => {
-      setTimeout(() => {
-        window.location.href =
-          "/advertisements/houses/" + houseAdvertisement.value.id;
-      }, 1000);
+    .then((response) => {
+      if(response.status == 200) {
+          setTimeout(() => {
+          window.location.href =
+            "/advertisements/houses/" + houseAdvertisement.value.id;
+        }, 1000);
+      } else { 
+        response.json()
+          .then((body) => {
+            console.log(body)
+            erroresComentario.value = body ? body : [{"message": "Ha ocurrido un error inesperado"}];
+          });
+      }
     })
     .catch((error) => {
       console.error("Error al enviar datos al backend:", error);
-      errorComentario.value = "No puedes ponerte una reseña a ti mismo.";
+      erroresComentario.value = error ? error : "Ha ocurrido un error inesperado";
     });
 };
 
@@ -313,19 +320,19 @@ onMounted(() => {
               </div>
               <div class="form-group">
                 <label for="commentText">Comentario</label>
-                <div
-                  class="alert alert-danger"
-                  role="alert"
-                  v-if="errorComentario"
-                >
-                  <i class="fas fa-exclamation-triangle"></i>
-                  {{ errorComentario }}
-                </div>
                 <textarea
                   class="form-control"
                   id="text"
                   v-model="text"
                 ></textarea>
+              </div>
+              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="erroresComentario.length > 0" v-for="error in erroresComentario" :key="error.message">
+                <span v-if="error.field !== undefined && error.field !== '*'">
+                  <i class="fas fa-exclamation-triangle"></i> El campo {{ error.field }} contiene el valor no válido: {{ error.rejectedValue }}. {{ error.message }}
+                </span>
+                <span v-if="error.field === undefined || error.field === '*'">
+                  <i class="fas fa-exclamation-triangle"></i> {{ error.message }}
+                </span>
               </div>
               <button
                 type="submit"

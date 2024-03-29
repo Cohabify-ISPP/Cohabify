@@ -4,9 +4,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.dto.ErrorResponse;
+import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.dto.HouseAdvertisementRatingRequest;
+import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.utils.Global;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,16 +87,35 @@ public class HouseRatingController {
     }
 
     @PostMapping("")
-    public ResponseEntity<HouseRating> createHouseRating(@RequestBody @Valid HouseAdvertisementRatingRequest request) {
+    public ResponseEntity<?> createHouseRating(@RequestBody @Valid HouseAdvertisementRatingRequest request, BindingResult result) {
         try	{
+            User currentUser = global.getCurrentUser();
+
+            if(currentUser == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("No puedes comentar sin estar logeado."));
+            }
+
+            if(currentUser.equals(request.getHouseAdvertisement().getAuthor())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No puedes ponerte una reseña a ti mismo."));
+            }
+
+            if(result.hasErrors()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                    .body(result.getFieldErrors()
+                                                .stream()
+                                                .map(fe -> new FormItemValidationError(fe))
+                                                .toList());
+            }
+            
             HouseRating newHouseRating = new HouseRating();
             newHouseRating.setComment(request.getComment());
             newHouseRating.setDate(new Date(System.currentTimeMillis()));
             newHouseRating.setHouseAdvertisement(request.getHouseAdvertisement());
             newHouseRating.setRating(request.getRating());
-            newHouseRating.setUser(global.getCurrentUser());
+            newHouseRating.setUser(currentUser);
             newHouseRating = houseRatingService.save(newHouseRating);
             return ResponseEntity.ok(newHouseRating);
+
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }

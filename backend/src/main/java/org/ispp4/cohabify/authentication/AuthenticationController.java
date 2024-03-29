@@ -81,8 +81,11 @@ public class AuthenticationController {
 		user = new User();
 		user.setUsername(request.getUsername());
 		user.setName(request.getName());
-		if (request.getGoogleOAuthToken() != null) {
+		if (request.getGoogleOAuthToken() == null) {
 			user.setPassword(passwordEncoder.encode(request.getPassword()));
+		} else {
+			// TODO: Cambiar el oauth para meter contraseña en el usuario, que es obligatoria para que spring funcione.
+			user.setPassword("$2a$10$aTgufqicyQMIzNT7tWEdUuK9HmEiDTOYKHADz7TDDBUMwcmNDGhjm");
 		}
 		user.setEmail(request.getEmail());
 		user.setPhone(request.getPhone().replaceAll("-", ""));
