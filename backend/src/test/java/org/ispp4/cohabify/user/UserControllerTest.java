@@ -199,7 +199,7 @@ public class UserControllerTest {
 
         List<Tag> tags = new ArrayList<>();
         tags.add(tagService.findAll().get(0));
-        UserUpdateRequest request = new UserUpdateRequest("x","admin","Test_1512-ao",tags,user.getDescription(),user.getEmail(),"666666666",user.getGender(),false);
+        UserUpdateRequest request = new UserUpdateRequest("x","manlovper90","Test_1512-ao",tags,user.getDescription(),user.getEmail(),"666666666",user.getGender(),false);
         BindingResult bindingResult = new BeanPropertyBindingResult(request, "request");
         try {
             ResponseEntity<?> response = userController.updateUser(user.getId(), request, bindingResult, null);
