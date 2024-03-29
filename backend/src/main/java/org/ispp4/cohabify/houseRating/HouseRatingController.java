@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.ErrorResponse;
+import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.dto.HouseAdvertisementRatingRequest;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.utils.Global;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -85,7 +87,7 @@ public class HouseRatingController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createHouseRating(@RequestBody @Valid HouseAdvertisementRatingRequest request) {
+    public ResponseEntity<?> createHouseRating(@RequestBody @Valid HouseAdvertisementRatingRequest request, BindingResult result) {
         try	{
             User currentUser = global.getCurrentUser();
 
@@ -95,6 +97,14 @@ public class HouseRatingController {
 
             if(currentUser.equals(request.getHouseAdvertisement().getAuthor())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No puedes ponerte una reseña a ti mismo."));
+            }
+
+            if(result.hasErrors()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                    .body(result.getFieldErrors()
+                                                .stream()
+                                                .map(fe -> new FormItemValidationError(fe))
+                                                .toList());
             }
             
             HouseRating newHouseRating = new HouseRating();

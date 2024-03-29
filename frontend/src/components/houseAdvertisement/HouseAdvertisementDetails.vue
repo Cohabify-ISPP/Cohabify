@@ -13,7 +13,7 @@ const store = useStore();
 const currentUser = computed(() => store.state.user);
 const valorations = ref([]);
 const isLoading = ref(true);
-const errorComentario = ref(null);
+const erroresComentario = ref([]);
 const fetchError = ref(null);
 const text = ref("");
 const currentUserHouseAdvertisementRating = ref(null);
@@ -143,13 +143,14 @@ const createHouseAdvertisementRating = () => {
       } else { 
         response.json()
           .then((body) => {
-            errorComentario.value = body.message ? body.message : "Ha ocurrido un error inesperado";
+            console.log(body)
+            erroresComentario.value = body ? body : [{"message": "Ha ocurrido un error inesperado"}];
           });
       }
     })
     .catch((error) => {
       console.error("Error al enviar datos al backend:", error);
-      errorComentario.value = error ? error : "Ha ocurrido un error inesperado";
+      erroresComentario.value = error ? error : "Ha ocurrido un error inesperado";
     });
 };
 
@@ -319,19 +320,19 @@ onMounted(() => {
               </div>
               <div class="form-group">
                 <label for="commentText">Comentario</label>
-                <div
-                  class="alert alert-danger"
-                  role="alert"
-                  v-if="errorComentario"
-                >
-                  <i class="fas fa-exclamation-triangle"></i>
-                  {{ errorComentario }}
-                </div>
                 <textarea
                   class="form-control"
                   id="text"
                   v-model="text"
                 ></textarea>
+              </div>
+              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="erroresComentario.length > 0" v-for="error in erroresComentario" :key="error.message">
+                <span v-if="error.field !== undefined && error.field !== '*'">
+                  <i class="fas fa-exclamation-triangle"></i> El campo {{ error.field }} contiene el valor no válido: {{ error.rejectedValue }}. {{ error.message }}
+                </span>
+                <span v-if="error.field === undefined || error.field === '*'">
+                  <i class="fas fa-exclamation-triangle"></i> {{ error.message }}
+                </span>
               </div>
               <button
                 type="submit"
