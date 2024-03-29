@@ -60,6 +60,7 @@ public class DataLoader implements ApplicationRunner {
         houseAdvertisementRepository.deleteAll();
         userAdvertisementRepository.deleteAll();
         userRatingRepository.deleteAll();
+        houseRatingRepository.deleteAll();
 
         // Procesa las etiquetas
         JsonNode tagsNode = rootNode.get("tags");

@@ -134,16 +134,22 @@ const createHouseAdvertisementRating = () => {
       rating: rating.value,
     }),
   })
-    .then((response) => response.json())
-    .then((jsonData) => {
-      setTimeout(() => {
-        window.location.href =
-          "/advertisements/houses/" + houseAdvertisement.value.id;
-      }, 1000);
+    .then((response) => {
+      if(response.status == 200) {
+          setTimeout(() => {
+          window.location.href =
+            "/advertisements/houses/" + houseAdvertisement.value.id;
+        }, 1000);
+      } else { 
+        response.json()
+          .then((body) => {
+            errorComentario.value = body.message ? body.message : "Ha ocurrido un error inesperado";
+          });
+      }
     })
     .catch((error) => {
       console.error("Error al enviar datos al backend:", error);
-      errorComentario.value = "No puedes ponerte una reseña a ti mismo.";
+      errorComentario.value = error ? error : "Ha ocurrido un error inesperado";
     });
 };
 
