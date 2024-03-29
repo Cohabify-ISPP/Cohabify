@@ -26,6 +26,12 @@
               placeholder="Contraseña" @input="validatePassword" :class="{ 'is-invalid': !isPasswordSafe }">
             <div class="invalid-feedback text-danger" v-if="!isPasswordSafe">{{ passwordError }}</div>
           </div>
+          <div class="form-check form-check-inline" style="padding: 20px;">
+            <input class="form-check-input" type="checkbox" id="termsAndConditions" v-model="termsAccepted">
+            <label class="form-check-label" for="termsAndConditions">
+              Acepto los <a href="https://cohabify.github.io/ca" target="_blank">Términos y condiciones de uso</a>
+            </label>
+          </div>
         </div>
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
           <div class="form-group" style="padding: 20px;">
@@ -146,6 +152,7 @@ export default {
     const isPasswordSafe = ref('true');
     const store = useStore();
     const validationErrors = ref([])
+    const termsAccepted = ref(false);
 
     const validatePassword = () => {
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
@@ -226,6 +233,10 @@ export default {
 
     const changePage = () => {
       validatePassword();
+      if (!termsAccepted.value) {
+        alert('Debes aceptar los términos y condiciones para registrarte.');
+        return;
+      }
   
       if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
         if (name.value && username.value && email.value && phone.value && phone.value.length === 9 && !isNaN(phone.value)
@@ -241,6 +252,8 @@ export default {
       };
 
     const register = () => {
+      
+
       if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value) {
         alert('Las contraseñas no coinciden');
       } else {
@@ -342,7 +355,8 @@ export default {
       validatePassword,
       googleOAuthToken,
       redirectToLogin,
-      validationErrors
+      validationErrors,
+      termsAccepted
     };
   }
 }

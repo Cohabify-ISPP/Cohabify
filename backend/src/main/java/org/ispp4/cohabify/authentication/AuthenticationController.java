@@ -94,6 +94,7 @@ public class AuthenticationController {
 		user.setAuthorities(List.of("User"));
 		user.setPlan(Plan.BASIC);
 		user.setGoogleOAuthToken(request.getGoogleOAuthToken());
+		user.setDescription("¡Hola, estoy utilizando Cohabify!");
 		user = userService.save(user);
 		
 		// Save the image and add the static uri to the user
