@@ -53,11 +53,19 @@ public class HouseControllerTest {
 
     @Test
     public void testCreateNewHouseWithCorrectData() {
-        List<String> authorities = new ArrayList<String>();
+        List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", null, null, "test@gmail.com", null, "descripcion test", Plan.BASIC, Gender.FEMENINO, null, true, authorities, null, null);
-        user.setIsOwner(false);
-        user.setPhone("666777666");
+        User user = new User();
+        user.setUsername("test000000000000000000000000000000000000000000000000000000");
+        user.setPassword("test");
+        user.setIsOwner(true);
+        user.setPhone("test");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities); 
         userService.save(user);
 
         House newHouse = new House();
