@@ -2,19 +2,14 @@ package org.ispp4.cohabify.user_advertisement;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.ispp4.cohabify.user.Gender;
-import org.ispp4.cohabify.user.Plan;
-import org.ispp4.cohabify.user.User;
+
 import org.ispp4.cohabify.user.UserService;
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
 import org.ispp4.cohabify.userAdvertisement.UserAdvertisementController;
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

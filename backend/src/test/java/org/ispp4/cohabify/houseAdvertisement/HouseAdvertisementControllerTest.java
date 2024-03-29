@@ -1,22 +1,25 @@
 package org.ispp4.cohabify.houseAdvertisement;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.any;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jakarta.servlet.http.Part;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.http.MediaType;
 
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.AdvertisementHouseRequest;
@@ -36,13 +39,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockPart;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.servlet.http.Part;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,13 +56,13 @@ public class HouseAdvertisementControllerTest {
     private HouseAdvertisementService advertisementService;
 
     @MockBean
-    private UserService userService; 
+    private UserService userService;
 
     @MockBean
-    private HouseService houseService; 
+    private HouseService houseService;
 
     @MockBean
-    private StorageService storageService; 
+    private StorageService storageService;
 
     @Autowired
     private MockMvc controller;
@@ -97,11 +101,10 @@ public class HouseAdvertisementControllerTest {
         userOwner.setPlan(Plan.OWNER);
         userOwner.setAuthorities(List.of("USER"));
         when(userService.getUserByUsername("test_user_owner")).thenReturn(userOwner);
-        
+
         when(advertisementService.findAll()).thenReturn(Arrays.asList(
                 new HouseAdvertisement(),
-                new HouseAdvertisement()
-        ));
+                new HouseAdvertisement()));
 
         House house1 = new House();
         house1.setId(new ObjectId());
@@ -118,7 +121,7 @@ public class HouseAdvertisementControllerTest {
         advertisement2.setId(new ObjectId("60d313f3f682fbd39a1b8b5a"));
         advertisement2.setAuthor(userBasic);
         advertisement2.setHouse(house2);
-        
+
         when(advertisementService.findAll()).thenReturn(List.of(advertisement1, advertisement2));
 
         when(advertisementService.findByAuthorId(userBasic.getId())).thenReturn(List.of(advertisement2));
@@ -136,7 +139,7 @@ public class HouseAdvertisementControllerTest {
         house3.setTags(new ArrayList<Tag>());
         GeoJsonPoint point = new GeoJsonPoint(2, 2);
         house3.setLocationPoint(point);
-       
+
         advertisement3 = new HouseAdvertisement();
         advertisement3.setTitle("Test Advertisement");
         advertisement3.setDescription("This is a test advertisement");
@@ -156,42 +159,45 @@ public class HouseAdvertisementControllerTest {
         request.setHouse(advertisement3.getHouse());
         request.setHouseId(house3.getId());
         request.setImagesB(List.of());
-             
+
         when(houseService.findById(any(ObjectId.class))).thenReturn(Optional.of(house3));
 
         when(advertisementService.findById(advertisement2.getId())).thenReturn(Optional.of(advertisement2));
         when(advertisementService.findAdById(advertisement2.getId())).thenReturn(advertisement2);
         when(advertisementService.findAdById(advertisement3.getId())).thenReturn(advertisement3);
-        
+
         when(houseService.save(any(House.class))).thenReturn(house3);
         when(advertisementService.save(any(HouseAdvertisement.class))).thenReturn(advertisement3);
-        
+
         // Simular el servicio de almacenamiento de imágenes
         try {
-            when(storageService.saveImage(anyString(), any(MultipartFile.class))).thenReturn("http://example.com/image.jpg");
+            when(storageService.saveImage(anyString(), any(MultipartFile.class)))
+                    .thenReturn("http://example.com/image.jpg");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /* 
-    // Testea que un usuario anonimo no tiene acceso anticipado
-    @Test
-    void testGetAllAdvertisements() throws Exception {
-        controller.perform(get("/api/advertisements/houses"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
-    }
-    */
+    /*
+     * // Testea que un usuario anonimo no tiene acceso anticipado
+     * 
+     * @Test
+     * void testGetAllAdvertisements() throws Exception {
+     * controller.perform(get("/api/advertisements/houses"))
+     * .andExpect(status().isOk())
+     * .andExpect(jsonPath("$", hasSize(1)));
+     * }
+     */
 
-    // Testea con un usuario basico que no es dueño del anuncio recien creado (No lo ve por falta de acceso anticipado)
+    // Testea con un usuario basico que no es dueño del anuncio recien creado (No lo
+    // ve por falta de acceso anticipado)
     @Test
     void testGetAllAdvertisementsWithBasicPlan() throws Exception {
         controller.perform(get("/api/advertisements/houses").with(user("test_user_basic")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is("60d313f3f682fbd39a1b8b5a")));
-    }  
+    }
 
     // Testea con un usuario basico que es dueño del anuncio recien creado
     @Test
@@ -219,7 +225,7 @@ public class HouseAdvertisementControllerTest {
         // Verificar que se llamó al método del servicio con el ID del autor correcto
         verify(advertisementService, times(1)).findByAuthorId(userBasic.getId());
     }
-    
+
     @Test
     void testCreateAdvertisement() throws Exception {
         byte[] requestContent = objectMapper.writeValueAsBytes(request);
@@ -237,7 +243,8 @@ public class HouseAdvertisementControllerTest {
                 .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated());
 
-        // Verificar que se llamó al servicio de casa y al servicio de anuncios con los datos correctos
+        // Verificar que se llamó al servicio de casa y al servicio de anuncios con los
+        // datos correctos
         verify(houseService, times(1)).save(any(House.class));
         verify(advertisementService, times(3)).save(any(HouseAdvertisement.class));
         verify(storageService, times(2)).saveImage(anyString(), any(MultipartFile.class));
@@ -264,20 +271,22 @@ public class HouseAdvertisementControllerTest {
         User currentUser = userOwner;
         when(global.getCurrentUser()).thenReturn(currentUser);
 
-        controller.perform(multipart("/api/advertisements/houses/{id}", advertisement3.getId()) 
+        controller.perform(multipart("/api/advertisements/houses/{id}", advertisement3.getId())
                 .part(requestData)
                 .part(requestImage1)
                 .part(requestImage2)
                 .contentType(MediaType.MULTIPART_FORM_DATA)
-                // Necesario para cambiar el comportamiento de multipart que esta hardcoded para enviar un POST unicamente
-                .with(request -> { 
-                        request.setMethod("PUT"); 
-                        return request; 
-                    }) 
+                // Necesario para cambiar el comportamiento de multipart que esta hardcoded para
+                // enviar un POST unicamente
+                .with(request -> {
+                    request.setMethod("PUT");
+                    return request;
+                })
                 .with(user("test_user_owner")))
                 .andExpect(status().isCreated());
 
-        // Verificar que se llamó al servicio de casa y al servicio de anuncios con los datos correctos
+        // Verificar que se llamó al servicio de casa y al servicio de anuncios con los
+        // datos correctos
         verify(houseService, times(1)).save(any(House.class));
         verify(advertisementService, times(3)).save(any(HouseAdvertisement.class));
         verify(storageService, times(2)).saveImage(anyString(), any(MultipartFile.class));
@@ -300,15 +309,15 @@ public class HouseAdvertisementControllerTest {
     @Test
     void testDeleteAdvertisementForbidden() throws Exception {
         ObjectId advertisementId = advertisement2.getId();
-       
+
         User currentUser = userBasic2;
         when(global.getCurrentUser()).thenReturn(currentUser);
-        
+
         controller.perform(delete("/api/advertisements/houses/{id}", advertisementId))
                 .andExpect(status().isForbidden());
 
         // Verificar que no se llamó al método del servicio
         verify(advertisementService, never()).deleteById(any());
     }
-    
+
 }

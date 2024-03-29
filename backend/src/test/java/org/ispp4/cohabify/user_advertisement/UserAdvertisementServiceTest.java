@@ -1,9 +1,10 @@
 package org.ispp4.cohabify.user_advertisement;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.user.Gender;
@@ -13,18 +14,8 @@ import org.ispp4.cohabify.user.UserService;
 import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
 import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class UserAdvertisementServiceTest {
@@ -57,6 +48,7 @@ public class UserAdvertisementServiceTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user = us.save(user);
 
         Double budget = 600.0;
         Integer maxCohabitants = 1;

@@ -16,11 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-
-import com.google.rpc.context.AttributeContext.Response;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -43,6 +40,7 @@ public class UserControllerTest {
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
         User user = new User();
+        user.setName("name");
         user.setUsername("test");
         user.setPassword("Test_1512*123oa");
         user.setIsOwner(true);
