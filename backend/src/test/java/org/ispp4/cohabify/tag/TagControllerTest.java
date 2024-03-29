@@ -27,14 +27,12 @@ public class TagControllerTest {
 
     private Tag testTag1;
     private Tag testTag2;
-    //private Tag nonExistentTag;
     private ObjectId testObjectId;
 
     @BeforeEach
     void setUp() {
         testTag1 = new Tag("Test tag 1", TagType.USER_TAG);
         testTag2 = new Tag("Test tag 2", TagType.FLAT_TAG);
-        //nonExistentTag = new Tag("Non-existent tag", TagType.USER_TAG);
         testObjectId = new ObjectId();
     }
 
