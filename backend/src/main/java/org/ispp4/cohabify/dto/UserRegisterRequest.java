@@ -21,11 +21,11 @@ import lombok.NoArgsConstructor;
 public class UserRegisterRequest {
 	
 	@NotBlank
-    @Size(max = 64)
+    @Size(max = 100)
 	private String name;
 	
 	@NotBlank
-    @Size(max = 14)
+    @Size(max = 50)
 	private String username;
 	
 	private String password;
@@ -39,7 +39,6 @@ public class UserRegisterRequest {
 	private String email;
 	
     @NotBlank
-    @Size(max = 11)
     @Pattern(regexp = "^[0-9]{9}$")
     private String phone;
     

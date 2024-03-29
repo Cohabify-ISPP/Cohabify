@@ -81,7 +81,7 @@ public class AuthenticationController {
 		user = new User();
 		user.setUsername(request.getUsername());
 		user.setName(request.getName());
-		if (request.getGoogleOAuthToken() != null) {
+		if (request.getGoogleOAuthToken() == null) {
 			user.setPassword(passwordEncoder.encode(request.getPassword()));
 		}
 		user.setEmail(request.getEmail());

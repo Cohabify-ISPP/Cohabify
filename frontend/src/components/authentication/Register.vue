@@ -11,18 +11,18 @@
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
           <div class="form-group" style="padding: 20px;">
             <label for="name" class="form-label text-white fw-bold">Nombre completo</label>
-            <input type="text" maxlength="255" required class="form-control" id="name" v-model="name"
+            <input name="name" type="text" maxlength="255" required class="form-control" id="name" v-model="name"
               placeholder="Nombre completo">
           </div>
           <div class="form-group" style="padding: 20px;">
             <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
-            <input type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" required class="form-control" id="phone"
+            <input name="phone" type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" required class="form-control" id="phone"
               v-model="phone" placeholder="XXXXXXXXX">
           </div>
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
             <label for="password" class="form-label text-white fw-bold">Contraseña</label>
-            <input type="password" maxlength="255" required class="form-control" id="password" v-model="password"
+            <input name="password" type="password" maxlength="255" required class="form-control" id="password" v-model="password"
               placeholder="Contraseña" @input="validatePassword" :class="{ 'is-invalid': !isPasswordSafe }">
             <div class="invalid-feedback text-danger" v-if="!isPasswordSafe">{{ passwordError }}</div>
           </div>
@@ -30,19 +30,19 @@
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
           <div class="form-group" style="padding: 20px;">
             <label for="username" class="form-label text-white fw-bold">Nombre de usuario</label>
-            <input type="text" maxlength="50" required class="form-control" id="username" v-model="username"
+            <input name="username" type="text" maxlength="50" required class="form-control" id="username" v-model="username"
               placeholder="Nombre de usuario">
           </div>
           <div class="form-group" style="padding: 20px;">
             <label for="email" class="form-label text-white fw-bold">Email</label>
-            <input :readonly="email !== '' && googleOAuthToken !== ''"
-              :class="{ 'form-control': true, 'readonly': email !== '' && googleOAuthToken !== '' }" type="email"
+            <input name="email" :readonly="googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== ''"
+              :class="{ 'form-control': true, 'readonly': googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== '' }" type="email"
               maxlength="255" required id="email" v-model="email" placeholder="email">
           </div>
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
             <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña</label>
-            <input type="password" required class="form-control" id="confirmPassword" v-model="confirmPassword"
+            <input name="confirmPassword" type="password" required class="form-control" id="confirmPassword" v-model="confirmPassword"
               placeholder="repetir contraseña" :class="{ 'is-invalid': password !== confirmPassword }">
             <div class="invalid-feedback text-danger" v-if="password !== confirmPassword">Las contraseñas no coinciden
             </div>
@@ -87,7 +87,7 @@
                 </span>
               </span>
               <div v-else class="select">Deja la imagen aquí</div>
-              <input type="file" accept="image/*" class="file" ref="fileInput" @change="onFileChanged" id="formFile"
+              <input name="formFile" type="file" accept="image/*" class="file" ref="fileInput" @change="onFileChanged" id="formFile"
                 required />
             </div>
             <div class="container">
@@ -97,6 +97,14 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="secondPage && validationErrors.length > 0" v-for="error in validationErrors" :key="error.message">
+          <span v-if="error.field !== undefined && error.field !== '*'">
+            <i class="fas fa-exclamation-triangle"></i> El campo {{ error.field }} contiene el valor no válido: {{ error.rejectedValue }}. {{ error.message }}
+          </span>
+          <span v-if="error.field === undefined || error.field === '*'">
+            <i class="fas fa-exclamation-triangle"></i> {{ error.message }}
+          </span>
         </div>
         <div class="mt-3" style="padding-top: 20px;" v-if="secondPage">
           <button type="submit" class="btn-primary " @click="changePage" style="margin-right: 20px;">Anterior</button>
@@ -137,11 +145,12 @@ export default {
     const passwordError = ref('');
     const isPasswordSafe = ref('true');
     const store = useStore();
+    const validationErrors = ref([])
 
     const validatePassword = () => {
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
 
-      if (googleOAuthToken !== null || googleOAuthToken !== undefined) {
+      if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
         isPasswordSafe.value = true;
         return '';
       } 
@@ -218,7 +227,7 @@ export default {
     const changePage = () => {
       validatePassword();
   
-      if (googleOAuthToken !== null || googleOAuthToken !== undefined) {
+      if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
         if (name.value && username.value && email.value && phone.value && phone.value.length === 9 && !isNaN(phone.value)
           && email.value.includes('@') && !passwordError.value) {
           secondPage.value = !secondPage.value;
@@ -232,34 +241,21 @@ export default {
       };
 
     const register = () => {
-      const data = {
-        name: name.value,
-        username: username.value,
-        gender: gender.value,
-        email: email.value,
-        phone: phone.value,
-        password: password.value,
-        confirmPassword: confirmPassword.value,
-        img: img.value,
-        tags: selectedTags.value,
-        googleOAuthToken: googleOAuthToken.value
-      };
-      if ((googleOAuthToken === null || googleOAuthToken === undefined) && password.value !== confirmPassword.value) {
+      if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value) {
         alert('Las contraseñas no coinciden');
       } else {
-        const formData = new FormData();
+        const formData = new FormData();  
         formData.append("string-data", new Blob([JSON.stringify({
-          name: data.name,
-          username: data.username,
-          gender: data.gender,
-          email: data.email,
-          phone: data.phone,
-          password: data.password,
-          tag: data.tags,
-          googleOAuthToken: data.googleOAuthToken,
-          
+          name: name.value,
+          username: username.value,
+          gender: gender.value,
+          email: email.value,
+          phone: phone.value,
+          password: password.value,
+          googleOAuthToken: googleOAuthToken.value,
+          tag: selectedTags.value,
         })], { type: "application/json" }));
-        formData.append("profile-pic", data.img);
+        formData.append("profile-pic", img.value);
 
         fetch(import.meta.env.VITE_BACKEND_URL + '/auth/register', {
           method: 'POST',
@@ -268,16 +264,19 @@ export default {
         })
           .then(response => {
             if (response.status === 201) {
-              return response.json();
+              success.value = true;
+              setTimeout(() => {
+                window.location.href = '/login';
+              }, 1000);
             } else {
-              throw new Error('Error al registrar usuario');
+              response.json()
+                .then((body) => {
+                  if(body.length === undefined)
+                    body = [body]
+                  validationErrors.value = body ? body : [{"message": "Ha ocurrido un error inesperado al procesar el registro"}];
+                })
+                .catch(error => console.error(error));
             }
-          })
-          .then(jsonData => {
-            success.value = true;
-            setTimeout(() => {
-              window.location.href = '/login';
-            }, 1000);
           })
           .catch(error => console.error(error));
       }
@@ -342,7 +341,8 @@ export default {
       isPasswordSafe,
       validatePassword,
       googleOAuthToken,
-      redirectToLogin
+      redirectToLogin,
+      validationErrors
     };
   }
 }
