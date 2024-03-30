@@ -291,9 +291,9 @@ export default {
                         <div class="d-flex justify-content-between">
                             <h4 style=" text-align: left;">Comentarios</h4>
                             <i class="fas fa-trash-alt" @click="deleteComment2" 
-                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="userAdvertisement.author?.username !== currentUser.username">
+                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username">
                             </i>
-                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="userAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
+                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
                         </div>
                         <hr>
                         
