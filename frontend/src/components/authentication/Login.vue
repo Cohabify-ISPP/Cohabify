@@ -61,7 +61,6 @@ export default {
         const username = ref('');
         const password = ref('');
         const fetchError = ref(null);
-        const googleOauth = inject('Vue3GoogleOauth');
         const store = useStore();
         const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
         const router = useRouter();
@@ -155,7 +154,6 @@ export default {
             username,
             password,
             fetchError,
-            googleOauth,
             clientId,
             handleGoogleOauth,
             login,
