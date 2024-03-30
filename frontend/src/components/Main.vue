@@ -35,7 +35,7 @@ import Navbar from './Navbar.vue'
             <div class="card-body">
               <h3 class="card-title text-white">Plan <span class="gradient-text">Explorador</span></h3>            
               <p class="card-text text-white">Sé el primero en descubrir a tu nuevo compañero con el plan de explorador.</p>
-              <button type="button" class="btn btn-success">Ver planes</button>
+              <a class="btn btn-success" href="/plan">Ver planes</a>
             </div>
           </div>
           <div class="col-md-4">
