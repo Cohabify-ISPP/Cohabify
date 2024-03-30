@@ -22,7 +22,11 @@ onMounted(async() => {
     const decoded = jwtDecode(token)
     const now = Date.now() / 1000
     image.value = user.value?.imageUri?.startsWith('/') ? `${BACKEND_URL}${user.value?.imageUri}` : user.value?.imageUri
-    isLoggedIn.value = decoded.exp > now
+    if(decoded.exp < now) {
+      logout()
+    } else{
+      isLoggedIn.value = true
+    }
 
   }
 })
