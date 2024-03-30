@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -74,7 +73,7 @@ public class User extends BaseEntity {
     @NotNull
     private List<String> authorities;
 
-    private Double googleOAuthToken;
+    private String googleOAuthToken;
 
     private LocalDate expirationDate;
 

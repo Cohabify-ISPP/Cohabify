@@ -18,7 +18,7 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     Optional<User> findByUsername(String username);
 
-    Optional<User> findBygoogleOAuthToken(Double googleOAuthToken);
+    Optional<User> findBygoogleOAuthToken(String googleOAuthToken);
 
     Optional<User> findByUsernameAndPhone(String username, String phone);
 }

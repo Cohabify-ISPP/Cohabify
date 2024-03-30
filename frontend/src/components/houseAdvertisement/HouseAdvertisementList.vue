@@ -270,7 +270,7 @@ const applyFilters = () => {
                 </div>
                 <div class="list-container mt-4" v-else>
                     <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
-                        <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image">
+                        <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image" style="width:20vw; max-width:20vw">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
                                 <h3>{{ advertisement.title }}</h3>

@@ -49,7 +49,7 @@ public class UserService {
 	  return userRepository.findByIsOwner(owner);
 	}
 
-    public Optional<User> getUserByGoogleOAuthToken(Double googleAuthToken) {
+    public Optional<User> getUserByGoogleOAuthToken(String googleAuthToken) {
         return userRepository.findBygoogleOAuthToken(googleAuthToken);
     }
 

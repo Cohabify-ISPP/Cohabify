@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.security.SecureRandom;
 import jakarta.validation.Valid;
 
 @RestController
@@ -84,8 +84,9 @@ public class AuthenticationController {
 		if (request.getGoogleOAuthToken() == null) {
 			user.setPassword(passwordEncoder.encode(request.getPassword()));
 		} else {
-			// TODO: Cambiar el oauth para meter contraseña en el usuario, que es obligatoria para que spring funcione.
-			user.setPassword("$2a$10$aTgufqicyQMIzNT7tWEdUuK9HmEiDTOYKHADz7TDDBUMwcmNDGhjm");
+			String pass = "";
+			new SecureRandom().ints(100).forEach(x->pass.concat((x + "")));
+			user.setPassword(passwordEncoder.encode(pass));
 		}
 		user.setEmail(request.getEmail());
 		user.setPhone(request.getPhone().replaceAll("-", ""));

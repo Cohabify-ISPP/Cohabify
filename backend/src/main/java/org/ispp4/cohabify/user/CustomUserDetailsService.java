@@ -38,9 +38,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails loadUserByGoogleToken(String googleToken) throws UsernameNotFoundException {
-        User user = userRepository.findBygoogleOAuthToken((Double.valueOf(googleToken) ))
+        User user = userRepository.findBygoogleOAuthToken(googleToken)
                 	.orElseThrow(() -> new UsernameNotFoundException("User not found with token: " + googleToken));
-
+        
         List<GrantedAuthority> authorities = user.getAuthorities().stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
