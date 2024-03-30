@@ -259,7 +259,7 @@ export default {
                     <div class= "botones" style="margin-top: 3%;">
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="likes" style="margin-right: 1vw;">
-                                <button :class="{ 'like-button': true, 'no-clickable' : userAdvertisement.author?.id == currentUser?.id }" :disabled="userAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
+                                <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || currentUser && userAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || userAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
                                     <i v-if="userAdvertisement.author?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878" ></i>
                                     <i v-else class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
                                 </button>
