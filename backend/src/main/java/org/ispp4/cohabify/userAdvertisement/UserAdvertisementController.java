@@ -109,14 +109,10 @@ public class UserAdvertisementController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<UserAdvertisement> processCreationForm(@RequestBody UserAdvertisement userAdvertisement) {		
+	public ResponseEntity<UserAdvertisement> createOrEditUserAd(@RequestBody UserAdvertisement userAdvertisement) {
+		
 		try {
 			if(userAdvertisement.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
-				Optional<UserAdvertisement> advertisement = userAdvertisementService.findByAuthorId(userAdvertisement.getAuthor().getId());
-				if(advertisement.isPresent()) {
-					throw new Exception("User already has an advertisement created");
-				}
-
 				UserAdvertisement res = userAdvertisementService.save(userAdvertisement);
 				return new ResponseEntity<UserAdvertisement>(res, HttpStatus.CREATED);
 			} else {

@@ -71,7 +71,7 @@ public class HouseController {
     }
 
     @PutMapping("/houses/like/{id}")
-    public ResponseEntity<House> modifyRaters(@PathVariable("id") ObjectId id) {
+    public ResponseEntity<House> toggleLike(@PathVariable("id") ObjectId id) {
 
         House house = houseService.findById(id).get();
         User raterUser = global.getCurrentUser(); 

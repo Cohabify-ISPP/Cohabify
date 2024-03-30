@@ -211,7 +211,7 @@ public class UserController {
     }
 
     @PutMapping("like/{id}")
-    public ResponseEntity<User> modifyRaters(@PathVariable("id") ObjectId id) {
+    public ResponseEntity<User> toggleLike(@PathVariable("id") ObjectId id) {
         
         try {
             Optional<User> optionalUser = userService.findById(id);
