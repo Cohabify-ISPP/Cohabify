@@ -159,7 +159,7 @@ export default {
         const toggleLike = async () => {
   
             try {
-                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/user/like/${userAdvertisement.value.author.id}/${currentUser.value.id}`, {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/user/like/${userAdvertisement.value.author.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -259,10 +259,10 @@ export default {
                     <div class= "botones" style="margin-top: 3%;">
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="likes" style="margin-right: 1vw;">
-                                <div @click="toggleLike" style="cursor: pointer">
+                                <button :class="{ 'like-button': true, 'no-clickable' : userAdvertisement.author?.id == currentUser?.id }" :disabled="userAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
                                     <i v-if="userAdvertisement.author?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878" ></i>
                                     <i v-else class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
-                                </div>
+                                </button>
                                  
                                 <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
                             </div>
@@ -534,6 +534,17 @@ export default {
   border: 1px solid #28426B;
   background-color: #FFFFFF;
   color: #28426B;
+}
+
+.like-button {
+    cursor: pointer; 
+    background-color: rgba(0,0,0,0); 
+    border-color: rgba(0,0,0,0); 
+    padding: 0%
+}
+
+.no-clickable {
+    cursor: not-allowed;
 }
 
 </style>
