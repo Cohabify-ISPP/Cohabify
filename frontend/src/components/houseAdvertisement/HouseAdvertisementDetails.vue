@@ -726,7 +726,7 @@ onMounted(() => {
                   background-color: #f2f2f2;
                 "
                 v-if="
-                  houseAdvertisement.author?.username !== currentUser.username && currentUserHouseAdvertisementRating !== null
+                  currentUser.username && houseAdvertisement.author?.username !== currentUser.username && currentUserHouseAdvertisementRating !== null
                 "
               >
               </i>
@@ -736,7 +736,7 @@ onMounted(() => {
                 class="button boton"
                 style="padding: 1vh"
                 v-if="
-                  houseAdvertisement.author?.username !== currentUser.username && currentUserHouseAdvertisementRating === null
+                  currentUser.username && houseAdvertisement.author?.username !== currentUser.username && currentUserHouseAdvertisementRating === null
                 "
               >
                 <strong style="color: white">Comentar</strong>
