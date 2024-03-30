@@ -19,7 +19,6 @@
     "vite-plugin-pwa": "^0.18.1",
     "vue": "^3.4.15",
     "vue-router": "^4.3.0",
-    "vue3-google-oauth2": "^1.0.7",
     "vuex": "^4.1.0"
   }
 }
