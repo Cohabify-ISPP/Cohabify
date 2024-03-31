@@ -203,7 +203,7 @@ export default {
           <div v-if="!empty">
             <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: 30px;">
               <p class="m-1">Fecha de entrada</p>
-              <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="cohabitants = null" style="width:2vw; height: 2vw;">
+              <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="entranceDate = null" style="width:2vw; height: 2vw;">
                 <i class="bi bi-x-lg"></i>
               </button>
             </div>
