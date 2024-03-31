@@ -53,8 +53,8 @@ public class AuthenticationController {
 		this.storageService = storageService;
 	}
 
-	@Value("${google.public.key}")
-	private String googlePublicKey;
+	@Value("${google.public.keys}")
+	private String[] googlePublicKeys;
 	
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
@@ -140,7 +140,7 @@ public class AuthenticationController {
 	public ResponseEntity<?> loginGoogle(@RequestBody String request) {
 		UserDetails userDetails;
 		try {
-			userDetails = (UserDetails) authenticationManager.authenticate(new GoogleAuthenticationToken(request, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")),googlePublicKey)).getPrincipal();
+			userDetails = (UserDetails) authenticationManager.authenticate(new GoogleAuthenticationToken(request, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")), googlePublicKeys)).getPrincipal();
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
