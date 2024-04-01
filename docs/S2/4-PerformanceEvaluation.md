@@ -9,7 +9,9 @@ Evaluación de rendimiento individual
 <table>
     <tbody>
         <tr>
-            <td rowspan=2></p> Barrera García, Ismael (creador)<p>Morato Navarro, Juan Carlos (revisor)<p></p>
+            <td rowspan=2>Arriaza Arriaza, Daniel (editor)<p></p> Barrera García, Ismael (editor)<p></p> Calero López, Marina (editor)<p></p> Galeano de Paz, Guillermo (editor)<p></p> González Castillero, Rafael (editor)<p></p> Márquez Sierra, María (editor)<p></p> Márquez Soldán, María (editor)
+            </td>
+            <td rowspan=2>Morato Navarro, Juan Carlos (revisor,editor) <p></p> Morato Navarro, Olegario (editor)<p></p> Robles Russo, Eduardo (editor)<p></p> Roldán García, Miguel Ángel (editor)<p></p> Romero González, Juan (editor)<p></p> Urquijo Martínez, Álvaro (editor)<p></p>
             </td>
         </tr>
     </tbody>
