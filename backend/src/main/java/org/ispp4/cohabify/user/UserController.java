@@ -5,12 +5,19 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.authentication.JwtService;
+import org.ispp4.cohabify.dto.FormItemValidationError;
+import org.ispp4.cohabify.dto.JwtTokenDto;
+import org.ispp4.cohabify.dto.UserUpdateRequest;
+import org.ispp4.cohabify.storage.StorageService;
+import org.ispp4.cohabify.utils.Global;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,17 +26,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.lang.Nullable;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.ispp4.cohabify.dto.UserUpdateRequest;
-import org.ispp4.cohabify.storage.StorageService;
-import org.ispp4.cohabify.authentication.JwtService;
-import org.ispp4.cohabify.dto.FormItemValidationError;
-import org.ispp4.cohabify.dto.JwtTokenDto;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -44,6 +46,7 @@ public class UserController {
     private JwtService jwtService;
     private PasswordEncoder passwordEncoder;
     private StorageService storageService;
+    private Global global;
 
     @PostMapping("/add")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
@@ -207,29 +210,30 @@ public class UserController {
         }
     }
 
-    @PutMapping("like/{id}/{raterId}")
-    public ResponseEntity<User> modifyRaters(@PathVariable("id") ObjectId id,
-            @PathVariable("raterId") ObjectId raterId) {
-
+    @PutMapping("like/{id}")
+    public ResponseEntity<User> toggleLike(@PathVariable("id") ObjectId id) {
+        
         try {
             Optional<User> optionalUser = userService.findById(id);
             if (optionalUser.isPresent() == false) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 User user = optionalUser.get();
-                Optional<User> optionalRaterUser = userService.findById(raterId);
+                User loggedUser = global.getCurrentUser();
 
-                if (optionalRaterUser.isPresent() == false) {
+                if (loggedUser == null) {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
                 } else {
-                    User raterUser = optionalRaterUser.get();
+                   if (user.getId().equals(loggedUser.getId())) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    }
                     List<User> positiveRaters = user.getLikes();
-                    Optional<User> foundUser = positiveRaters.stream().filter(x-> x.getId().equals(raterId)).findFirst();
+                    Optional<User> foundUser = positiveRaters.stream().filter(x-> x.getId().equals(loggedUser.getId())).findFirst();
                     if (foundUser.isPresent()) {
                         positiveRaters.remove(foundUser.get());
                     } else {
-                        positiveRaters.add(raterUser);
+                        positiveRaters.add(loggedUser);
                     }
                     user.setLikes(positiveRaters);
                     user = userService.save(user);

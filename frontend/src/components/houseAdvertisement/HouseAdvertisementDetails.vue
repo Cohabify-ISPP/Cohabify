@@ -181,7 +181,7 @@ const toggleLike = async () => {
   try {
     const response = await fetch(
       import.meta.env.VITE_BACKEND_URL +
-        `/api/houses/like/${houseAdvertisement.value.house.id}/${currentUser.value.id}`,
+        `/api/houses/like/${houseAdvertisement.value.house.id}`,
       {
         method: "PUT",
         headers: {
@@ -640,22 +640,10 @@ onMounted(() => {
           <div class="d-flex justify-content-center">
             <div class="d-flex justify-content-center align-items-center">
               <div class="likes" style="margin-right: 1vw">
-                <div @click="toggleLike" style="cursor: pointer">
-                  <i
-                    v-if="
-                      houseAdvertisement.house?.likes.some(
-                        (like) => like.id === currentUser.id
-                      )
-                    "
-                    class="bi bi-heart-fill"
-                    style="margin-top: 2px; margin-right: 5px; color: #e87878"
-                  ></i>
-                  <i
-                    v-else
-                    class="bi bi-heart"
-                    style="margin-top: 2px; margin-right: 5px; color: #28426b"
-                  ></i>
-                </div>
+                <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
+                    <i v-if="houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top: 2px; margin-right: 5px; color: #e87878"></i>
+                    <i v-else class="bi bi-heart" style="margin-top: 2px; margin-right: 5px; color: #28426b"></i>
+                </button>
 
                 <span
                   style="font-weight: bold; font-size: large; color: #28426b"
@@ -738,7 +726,7 @@ onMounted(() => {
                   background-color: #f2f2f2;
                 "
                 v-if="
-                  houseAdvertisement.author?.username !== currentUser.username && currentUserHouseAdvertisementRating !== null
+                  currentUser.username && houseAdvertisement.author?.username !== currentUser.username && currentUserHouseAdvertisementRating !== null
                 "
               >
               </i>
@@ -748,7 +736,7 @@ onMounted(() => {
                 class="button boton"
                 style="padding: 1vh"
                 v-if="
-                  houseAdvertisement.author?.username !== currentUser.username && currentUserHouseAdvertisementRating === null
+                  currentUser.username && houseAdvertisement.author?.username !== currentUser.username && currentUserHouseAdvertisementRating === null
                 "
               >
                 <strong style="color: white">Comentar</strong>
@@ -909,6 +897,17 @@ onMounted(() => {
 
 .stars span.active {
   color: gold;
+}
+
+.like-button {
+    cursor: pointer; 
+    background-color: rgba(0,0,0,0); 
+    border-color: rgba(0,0,0,0); 
+    padding: 0%
+}
+
+.no-clickable {
+    cursor: not-allowed;
 }
 
 </style>

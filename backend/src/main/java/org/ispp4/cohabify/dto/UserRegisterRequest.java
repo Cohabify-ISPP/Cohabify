@@ -45,6 +45,6 @@ public class UserRegisterRequest {
     @NotNull
     private Gender gender;
 
-    private Double googleOAuthToken;
+    private String googleOAuthToken;
     
 }

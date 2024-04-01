@@ -74,7 +74,7 @@ const search =  () => {
 
 const applyFilters = () => {
 
-        if (price.value < 0 || price.value > 5000) {
+    if (price.value < 0 || price.value > 5000) {
         errors.value.priceVal = 'Precio fuera de rango'
     }
 
@@ -84,19 +84,22 @@ const applyFilters = () => {
 
     else if (tenants.value < 0 || tenants.value > 10) {
         errors.value.tenantsVal = 'Número de inquilinos fuera de rango'
-    }
 
-    else if (minBathrooms.value !== null) {
+    }else if (minBathrooms.value !== null) {
        if (typeof minBathrooms.value !== 'number') {
             errors.value.minBathroomsVal = 'Valor no numérico'
+            console.log(errors.value.minBathroomsVal)
         } else if (minBathrooms.value < 0) {
             errors.value.minBathroomsVal = 'Valor negativo'
+            console.log(errors.value.minBathroomsVal)
         } else if (maxBathrooms.value == null) {
             errors.value.maxBathroomsVal = 'Valor no indicado'
+            console.log(errors.value.maxBathroomsVal)
         }
     } 
 
     else if (maxBathrooms.value !== null) {
+        console.log(maxBathrooms.value)
         if (typeof maxBathrooms.value !== 'number') {
             errors.value.maxBathroomsVal = 'Valor no numérico'
         } else if (maxBathrooms.value < 0) {
@@ -106,7 +109,7 @@ const applyFilters = () => {
         }
     }
 
-    else if (minBathrooms.value != null && maxBathrooms.value != null && minBathrooms.value > maxBathrooms.value) {
+    else if (minBathrooms.value !== null && maxBathrooms.value !== null && minBathrooms.value > maxBathrooms.value) {
         if (!errors.value.minBathroomsVal) {
             errors.value.minBathroomsVal = 'Valor mayor que el máximo seleccionado'
         }
@@ -132,18 +135,20 @@ const applyFilters = () => {
         }
     }
 
-    else if (minBedrooms.value != null && maxBedrooms.value != null && minBedrooms.value > maxBedrooms.value) {
+    else if (minBedrooms.value !== null && maxBedrooms.value !== null && minBedrooms.value > maxBedrooms.value) {
         if (!errors.value.minRoomsVal) {
             errors.value.minRoomsVal = 'Valor mayor que el máximo seleccionado'
         }
     }
 
-    else{
+    if(Object.keys(errors.value).length === 0){
+        
         filtered.value ? (
         filteredAdvertisements.value = filteredAdvertisements.value.filter(a => {
             return (price.value >= a.price || price.value == 0) &&
             (meters.value <= a.house.area || meters.value == 0) &&
-            ((empty.value == a.house.empty) || (tenants.value>=a.house.tenants || tenants.value==0)) &&
+            (!empty.value && tenants.value>=a.tenants.length|| tenants.value ==0 || empty.value) &&
+            (empty.value && a.tenants.length==0 || !empty.value) &&
             (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
             (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
             (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
@@ -152,7 +157,8 @@ const applyFilters = () => {
         filteredAdvertisements.value = advertisements.value.filter(a => {
             return (price.value >= a.price || price.value == 0) &&
             (meters.value <= a.house.area || meters.value == 0) &&
-            ((empty.value == a.house.empty) || (tenants.value>=a.house.tenants || tenants.value==0)) &&
+            (!empty.value && tenants.value>=a.tenants.length|| tenants.value ==0 || empty.value) &&
+            (empty.value && a.tenants.length==0 || !empty.value) &&
             (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
             (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
             (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
@@ -270,7 +276,7 @@ const applyFilters = () => {
                 </div>
                 <div class="list-container mt-4" v-else>
                     <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
-                        <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image">
+                        <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image" style="width:20vw; max-width:20vw">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
                                 <h3>{{ advertisement.title }}</h3>

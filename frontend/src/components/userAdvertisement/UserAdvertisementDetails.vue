@@ -159,7 +159,7 @@ export default {
         const toggleLike = async () => {
   
             try {
-                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/user/like/${userAdvertisement.value.author.id}/${currentUser.value.id}`, {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/user/like/${userAdvertisement.value.author.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -259,10 +259,10 @@ export default {
                     <div class= "botones" style="margin-top: 3%;">
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="likes" style="margin-right: 1vw;">
-                                <div @click="toggleLike" style="cursor: pointer">
+                                <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || currentUser && userAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || userAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
                                     <i v-if="userAdvertisement.author?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878" ></i>
                                     <i v-else class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
-                                </div>
+                                </button>
                                  
                                 <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
                             </div>
@@ -291,9 +291,9 @@ export default {
                         <div class="d-flex justify-content-between">
                             <h4 style=" text-align: left;">Comentarios</h4>
                             <i class="fas fa-trash-alt" @click="deleteComment2" 
-                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="userAdvertisement.author?.username !== currentUser.username">
+                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username">
                             </i>
-                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="userAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
+                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
                         </div>
                         <hr>
                         
@@ -340,7 +340,7 @@ export default {
                         <hr>
                         <h5 style="color: #5D5E60; text-align: left;"><i class="bi bi-geo-alt" style="margin-left: 5px;"></i> {{ userAdvertisement.desiredLocation }}</h5>
                         <h5 style="color: #5D5E60; text-align: left;"><i class="bi bi-calendar-week-fill" style="margin-left: 5px;"></i> {{ userAdvertisement.entranceDate }}<span v-if="userAdvertisement.exitDate != null"> a {{ userAdvertisement.exitDate }}</span> </h5>
-                        <h5 style="color: #5D5E60; text-align: left;"> Máximo {{ userAdvertisement.maxCohabitants }} compañeros</h5> 
+                        <h5 style="color: #5D5E60; text-align: left;"> Máximo {{ userAdvertisement.maxCohabitants }} compañero(s)</h5> 
                     </div>
 
                     <div v-if="userAdvertisement.author?.tag.length === 0" style="text-align: left; margin-top: 5%;">
@@ -534,6 +534,17 @@ export default {
   border: 1px solid #28426B;
   background-color: #FFFFFF;
   color: #28426B;
+}
+
+.like-button {
+    cursor: pointer; 
+    background-color: rgba(0,0,0,0); 
+    border-color: rgba(0,0,0,0); 
+    padding: 0%
+}
+
+.no-clickable {
+    cursor: not-allowed;
 }
 
 </style>

@@ -379,6 +379,7 @@ export default {
         }
       }catch (error){
         console.error("Error:", error);
+        alert("Catastro no encontrado");
       }
     }
     
@@ -391,6 +392,10 @@ export default {
       }
       if (selectedTags.value.length === 0) {
         alert("Selecciona al menos un tag");
+        return;
+      }
+      if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
+        alert("Selecciona un catastro válido");
         return;
       }
       

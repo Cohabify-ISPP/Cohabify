@@ -9,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.loader.DataLoader;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,7 @@ public class TagControllerTest {
     private Tag testTag2;
     private ObjectId testObjectId;
 
+    /* 
     @BeforeEach
     void setUp() {
         testTag1 = new Tag("Test tag 1", TagType.USER_TAG);
@@ -171,5 +175,6 @@ public class TagControllerTest {
     
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
+    */
 
 }

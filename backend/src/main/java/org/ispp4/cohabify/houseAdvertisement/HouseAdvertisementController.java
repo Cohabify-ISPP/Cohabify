@@ -32,9 +32,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/advertisements/houses")
@@ -51,16 +53,23 @@ public class HouseAdvertisementController {
     @GetMapping("")
     public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(@Nullable Principal principal) {
         List<HouseAdvertisement> advertisements = advertisementService.findAll();
-        if(principal != null) {
+
+        if (principal == null) {
+            advertisements = advertisements.stream() 
+            // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+        .filter(a -> System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000).toList();
+        }else{
             User user = userService.getUserByUsername(principal.getName());
-            if(user.getPlan().equals(Plan.BASIC)) {
+            if(user.getPlan().equals(Plan.BASIC) ) {
+
                 advertisements = advertisements.stream() 
                                                 // Filter advertisements to leave the ones that are owned or that were created at least a day before now
                                             .filter(a -> a.getAuthor().getId().equals(user.getId()) ||
                                                             System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
                                             .toList();
             }
-        }
+        } 
+        
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
@@ -84,7 +93,11 @@ public class HouseAdvertisementController {
 
     @PostMapping("")
 	public ResponseEntity<?> createAdvertisement(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
-    @RequestPart(value = "images",required = false) List<MultipartFile> images) throws BadRequestException {
+    @RequestPart(value = "images",required = true) List<MultipartFile> images) throws BadRequestException {
+
+        if (images == null || images.size() == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "images are required");
+        }
 
         if(request.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
             House house = new House();
@@ -116,7 +129,7 @@ public class HouseAdvertisementController {
             for(int i = 0; i < images.size(); i++){
                 MultipartFile image = images.get(i);
                 String[] filename_split = images.get(i).getOriginalFilename().split("\\.");
-                String filename = advertisement.getJsonId() + "." + filename_split[filename_split.length-1];
+                String filename = advertisement.getJsonId() +UUID.randomUUID().toString() + "." + filename_split[filename_split.length-1];
                 String static_path;
                 try {
                     static_path = storageService.saveImage(filename, image);
@@ -127,9 +140,9 @@ public class HouseAdvertisementController {
                 }
             
                 imagesPath.add(static_path);
-                advertisement.setImages(imagesPath);
-                advertisement = advertisementService.save(advertisement);
             }
+            advertisement.setImages(imagesPath);
+            advertisement = advertisementService.save(advertisement);
             return ResponseEntity.status(HttpStatus.CREATED)
 							 .body(advertisement);  
         }else{
@@ -165,7 +178,7 @@ public class HouseAdvertisementController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAdvertisement(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
-    @RequestPart(value = "images",required = false) List<MultipartFile> images,@PathVariable ObjectId id) throws BadRequestException {
+    @RequestPart(value = "images",required = true) List<MultipartFile> images,@PathVariable ObjectId id) throws BadRequestException {
 		
 		if(result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -174,6 +187,11 @@ public class HouseAdvertisementController {
 										 	 	.map(fe -> new FormItemValidationError(fe))
 										 	 	.toList());
 		}
+
+        if (images == null || images.size() == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "images are required");
+        }
+
         if(request.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
             
             House house = houseService.findById(request.getHouseId()).get();
@@ -206,7 +224,7 @@ public class HouseAdvertisementController {
                 for(int i = 0; i < images.size(); i++){
                     MultipartFile image = images.get(i);
                     String[] filename_split = images.get(i).getOriginalFilename().split("\\.");
-                    String filename = advertisement.getJsonId() + "." + filename_split[filename_split.length-1];
+                    String filename = advertisement.getJsonId() +UUID.randomUUID().toString() + "." + filename_split[filename_split.length-1];
                     String static_path;
                     try {
                         static_path = storageService.saveImage(filename, image);
@@ -218,10 +236,9 @@ public class HouseAdvertisementController {
                 
                     imagesPath.add(static_path);
                     
-                    
-                    advertisement.setImages(imagesPath);
-                    advertisement = advertisementService.save(advertisement);
                 }
+                advertisement.setImages(imagesPath);
+                advertisement = advertisementService.save(advertisement);
                 
             }else{
                 imagesPath = request.getImagesB();
