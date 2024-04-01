@@ -1,176 +1,34 @@
 <script>
-import { ref, onMounted, computed, inject } from 'vue';
-import Navbar from '../Navbar.vue'; // Import the Navbar component correctly
-import { useRoute } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
+import Navbar from '../Navbar.vue';
+
 
 export default {
 
   setup() {
 
-    /*
-    const tags = ref([{ tag: 'Ordenado', tagtype: "USER_TAG" }, { tag: 'Limpio', tagtype: "USER_TAG" },
-    { tag: 'Amueblado', tagtype: "USER_TAG" }, { tag: 'Céntrico', tagtype: "USER_TAG" },
-    { tag: 'Exterior', tagtype: "USER_TAG" }, { tag: 'Interior', tagtype: "USER_TAG" },
-    { tag: 'Luminoso', tagtype: "USER_TAG" }, { tag: 'Tranquilo', tagtype: "USER_TAG" },
-    { tag: 'Reformado', tagtype: "USER_TAG" }, { tag: 'Terraza', tagtype: "USER_TAG" },
-    { tag: 'Ascensor', tagtype: "USER_TAG" }, { tag: 'Parking', tagtype: "USER_TAG" },
-    { tag: 'Piscina', tagtype: "USER_TAG" }, { tag: 'Jardín', tagtype: "USER_TAG" },
-    { tag: 'Calefacción', tagtype: "USER_TAG" }, { tag: 'Aire acondicionado', tagtype: "USER_TAG" },
-    { tag: 'Vistas', tagtype: "USER_TAG" }, { tag: 'Amueblado', tagtype: "USER_TAG" },
-    { tag: 'Céntrico', tagtype: "USER_TAG" }, { tag: 'Exterior', tagtype: "USER_TAG" },
-    { tag: 'Interior', tagtype: "USER_TAG" }, { tag: 'Luminoso', tagtype: "USER_TAG" },
-    { tag: 'Tranquilo', tagtype: "USER_TAG" }, { tag: 'Reformado', tagtype: "USER_TAG" },
-    { tag: 'Terraza', tagtype: "USER_TAG" }, { tag: 'Ascensor', tagtype: "USER_TAG" },
-    { tag: 'Parking', tagtype: "USER_TAG" }, { tag: 'Piscina', tagtype: "USER_TAG" },
-    { tag: 'Jardín', tagtype: "USER_TAG" }, { tag: 'Calefacción', tagtype: "USER_TAG" },
-    { tag: 'Aire acondicionado', tagtype: "USER_TAG" }, { tag: 'Vistas', tagtype: "USER_TAG" },
-    { tag: 'Amueblado', tagtype: "USER_TAG" }, { tag: 'Céntrico', tagtype: "USER_TAG" },
-    { tag: 'Exterior', tagtype: "USER_TAG" }, { tag: 'Interior', tagtype: "USER_TAG" }])
-    */
     const tagsSeleccionadas = ref([])
-
-    const userAdas = [
-      {
-        description: "Description 1",
-        minBudget: 100,
-        maxBudget: 200,
-        desiredLocation: "Street 1",
-        entranceDate: "2024-03-01",
-        exitDate: "2024-03-31",
-        maxCohabitants: 2,
-        likes: 10,
-        comments: [
-          { user: "User1", comment: "Comment 1" },
-          { user: "User2", comment: "Comment 2" },
-          { user: "User3", comment: "Comment 3" }
-        ],
-        author: {
-          name: "User 1",
-          gender: "Male",
-          description: "User 1 description",
-          imageUri: "https://via.placeholder.com/200",
-          tags: [
-            { tag: "Ordenado", tagtype: "USER_TAG" },
-            { tag: "Limpio", tagtype: "USER_TAG" }
-          ]
-        }
-      },
-      {
-        description: "Description 2 adsftyguhijokpjiuhjmokijuh",
-        minBudget: 150,
-        maxBudget: 300,
-        desiredLocation: "Street 2",
-        entranceDate: "2024-04-01",
-        exitDate: "2024-04-30",
-        maxCohabitants: 3,
-        likes: 15,
-        comments: [
-          { user: "User4", comment: "Comment 4" },
-          { user: "User5", comment: "Comment 5" }
-        ],
-        author: {
-          name: "User 2",
-          gender: "Female",
-          description: "User 2 description ashgdasjgdkalsjhjfgajshdkldsnh,bva",
-          imageUri: "https://via.placeholder.com/200",
-          tags: [
-            { tag: "Amueblado", tagtype: "USER_TAG" },
-            { tag: "Céntrico", tagtype: "USER_TAG" }
-          ]
-        }
-      },
-      {
-        description: "Description 3",
-        minBudget: 200,
-        maxBudget: 400,
-        desiredLocation: "Street 3",
-        entranceDate: "2024-05-01",
-        exitDate: "2024-05-31",
-        maxCohabitants: 4,
-        likes: 20,
-        comments: [
-          { user: "User6", comment: "Comment 6" },
-          { user: "User7", comment: "Comment 7" },
-          { user: "User8", comment: "Comment 8" }
-        ],
-        author: {
-          name: "User 3",
-          gender: "Non-binary",
-          description: "User 3 description",
-          imageUri: "https://via.placeholder.com/200",
-          tags: [
-            { tag: "Exterior", tagtype: "USER_TAG" },
-            { tag: "Interior", tagtype: "USER_TAG" }
-          ]
-        }
-      },
-      {
-        description: "Description 4",
-        minBudget: 250,
-        maxBudget: 500,
-        desiredLocation: "Street 4",
-        entranceDate: "2024-06-01",
-        exitDate: "2024-06-30",
-        maxCohabitants: 5,
-        likes: 25,
-        comments: [
-          { user: "User9", comment: "Comment 9" }
-        ],
-        author: {
-          name: "User 4",
-          gender: "Male",
-          description: "User 4 description",
-          imageUri: "https://via.placeholder.com/200",
-          tags: [
-            { tag: "Luminoso", tagtype: "USER_TAG" },
-            { tag: "Tranquilo", tagtype: "USER_TAG" },
-            { tag: 'Parking', tagtype: "USER_TAG" }, { tag: 'Piscina', tagtype: "USER_TAG" },
-            { tag: 'Jardín', tagtype: "USER_TAG" }, { tag: 'Calefacción', tagtype: "USER_TAG" },
-            { tag: 'Aire acondicionado', tagtype: "USER_TAG" }, { tag: 'Vistas', tagtype: "USER_TAG" },
-            { tag: 'Amueblado', tagtype: "USER_TAG" }, { tag: 'Céntrico', tagtype: "USER_TAG" },
-            { tag: 'Exterior', tagtype: "USER_TAG" }, { tag: 'Interior', tagtype: "USER_TAG" },
-            { tag: "Tranquilo", tagtype: "USER_TAG" },
-            { tag: 'Parking', tagtype: "USER_TAG" }, { tag: 'Piscina', tagtype: "USER_TAG" },
-            { tag: 'Jardín', tagtype: "USER_TAG" }, { tag: 'Calefacción', tagtype: "USER_TAG" },
-            { tag: 'Aire acondicionado', tagtype: "USER_TAG" }, { tag: 'Vistas', tagtype: "USER_TAG" }
-          ]
-        }
-      },
-      {
-        description: "Description 5",
-        minBudget: 300,
-        maxBudget: 600,
-        desiredLocation: "Street 5",
-        entranceDate: "2024-07-01",
-        exitDate: "2024-07-31",
-        maxCohabitants: 6,
-        likes: 30,
-        comments: [
-          { user: "User10", comment: "Comment 10" },
-          { user: "User11", comment: "Comment 11" }
-        ],
-        author: {
-          name: "User 5",
-          gender: "Female",
-          description: "User 5 description",
-          imageUri: "https://via.placeholder.com/200",
-          tags: [
-            { tag: "Reformado", tagtype: "USER_TAG" },
-            { tag: "Terraza", tagtype: "USER_TAG" }
-          ]
-        }
-      }
-    ];
-
+    const budget = ref(0)
+    const cohabitants = ref(0)
+    const errors = ref([])
     const userAds = ref([]);
     const tags = ref([]);
-    const route = useRoute();
+    const entranceDate = ref(null);
+    const currentDate = new Date();
+    const filtersVisibility = ref(false);
+    const filteredAdvertisements = ref([]);
+    const filtered = ref(false);
+    const empty = ref(false);
+    const searchTerm = ref('');
 
     const fetchAdvertisements = async () => {
       try {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users`,
           {
             method: "GET",
+            headers: {
+                'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+            },
             credentials: "include",
           });
 
@@ -191,6 +49,9 @@ export default {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/tag/types/USER_TAG`,
           {
             method: "GET",
+			headers: {
+				'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+			},
             credentials: "include",
           });
         const data = await response.json();
@@ -200,14 +61,42 @@ export default {
       }
     };
 
-    /*
-    const searchQuery = ref('');
-    const isSubmitted = ref(false);
+    const applyFilters = () => {
+      
+      const selectedDate = entranceDate.value ? new Date(entranceDate.value) : null;
+      if (budget.value < 0 || budget.value > 5000) {
+        errors.value.push('budgetVal')
+      }
 
-    function searchFunction() {
-      isSubmitted.value = true;
+      else if (cohabitants.value < 0 || cohabitants.value > 10) {
+        errors.value.push('cohabitantsVal')
+      }
+
+      else if (selectedDate !== null && selectedDate < currentDate ) {
+        errors.value.push('entranceDateVal');
+      }
+      else{
+        filtered.value ? filteredAdvertisements.value = filteredAdvertisements.value.filter(a => {
+        const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
+        const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
+        return (budget.value >= a.maxBudget || budget.value == 0) &&
+            (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
+            isDateValid;
+        }):(
+        filteredAdvertisements.value = userAds.value.filter(a => {
+          const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
+          const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
+          return (budget.value >= a.maxBudget || budget.value == 0) &&
+              (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
+              isDateValid;
+        }))
+        filtered.value = true
+      }
     }
-    */
+
+    const currentAdvertisements = computed(() => {
+      return filtered.value ? filteredAdvertisements.value : userAds.value
+    })
 
     const toggleTag = (tag) => {
       const index = tagsSeleccionadas.value.indexOf(tag);
@@ -221,35 +110,38 @@ export default {
     function toggleDivVisibility() {
       var div17 = document.getElementById('div-17');
       div17.classList.toggle('hidden');
+      var filters = document.getElementById('filterContainer');
+      filters.classList.toggle('hidden');
+      
+
     }
 
     const filteredUserAdsByTags = computed(() => {
       if (tagsSeleccionadas.value.length === 0) {
-        return userAds.value;
+        return currentAdvertisements.value;
       } else {
-        return userAds.value.filter(ad => {
+        return currentAdvertisements.value.filter(ad => {
           return tagsSeleccionadas.value.every(selectedTag => {
             return ad.author.tag.some(adTag => adTag.tag === selectedTag.tag);
           });
         });
       }
     });
-
-    /*
-    const filteredUserAdsByNameAndDescription = computed(() => {
-      if (!isSubmitted.value) {
-        return userAds;
-      }
-
-      const query = searchQuery.value.toLowerCase().trim();
-
-      return userAds.filter(ad => {
-        const nameMatch = ad.author.name.toLowerCase().includes(query);
-        const descriptionMatch = ad.author.description.toLowerCase().includes(query);
-        return nameMatch || descriptionMatch;
-      });
-    });
-    */
+    
+    const search =  () => {
+      budget.value = 0;
+      cohabitants.value = 0;
+      entranceDate.value = null;
+      filteredAdvertisements.value = userAds.value.filter(a => {
+        if(searchTerm.value === ''){
+          return true;
+        }else{
+          return a.desiredLocation.toLowerCase().includes(searchTerm.value.toLowerCase()) || a.description.toLowerCase().includes(searchTerm.value.toLowerCase());
+        }
+      })
+      filtered.value = true;
+    
+}
 
     onMounted(() => {
       fetchAdvertisements();
@@ -258,12 +150,21 @@ export default {
     });
 
     return {
-      userAds: filteredUserAdsByTags,
+      currentAdvertisements: filteredUserAdsByTags,
       tags,
+      errors,
+      budget,
+      cohabitants,
       tagsSeleccionadas,
       toggleDivVisibility,
-      //searchFunction,
-      toggleTag
+      applyFilters,
+      toggleTag,
+      filtersVisibility,
+      entranceDate,
+      empty,
+      filtered,
+      searchTerm,
+      search
     }
   },
 }
@@ -271,55 +172,113 @@ export default {
 
 <template>
   <Navbar />
-  <div class="div-2">
-    <div class="div-13">
-      <div class="column-4">
-        <div class="div-14">
-          <div class="search-bar">
-            <form class="d-flex w-100 justify-content-between" onsubmit="searchFunction();">
-              <div id="searchForm" style="width:95%">
-                <input class="searchInput" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
-              </div>
-              <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit">
-                <img src="/images/search.png" alt="Buscar" />
-              </button>
-              <button @click.prevent="toggleDivVisibility" class="searchButton d-flex align-items-center">
-                <img src="/images/filter.png" alt="Filter" />
-              </button>
-            </form>
+  <div style="display: flex; flex-direction: row; height:100%">
+    <div id="filterContainer" class="container-fluid" style="padding-left:0; flex-basis:20vw; flex-shrink:0; transition: opacity 0.3s ease, visibility 0.3s ease;">
+      <div class="col filter-column align-items-center" id="filters" style="height:auto;  overflow: hidden; ">
+        <form class="needs-validation mb-4" style="width:90%" novalidate>
+          <div class="d-flex justify-content-between m-1 mt-4 mr-3" style="width: 100%; height: 30px; border-bottom-right-radius: 0px;">
+            <div>
+              <p class="m-1">Máx. Presupuesto</p>
+            </div>
+            <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="budget = 0" style="width:2vw; height: 2vw;">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <input type="range" class="form-range" min="0" max="5000" step="50" v-model="budget" id="budgetVal"
+            :class="{ 'is-invalid': errors.includes('budgetVal') }">
+          <b>{{ budget == 0 ? '-' : budget == 5000 ? '+ ' + budget.toString() + '€/mes' : '<= ' + budget.toString() + '€/mes' }}</b>
+
+              <div v-if="!empty">
+                <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: auto; text-wrap:nowrap">
+                  <p class="m-1">Máx. Inquilinos</p>
+                  <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="cohabitants = 0" style="width:2vw; height: 2vw;">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                </div>
+                <input type="range" class="form-range" min="0" max="10" step="1" v-model="cohabitants"
+                  id="cohabitantsVal" :class="{ 'is-invalid': errors.includes('cohabitantsVal') }">
+                <b>{{ cohabitants == 0 ? '-' : cohabitants == 10 ? '+ ' + cohabitants.toString() : '<= ' + cohabitants.toString() }}</b>
           </div>
 
-          <div class="div-17" id="div-17">
-            <div class="tags-container">
-              <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
-                :class="{ 'selected': tagsSeleccionadas.includes(tag), 'unselected': !tagsSeleccionadas.includes(tag) }">
-                {{ tag.tag }}
-              </span>
+          <div v-if="!empty">
+            <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: 30px;">
+              <p class="m-1">Fecha de entrada</p>
+              <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="entranceDate = null" style="width:2vw; height: 2vw;">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+            <input type="date" v-model="entranceDate" id="entranceDate"  class="form-control" :class="{
+              ' is-invalid':
+                errors.includes('entranceDateVal')
+            }">
+                    <b>{{ entranceDate ? entranceDate : '-' }}</b>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-center mb-2" >
+                <button type="button" class="btn btn-primary" style="margin-right:4px" @click.prevent="errors = []; applyFilters()">Aplicar</button>
+                <button class="btn btn-danger ml-2" style="margin-left:4px" @click.prevent="errors = [];filtered=false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
+              </div>
+        </form>
+      </div>
+    </div>
+    <div class="div-2" style="flex-basis:3">
+      <div class="div-13">
+        <div class="column-4">
+          <div class="div-14">
+            <div class="search-bar">
+              <form class="d-flex w-100 justify-content-between">
+                <div id="searchForm" style="width:95%">
+                  <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
+                </div>
+                <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
+                  <img src="/images/search.png" alt="Buscar" />
+                </button>
+                <button @click.prevent="toggleDivVisibility" class="searchButton d-flex align-items-center">
+                  <img src="/images/filter.png" alt="Filter" />
+                </button>
+              </form>
+            </div>
+
+            <div class="div-17" id="div-17">
+              <div class="tags-container">
+                <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)" :class="{
+              ' selected': tagsSeleccionadas.includes(tag), 'unselected': !tagsSeleccionadas.includes(tag)
+            }">
+                  <b>{{ tag.tag }}</b>
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="box" style="width:80vw" v-for="anuncio in userAds" :key="anuncio">
-      <a style="color: inherit; text-decoration: none; width:100%" :href="'/advertisements/users/' + anuncio?.id">
-        <div class="inside-box" style="width:100%">
-          <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario">
-          <div class="columna-informacion" style="width:100%">
-            <div class="user-name" style="text-align: left;">{{ anuncio?.author?.username }}</div>
-            <div class="text-truncate"
-              style="display:flex; width:100%; justify-content: space-between; align-content: left; margin-right: 20px;">
-              {{ anuncio?.author?.description }}
+      <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in currentAdvertisements" :key="anuncio">
+        <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + anuncio?.id)">
+          <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
+            <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario"
+              style="margin-right: 10px;">
+
+            <div class="columna-informacion" style="flex: 1;">
+              <div class="user-name" style="text-align: left;">{{ anuncio?.author?.username }}<img v-if="anuncio?.author?.plan === 'explorer'" 
+                style="margin-left: 6px; max-height: 35px;"
+                src="/images/verificado.png"
+                loading="lazy"
+              /></div>
+              <div class="text-truncate"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-right: 4vh;">
+                <span>{{ anuncio?.desiredLocation }}</span>
+                <h3><b>{{ anuncio?.maxBudget }}€/mes</b></h3>
+                <h3><b>Máximo {{ anuncio?.maxCohabitants }} inquilinos</b></h3>
+              </div>
+              <div class="tags-container" style="display: flex; align-items: center;">
+                <span v-for="(tag, index) in anuncio?.author?.tag.slice(0, 8)" :key="index" class="tag selected">
+                  <b>{{ tag.tag }}</b>
+                </span>
+              </div>
             </div>
           </div>
-          <div class="tags-container" style="width:40%; display:flex; align-items: center">
-            <span v-for="(tag, index) in anuncio?.author?.tag.slice(0, 8)" :key="index" class="tag"
-              @click="toggleTag(tag)"
-              :class="{ 'selected': tagsSeleccionadas.includes(tag), 'selected': !tagsSeleccionadas.includes(tag) }">
-              {{ tag.tag }}
-            </span>
-          </div>
-        </div>
-      </a>
+
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -380,13 +339,12 @@ export default {
 .div-14 {
   position: relative;
   align-self: center;
-  width: 1292px;
+  width: 1000px;
   max-width: 100%;
-  gap: 20px;
-  padding: 31px 43px;
+  gap: 10px;
+  padding-top: 6vh;
   position: relative;
   display: flex;
-  margin-top: 69px;
   flex-grow: 1;
   flex-direction: column;
 }
@@ -394,7 +352,7 @@ export default {
 @media (max-width: 991px) {
   .div-14 {
     max-width: 100%;
-    margin-top: 40px;
+    margin-top: 20px;
   }
 }
 
@@ -411,8 +369,8 @@ export default {
   font-weight: 700;
   align-items: center;
   flex-wrap: wrap;
-  white-space: nowrap;
-  padding: 17px 67px;
+  white-space: initial;
+  padding: 10px 50px;
 }
 
 @media (max-width: 991px) {
@@ -435,6 +393,7 @@ export default {
   align-items: start;
   margin: -10px 28px 0;
   padding: 31px 60px 13px 13px;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 @media (max-width: 991px) {
@@ -448,7 +407,7 @@ export default {
 .box {
   position: relative;
   border-radius: 15px;
-  background-color: rgba(182, 205, 239, 1);
+  background-color: #FFFFFF;
   align-self: center;
   display: flex;
   margin-top: 17px;
@@ -456,6 +415,12 @@ export default {
   justify-content: space-between;
   gap: 20px;
   padding: 1vw 1vh;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.box:hover {
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.2s ease;
 }
 
 .inside-box {
@@ -483,19 +448,30 @@ export default {
   background-color: rgba(182, 205, 239, 0);
 }
 
+.etiqueta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  border: 1px solid #28426B;
+  background-color: #FFFFFF;
+  color: #28426B;
+}
+
 .tag {
   display: inline-block;
   padding: 5px 10px;
   margin: 5px;
   border-radius: 20px;
   cursor: pointer;
-  background-color: rgb(156, 182, 221);
+  border: 1px solid #28426B;
+  background-color: #FFFFFF;
   color: #28426B;
 }
 
 .selected {
   background-color: #28426B;
-  color: #ffff;
+  color: #FFFFFF;
 }
 
 .user-name {
@@ -507,8 +483,8 @@ export default {
 
 .imagen-circulo {
   position: relative;
-  width: 20vh;
-  height: 20vh;
+  width: 15vh;
+  height: 15vh;
   overflow: hidden;
   border-radius: 50%;
   display: flex;
@@ -532,7 +508,6 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 30px;
   font: 400 20px Karla, sans-serif;
 }
 
@@ -560,6 +535,11 @@ export default {
 }
 
 .hidden {
-  display: none;
+  opacity: 0;
+  max-height: 0;
+  max-width: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
+
+
 </style>

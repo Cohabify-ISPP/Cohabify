@@ -1,39 +1,86 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { jwtDecode } from 'jwt-decode'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 const isLoggedIn = ref(false)
+const image = ref(null)
+const store = useStore()
+const user = computed(() => store.state.user);
+const BACKEND_URL= import.meta.env.VITE_BACKEND_URL
+const router = useRouter()
 
-onMounted(() => {
-  console.log('mounted')
-  const cookies = document.cookie.split('; ')
-  console.log(cookies)
-  const authCookie = cookies.find(cookie => cookie.startsWith('Authentication='))
-  const token = authCookie ? authCookie.split('=')[1] : null
-  console.log(token)
+onMounted(async() => {
+  const token = localStorage.getItem("authentication")
 
   if (token) {
+    if (user.value ===null || user.value === undefined || Object.keys(user.value).length === 0) {
+      await store.dispatch('cargarUser')
+    }
+     
     const decoded = jwtDecode(token)
-    console.log(decoded)
     const now = Date.now() / 1000
-    isLoggedIn.value = decoded.exp > now
-    console.log(isLoggedIn.value)
-  }
+    image.value = user.value?.imageUri?.startsWith('/') ? `${BACKEND_URL}${user.value?.imageUri}` : user.value?.imageUri
+    if(decoded.exp < now) {
+      logout()
+    } else{
+      isLoggedIn.value = true
+    }
 
+  }
 })
 
 const logout = () => {
-  document.cookie = 'Authentication=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+  localStorage.removeItem("authentication")
   isLoggedIn.value = false
+  store.commit('limpiarUser')
+  router.push('/')
 }
 
-</script>
+const findMyUserAd = async () => {
+  try {
+    const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/myAdvertisement/${user.value.id}`,
+        {
+            method: "GET",
+            headers: {
+                'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+            },
+            credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          router.push(`/advertisements/users/${data.id}`);
+        } else{
+          if (response.status === 404){
+          router.push("/advertisements/users/myAdvertisement")
+          } else {
+            console.error("Error:", response);
+          }
+        }
+
+    } catch (error) {
+    if (error.response.status === 404) {
+      router.push("/advertisements/users/myAdvertisement")
+    } else {
+        console.error("Error:", error);
+    }
+  }
+}
+
+
+watch(user, (newValue) => {
+  if (newValue !== null && newValue !== undefined && Object.keys(newValue).length !== 0) { 
+    image.value = newValue.imageUri.startsWith('/') ? `${BACKEND_URL}${newValue.imageUri}` : newValue.imageUri;
+  }
+});
+</script> 
 
 <template>
-<nav class="navbar navbar-expand navbar-custom sticky-top">
+<nav class="navbar navbar-expand navbar-dark navbar-custom sticky-top">
   <div class="container-fluid">
-
-    <a class="navbar-brand mt-2 mt-lg-0" href="/">
+    <a class="navbar-brand mt-2 mt-lg-0" href="/" @click.prevent="$router.push('/')">
       <img style="max-height: 35px;"
         src="/images/LogoMonoColor.png"
         alt="Cohabify"
@@ -43,37 +90,75 @@ const logout = () => {
 
     <div class="d-flex align-items-center" v-if="isLoggedIn">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
+        
         <li class="nav-item">
           <a class="nav-link" href="#"><span class="badge rounded-pill badge-notification bg-danger">1</span> Chat</a>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Buscar
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/advertisements/houses" @click.prevent="$router.push('/advertisements/houses')">Viviendas</a></li>
+            <li><a class="dropdown-item" href="/advertisements/users" @click.prevent="$router.push('/advertisements/users')">Compañeros</a></li>
+          </ul>
+        </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Planes</a>
+          <a class="nav-link" href="/plan">Planes</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Publicar Anuncio
+            Anuncios de vivienda
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/advertisements/houses/new">Vivienda</a></li>
-            <li><a class="dropdown-item" href="/advertisements/users/new">Búsqueda</a></li>
+            <li><a class="dropdown-item" @click.prevent="$router.push('/myAdvertisements/house')">Ver publicados</a></li>
+            <li v-if="user?.plan === 'owner'"><a class="dropdown-item" href="/advertisements/houses/new" @click.prevent="$router.push('/advertisements/houses/new')">Publicar</a></li>           
           </ul>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Anuncios de compañero
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" @click.prevent="findMyUserAd">Ver publicado</a></li>
+            <li><a class="dropdown-item" href="/advertisements/users/new" @click.prevent="$router.push('/advertisements/users/myAdvertisement')">Publicar/Editar</a></li>
+          </ul>
+        </li>
+        
       </ul>
       
-      <div class="dropdown" style="margin-left: 1vw; margin-right: 1vw;">
+      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw">
         <a
-          class="dropdown-toggle d-flex align-items-center hidden-arrow"
+          class="nav-link dropdown-toggle d-flex align-items-center hidden-arrow"
           href="#"
           id="navbarDropdownMenuAvatar"
           role="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <img
-            src="/images/user.png"
+          <img v-if="image"
+            :src="image"
             class="rounded-circle"
             height="40"
-            alt="Black and White Portrait of a Man"
+            width="40"
+            alt="avatar"
+            loading="lazy"
+            style="object-fit: cover; margin-right: 0.6vw;"
+          />
+          <img v-else
+            src="https://st4.depositphotos.com/14903220/22197/v/450/depositphotos_221970610-stock-illustration-abstract-sign-avatar-icon-profile.jpg"
+            class="rounded-circle"
+            height="40"
+            width="40"
+            alt="avatar"
+            loading="lazy"
+            style="object-fit: cover; margin-right: 0.6vw;"
+          />
+          {{ user?.username }}
+          <img v-if="user?.plan === 'explorer'" 
+            style="max-height: 35px;"
+            src="/images/verificado.png"
             loading="lazy"
           />
         </a>
@@ -82,7 +167,7 @@ const logout = () => {
           aria-labelledby="navbarDropdownMenuAvatar"
         >
           <li>
-            <a class="dropdown-item " href="#" >Perfil</a>
+            <a class="dropdown-item" href="/user/" @click.prevent="$router.push('/user/' + user?.id)">Perfil</a>
           </li>
           <li class="d-lg-none">
             <a class="dropdown-item" href="#">Chat <span class="badge rounded-pill badge-notification bg-danger">1</span></a>
@@ -94,7 +179,7 @@ const logout = () => {
             <a class="dropdown-item" href="#">Planes</a>
           </li>
           <li>
-            <a class="dropdown-item" @click="logout()">Cerrar sesión</a>
+            <a class="dropdown-item" @click="logout()" style="cursor:pointer">Cerrar sesión</a>
           </li>
         </ul>
       </div>
@@ -107,22 +192,25 @@ const logout = () => {
 </template>
 
 <style scoped>
- .nav-link {
-   color: white;
-   transition: 0.1s;
- }
 
- .nav-link:hover {
-   color: #a4c7ff;
-   transition: 0.2s;
- }
  .dropdown-toggle::after {
-  border-top-color: white; /* Cambia esto al color que prefieras */
-  border-width: 0.3em; /* Cambia esto al tamaño que prefieras */
+  border-top-color: white;
+  border-width: 0.3em;
 }
 
 .dropdown-toggle:hover::after {
-  border-top-color: #a4c7ff; /* Cambia esto al color que prefieras */
+  border-top-color: #a4c7ff;
   transition: 0.2s;
 }
+
+.dropdown::after {
+  border-top-color: white;
+  border-width: 0.3em;
+}
+
+.dropdown:hover::after {
+  border-top-color: #a4c7ff;
+  transition: 0.2s;
+}
+
 </style>

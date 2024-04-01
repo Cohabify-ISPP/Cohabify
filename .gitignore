@@ -42,6 +42,7 @@ local.properties
 .target
 */target/
 
+
 # Tern plugin
 .tern-project
 
@@ -72,7 +73,7 @@ local.properties
 .sts4-cache/
 
 ### VSCode ###
-.vscode/*
+.vscode/
 !.vscode/extensions.json
 
 
@@ -96,7 +97,7 @@ local.properties
 .mtj.tmp/
 
 # Package Files #
-*/target/*
+target/
 *.jar
 *.war
 *.nar
@@ -246,7 +247,12 @@ dist
 */node_modules/
 */package-lock.json
 */package.json
+package-lock.json
+package.json
 */manifest.json
 
 # Uploaded files
-*/uploads/*
+uploads/
+
+# GCloud credentials file
+*credentials.json

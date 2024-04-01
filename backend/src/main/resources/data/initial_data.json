@@ -18,11 +18,12 @@
   "users": [
     {
       "id": "60d5ec9af682fbd39a1b8b9d",
-      "username": "admin",
-      "password": "$2a$10$S/9Tn47FJ68fR7.tCKLqhelXOQbZbXmBOnzQqKqC97TPUHeIhOoim",
+      "username": "javgaragu90",
+      "name": "Javier García Aguado", 
+      "password": "$2a$10$N.YNWLUBuyZt3dawPCbTHe2.Ys8VXGglhmwXyAmiHi7uFkrYmfk9u",
       "isOwner": true,
-      "phone": "123456789",
-      "email": "usuario1@example.com",
+      "phone": "618537466",
+      "email": "javgaragu90@alum.us.es",
       "tag": [
         {
           "id": "60d5ec9af682fbd39a1b8b9b"
@@ -31,16 +32,17 @@
       "plan": "Basic",
       "isVerified": true,
       "authorities": ["Admin"],
-      "genre": "MASCULINO",
+      "gender": "MASCULINO",
       "imageUri": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
     },
     {
       "id": "60d5ec9af682fbd39a1b8b9e",
-      "username": "usuario 2",
-      "password": "$2a$10$PcN/V6liOTDpfQqjh0s6weo7vi8BGKXqYjtIYzp/m9ciP60CyCsQa",
+      "username": "manlovper90",
+      "name": "Manuela Lovato Pérez",
+      "password": "$2a$10$4PzUQ8nmDn7h62ssxQcPwOKjBG3L8FQYVyFgwxHz02mILgwPO3qiG",
       "isOwner": false,
-      "phone": "987654321",
-      "email": "usuario2@example.com",
+      "phone": "618592566",
+      "email": "manlovper90@us.es",
       "tag": [
         {
           "id": "60d5ec9af682fbd39a1b8b9a"
@@ -51,19 +53,20 @@
       "plan": "Explorer",
       "isVerified": false,
       "authorities": ["User"],
-      "genre": "OTRO",
+      "gender": "OTRO",
       "imageUri": "https://hips.hearstapps.com/hmg-prod/images/demi-lovaro-ge-nero-no-binario-1-1622484860.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=1200:*"
     }
   ],
   "houses": [
     {
       "id": "60d5ec9af682fbd39a1b8b9f",
-      "location":"Zona desconocida", 
-      "roomsNumber":"20", 
+      "location":"Triana, Sevilla", 
+      "roomsNumber":"5", 
       "bathroomsNumber":"1",
       "area":"10", 
       "heating":"CENTRAL_HEATING", 
-      "floor":"1",  
+      "floor":"1",
+      "cadastre": "12345678901234567890",  
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": -2.6637, 
@@ -78,6 +81,7 @@
       "area":"105", 
       "heating":"AIR_CONDITIONING", 
       "floor":"9",  
+      "cadastre": "12345678901234567891", 
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 40.3437, 
@@ -91,28 +95,23 @@
       "bathroomsNumber":"2",
       "area":"120", 
       "heating":"NATURAL_GAS", 
-      "floor":"9",  
+      "floor":"9", 
+      "cadastre": "12345678901234567892",  
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 38.184049, 
         "y": -3.685237
       }
     },
-    {
-
-      "id": "65e305e4597c9969f3b36f09",
-      "tag": "tag4",
-      "tagType": "USER_TAG"
-    },
-    
     { 
       "id": "60d5ec9af682fbd39a1b8b6f",
       "location":"Cabra, Córdoba", 
       "roomsNumber":"3", 
       "bathroomsNumber":"1",
-      "area":"70", 
+      "area":"200", 
       "heating":"RADIATOR", 
       "floor":"0",  
+      "cadastre": "12345678901234567893", 
       "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
       "locationPoint" : {
         "x": 37.471815, 
@@ -122,63 +121,73 @@
   ],"houseAdvertisements": [
     {
       "id": "60d5ec9af682fbd39a1b8b1a",
-      "title": "Casa 1",
-      "description": "Descripción para casa 1",
+      "title": "Bonito y amplio piso en Triana",
+      "description": "Se busca compañero de piso para compartir gastos. El piso está a 5 minutos de una parada de metro y tiene varios establecimientos cercanos. ",
       "price": 1000,
       "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9e"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images":["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
+      "images":["https://images.pexels.com/photos/276625/pexels-photo-276625.jpeg",
       "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
       "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
     },
     {
       "id": "60d5ec9af682fbd39a1b8b2a",
-      "title": "Casa 2",
-      "description": "Descripción para casa 2",
+      "title": "Amplio piso en Vallecas",
+      "description": "El piso se encuentra recién reformado y amueblado. Es muy luminoso y tiene una terraza con vistas a la ciudad.",
       "price": 900,
       "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9d"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
-      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+      "images": ["https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+      "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg",
+      "https://images.pexels.com/photos/3288104/pexels-photo-3288104.png"]
     },
     {
       "id": "60d5ec9af682fbd39a1b8b3a",
-      "title": "Casa 3",
-      "description": "Descripción para casa 3",
-      "price": 800,
+      "title": "Acogedor estudio en Guarromán",
+      "description": "Estudio en buena localización de Guarromán. EL precio incluye los gastos de comunidad, pero no los suministros.",
+      "price": 200,
       "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9d"
+      },
       "tenants": [],
-      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
-      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+      "images": ["https://images.pexels.com/photos/4119831/pexels-photo-4119831.jpeg",
+      "https://images.pexels.com/photos/7587472/pexels-photo-7587472.jpeg",
+      "https://images.pexels.com/photos/1714430/pexels-photo-1714430.jpeg"]
     },
     {
       "id": "60d5ec9af682fbd39a1b8b4a",
-      "title": "Casa 4",
-      "description": "Descripción para casa 4",
-      "price": 1100,
+      "title": "Casa amplia en Cabra",
+      "description": "La casa tiene un jardín y está cerca de un parque. Además, dispone de un garaje espacioso para un coche.",
+      "price": 350,
       "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
+      "author": {
+        "id": "60d5ec9af682fbd39a1b8b9d"
+      },
       "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://www.caralca.es/wp-content/uploads/2021/02/pisos-en-venta-en-Huelva.jpg",
-                "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-                "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
-
-
+      "images": ["https://images.pexels.com/photos/59321/pexels-photo-59321.jpeg",
+                "https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg",
+                "https://images.pexels.com/photos/4480448/pexels-photo-4480448.jpeg"]
     }
   ],
   
   "userRatings":[
     {
       "id": "65e305e4597c9969f3b36f10",
-      "user": {"id" : "60d5ec9af682fbd39a1b8b9d"},
-      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
+      "user": {"id" : "60d5ec9af682fbd39a1b8b9e"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
       "comment": "He convivido con este usuario y es muy interesante, además de ordenado."
     },
     {
       "id": "65e305e4597c9969f3b36f11",
-      "user": {"id": "60d5ec9af682fbd39a1b8b9e"},
-      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
+      "user": {"id": "60d5ec9af682fbd39a1b8b9d"},
+      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
       "comment": "Aunque parezca que pueda hacer mucho ruido, es una persona tranquila para convivir."
     }
   ],
@@ -188,8 +197,8 @@
       "description": "Busco 2 compañeros organizados por Avenida Reina Mercedes",
       "maxBudget": 600,
       "desiredLocation": "Avenida Reina Mercedes, Sevilla",
-      "entranceDate": "2024-03-01",
-      "exitDate": "2024-06-30",
+      "entranceDate": "2025-03-01",
+      "exitDate": "2025-06-30",
       "maxCohabitants": 2,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9e"
@@ -197,15 +206,39 @@
     },
     {
       "id": "65e326184510d9c9a7c48174",
-      "description": "Busco 2 compañeros organizados por Calle Awawa",
+      "description": "Busco 2 compañeros por Calle Vencejo",
       "maxBudget": 444,
-      "desiredLocation": "Calle Awawa, Sevilla",
-      "entranceDate": "2022-03-01",
-      "exitDate": "2022-06-30",
+      "desiredLocation": "Calle Vencejo, Sevilla",
+      "entranceDate": "2025-03-01",
+      "exitDate": "2025-06-30",
       "maxCohabitants": 4,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9d"
       }
     }
-  ]
+  ],
+  "houseRatings":[
+    {
+    "houseAdvertisement": {
+      "id": "60d5ec9af682fbd39a1b8b1a"
+    },
+    "user": {
+      "id": "60d5ec9af682fbd39a1b8b9d"
+    },
+    "rating": 3,
+    "date": "2024-03-25",
+    "comment": "Es muy luminoso y está bien cuidado"
+    },
+    {
+    "houseAdvertisement": {
+      "id": "60d5ec9af682fbd39a1b8b2a"
+    },
+    "user":{
+      "id": "60d5ec9af682fbd39a1b8b9e"
+    },
+    "rating": 1,
+    "date": "2024-02-25",
+    "comment": "Es un piso muy sucio y con mala ventilación"
+
+    }]
 }

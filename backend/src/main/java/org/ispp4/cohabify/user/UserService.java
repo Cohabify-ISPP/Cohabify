@@ -1,5 +1,6 @@
 package org.ispp4.cohabify.user;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,9 +41,23 @@ public class UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
+    public User getUserByUsernameAndPhone(String username, String phone) {
+        return userRepository.findByUsernameAndPhone(username,phone).orElse(null);
+    }
+
 	public List<User> findByIsOwner(Boolean owner) {
 	  return userRepository.findByIsOwner(owner);
 	}
 
+    public Optional<User> getUserByGoogleOAuthToken(String googleAuthToken) {
+        return userRepository.findBygoogleOAuthToken(googleAuthToken);
+    }
+
+    public Boolean isUserPlanValid(User user){
+        LocalDate currentDate = LocalDate.now();
+        if (user.getExpirationDate() == null)
+            return false;
+        return currentDate.isBefore(user.getExpirationDate());
+    }
 
 }

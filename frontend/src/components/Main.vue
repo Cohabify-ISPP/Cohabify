@@ -10,13 +10,13 @@ import Navbar from './Navbar.vue'
     </div>
     <div class="d-flex flex-row justify-content-center align-items-center">
       <div class="d-flex flex-column align-items-center" style="padding-right: 2rem;">
-        <button class="btn-primary btn-circle btn-xl" @click="this.$router.push('/advertisements/houses')">
+        <button class="btn-primary btn-circle btn-xl" @click="$router.push('/advertisements/houses')">
           <i class="bi bi-houses h1"></i>
         </button>
         <b class="mt-3">Viviendas</b>
       </div>
       <div class="d-flex flex-column align-items-center" style="padding-left: 2rem;">
-        <button class="btn-primary btn-circle btn-xl" @click="this.$router.push('/advertisements/users')">
+        <button class="btn-primary btn-circle btn-xl" @click="$router.push('/advertisements/users')">
           <i class="bi bi-people h1"></i>
         </button>
         <b class="mt-3">Compañeros</b>
@@ -35,7 +35,7 @@ import Navbar from './Navbar.vue'
             <div class="card-body">
               <h3 class="card-title text-white">Plan <span class="gradient-text">Explorador</span></h3>            
               <p class="card-text text-white">Sé el primero en descubrir a tu nuevo compañero con el plan de explorador.</p>
-              <button type="button" class="btn btn-success">Ver planes</button>
+              <a class="btn btn-success" href="/plan">Ver planes</a>
             </div>
           </div>
           <div class="col-md-4">

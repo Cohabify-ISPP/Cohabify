@@ -91,12 +91,32 @@ button:focus-visible {
   background-color: #28426B;
   border-color: #28426b;
   transition: 0.1s;
+}
+
+.btn-plan {
+  color: #fff;
+  background-color: #28426b74;
+  border-color: #28426b66;
+  transition: 0.1s;
+}
+
+.btn-green {
+  color: #fff;
+  background-color: #1f7237;
+  border-color: #062407;
+  transition: 0.1s;
 } 
 
 .btn-primary:hover {
   color: #fff;
   background-color: #475e84;
   border-color: #28426B;
+}
+
+.btn-green:hover {
+  color: #fff;
+  background-color: #319c50;
+  border-color: #062407;
 }
 
 .navbar-custom {
@@ -201,9 +221,11 @@ input[type=range]::-ms-fill-upper {
 }
 
 .list-item-image {
-  max-height: 100%;
+  max-height: 20vw;
+  width:20vw;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
+  flex-shrink: 0;
 }
 
 .list-item-content {
@@ -213,7 +235,37 @@ input[type=range]::-ms-fill-upper {
   justify-content: start;
   align-items: start;
   padding: 20px;
-  width: 100%;
+  width: 80%;
+}
+
+.search-bar {
+  border: 2px solid #000;
+  border-radius: 50px;
+  background-color: #fff;
+  justify-content: space-between;
+  font-size: 24px;
+  width: 60%;
+  height: 70px;
+}
+
+.search-input {
+  background-color: #ffff;
+  border: none;
+  border-radius: 5px;
+  width: 90%;
+  margin-right: 10px;
+  color: black;
+}
+
+.search-button {
+  background-color: transparent;
+  border-radius: 50px;
+  color: black;
+  border: none;
+}
+
+.search-button:hover {
+  background-color: #dddddd;
 }
 
 #app {

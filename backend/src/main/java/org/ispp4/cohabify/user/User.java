@@ -1,5 +1,6 @@
 package org.ispp4.cohabify.user;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,20 +16,26 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "users")
 public class User extends BaseEntity {
 
     @NotNull
-    @Size(max = 14)
+    @Size(max = 100)
+    private String name;
+
+    @NotNull
+    @Size(max = 50)
     private String username;
     
-    @NotNull
-    @Size(max = 255)
     @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
@@ -56,7 +63,7 @@ public class User extends BaseEntity {
     private Plan plan;
     
     @NotNull
-    private Genre genre;
+    private Gender gender;
     
     private String imageUri;
     
@@ -66,16 +73,13 @@ public class User extends BaseEntity {
     @NotNull
     private List<String> authorities;
 
+    private String googleOAuthToken;
+
+    private LocalDate expirationDate;
+
     @DBRef
     private List<User> likes = new ArrayList<User>();
     
-    @NotNull
-    private String image;
-
-    public User() {
-    
-    }
-
     public Boolean isAdmin() {
         return this.authorities.contains("Admin");
     }

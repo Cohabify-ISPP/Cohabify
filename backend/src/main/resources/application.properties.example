@@ -13,6 +13,9 @@ token.secret.key=secret
 # One day
 token.expirationms=86400000
 
+## Stored static files
+static.files.host=http://localhost:8080
+
 ## Logging
 logging.level.org.springframework=INFO
 #logging.level.org.springframework.security=TRACE
@@ -21,4 +24,5 @@ logging.level.org.springframework=INFO
 ## Debug
 #debug=true
 
-
+## Google
+google.public.keys=googlePublicKey1,googlePublicKey2

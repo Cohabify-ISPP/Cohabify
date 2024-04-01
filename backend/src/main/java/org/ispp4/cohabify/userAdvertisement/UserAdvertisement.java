@@ -18,9 +18,6 @@ import lombok.Setter;
 @Document(collection = "userAdvertisements")
 public class UserAdvertisement extends BaseEntity {
 
-    @NotBlank
-    private String title;
-
     private String description;
     
     @NotNull
@@ -42,10 +39,10 @@ public class UserAdvertisement extends BaseEntity {
 
     public UserAdvertisement() {
         
-    }
+    } 
 
     public UserAdvertisement(ObjectId id, String description, Double maxBudget, String desiredLocation, LocalDate entranceDate, LocalDate exitDate, Integer maxCohabitants, User author) {
-        this.id = id;
+        this.id = id; 
         this.description = description;
         this.maxBudget = maxBudget;
         this.desiredLocation = desiredLocation;
@@ -66,7 +63,7 @@ public class UserAdvertisement extends BaseEntity {
             ", exitDate='" + getExitDate() + "'" +
             ", maxCohabitants='" + getMaxCohabitants() + "'" +
             ", user='" + getAuthor() + "'"+
-            "}";
+            "}";   
     }
 
 }
