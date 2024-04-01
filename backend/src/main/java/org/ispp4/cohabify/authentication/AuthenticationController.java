@@ -46,14 +46,7 @@ public class AuthenticationController {
 	private PasswordEncoder passwordEncoder;
 	private StorageService storageService;
 
-	public AuthenticationController(UserService userService, JwtService jwtService, CustomAuthenticationManager authenticationManager,
-									PasswordEncoder passwordEncoder, StorageService storageService) {
-		this.userService = userService;
-		this.jwtService = jwtService;
-		this.authenticationManager = authenticationManager;
-		this.passwordEncoder = passwordEncoder;
-		this.storageService = storageService;
-	}
+	
 
 	@Value("${google.public.keys}")
 	private String[] googlePublicKeys;
