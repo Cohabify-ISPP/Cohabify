@@ -46,8 +46,6 @@ public class AuthenticationController {
 	private PasswordEncoder passwordEncoder;
 	private StorageService storageService;
 
-	
-
 	@Value("${google.public.keys}")
 	private String[] googlePublicKeys;
 	
