@@ -11,7 +11,7 @@ Time Effort
         <tr>
             <td rowspan=2>Arriaza Arriaza, Daniel <p></p> Barrera García, Ismael <p></p> Calero López, Marina <p></p> Galeano de Paz, Guillermo <p></p> González Castillero, Rafael <p></p> Márquez Sierra, María <p></p> Márquez Soldán, María
             </td>
-            <td rowspan=2>Morato Navarro, Juan Carlos <p></p> Morato Navarro, Olegario <p></p> Robles Russo, Eduardo <p></p> Roldán García, Miguel Ángel <p></p> Romero García, Juan <p></p> Urquijo Martínez, Álvaro <p></p>
+            <td rowspan=2>Morato Navarro, Juan Carlos <p></p> Morato Navarro, Olegario <p></p> Robles Russo, Eduardo <p></p> Roldán García, Miguel Ángel <p></p> Romero González, Juan <p></p> Urquijo Martínez, Álvaro <p></p>
             </td>
         </tr>
     </tbody>
