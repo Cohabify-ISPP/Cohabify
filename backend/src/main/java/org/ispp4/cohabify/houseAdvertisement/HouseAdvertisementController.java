@@ -37,6 +37,7 @@ import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/advertisements/houses")
@@ -264,4 +265,27 @@ public class HouseAdvertisementController {
         }
 
     }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/users/{userId}/ads/{adUserId}")
+    public ResponseEntity<List<HouseAdvertisement>> getSharedLikes(@PathVariable String userId, @PathVariable String adUserId) {
+        List<House> userHouses = houseService.getLikedHousesByUser(new ObjectId(userId));
+        List<House> adUserHouses = houseService.getLikedHousesByUser(new ObjectId(adUserId));
+        List<HouseAdvertisement> sharedLikes = new ArrayList<>();
+
+        for (House userHouse : userHouses) {
+            for (House adUserHouse : adUserHouses) {
+                if (userHouse.getId().equals(adUserHouse.getId())) {
+                    sharedLikes.add(advertisementService.findAdvertisementByHouseId(userHouse.getId()));
+                    break;
+                }
+            }
+        }
+
+        return new ResponseEntity<>(sharedLikes, HttpStatus.OK);
+    }
+
+
+    
+    
 }
