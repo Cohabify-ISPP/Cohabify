@@ -125,6 +125,7 @@
       "description": "Se busca compañero de piso para compartir gastos. El piso está a 5 minutos de una parada de metro y tiene varios establecimientos cercanos. ",
       "price": 1000,
       "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
+      "views": 0,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9e"
       },
@@ -139,6 +140,7 @@
       "description": "El piso se encuentra recién reformado y amueblado. Es muy luminoso y tiene una terraza con vistas a la ciudad.",
       "price": 900,
       "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
+      "views": 0,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9d"
       },
@@ -153,6 +155,7 @@
       "description": "Estudio en buena localización de Guarromán. EL precio incluye los gastos de comunidad, pero no los suministros.",
       "price": 200,
       "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
+      "views": 0,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9d"
       },
@@ -167,6 +170,7 @@
       "description": "La casa tiene un jardín y está cerca de un parque. Además, dispone de un garaje espacioso para un coche.",
       "price": 350,
       "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
+      "views": 0,
       "author": {
         "id": "60d5ec9af682fbd39a1b8b9d"
       },

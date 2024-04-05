@@ -44,4 +44,10 @@ public class HouseAdvertisement extends BaseEntity {
     @DBRef
     private User author;
 
+    private int views;
+
+    public void incrementViews() {
+        views++;
+    }
+
 }
