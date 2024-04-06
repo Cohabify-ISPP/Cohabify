@@ -12,6 +12,7 @@
             const stripePromise = loadStripe('pk_test_51P2DTpBofFRUNSKsZLVQgYTOY0I6PLl4BP8w6a5y8IYZThREOk8a7dcqu7kXCg8aV9byhdSkZ98Sg3dFL24RzkON00R08XEGbM');
             const loading = ref(false);
             const lineItems = ref(null);
+            const isLoading = ref(true);
 
             onMounted(async () => {
             
@@ -34,53 +35,69 @@
                     }) 
                     .then(jsonData => {
                         changePlan(jsonData.plan)
+                        isLoading.value = false
                     })
+                    .catch(error => {
+                        isLoading.value = false
+                        fetchError.value = error
+                    })
+            }else{
+                isLoading.value = false
             }
-        });
-
-            const handleCheckout = async (newPlan) => {
-                if (newPlan === 'basic') {
-                   changePlan(newPlan)
-                } else if (newPlan === 'explorer') {
-                    lineItems.value = [{ price: 'price_1P2GsuBofFRUNSKsf2qfzvZr', quantity: 1}];
-                } else if (newPlan === 'owner') {
-                    lineItems.value = [{ price: 'price_1P2WH6BofFRUNSKs24h67005', quantity: 1}];
-                }
-                if (lineItems.value !== null) {
-                    const stripe = await stripePromise;
-                    const { error } = await stripe.redirectToCheckout({
-                        lineItems: lineItems.value,
-                        mode: 'payment',
-                        successUrl: 'http://localhost:5173/plan?session_id={CHECKOUT_SESSION_ID}',
-                        cancelUrl: 'http://localhost:5173/',
                     });
 
-                    if (error) {
-                        console.error(error);
+            const handleCheckout = async (newPlan) => {
+                if (await confirmChangePlan()){
+                    if (newPlan === 'basic') {
+                        changePlan(newPlan)
+                    } else if (newPlan === 'explorer') {
+                        lineItems.value = [{ price: 'price_1P2GsuBofFRUNSKsf2qfzvZr', quantity: 1}];
+                    } else if (newPlan === 'owner') {
+                        lineItems.value = [{ price: 'price_1P2WH6BofFRUNSKs24h67005', quantity: 1}];
                     }
-                } 
+                    if (lineItems.value !== null) {
+                        const stripe = await stripePromise;
+                        const { error } = await stripe.redirectToCheckout({
+                            lineItems: lineItems.value,
+                            mode: 'payment',
+                            successUrl: 'http://localhost:5173/plan?session_id={CHECKOUT_SESSION_ID}',
+                            cancelUrl: 'http://localhost:5173/',
+                        });
+
+                        if (error) {
+                            console.error(error);
+                        }
+                    } 
+                }
+
             } ;
 
             //Cambiar el plan del usuario
             const changePlan = async (newPlan) => {
-                const response = await fetch(
-                    import.meta.env.VITE_BACKEND_URL + '/api/user/update/plan/'+ newPlan + '/'+currentUser.value.id,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Authentication': 'Bearer ' + localStorage.getItem('authentication')
-                        },
-                    }
-                )
-                store.dispatch('cargarUser')
-            }  
+                    const response = await fetch(
+                        import.meta.env.VITE_BACKEND_URL + '/api/user/update/plan/'+ newPlan + '/'+currentUser.value.id,
+                        {
+                            method: 'PUT',
+                            headers: {
+                                'Authentication': 'Bearer ' + localStorage.getItem('authentication')
+                            },
+                        }
+                    )
+                    store.dispatch('cargarUser')
+            } 
+            
+            const confirmChangePlan = async () => {
+                var response = confirm("¿Estás seguro de que quieres cambiar de plan?");
+                return response;
+            }
 
             return { 
             currentUser,
             plan,
             changePlan,
             loading,
-            handleCheckout
+            handleCheckout,
+            isLoading
             }
 
         }  
@@ -92,7 +109,10 @@
 <template>
      <navbar />
      <h1 style="margin-top: 1vw; margin-bottom: 2vw;">Escoge tu plan</h1>
-    <div class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 15vw ;">
+     <div v-if="isLoading" class="spinner-border mt-5" role="status">
+                    <span class="visually-hidden">Loading...</span>
+    </div>
+    <div  v-else class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 15vw ;">
             <div class="col">
                 <div class="card card1">
                     <h2 class="fw-bold" style="color: #28426B;">Básico</h2>

@@ -40,7 +40,8 @@ public class OrderController {
         SessionListLineItemsParams params = SessionListLineItemsParams.builder().build();
         LineItemCollection lineItems = session.listLineItems(params);
         String plan = lineItems.getData().get(0).getDescription();
-        if (plan == null) {
+        //Si plan es null o el pago no se ha completado, devuelve un error 404
+        if (plan == null || session.getPaymentStatus().equals("unpaid")) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             if (plan.equals("Propietario")) {
