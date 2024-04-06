@@ -18,6 +18,7 @@ export default {
         const router = useRouter();
         const commonHouses = ref([]);
         const clipboardMessage = ref(false);
+        const currentUserAdvertisementRating = ref({});
 
         const fetchAdvertisement = async () => {
             try {
@@ -43,23 +44,8 @@ export default {
             }
         };
 
-        const deleteComment1 = () => {
-            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + currentUser.value.id + '/' + userAdvertisement.value.author.id, {
-                method: 'DELETE',
-                headers: {
-                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
-                },
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        console.error('Error al eliminar el comentario');
-                    }
-                })
-                .catch(error => console.error('Error al enviar datos al backend:', error));
-        };
-
-        const deleteComment2 = () => {
-            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + currentUser.value.id + '/' + userAdvertisement.value.author.id, {
+        const deleteComment = () => {
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/' + currentUser.value.id + '/' + userAdvertisement.value.author.id, {
                 method: 'DELETE',
                 headers: {
                     'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
@@ -67,6 +53,7 @@ export default {
             })
                 .then(response => {
                     setTimeout(() => {
+                        currentUserAdvertisementRating.value = {};
                         fetchAdvertisement();
                     }, 1000);
                     if (!response.ok) {
@@ -76,11 +63,11 @@ export default {
                 .catch(error => console.error('Error al enviar datos al backend:', error));
         };
 
-        const register = () => {
+        const saveComment = () => {
             const formData = new FormData();
             formData.append("string-data", new Blob([JSON.stringify({
-                user: userAdvertisement.value.author,
-                ratedUser: currentUser.value,
+                user: currentUser.value,
+                ratedUser: userAdvertisement.value.author,
                 comment: text.value
             })], { type: "application/json" }));
             fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating', {
@@ -93,6 +80,7 @@ export default {
                 .then(response => response.json())
                 .then(jsonData => {
                     setTimeout(() => {
+                        fetchValorations();
                         fetchAdvertisement();
                         closeModal();
                     }, 1000);
@@ -108,7 +96,7 @@ export default {
 
         const fetchValorations = async () => {
             try {
-                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userRating/user/${userAdvertisement.value.author.id}`,
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userRating/ratedUser/${userAdvertisement.value.author.id}`,
                     {
                         method: "GET",
                         headers: {
@@ -118,12 +106,18 @@ export default {
                     });
                 const data = await response.json();
                 valorations.value = data;
+                console.log(valorations.value);
+                for(const rating of valorations.value){
+                    if(rating.user.username === currentUser.value.username){
+                        currentUserAdvertisementRating.value = rating;
+                        break;
+                    }
+                }
             } catch (error) {
                 console.error("Error:", error);
             }
         };
         const openModal = () => {
-            deleteComment1();
             modalText.value = "";
             let modal = document.getElementById('loginModal');
             modal.style.display = "block";
@@ -201,9 +195,9 @@ export default {
             errorComentario,
             modalText,
             closeModal,
-            deleteComment2,
+            deleteComment,
             openModal,
-            register,
+            saveComment,
             userAdvertisement,
             commonHouses,
             toggleLike,
@@ -211,7 +205,8 @@ export default {
             clipboardMessage,
             valorations,
             deleteUserAd,
-            currentUser
+            currentUser,
+            currentUserAdvertisementRating
         }
     }
 }
@@ -237,7 +232,7 @@ export default {
                                     </div>
                                 </div>
                                 <div class="modal-body">
-                                    <form @submit.prevent="register">
+                                    <form @submit.prevent="saveComment">
                                         <div class="form-group">
                                             <label for="commentText">Comentario</label>
                                             <div class="alert alert-danger" role="alert" v-if="errorComentario">
@@ -290,10 +285,10 @@ export default {
                     <div style="margin-top: 5%;"> 
                         <div class="d-flex justify-content-between">
                             <h4 style=" text-align: left;">Comentarios</h4>
-                            <i class="fas fa-trash-alt" @click="deleteComment2" 
-                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username">
+                            <i class="fas fa-trash-alt" @click="deleteComment" 
+                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username && Object.keys(currentUserAdvertisementRating).length !== 0">
                             </i>
-                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
+                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username && Object.keys(currentUserAdvertisementRating).length === 0"><strong style="color:white">Comentar</strong></button>
                         </div>
                         <hr>
                         
@@ -303,7 +298,7 @@ export default {
                             <div v-for="comentario in valorations" :key="comentario">
                                 <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;"> 
                                     <div class="card-body">
-                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.ratedUser.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.ratedUser.username}}</p>
+                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.user.username}}</p>
                                         <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ comentario.comment }}</p>
                                     </div>
                                 </div>

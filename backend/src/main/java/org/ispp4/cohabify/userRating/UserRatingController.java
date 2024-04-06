@@ -84,7 +84,7 @@ public class UserRatingController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    @DeleteMapping("/ratedUser/{ratedUserId}/{userId}")
+    @DeleteMapping("/{userId}/{ratedUserId}")
     public ResponseEntity<Void> deleteUserRatingsByRatedUserId(@PathVariable("ratedUserId") ObjectId ratedUserId, @PathVariable("userId") ObjectId userId) {
         try	{
             List<UserRating> userRatings = userRatingService.findByUserIdAndRatedUserId(ratedUserId, userId);

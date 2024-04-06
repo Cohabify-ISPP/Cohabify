@@ -31,9 +31,17 @@ onMounted(() => {
             if (!response.ok) {
                 throw new Error('No se han podido cargar las viviendas')
             }
+
             return response.json()
         })
         .then(data => {
+
+            for (let i = 0; i < data.length; i++) {
+                fetchValoration(data[i].id).then((valoration) => {
+                    data[i].valoration = valoration;
+                });
+            }
+
             setTimeout(() => {
                 isLoading.value = false
                 advertisements.value = data
@@ -44,6 +52,7 @@ onMounted(() => {
             fetchError.value = error
         })
 })
+
 const currentAdvertisements = computed(() => {
  return filtered.value ? filteredAdvertisements.value : advertisements.value
 })
@@ -167,8 +176,35 @@ const applyFilters = () => {
         )
         filtered.value = true
     }
-
 }
+
+const fetchValoration = async (id) => {
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/houseRating/houseAdvertisements/${id}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+    const valorations = await response.json();
+    console.log(valorations);
+    let total = 0;
+
+    for(const rating of valorations){
+        total = total + rating.rating;        
+    }
+
+    if(valorations.length > 0){
+        return (total * 1.0) / valorations.length;
+    } else {
+        return 0;
+    }
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 </script>
 <template>
@@ -282,7 +318,20 @@ const applyFilters = () => {
                                 <h3>{{ advertisement.title }}</h3>
                                 <h3><b>{{ advertisement.price }}€/mes</b></h3>
                             </div>
-                            <b>{{ advertisement.house.location }}</b>
+                            <div class="d-flex justify-content-between w-100">
+                                <b>{{ advertisement.house.location }}</b>
+
+                                <div class="d-flex display-inline-flex">
+                                    <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
+                                    <span> {{ advertisement.house.likes.length }} </span>
+                                    <span style="color: #e87878;" class="material-icons">favorite</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span> {{ advertisement.valoration }} </span>
+                                        <span style="color: darkgoldenrod;" class="material-icons">star</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
                                 <div class="d-flex flex-column align-items-center">
                                     <span class="material-icons">bed</span>

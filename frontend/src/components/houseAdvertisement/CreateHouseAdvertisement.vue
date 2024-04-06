@@ -391,7 +391,7 @@ export default {
         return;
       }
       if (selectedTags.value.length === 0) {
-        alert("Selecciona al menos un tag");
+        alert("Selecciona al menos una etiqueta");
         return;
       }
       if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
