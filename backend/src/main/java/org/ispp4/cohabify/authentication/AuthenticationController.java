@@ -33,9 +33,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import java.security.SecureRandom;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
+@AllArgsConstructor
 public class AuthenticationController {
 
 	private UserService userService;
@@ -44,17 +46,8 @@ public class AuthenticationController {
 	private PasswordEncoder passwordEncoder;
 	private StorageService storageService;
 
-	public AuthenticationController(UserService userService, JwtService jwtService, CustomAuthenticationManager authenticationManager,
-									PasswordEncoder passwordEncoder, StorageService storageService) {
-		this.userService = userService;
-		this.jwtService = jwtService;
-		this.authenticationManager = authenticationManager;
-		this.passwordEncoder = passwordEncoder;
-		this.storageService = storageService;
-	}
-
-	@Value("${google.public.key}")
-	private String googlePublicKey;
+	@Value("${google.public.keys}")
+	private String[] googlePublicKeys;
 	
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<?> register(@Valid @RequestPart("string-data") UserRegisterRequest request, BindingResult result,  
@@ -140,7 +133,7 @@ public class AuthenticationController {
 	public ResponseEntity<?> loginGoogle(@RequestBody String request) {
 		UserDetails userDetails;
 		try {
-			userDetails = (UserDetails) authenticationManager.authenticate(new GoogleAuthenticationToken(request, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")),googlePublicKey)).getPrincipal();
+			userDetails = (UserDetails) authenticationManager.authenticate(new GoogleAuthenticationToken(request, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")), googlePublicKeys)).getPrincipal();
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

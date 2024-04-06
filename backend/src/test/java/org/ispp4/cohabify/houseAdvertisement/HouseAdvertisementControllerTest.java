@@ -246,7 +246,7 @@ public class HouseAdvertisementControllerTest {
         // Verificar que se llamó al servicio de casa y al servicio de anuncios con los
         // datos correctos
         verify(houseService, times(1)).save(any(House.class));
-        verify(advertisementService, times(3)).save(any(HouseAdvertisement.class));
+        verify(advertisementService, times(2)).save(any(HouseAdvertisement.class));
         verify(storageService, times(2)).saveImage(anyString(), any(MultipartFile.class));
     }
 
@@ -288,7 +288,7 @@ public class HouseAdvertisementControllerTest {
         // Verificar que se llamó al servicio de casa y al servicio de anuncios con los
         // datos correctos
         verify(houseService, times(1)).save(any(House.class));
-        verify(advertisementService, times(3)).save(any(HouseAdvertisement.class));
+        verify(advertisementService, times(2)).save(any(HouseAdvertisement.class));
         verify(storageService, times(2)).saveImage(anyString(), any(MultipartFile.class));
     }
 

@@ -3,7 +3,6 @@ package org.ispp4.cohabify.configuration;
 import org.ispp4.cohabify.authentication.GoogleAuthenticationToken;
 import org.ispp4.cohabify.user.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -15,9 +14,6 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
-
-    @Value("${google.public.key}")
-	private String googlePublicKey;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

@@ -55,15 +55,16 @@ public class UserServiceTest {
         User foundUser = userService.getUserByUsername("test");
         assertNotNull(foundUser);
         userService.deleteById(user.getId());
+
     }
 
     @Test
     void shouldFindByNameAndTlf(){
         User user = new User();
-        user.setUsername("test");
+        user.setUsername("test2");
         user.setPhone("666666666");
         user = userService.save(user);
-        User foundUser = userService.getUserByUsernameAndPhone("test", "666666666");
+        User foundUser = userService.getUserByUsernameAndPhone("test2", "666666666");
         assertNotNull(foundUser);
         userService.deleteById(user.getId());
     }
