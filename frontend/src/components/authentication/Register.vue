@@ -5,7 +5,7 @@
     <h1 style="padding-bottom: 30px;">Registro</h1>
     <div class="card">
       <div v-show="success" class="alert alert-success alert-dismissible fade show" role="alert">
-        Registro completado con éxito.
+        Registro completado con éxito. Se le ha enviado un correo para verificar su cuenta. Se le redireccionará en 5 segundos...
       </div>
       <form id="form1" class="row justify-content-center" @submit.prevent="[changePage]" v-if="!secondPage">
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
@@ -278,9 +278,10 @@ export default {
           .then(response => {
             if (response.status === 201) {
               success.value = true;
+
               setTimeout(() => {
                 window.location.href = '/login';
-              }, 1000);
+              }, 5000);
             } else {
               response.json()
                 .then((body) => {
