@@ -247,7 +247,7 @@ const applyFilters = () => {
                     </form>
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
-                        <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar</button>
+                        <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
                         <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
                     </div>
                 </div>
@@ -256,14 +256,14 @@ const applyFilters = () => {
                 <div class="d-flex justify-content-center align-items-center mt-4">
                     <div class="search-bar">
                         <form class="d-flex w-100 justify-content-between">
-                            <div class="w-100 my-auto">
-                                <input class="search-input" v-model= "searchTerm" type="text" id="search-input" placeholder="Busco..."/>
+                            <div id="searchForm" style="width:90%;  padding-top: 5px; padding-right: 1px;">
+                                <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
                             </div>
-                            <button class="search-button d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
-                                <i class="bi bi-search"></i>
+                            <button class="searchButton d-flex align-items-center" style="padding-top:15px; padding-right: 1%; " type="submit" @click.prevent="search" >
+                                <img src="/images/search.png" alt="Buscar" />
                             </button>
-                            <button @click.prevent="showFilters=!showFilters" class="search-button d-flex align-items-center">
-                                <i class="bi bi-funnel-fill"></i>
+                            <button @click.prevent="showFilters=!showFilters" class="searchButton d-flex align-items-center" style="margin-left: 2%; margin-right: 4%;">
+                                <img src="/images/filter.png" alt="Filter" />
                             </button>
                         </form>
                     </div>
@@ -318,5 +318,47 @@ const applyFilters = () => {
 
 .slide-enter-from {
   transform: translateX(-100%);
+}
+
+.searchInput {
+  background-color: #ffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  width: 90%;
+  margin-right: 10px;
+}
+
+.searchButton {
+  background-color: transparent;
+  border: none;
+  align-self: center;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+}
+
+.searchButton img {
+  width: 24px;
+  align-self: right;
+}
+
+.hidden {
+  opacity: 0;
+  max-height: 0;
+  max-width: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.form-range::-webkit-slider-thumb {
+  background: #a4c7ff; /* Cambia a tu color preferido */
+}
+
+.form-range::-moz-range-thumb {
+  background: #a4c7ff; /* Cambia a tu color preferido */
+}
+
+.form-range::-ms-thumb {
+  background: #a4c7ff; /* Cambia a tu color preferido */
 }
 </style>

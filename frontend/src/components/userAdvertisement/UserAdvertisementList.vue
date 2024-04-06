@@ -180,9 +180,6 @@ export default {
             <div>
               <p class="m-1">Máx. Presupuesto</p>
             </div>
-            <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="budget = 0" style="width:2vw; height: 2vw;">
-              <i class="bi bi-x-lg"></i>
-            </button>
           </div>
           <input type="range" class="form-range" min="0" max="5000" step="50" v-model="budget" id="budgetVal"
             :class="{ 'is-invalid': errors.includes('budgetVal') }">
@@ -191,9 +188,6 @@ export default {
               <div v-if="!empty">
                 <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: auto; text-wrap:nowrap">
                   <p class="m-1">Máx. Inquilinos</p>
-                  <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="cohabitants = 0" style="width:2vw; height: 2vw;">
-                    <i class="bi bi-x-lg"></i>
-                  </button>
                 </div>
                 <input type="range" class="form-range" min="0" max="10" step="1" v-model="cohabitants"
                   id="cohabitantsVal" :class="{ 'is-invalid': errors.includes('cohabitantsVal') }">
@@ -203,9 +197,6 @@ export default {
           <div v-if="!empty">
             <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: 30px;">
               <p class="m-1">Fecha de entrada</p>
-              <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="entranceDate = null" style="width:2vw; height: 2vw;">
-                <i class="bi bi-x-lg"></i>
-              </button>
             </div>
             <input type="date" v-model="entranceDate" id="entranceDate"  class="form-control" :class="{
               ' is-invalid':
@@ -214,10 +205,11 @@ export default {
                     <b>{{ entranceDate ? entranceDate : '-' }}</b>
               </div>
               <hr>
-              <div class="d-flex justify-content-center mb-2" >
-                <button type="button" class="btn btn-primary" style="margin-right:4px" @click.prevent="errors = []; applyFilters()">Aplicar</button>
-                <button class="btn btn-danger ml-2" style="margin-left:4px" @click.prevent="errors = [];filtered=false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
-              </div>
+              <div class="d-flex justify-content-between mb-2">
+                        <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
+                        <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
+                    </div>
+
         </form>
       </div>
     </div>
@@ -227,10 +219,10 @@ export default {
           <div class="div-14">
             <div class="search-bar">
               <form class="d-flex w-100 justify-content-between">
-                <div id="searchForm" style="width:95%">
-                  <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
+                <div id="searchForm" style="width:90%">
+                  <input class="searchInput" v-model= "searchTerm" type="text" style="color:black; padding-bottom: 1%;" id="searchInput" placeholder="Busco..." />
                 </div>
-                <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
+                <button class="searchButton d-flex align-items-center" style="padding:1%;" type="submit" @click.prevent="search">
                   <img src="/images/search.png" alt="Buscar" />
                 </button>
                 <button @click.prevent="toggleDivVisibility" class="searchButton d-flex align-items-center">
@@ -541,5 +533,17 @@ export default {
   transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
+
+.form-range::-webkit-slider-thumb {
+  background: #a4c7ff; /* Cambia a tu color preferido */
+}
+
+.form-range::-moz-range-thumb {
+  background: #a4c7ff; /* Cambia a tu color preferido */
+}
+
+.form-range::-ms-thumb {
+  background: #a4c7ff; /* Cambia a tu color preferido */
+}
 
 </style>
