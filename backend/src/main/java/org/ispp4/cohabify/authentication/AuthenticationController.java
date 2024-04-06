@@ -81,7 +81,6 @@ public class AuthenticationController {
 		try{
 			user = userService.save(user);
 		} catch (IllegalStateException e) {
-			System.out.println("ERROR AQUÍ->"+e.getMessage());
 			if (e.getMessage().contains("nombre de usuario")) {
 				FormItemValidationError error = new FormItemValidationError();
 				error.setField("username");

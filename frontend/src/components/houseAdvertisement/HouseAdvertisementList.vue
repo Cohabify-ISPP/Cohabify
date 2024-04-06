@@ -328,7 +328,7 @@ const fetchValoration = async (id) => {
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <span> {{ advertisement.valoration }} </span>
-                                        <span style="color: darkgoldenrod;" class="material-icons">star</span>
+                                        <span style="color: goldenrod;" class="material-icons">star</span>
                                     </div>
                                 </div>
                             </div>

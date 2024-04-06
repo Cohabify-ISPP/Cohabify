@@ -207,7 +207,6 @@ export default {
               ' is-invalid':
                 errors.includes('entranceDateVal')
             }">
-                    <b>{{ entranceDate ? entranceDate : '-' }}</b>
               </div>
               <hr>
               <div class="d-flex justify-content-center mb-2" >
@@ -221,9 +220,9 @@ export default {
       <div class="div-13">
         <div class="column-4">
           <div class="div-14">
-            <div class="search-bar">
+            <div class="search-bar w-100">
               <form class="d-flex w-100 justify-content-between">
-                <div id="searchForm" style="width:95%">
+                <div id="searchForm" style="width:100%">
                   <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
                 </div>
                 <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
@@ -374,7 +373,7 @@ export default {
   align-items: center;
   flex-wrap: wrap;
   white-space: initial;
-  padding: 10px 50px;
+  padding: 0 50px 0 0;
 }
 
 @media (max-width: 991px) {

@@ -19,6 +19,7 @@ export default {
         const commonHouses = ref([]);
         const clipboardMessage = ref(false);
         const currentUserAdvertisementRating = ref({});
+        const erroresComentario = ref(null);
 
         const fetchAdvertisement = async () => {
             try {
@@ -52,10 +53,8 @@ export default {
                 },
             })
                 .then(response => {
-                    setTimeout(() => {
-                        currentUserAdvertisementRating.value = {};
-                        fetchAdvertisement();
-                    }, 1000);
+                    currentUserAdvertisementRating.value = {};
+                    fetchAdvertisement();
                     if (!response.ok) {
                         console.error('Error al eliminar el comentario');
                     }
@@ -77,21 +76,22 @@ export default {
                             },
                 body: formData,
             })
-                .then(response => response.json())
-                .then(jsonData => {
-                    setTimeout(() => {
-                        fetchValorations();
-                        fetchAdvertisement();
-                        closeModal();
-                    }, 1000);
-                }
-                
-                )
-                .catch(error => {
-                        console.error('Error al enviar datos al backend:', error);
-                        errorComentario.value = 'No puedes ponerte una reseña a ti mismo.';
+            .then((response) => {
+                if (response.ok) {
+                fetchValorations();
+                fetchAdvertisement();
+                closeModal();
+                } else {
+                    response.json()
+                    .then((body) => {
+                        erroresComentario.value = body ? body : [{"message": "Ha ocurrido un error inesperado"}];
                     });
-
+                }
+            })
+            .catch(error => {
+                    console.error('Error al enviar datos al backend:', error);
+                    errorComentario.value = 'No puedes ponerte una reseña a ti mismo.';
+                });
         };
 
         const fetchValorations = async () => {
@@ -121,6 +121,7 @@ export default {
             modalText.value = "";
             let modal = document.getElementById('loginModal');
             modal.style.display = "block";
+            erroresComentario.value = null;
         }
 
         const closeModal = () => {
@@ -206,7 +207,8 @@ export default {
             valorations,
             deleteUserAd,
             currentUser,
-            currentUserAdvertisementRating
+            currentUserAdvertisementRating,
+            erroresComentario
         }
     }
 }
@@ -235,11 +237,11 @@ export default {
                                     <form @submit.prevent="saveComment">
                                         <div class="form-group">
                                             <label for="commentText">Comentario</label>
-                                            <div class="alert alert-danger" role="alert" v-if="errorComentario">
-                                                <i class="fas fa-exclamation-triangle"></i> {{ errorComentario }}
-                                            </div>
                                             <textarea class="form-control" id="text" v-model="modalText"></textarea>
-
+                                        </div>
+                                        <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="erroresComentario !== null">
+                                            <i class="fas fa-exclamation-triangle"></i> {{ erroresComentario.message }}
+                                            
                                         </div>
                                         <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:white">Enviar</strong></button>
                                     </form>
@@ -288,15 +290,24 @@ export default {
                             <i class="fas fa-trash-alt" @click="deleteComment" 
                                 style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username && Object.keys(currentUserAdvertisementRating).length !== 0">
                             </i>
-                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username && Object.keys(currentUserAdvertisementRating).length === 0"><strong style="color:white">Comentar</strong></button>
+                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" 
+                            v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username && Object.keys(currentUserAdvertisementRating).length === 0">
+                                <strong style="color:white">Comentar</strong>
+                            </button>
                         </div>
                         <hr>
                         
                         <div v-if="valorations.length == 0" style="text-align: left;">Aún no hay comentarios...</div>
 
                         <div v-else style="overflow-y: auto; max-height: 50vh;">
+                            <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;" v-if="Object.keys(currentUserAdvertisementRating).length !== 0"> 
+                                <div class="card-body" >
+                                    <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="currentUserAdvertisementRating.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ currentUserAdvertisementRating.user.username}}</p>
+                                    <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ currentUserAdvertisementRating.comment }}</p>
+                                </div>
+                            </div>
                             <div v-for="comentario in valorations" :key="comentario">
-                                <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;"> 
+                                <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;" v-if="comentario.user.username !== currentUser.username"> 
                                     <div class="card-body">
                                         <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.user.username}}</p>
                                         <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ comentario.comment }}</p>
@@ -312,11 +323,7 @@ export default {
                 <div class="subseccion">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <h1 style="text-align: left;"> {{ userAdvertisement.author?.username}} 
-                            <img v-if="userAdvertisement.author?.plan === 'explorer'" 
-                                style="max-height: 35px;"
-                                src="/images/verificado.png"
-                                loading="lazy"
-                            />
+                            <img v-if="userAdvertisement.author?.plan === 'explorer'"style="max-height: 35px;" src="/images/verificado.png" loading="lazy"/>
                             <i :class="{'bi':true,'bi-gender-male': userAdvertisement.author?.gender == 'MASCULINO', 'bi-gender-female':userAdvertisement.author?.gender == 'FEMENINO', 'bi-gender-ambiguous': userAdvertisement.author?.gender == 'OTRO'}"></i>
                         </h1>
                         <button class="btn btn-share" @click="copyToClipboard()">
