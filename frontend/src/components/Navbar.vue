@@ -87,11 +87,11 @@ watch(user, (newValue) => {
         loading="lazy"
       />
     </a>
-
-    <div class="d-flex align-items-center" v-if="isLoggedIn">
+    <div class="d-flex">
+    <div class="d-flex align-items-center">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
         
-        <li class="nav-item">
+        <li class="nav-item" v-if="isLoggedIn">
           <a class="nav-link" href="#"><span class="badge rounded-pill badge-notification bg-danger">1</span> Chat</a>
         </li>
         <li class="nav-item dropdown">
@@ -103,10 +103,10 @@ watch(user, (newValue) => {
             <li><a class="dropdown-item" href="/advertisements/users" @click.prevent="$router.push('/advertisements/users')">Compañeros</a></li>
           </ul>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isLoggedIn">
           <a class="nav-link" href="/plan">Planes</a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" v-if="isLoggedIn">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Anuncios de vivienda
           </a>
@@ -116,7 +116,7 @@ watch(user, (newValue) => {
           </ul>
         </li>
 
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" v-if="isLoggedIn">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Anuncios de compañero
           </a>
@@ -128,7 +128,7 @@ watch(user, (newValue) => {
         
       </ul>
       
-      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw">
+      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw" v-if="isLoggedIn">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center hidden-arrow"
           href="#"
@@ -162,10 +162,7 @@ watch(user, (newValue) => {
             loading="lazy"
           />
         </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuAvatar"
-        >
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
           <li>
             <a class="dropdown-item" href="/user/" @click.prevent="$router.push('/user/' + user?.id)">Perfil</a>
           </li>
@@ -184,9 +181,10 @@ watch(user, (newValue) => {
         </ul>
       </div>
     </div>
-    <div class="d-flex align-items-center" v-else>
+    <div class="d-flex align-items-center" v-if="!isLoggedIn">
       <a href="/login" class="btn btn-primary">Iniciar sesión</a>
     </div>
+  </div>
   </div>
 </nav>
 </template>

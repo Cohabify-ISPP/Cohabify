@@ -1,4 +1,5 @@
 <template>
+  <Navbar />
   <div class="mx-auto p-2" style="width: 50%;">
     <img src="/images/LogoCohabify.png" class="img-fluid rounded-start" alt="..."
       style="max-width: 400px; padding-top: 20px;padding-bottom: 2%;">
@@ -23,13 +24,15 @@
             style="padding: 20px;">
             <label for="password" class="form-label text-white fw-bold">Contraseña</label>
             <input name="password" type="password" maxlength="255" required class="form-control" id="password" v-model="password"
-              placeholder="Contraseña" @input="validatePassword" :class="{ 'is-invalid': !isPasswordSafe }">
-            <div class="invalid-feedback text-danger" v-if="!isPasswordSafe">{{ passwordError }}</div>
+              placeholder="Contraseña" @input="validatePassword" :class="{ 'is-invalid': !isPasswordSafe}">
+            <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!isPasswordSafe">
+              <p><i class="fas fa-exclamation-triangle"></i> {{ passwordError }}</p>
+            </div>
           </div>
           <div class="form-check form-check-inline" style="padding: 20px;">
             <input class="form-check-input" type="checkbox" id="termsAndConditions" v-model="termsAccepted">
             <label class="form-check-label" for="termsAndConditions">
-              Acepto los <a href="https://cohabify.github.io/ca" target="_blank">Términos y condiciones de uso</a>
+              <p style="color: white;">Acepto los <a style="color: darkblue;"  href="https://cohabify.github.io/ca" target="_blank">Términos y condiciones de uso</a></p>
             </label>
           </div>
         </div>
@@ -37,7 +40,10 @@
           <div class="form-group" style="padding: 20px;">
             <label for="username" class="form-label text-white fw-bold">Nombre de usuario</label>
             <input name="username" type="text" maxlength="50" required class="form-control" id="username" v-model="username"
-              placeholder="Nombre de usuario">
+              placeholder="Nombre de usuario"  @input="validateUsername" :class="{ 'is-invalid': !isUsernameValid}">
+              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!isUsernameValid">
+                <p><i class="fas fa-exclamation-triangle"></i> {{ usernameError }}</p>  
+              </div>
           </div>
           <div class="form-group" style="padding: 20px;">
             <label for="email" class="form-label text-white fw-bold">Email</label>
@@ -50,7 +56,8 @@
             <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña</label>
             <input name="confirmPassword" type="password" required class="form-control" id="confirmPassword" v-model="confirmPassword"
               placeholder="repetir contraseña" :class="{ 'is-invalid': password !== confirmPassword }">
-            <div class="invalid-feedback text-danger" v-if="password !== confirmPassword">Las contraseñas no coinciden
+            <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="password !== confirmPassword && confirmPassword !== ''">
+                <i class="fas fa-exclamation-triangle"></i> Las contraseñas no coinciden
             </div>
           </div>
 
@@ -105,12 +112,7 @@
           </div>
         </div>
         <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="secondPage && validationErrors.length > 0" v-for="error in validationErrors" :key="error.message">
-          <span v-if="error.field !== undefined && error.field !== '*'">
-            <i class="fas fa-exclamation-triangle"></i> El campo {{ error.field }} contiene el valor no válido: {{ error.rejectedValue }}. {{ error.message }}
-          </span>
-          <span v-if="error.field === undefined || error.field === '*'">
-            <i class="fas fa-exclamation-triangle"></i> {{ error.message }}
-          </span>
+          <i class="fas fa-exclamation-triangle"></i> {{ error.message }} 
         </div>
         <div class="mt-3" style="padding-top: 20px;" v-if="secondPage">
           <button type="submit" class="btn-primary " @click="changePage" style="margin-right: 20px;">Anterior</button>
@@ -149,7 +151,9 @@ export default {
     const isDragging = ref(false);
     const fileInput = ref(null);
     const passwordError = ref('');
+    const usernameError = ref('');
     const isPasswordSafe = ref('true');
+    const isUsernameValid = ref('true');
     const store = useStore();
     const validationErrors = ref([])
     const termsAccepted = ref(false);
@@ -161,9 +165,9 @@ export default {
         isPasswordSafe.value = true;
         return '';
       } 
-      if (password.value.length == 0) {
+      if (password.value.length == 0 && googleOAuthToken.value !== null) {
         isPasswordSafe.value = true;
-      } else if (!passwordRegex.test(password.value)) {
+      } else if (!passwordRegex.test(password.value) && password.value.length > 0) {
         passwordError.value = 'Contraseña no segura: la contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial  (!@#$%^&*).';
         isPasswordSafe.value = false;
       } else {
@@ -171,6 +175,17 @@ export default {
         isPasswordSafe.value = true;
       }
     };
+
+    const validateUsername = () => {
+      const usernameRegex = /^.*\s.*$/;
+      if (usernameRegex.test(username.value)) {
+        usernameError.value = 'El nombre de usuario no puede contener espacios.';
+        isUsernameValid.value = false;
+      } else {
+        usernameError.value = '';
+        isUsernameValid.value = true;
+      }
+    }
 
     const imgUrl = computed(() => {
       if (img.value) {
@@ -233,6 +248,7 @@ export default {
 
     const changePage = () => {
       validatePassword();
+      validateUsername();
       if (!termsAccepted.value) {
         alert('Debes aceptar los términos y condiciones para registrarte.');
         return;
@@ -242,14 +258,16 @@ export default {
         if (name.value && username.value && email.value && phone.value && phone.value.length === 9 && !isNaN(phone.value)
           && email.value.includes('@') && !passwordError.value) {
           secondPage.value = !secondPage.value;
-          }
-        } else {
-          if (name.value && username.value && email.value && phone.value && password.value && confirmPassword.value
-            && password.value === confirmPassword.value && phone.value.length === 9 && !isNaN(phone.value) && email.value.includes('@') && !passwordError.value) {
-            secondPage.value = !secondPage.value;
-          }
+          validationErrors.value = [];
         }
-      };
+      } else {
+        if (name.value && username.value && email.value && phone.value && password.value && confirmPassword.value
+          && password.value === confirmPassword.value && phone.value.length === 9 && !isNaN(phone.value) && email.value.includes('@') && !passwordError.value && !usernameError.value) {
+          secondPage.value = !secondPage.value;
+          validationErrors.value = [];
+        }
+      }
+    };
 
     const register = () => {
       
@@ -269,6 +287,8 @@ export default {
           tag: selectedTags.value,
         })], { type: "application/json" }));
         formData.append("profile-pic", img.value);
+
+        validationErrors.value = [];
 
         fetch(import.meta.env.VITE_BACKEND_URL + '/auth/register', {
           method: 'POST',
@@ -351,12 +371,16 @@ export default {
       imgUrl,
       fileInput,
       passwordError,
+      usernameError,
       isPasswordSafe,
+      isUsernameValid,
       validatePassword,
       googleOAuthToken,
       redirectToLogin,
       validationErrors,
-      termsAccepted
+      termsAccepted,
+      usernameError,
+      validateUsername,
     };
   }
 }

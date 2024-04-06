@@ -1,15 +1,16 @@
 <script>
     import { ref, onMounted, computed } from 'vue'
     import { useStore } from 'vuex'
+    import { useRouter } from 'vue-router'
 
     export default {
+
         setup() {
-            //const currentUser = ref(null);
             const store = useStore()
             const currentUser = computed(() => store.state.user);
+            const router = useRouter();
             const plan = computed(() => currentUser.value.plan);
 
-            //Cambiar el plan del usuario
             const changePlan = async (newPlan) => {
                 const response = await fetch(
                     import.meta.env.VITE_BACKEND_URL + '/api/user/update/plan/'+ newPlan + '/'+currentUser.value.id,
@@ -22,15 +23,19 @@
                 )
                 store.dispatch('cargarUser')
             }
+
+            onMounted(async () => {
+                if (currentUser.value === null || currentUser.value === undefined || Object.keys(currentUser.value).length === 0) {
+                    router.push('/')
+                }
+            })
         
             return { 
             currentUser,
             plan,
             changePlan
             }
-
-        }  
-        
+        }
     }
 
 </script>
