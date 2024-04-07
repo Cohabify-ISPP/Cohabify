@@ -77,7 +77,8 @@ public class HouseAdvertisementController {
     @GetMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
         Optional<HouseAdvertisement> advertisement = advertisementService.findById(new ObjectId(id));
-        if(!advertisement.get().getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
+        if(global.getCurrentUser() == null || 
+            !advertisement.get().getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
             advertisement.get().setViews(advertisement.get().getViews()+1);
             advertisementService.update(advertisement.get().getId(), advertisement.get());
         }
