@@ -77,7 +77,8 @@ public class HouseAdvertisementService {
         }
         return advertisements;
 
-
+    }
+    
     public HouseAdvertisement findAdvertisementByHouseId(ObjectId id) {
         return advertisementRepository.findAdvertisementByHouseId(id).get();
 
