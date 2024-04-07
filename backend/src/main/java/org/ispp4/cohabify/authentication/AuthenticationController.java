@@ -68,18 +68,7 @@ public class AuthenticationController {
 											.toList());
 		}
 		
-		User user = userService.getUserByUsername(request.getUsername());
-		if(user != null) {
-			FormItemValidationError error = new FormItemValidationError();
-			error.setField("username");
-			error.setCode("AlreadyExists");
-			error.setMessage("An user with this username already exists.");
-			error.setRejectedValue(request.getUsername());
-			return ResponseEntity.status(HttpStatus.CONFLICT)
-					 .body(error);
-		}
-		
-		user = new User();
+		User user = new User();
 		user.setUsername(request.getUsername());
 		user.setName(request.getName());
 		if (request.getGoogleOAuthToken() == null) {
@@ -99,8 +88,40 @@ public class AuthenticationController {
 		user.setPlan(Plan.BASIC);
 		user.setGoogleOAuthToken(request.getGoogleOAuthToken());
 		user.setDescription("¡Hola, estoy utilizando Cohabify!");
-		user = userService.save(user);
-		user.setVerificationCode(randomStringGenerator.extendStringWithRandomCharactersUrlSafe(user.getId().toString(), 64));
+		try{
+			user = userService.save(user);
+      user.setVerificationCode(randomStringGenerator.extendStringWithRandomCharactersUrlSafe(user.getId().toString(), 64));
+		} catch (IllegalStateException e) {
+			if (e.getMessage().contains("nombre de usuario")) {
+				FormItemValidationError error = new FormItemValidationError();
+				error.setField("username");
+				error.setCode("AlreadyExists");
+				error.setMessage("Ya existe un usuario registrado con el nombre de usuario "+user.getUsername()+". Por favor, elija otro.");
+				error.setRejectedValue(request.getUsername());
+				return ResponseEntity.status(HttpStatus.CONFLICT)
+						 .body(error);
+			}else if (e.getMessage().contains("email")) {
+				FormItemValidationError error = new FormItemValidationError();
+				error.setField("email");
+				error.setCode("AlreadyExists");
+				error.setMessage("Ya existe un usuario registrado con el email "+user.getEmail()+". Por favor, elija otro.");
+				error.setRejectedValue(request.getEmail());
+				return ResponseEntity.status(HttpStatus.CONFLICT)
+						 .body(error);
+			}else if (e.getMessage().contains("teléfono")) {
+				FormItemValidationError error = new FormItemValidationError();
+				error.setField("phone");
+				error.setCode("AlreadyExists");
+				error.setMessage("Ya existe un usuario registrado con el teléfono "+user.getPhone()+". Por favor, elija otro.");
+				error.setRejectedValue(request.getPhone());
+				return ResponseEntity.status(HttpStatus.CONFLICT)
+						 .body(error);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();	
+			return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT)
+					 .body(e.getMessage());
+		}
 		
 		// Save the image and add the static uri to the user
 		String[] filename_split = image.getOriginalFilename().split("\\.");

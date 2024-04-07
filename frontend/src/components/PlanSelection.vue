@@ -1,14 +1,17 @@
 <script>
-    import { ref, onMounted, computed } from 'vue'
+    import { ref, onMounted, computed, watch } from 'vue'
     import { useStore } from 'vuex'
+    import { useRouter } from 'vue-router'
     import { loadStripe } from '@stripe/stripe-js';
 
     export default {
+
         setup() {
-            //const currentUser = ref(null);
             const store = useStore()
             const currentUser = computed(() => store.state.user);
+            const router = useRouter();
             const plan = computed(() => currentUser.value.plan);
+            const loggedIn = ref(false);
             const stripePromise = loadStripe('pk_test_51P2DTpBofFRUNSKsZLVQgYTOY0I6PLl4BP8w6a5y8IYZThREOk8a7dcqu7kXCg8aV9byhdSkZ98Sg3dFL24RzkON00R08XEGbM');
             const loading = ref(false);
             const lineItems = ref(null);
@@ -72,7 +75,6 @@
 
             } ;
 
-            //Cambiar el plan del usuario
             const changePlan = async (newPlan) => {
                     const response = await fetch(
                         import.meta.env.VITE_BACKEND_URL + '/api/user/update/plan/'+ newPlan + '/'+currentUser.value.id,
@@ -91,17 +93,22 @@
                 return response;
             }
 
+            watch(currentUser, (newValue) => {
+                if (newValue !== null && newValue !== undefined && Object.keys(newValue).length !== 0) { 
+                    loggedIn.value = true;
+                }
+            });
+        
             return { 
             currentUser,
             plan,
             changePlan,
+            loggedIn,
             loading,
             handleCheckout,
-            isLoading
+            isLoading,
             }
-
-        }  
-        
+        }
     }
 
 </script>
@@ -132,8 +139,13 @@
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> Gratis</h2>
-                            <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'basic'" @click="handleCheckout('basic')">¡Lo quiero!</button>
-                            <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            <div v-if="!loggedIn">
+                                <button class="btn-plan" style="margin-top: 1vw;" >Inicia sesión para contratar un plan</button>
+                            </div>
+                            <div v-else>
+                                <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'basic'" @click="handleCheckout('basic')">¡Lo quiero!</button>
+                                <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -158,8 +170,13 @@
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> 5€</h2>
-                            <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'explorer'" @click="handleCheckout('explorer')">¡Lo quiero!</button>
-                            <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            <div v-if="!loggedIn">
+                                <button class="btn-plan" style="margin-top: 1vw;" >Inicia sesión para contratar un plan</button>
+                            </div>
+                            <div v-else>
+                                <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'explorer'" @click="handleCheckout('explorer')">¡Lo quiero!</button>
+                                <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -184,8 +201,13 @@
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> 15€ + 5€*</h2>
-                            <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'owner'" @click="handleCheckout('owner')">¡Lo quiero!</button>
-                            <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            <div v-if="!loggedIn">
+                                <button class="btn-plan" style="margin-top: 1vw;" >Inicia sesión para contratar un plan</button>
+                            </div>
+                            <div v-else>
+                                <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'owner'" @click="handleCheckout('owner')">¡Lo quiero!</button>
+                                <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            </div>
                         </div>
                     </div>
                 </div>
