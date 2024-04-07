@@ -94,7 +94,22 @@ export default {
     }
 
     const currentAdvertisements = computed(() => {
-      return filtered.value ? filteredAdvertisements.value : userAds.value
+      const ads = filtered.value ? filteredAdvertisements.value : userAds.value;
+
+      const orderedAds = ads.sort((a, b) => {
+          if (a.promotionExpirationDate === null && b.promotionExpirationDate === null) {
+              return 0; 
+          } else if (a.promotionExpirationDate === null) {
+              return 1; 
+          } else if (b.promotionExpirationDate === null) {
+              return -1; 
+          }
+
+          const dateA = new Date(a.promotionExpirationDate);
+          const dateB = new Date(b.promotionExpirationDate);
+          return dateA - dateB;
+          });
+      return orderedAds;
     })
 
     const toggleTag = (tag) => {
@@ -245,9 +260,10 @@ export default {
           </div>
         </div>
       </div>
-      
-      <div class="list-container">
-        <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push('/advertisements/users/' + advertisement?.id)">
+
+      <div class="box list-item" style="width:90%; align-items:center" v-for="advertisement in currentAdvertisements" :key="anuncio" :class="{ highlighted: advertisement.promotionExpirationDate !== null }">
+        <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + advertisement?.id)">
+          <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
             <img class="imagen-circulo" :src="advertisement?.author?.imageUri" alt="Imagen del usuario"
               style="margin-right: 10px;">
               
@@ -280,12 +296,12 @@ export default {
                 </span>
               </div>
             </div>
-
           </div>
+          </div>
+        </a>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
@@ -469,8 +485,8 @@ export default {
 
 .imagen-circulo {
   position: relative;
-  width: 25vh;
-  height: 25vh;
+  width: 15vh;
+  height: 15vh;
   overflow: hidden;
   border-radius: 50%;
   display: flex;
@@ -515,6 +531,10 @@ export default {
   max-height: 0;
   max-width: 0;
   transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.highlighted {
+  background-color: #bbeeff;
+  border: 2px solid black;
 }
 
 </style>

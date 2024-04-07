@@ -54,7 +54,22 @@ onMounted(() => {
 })
 
 const currentAdvertisements = computed(() => {
- return filtered.value ? filteredAdvertisements.value : advertisements.value
+ const ads = filtered.value ? filteredAdvertisements.value : advertisements.value;
+
+ const orderedAds = ads.sort((a, b) => {
+    if (a.promotionExpirationDate === null && b.promotionExpirationDate === null) {
+        return 0; 
+    } else if (a.promotionExpirationDate === null) {
+        return 1; 
+    } else if (b.promotionExpirationDate === null) {
+        return -1; 
+    }
+
+    const dateA = new Date(a.promotionExpirationDate);
+    const dateB = new Date(b.promotionExpirationDate);
+    return dateA - dateB;
+    });
+ return orderedAds;
 })
 
 const getImageUrl = (image) => {
@@ -311,7 +326,7 @@ const fetchValoration = async (id) => {
                     {{ fetchError }}
                 </div>
                 <div class="list-container mt-4" v-else>
-                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
+                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)" :class="{ highlighted: advertisement.promotionExpirationDate !== null }">
                         <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image" style="width:20vw; max-width:20vw">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
@@ -367,5 +382,9 @@ const fetchValoration = async (id) => {
 
 .slide-enter-from {
   transform: translateX(-100%);
+}
+.highlighted {
+    background-color: #bbeeff;
+    border: 2px solid black;
 }
 </style>

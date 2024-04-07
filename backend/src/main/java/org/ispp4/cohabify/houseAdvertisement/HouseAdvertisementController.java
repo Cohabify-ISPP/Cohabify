@@ -2,6 +2,7 @@ package org.ispp4.cohabify.houseAdvertisement;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,9 @@ import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.RequestBody;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/advertisements/houses")
@@ -54,7 +57,7 @@ public class HouseAdvertisementController {
     @GetMapping("")
     public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(@Nullable Principal principal) {
         List<HouseAdvertisement> advertisements = advertisementService.findAll();
-
+        advertisements = advertisementService.checkPromotions(advertisements);
         if (principal == null) {
             advertisements = advertisements.stream() 
             // Filter advertisements to leave the ones that are owned or that were created at least a day before now
@@ -94,6 +97,7 @@ public class HouseAdvertisementController {
     @GetMapping("/owner/{id}")
     public ResponseEntity<List<HouseAdvertisement>> getAdvertisementsByAuthor(@PathVariable String id) {
         List<HouseAdvertisement> advertisements = advertisementService.findByAuthorId(new ObjectId(id));
+        advertisements = advertisementService.checkPromotions(advertisements);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
@@ -274,6 +278,19 @@ public class HouseAdvertisementController {
 
     }
 
+
+    @PostMapping("/promote/{id}")
+    public ResponseEntity<Void> promoteHouseAd(@PathVariable ObjectId id) {
+        if(!advertisementService.findAdById(id).getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }else{
+            HouseAdvertisement ad = advertisementService.findAdById(id);
+            ad.setPromotionExpirationDate(LocalDate.now().plusDays(1));
+            advertisementService.save(ad);
+        return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
     @Transactional(readOnly = true)
     @GetMapping("/users/{userId}/ads/{adUserId}")
     public ResponseEntity<List<HouseAdvertisement>> getSharedLikes(@PathVariable String userId, @PathVariable String adUserId) {
@@ -299,7 +316,5 @@ public class HouseAdvertisementController {
         return new ResponseEntity<>(sharedLikes, HttpStatus.OK);
     }
 
-
-    
     
 }
