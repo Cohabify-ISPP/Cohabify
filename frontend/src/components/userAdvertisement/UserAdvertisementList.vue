@@ -173,46 +173,59 @@ export default {
 <template>
   <Navbar />
   <div style="display: flex; flex-direction: row; height:100%">
-    <div id="filterContainer" class="container-fluid" style="padding-left:0; flex-basis:20vw; flex-shrink:0; transition: opacity 0.3s ease, visibility 0.3s ease;">
-      <div class="col filter-column align-items-center" id="filters" style="height:auto;  overflow: hidden; ">
-        <form class="needs-validation mb-4" style="width:90%" novalidate>
-          <div class="d-flex justify-content-between m-1 mt-4 mr-3" style="width: 100%; height: 30px; border-bottom-right-radius: 0px;">
-            <div>
-              <p class="m-1">Máx. Presupuesto</p>
-            </div>
+    
+      <div id="filterContainer" class="container-fluid" style="padding-left:0; flex-basis:20vw; flex-shrink:0;">
+        
+        <div class="col filter-column pt-4" id="filters" style="height:auto;  overflow: hidden; padding: 10px;">
+          
+          <div class="d-flex flex-row-reverse">
+            <button class="form-button  rounded-5 d-flex align-items-center" @click.prevent="toggleDivVisibility" style="height: 40px;">
+              <span class="material-symbols-outlined">
+                keyboard_double_arrow_left
+              </span>
+            </button>
           </div>
-          <input type="range" class="form-range" min="0" max="5000" step="50" v-model="budget" id="budgetVal"
-            :class="{ 'is-invalid': errors.includes('budgetVal') }">
-          <b>{{ budget == 0 ? '-' : budget == 5000 ? '+ ' + budget.toString() + '€/mes' : '<= ' + budget.toString() + '€/mes' }}</b>
-
-              <div v-if="!empty">
-                <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: auto; text-wrap:nowrap">
-                  <p class="m-1">Máx. Inquilinos</p>
-                </div>
-                <input type="range" class="form-range" min="0" max="10" step="1" v-model="cohabitants"
-                  id="cohabitantsVal" :class="{ 'is-invalid': errors.includes('cohabitantsVal') }">
-                <b>{{ cohabitants == 0 ? '-' : cohabitants == 10 ? '+ ' + cohabitants.toString() : '<= ' + cohabitants.toString() }}</b>
-          </div>
-
-          <div v-if="!empty">
-            <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: 30px;">
-              <p class="m-1">Fecha de entrada</p>
-            </div>
-            <input type="date" v-model="entranceDate" id="entranceDate"  class="form-control" :class="{
-              ' is-invalid':
-                errors.includes('entranceDateVal')
-            }">
-                    <b>{{ entranceDate ? entranceDate : '-' }}</b>
+          <form class="needs-validation mb-4" novalidate>
+            <div class="d-flexW " style="width: 100%; height: 30px;">
+              <div>
+                <p >Máx. Presupuesto</p>
               </div>
-              <hr>
-              <div class="d-flex justify-content-between mb-2">
-                        <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
-                        <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
-                    </div>
+            </div>
+            <input type="range" class="form-range" min="0" max="5000" step="50" v-model="budget" id="budgetVal"
+              :class="{ 'is-invalid': errors.includes('budgetVal') }">
+            <b>{{ budget == 0 ? '-' : budget == 5000 ? '+ ' + budget.toString() + '€/mes' : '<= ' + budget.toString() + '€/mes' }}</b>
 
-        </form>
+                <div v-if="!empty">
+                  <div class="mt-3 d-flex" :invalid="true" style="width: 100%; height: 30px; text-wrap:nowrap">
+                    <p>Máx. Inquilinos</p>
+                  </div>
+                  <input type="range" class="form-range" min="0" max="10" step="1" v-model="cohabitants"
+                    id="cohabitantsVal" :class="{ 'is-invalid': errors.includes('cohabitantsVal') }">
+                  <b>{{ cohabitants == 0 ? '-' : cohabitants == 10 ? '+ ' + cohabitants.toString() : '<= ' + cohabitants.toString() }}</b>
+            </div>
+
+            <div v-if="!empty">
+              <div class="mt-3 d-flex" :invalid="true" style="width: 100%; height: 30px;">
+                <p >Fecha de entrada</p>
+              </div>
+              <input type="date" v-model="entranceDate" id="entranceDate"  class="form-control" :class="{
+                ' is-invalid':
+                  errors.includes('entranceDateVal')
+              }">
+                      <b>{{ entranceDate ? entranceDate : '-' }}</b>
+                </div>
+              </form>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                          <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
+                          <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
+                      </div>
+    
       </div>
+    
     </div>
+  
+    
     <div class="div-2" style="flex-basis:3">
       <div class="div-13">
         <div class="column-4">
@@ -278,6 +291,17 @@ export default {
 
 
 <style scoped>
+.slide-enter-active, .slide-leave-active {
+  transition: .3s;
+}
+.slide-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+
 .div-2 {
   display: flex;
   flex-direction: column;
@@ -535,15 +559,34 @@ export default {
 
 
 .form-range::-webkit-slider-thumb {
-  background: #a4c7ff; /* Cambia a tu color preferido */
+  background: #a4c7ff; 
 }
 
 .form-range::-moz-range-thumb {
-  background: #a4c7ff; /* Cambia a tu color preferido */
+  background: #a4c7ff; 
 }
 
 .form-range::-ms-thumb {
-  background: #a4c7ff; /* Cambia a tu color preferido */
+  background: #a4c7ff;
+}
+
+.hidden {
+  opacity: 0;
+  max-height: 0;
+  max-width: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.form-button {
+  background: #28426B;
+}
+
+.form-button:hover {
+    border-color:#ffffff;
+}
+
+.form-button:active {
+    background: #3f5982;
 }
 
 </style>

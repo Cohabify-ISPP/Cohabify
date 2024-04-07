@@ -177,7 +177,7 @@ const applyFilters = () => {
             <transition name="slide">
                 <div class="col-md-3 filter-column p-4" style="padding: 10px;" v-if="showFilters">
                     <div class="d-flex flex-row-reverse">
-                        <button class="btn btn-primary rounded-5" @click.prevent="showFilters=false" style="height: 40px;">
+                        <button class="form-button rounded-5 d-flex align-items-center" @click.prevent="showFilters=false" style="height: 40px;">
                             <span class="material-symbols-outlined">
                                 keyboard_double_arrow_left
                             </span>
@@ -351,14 +351,26 @@ const applyFilters = () => {
 }
 
 .form-range::-webkit-slider-thumb {
-  background: #a4c7ff; /* Cambia a tu color preferido */
+  background: #a4c7ff; 
 }
 
 .form-range::-moz-range-thumb {
-  background: #a4c7ff; /* Cambia a tu color preferido */
+  background: #a4c7ff; 
 }
 
 .form-range::-ms-thumb {
-  background: #a4c7ff; /* Cambia a tu color preferido */
+  background: #a4c7ff; 
+}
+
+.form-button {
+  background: #28426B;
+}
+
+.form-button:hover {
+    border-color:#ffffff;
+}
+
+.form-button:active {
+    background: #3f5982;
 }
 </style>
