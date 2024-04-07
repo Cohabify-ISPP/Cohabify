@@ -14,6 +14,7 @@ import userDetails from './components/user/userDetails.vue';
 import updateUserDetails from './components/user/updateUserDetails.vue';
 import Error from './components/Error.vue';
 import MyHouseAdvertisementList from './components/houseAdvertisement/MyHouseAdvertisementList.vue';
+import Chat from './components/chat/Chat.vue';
 
 
 const routes = [
@@ -22,6 +23,8 @@ const routes = [
     { path: '/login', component: Login },
     { path: '/register', component: Register },
     
+    { path: '/chat', component: Chat},
+
     { path: '/advertisements/users', component: UserAdvertisementList },
     { path: '/advertisements/houses', component: HouseAdvertisementList},
 
