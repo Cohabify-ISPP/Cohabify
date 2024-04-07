@@ -485,8 +485,8 @@ export default {
 
 .imagen-circulo {
   position: relative;
-  width: 19vh;
-  height: 19vh;
+  width: 15vh;
+  height: 15vh;
   overflow: hidden;
   border-radius: 50%;
   display: flex;
