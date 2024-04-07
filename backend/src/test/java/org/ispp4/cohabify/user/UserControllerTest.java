@@ -58,6 +58,8 @@ public class UserControllerTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
 
         testUser = userController.createUser(user).getBody();
     }

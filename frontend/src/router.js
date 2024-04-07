@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Main from './components/Main.vue';
 import Login from './components/authentication/Login.vue';
 import Register from './components/authentication/Register.vue';
+import RegisterVerification from './components/authentication/RegisterVerification.vue';
 import UserAdvertisementList from './components/userAdvertisement/UserAdvertisementList.vue';
 import CreateHouseAdvertisement from './components/houseAdvertisement/CreateHouseAdvertisement.vue';
 import HouseAdvertisementList from './components/houseAdvertisement/HouseAdvertisementList.vue';
@@ -22,6 +23,7 @@ const routes = [
     { name: "main", path: '/', component: Main },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
+    { path: '/register/verify/:verificationCode', component: RegisterVerification },
     
     { path: '/chat', component: Chat},
 

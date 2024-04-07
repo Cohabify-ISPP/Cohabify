@@ -43,6 +43,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**", "/static/**").permitAll()
 					.requestMatchers("/api/tag/types/USER_TAG").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register", "/auth/login/google").anonymous()
+					.requestMatchers(HttpMethod.GET, "/auth/register/verify/**").anonymous()
 					.requestMatchers(HttpMethod.POST, "/auth/getUser").authenticated()
 					.requestMatchers(HttpMethod.GET, "/api/advertisements/houses", "/api/advertisements/users").permitAll()
 					.requestMatchers("/api/**").authenticated()

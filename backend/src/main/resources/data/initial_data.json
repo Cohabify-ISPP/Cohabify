@@ -177,7 +177,9 @@
           "username": "javgaragu90",
           "name": "Javier García Aguado",
           "password": "$2a$10$N.YNWLUBuyZt3dawPCbTHe2.Ys8VXGglhmwXyAmiHi7uFkrYmfk9u",
-          "isOwner": true,
+          "isOwner": true, 
+          "enabled": true,
+          "verificationCode": "60d5ec9af682fbd39a1b8b9eUnStringDe64CaracteresConMuchoRelleno123",
           "phone": "618537466",
           "email": "javgaragu90@alum.us.es",
           "tag": [
@@ -200,6 +202,8 @@
           "name": "Manuela López Pérez",
           "password": "$2a$10$4PzUQ8nmDn7h62ssxQcPwOKjBG3L8FQYVyFgwxHz02mILgwPO3qiG",
           "isOwner": false,
+          "enabled": true,
+          "verificationCode": "60d5ec9af682fbd39a1b8b9eUnStringDe64CaracteresConMuchoRelleno123",
           "phone": "618592566",
           "email": "manlovper90@us.es",
           "tag": [
