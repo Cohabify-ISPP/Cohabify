@@ -47,4 +47,11 @@ public class HouseAdvertisement extends BaseEntity {
 
     private LocalDate promotionExpirationDate;
 
+    private int views;
+
+    public void incrementViews() {
+        views++;
+    }
+
+
 }

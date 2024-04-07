@@ -49,5 +49,8 @@ public class AdvertisementHouseRequest {
     @DBRef
     private User author;
 
+    private int views;
+
     private List<String> imagesB;
+
 }
