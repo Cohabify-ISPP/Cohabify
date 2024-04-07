@@ -306,19 +306,22 @@ onMounted(() => {
             </div>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="createHouseAdvertisementRating">
+            <form @submit.prevent="createHouseAdvertisementRating" class="d-flex flex-column align-items-center">
               <div>
-                <div class="stars-input">
-                  <span
-                    v-for="star in 5"
-                    :key="star"
-                    @click="setRating(star)"
-                    :class="{ active: star <= rating }"
-                    >★</span
-                  >
-                </div>
+                  <div class="rating stars-input">
+                    <input value="5" name="rate" id="star5" type="radio" @click="setRating(5)">
+                    <label title="text" for="star5"></label>
+                    <input value="4" name="rate" id="star4" type="radio" @click="setRating(4)">
+                    <label title="text" for="star4"></label>
+                    <input value="3" name="rate" id="star3" type="radio" @click="setRating(3)">
+                    <label title="text" for="star3"></label>
+                    <input value="2" name="rate" id="star2" type="radio" @click="setRating(2)">
+                    <label title="text" for="star2"></label>
+                    <input value="1" name="rate" id="star1" type="radio" @click="setRating(1)">
+                    <label title="text" for="star1"></label>
+                  </div>
               </div>
-              <div class="form-group">
+              <div class="form-group container-fluid">
                 <label for="commentText">Comentario</label>
                 <textarea
                   class="form-control"
@@ -328,7 +331,7 @@ onMounted(() => {
               </div>
               <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="erroresComentario.length > 0" v-for="error in erroresComentario" :key="error.message">
                 <span v-if="error.field !== undefined && error.field !== '*'">
-                  <i class="fas fa-exclamation-triangle"></i> El campo {{ error.field }} contiene el valor no válido: {{ error.rejectedValue }}. {{ error.message }}
+                  <i class="fas fa-exclamation-triangle"></i> El campo {{ error.field }} contiene el valor no válido: {{ error.message }}
                 </span>
                 <span v-if="error.field === undefined || error.field === '*'">
                   <i class="fas fa-exclamation-triangle"></i> {{ error.message }}
@@ -755,11 +758,12 @@ onMounted(() => {
                 >
                   <div class="card-body">
                     <div>
-                      <div class="stars">
+                      <div class="stars" style="text-align: right;">
                         <span
                           v-for="star in 5"
                           :key="star"
                           :class="{ active: star <= comentario.rating }"
+                          style="font-size: 1.5em;"
                           >★</span
                         >
                       </div>
@@ -888,7 +892,7 @@ onMounted(() => {
 }
 
 .stars-input span.active {
-  color: gold;
+  color: #ffa723;
 }
 
 .stars span {
@@ -896,7 +900,7 @@ onMounted(() => {
 }
 
 .stars span.active {
-  color: gold;
+  color: #ffa723;
 }
 
 .like-button {
@@ -909,5 +913,41 @@ onMounted(() => {
 .no-clickable {
     cursor: not-allowed;
 }
+
+.rating:not(:checked) > input {
+  position: absolute;
+  appearance: none;
+}
+
+.rating:not(:checked) > label {
+  float: right;
+  cursor: pointer;
+  font-size: 30px;
+  color: #666;
+}
+
+.rating:not(:checked) > label:before {
+  content: '★';
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+  color: #e58e09;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: #ff9e0b;
+}
+
+.rating > input:checked ~ label {
+  color: #ffa723;
+}
+
+
+
 
 </style>
