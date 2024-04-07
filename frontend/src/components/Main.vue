@@ -57,7 +57,7 @@ const currentUser = computed(() => store.state.user);
     <div class="row pt-2">
       <div class="col">     
               <div class="text ">
-                <a href="https://cohabify.github.io" class="text-dark text-decoration-none fs-3">
+                <a class="text-dark text-decoration-none fs-3">
                     Cohabify  
                 </a>
               </div>
@@ -80,7 +80,7 @@ const currentUser = computed(() => store.state.user);
               </div>
               <div class="mt-2 col">
                 <div class="mt-8 fs-5 ">
-                  <a href="mailto: cohabify.soporte@gmail.com" class="text-dark text-decoration-none">
+                  <a href="https://cohabify.github.io/" class="text-dark text-decoration-none">
                     Landing Page
                   </a>
                 </div>
