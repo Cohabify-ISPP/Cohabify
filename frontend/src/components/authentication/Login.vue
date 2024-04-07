@@ -1,4 +1,5 @@
 <template>
+    <Navbar />
     <div class="container d-flex justify-content-center align-items-center  vh-100">
         <div class="text-center">
             <!-- Modal de Bootstrap que se mostrará -->

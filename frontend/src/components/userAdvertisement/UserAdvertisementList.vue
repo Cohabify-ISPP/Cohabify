@@ -2,7 +2,6 @@
 import { ref, onMounted, computed } from 'vue';
 import Navbar from '../Navbar.vue';
 
-
 export default {
 
   setup() {
@@ -127,8 +126,6 @@ export default {
       div17.classList.toggle('hidden');
       var filters = document.getElementById('filterContainer');
       filters.classList.toggle('hidden');
-      
-
     }
 
     const filteredUserAdsByTags = computed(() => {
@@ -155,7 +152,6 @@ export default {
         }
       })
       filtered.value = true;
-    
 }
 
     onMounted(() => {
@@ -226,7 +222,6 @@ export default {
               ' is-invalid':
                 errors.includes('entranceDateVal')
             }">
-                    <b>{{ entranceDate ? entranceDate : '-' }}</b>
               </div>
               <hr>
               <div class="d-flex justify-content-center mb-2" >
@@ -240,9 +235,9 @@ export default {
       <div class="div-13">
         <div class="column-4">
           <div class="div-14">
-            <div class="search-bar">
+            <div class="search-bar w-100">
               <form class="d-flex w-100 justify-content-between">
-                <div id="searchForm" style="width:95%">
+                <div id="searchForm" style="width:100%">
                   <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
                 </div>
                 <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
@@ -257,8 +252,7 @@ export default {
             <div class="div-17" id="div-17">
               <div class="tags-container">
                 <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)" :class="{
-              ' selected': tagsSeleccionadas.includes(tag), 'unselected': !tagsSeleccionadas.includes(tag)
-            }">
+              ' selected': tagsSeleccionadas.includes(tag), 'unselected': !tagsSeleccionadas.includes(tag)}">
                   <b>{{ tag.tag }}</b>
                 </span>
               </div>
@@ -266,39 +260,49 @@ export default {
           </div>
         </div>
       </div>
+
       <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in currentAdvertisements" :key="anuncio" :class="{ highlighted: anuncio.promotionExpirationDate !== null }">
         <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + anuncio?.id)">
           <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
             <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario"
               style="margin-right: 10px;">
+              
+          <div class="list-item-content">
+            <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
+                <div class="d-flex">
+                <h3>{{ advertisement?.author?.username }}</h3><img v-if="advertisement?.author?.plan === 'explorer'" style="margin-left: 6px; max-height: 35px;" src="/images/verificado.png" loading="lazy"/>  
+                </div>
+                <h3><b>{{ advertisement.maxBudget }}€/mes</b></h3>
+            </div>
+            <div class="d-flex justify-content-between w-100">
+                <b>{{ advertisement.desiredLocation }}</b>
 
-            <div class="columna-informacion" style="flex: 1;">
-              <div class="user-name" style="text-align: left;">{{ anuncio?.author?.username }}<img v-if="anuncio?.author?.plan === 'explorer'" 
-                style="margin-left: 6px; max-height: 35px;"
-                src="/images/verificado.png"
-                loading="lazy"
-              /></div>
-              <div class="text-truncate"
-                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-right: 4vh;">
-                <span>{{ anuncio?.desiredLocation }}</span>
-                <h3><b>{{ anuncio?.maxBudget }}€/mes</b></h3>
-                <h3><b>Máximo {{ anuncio?.maxCohabitants }} inquilinos</b></h3>
-              </div>
-              <div class="tags-container" style="display: flex; align-items: center;">
-                <span v-for="(tag, index) in anuncio?.author?.tag.slice(0, 8)" :key="index" class="tag selected">
+                <div class="d-flex display-inline-flex">
+                    <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
+                    <span> {{ advertisement.author.likes.length }} </span>
+                    <span style="color: #e87878;" class="material-icons">favorite</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between w-100">
+              <b>Máximo {{ advertisement.maxCohabitants }} inquilino(s)</b>
+            </div>
+
+            <div class="d-flex justify-content-between w-100 mt-3 h-100 align-items-center">
+              <div class="d-flex align-items-center" style="width:100%;overflow: hidden;">
+                <span v-for="(tag, index) in advertisement?.author?.tag.slice(0, 6)" :key="index" class="tag selected" style=" white-space: nowrap;">
                   <b>{{ tag.tag }}</b>
                 </span>
               </div>
             </div>
-          </div>
 
-        </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
-
-
 
 <style scoped>
 .div-2 {
@@ -385,7 +389,7 @@ export default {
   align-items: center;
   flex-wrap: wrap;
   white-space: initial;
-  padding: 10px 50px;
+  padding: 0 50px 0 0;
 }
 
 @media (max-width: 991px) {
@@ -463,16 +467,6 @@ export default {
   background-color: rgba(182, 205, 239, 0);
 }
 
-.etiqueta {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 15px;
-  border: 1px solid #28426B;
-  background-color: #FFFFFF;
-  color: #28426B;
-}
-
 .tag {
   display: inline-block;
   padding: 5px 10px;
@@ -489,17 +483,10 @@ export default {
   color: #FFFFFF;
 }
 
-.user-name {
-  color: #232323;
-  align-self: start;
-  margin-top: 15px;
-  font: 700 30px Karla, sans-serif;
-}
-
 .imagen-circulo {
   position: relative;
-  width: 15vh;
-  height: 15vh;
+  width: 25vh;
+  height: 25vh;
   overflow: hidden;
   border-radius: 50%;
   display: flex;
@@ -514,16 +501,6 @@ export default {
   object-fit: cover;
   border-radius: 50%;
   display: block;
-}
-
-.columna-informacion {
-  flex: 2;
-  padding: 1%;
-  max-height: 20vh;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font: 400 20px Karla, sans-serif;
 }
 
 .searchInput {
@@ -559,6 +536,5 @@ export default {
   background-color: #bbeeff;
   border: 2px solid black;
 }
-
 
 </style>

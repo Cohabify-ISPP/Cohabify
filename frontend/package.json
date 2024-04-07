@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^3.2.0",
     "@vitejs/plugin-vue": "^5.0.3",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",

@@ -26,6 +26,17 @@ public class UserService {
     }
 
     public User save(User user) {
+        if (user.getId() == null) {
+            userRepository.findByUsername(user.getUsername()).ifPresent(u -> {
+                throw new IllegalStateException("Este nombre de usuario ya existe");
+            });
+            userRepository.findByEmail(user.getEmail()).ifPresent(u -> {
+                throw new IllegalStateException("Este email ya está registrado");
+            });
+            userRepository.findByPhone(user.getPhone()).ifPresent(u -> {
+                throw new IllegalStateException("Este teléfono ya está registrado");
+            });
+        }
         return (User) userRepository.save(user);
     }
 
