@@ -87,7 +87,7 @@ watch(user, (newValue) => {
         loading="lazy"
       />
     </a>
-    <div class="d-flex">
+    <div class="d-flex"  style="padding-right: 1%;">
     <div class="d-flex align-items-center">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
         
