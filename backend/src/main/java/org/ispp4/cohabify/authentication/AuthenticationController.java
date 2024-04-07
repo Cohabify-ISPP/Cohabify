@@ -46,7 +46,7 @@ public class AuthenticationController {
 	private PasswordEncoder passwordEncoder;
 	private StorageService storageService;
 
-	@Value("${google.public.keys}")
+	@Value("${google.public.keys:default}")
 	private String[] googlePublicKeys;
 	
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

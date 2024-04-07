@@ -65,6 +65,28 @@ const fetchMyAdvertisements = () => {
         })
 }
 
+const promoteHouseAd = (id) =>{
+    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/promote/' + id, {
+        method: "POST",
+        headers: {
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+        credentials: "include"
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se ha podido promocionar el anuncio de vivienda')
+            }
+        })
+        .then(data => {
+            fetchMyAdvertisements()
+        })
+        .catch(error => {
+            fetchError.value = error
+        })
+
+}
+
 const deleteHouseAd = (id) => {
     
     event.stopPropagation();
@@ -318,7 +340,7 @@ const applyFilters = () => {
                     {{ fetchError }}
                 </div>
                 <div class="list-container mt-4" v-else>
-                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
+                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)" :class="{ highlighted: advertisement.promotionExpirationDate !== null }">
                         <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
@@ -353,6 +375,13 @@ const applyFilters = () => {
                                             <span class="material-symbols-outlined">edit</span>
                                         </button>
                                     </div>
+                                    
+                                    <div class="d-flex flex-column align-items-center">
+                                        <button class="btn btn-primary" style="margin-right: 1vw; height: 5.5vh;" @click="promoteHouseAd(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
+                                            Promocionar
+                                        </button>
+                                    </div>
+                                
                                     <div class="d-flex flex-column align-items-center">
                                         <button class="btn btn-danger" style="height: 5.5vh;" @click="deleteHouseAd(advertisement.id)">
                                             <span class="material-symbols-outlined">delete</span>
@@ -377,5 +406,10 @@ const applyFilters = () => {
 
 .slide-enter-from {
   transform: translateX(-100%);
+}
+
+.highlighted {
+    background-color: #bbeeff;
+    border: 2px solid black;
 }
 </style>

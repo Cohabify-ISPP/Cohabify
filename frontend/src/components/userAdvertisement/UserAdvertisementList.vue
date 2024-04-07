@@ -95,7 +95,22 @@ export default {
     }
 
     const currentAdvertisements = computed(() => {
-      return filtered.value ? filteredAdvertisements.value : userAds.value
+      const ads = filtered.value ? filteredAdvertisements.value : userAds.value;
+
+      const orderedAds = ads.sort((a, b) => {
+          if (a.promotionExpirationDate === null && b.promotionExpirationDate === null) {
+              return 0; 
+          } else if (a.promotionExpirationDate === null) {
+              return 1; 
+          } else if (b.promotionExpirationDate === null) {
+              return -1; 
+          }
+
+          const dateA = new Date(a.promotionExpirationDate);
+          const dateB = new Date(b.promotionExpirationDate);
+          return dateA - dateB;
+          });
+      return orderedAds;
     })
 
     const toggleTag = (tag) => {
@@ -251,7 +266,7 @@ export default {
           </div>
         </div>
       </div>
-      <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in currentAdvertisements" :key="anuncio">
+      <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in currentAdvertisements" :key="anuncio" :class="{ highlighted: anuncio.promotionExpirationDate !== null }">
         <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + anuncio?.id)">
           <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
             <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario"
@@ -539,6 +554,10 @@ export default {
   max-height: 0;
   max-width: 0;
   transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.highlighted {
+  background-color: #bbeeff;
+  border: 2px solid black;
 }
 
 

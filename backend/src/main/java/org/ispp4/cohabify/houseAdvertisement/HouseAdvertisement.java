@@ -10,6 +10,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.ispp4.cohabify.house.House;
@@ -43,5 +44,7 @@ public class HouseAdvertisement extends BaseEntity {
 
     @DBRef
     private User author;
+
+    private LocalDate promotionExpirationDate;
 
 }

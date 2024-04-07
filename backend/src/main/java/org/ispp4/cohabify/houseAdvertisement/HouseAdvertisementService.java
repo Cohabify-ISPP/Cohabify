@@ -3,6 +3,7 @@ package org.ispp4.cohabify.houseAdvertisement;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,5 +59,16 @@ public class HouseAdvertisementService {
 
     public void deleteById(ObjectId id) {
         advertisementRepository.deleteById(id);
+    }
+
+    public List<HouseAdvertisement> checkPromotions(List<HouseAdvertisement> advertisements) {
+        for (HouseAdvertisement advertisement : advertisements) {
+            if (advertisement.getPromotionExpirationDate() != null && advertisement.getPromotionExpirationDate().isBefore(LocalDate.now())) {
+                advertisement.setPromotionExpirationDate(null);
+                advertisementRepository.save(advertisement);
+            }
+        }
+        return advertisements;
+
     }
 }

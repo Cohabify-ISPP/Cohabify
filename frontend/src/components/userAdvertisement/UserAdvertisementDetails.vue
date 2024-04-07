@@ -197,6 +197,27 @@ export default {
             userAdvertisementId.value = route.params.id;
             fetchAdvertisement();
         });
+        const promoteAd = (id)=>{
+            fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/users/promote/' + id, {
+                method: "POST",
+                headers: {
+                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                },
+                credentials: "include"
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No se ha podido promocionar el anuncio de usuario')
+                }
+            })
+            .then(data => {
+                fetchAdvertisement()
+            })
+            .catch(error => {
+                fetchError.value = error
+            })
+
+        }
         return {
             errorComentario,
             modalText,
@@ -211,9 +232,12 @@ export default {
             clipboardMessage,
             valorations,
             deleteUserAd,
-            currentUser
+            currentUser,
+            promoteAd
         }
+        
     }
+    
 }
 </script>
 
@@ -269,6 +293,9 @@ export default {
                             
                             <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                             <div class="d-flex col" v-else>
+                                <button type="button" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;" @click="promoteAd(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
+                                    <strong>Promocionar</strong>
+                                </button>
                                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
                                 <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
                             </div>
