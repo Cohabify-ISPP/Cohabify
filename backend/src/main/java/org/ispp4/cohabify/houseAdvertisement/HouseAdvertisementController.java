@@ -269,6 +269,12 @@ public class HouseAdvertisementController {
     @Transactional(readOnly = true)
     @GetMapping("/users/{userId}/ads/{adUserId}")
     public ResponseEntity<List<HouseAdvertisement>> getSharedLikes(@PathVariable String userId, @PathVariable String adUserId) {
+        
+        // Si el usuario está viendo su propio anuncio, no devolver anuncios favoritos compartidos
+        if (userId.equals(adUserId)) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        }
+        
         List<House> userHouses = houseService.getLikedHousesByUser(new ObjectId(userId));
         List<House> adUserHouses = houseService.getLikedHousesByUser(new ObjectId(adUserId));
         List<HouseAdvertisement> sharedLikes = new ArrayList<>();

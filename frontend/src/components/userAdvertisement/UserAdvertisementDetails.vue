@@ -524,7 +524,7 @@ export default {
 
 .img-piso {
     width: 20%;
-    height: 25%;
+    height: 100px;
     object-fit: cover;
     border-radius: 5%;
     display: block;
