@@ -40,6 +40,7 @@ public class HouseAdvertisementService {
         if (existingAdvertisement.isPresent()) {
             HouseAdvertisement adv = existingAdvertisement.get();
 
+            adv.setViews(advertisement.getViews());
             adv.setTitle(advertisement.getTitle());
             adv.setDescription(advertisement.getDescription());
             adv.setPrice(advertisement.getPrice());

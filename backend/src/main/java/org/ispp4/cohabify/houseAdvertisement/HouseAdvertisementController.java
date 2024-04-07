@@ -77,6 +77,11 @@ public class HouseAdvertisementController {
     @GetMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
         Optional<HouseAdvertisement> advertisement = advertisementService.findById(new ObjectId(id));
+        if(global.getCurrentUser() == null || 
+            !advertisement.get().getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
+            advertisement.get().setViews(advertisement.get().getViews()+1);
+            advertisementService.update(advertisement.get().getId(), advertisement.get());
+        }
         if(advertisement.isPresent()){
             return new ResponseEntity<>(advertisement.get(), HttpStatus.OK);
         } else {
@@ -115,6 +120,7 @@ public class HouseAdvertisementController {
             
 
             HouseAdvertisement advertisement = new HouseAdvertisement();
+            advertisement.setViews(0);
             advertisement.setTitle(request.getTitle());
             advertisement.setDescription(request.getDescription());
             advertisement.setPrice(request.getPrice());
@@ -208,6 +214,8 @@ public class HouseAdvertisementController {
             house = houseService.save(house);
 
             HouseAdvertisement advertisement = advertisementService.findAdById(id);
+            
+            advertisement.setViews(request.getViews());
             advertisement.setTitle(request.getTitle());
             advertisement.setDescription(request.getDescription());
             advertisement.setPrice(request.getPrice());
