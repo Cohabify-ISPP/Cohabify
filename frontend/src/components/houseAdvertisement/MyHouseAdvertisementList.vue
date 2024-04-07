@@ -66,6 +66,7 @@ const fetchMyAdvertisements = () => {
 }
 
 const promoteHouseAd = (id) =>{
+    event.stopPropagation();
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/promote/' + id, {
         method: "POST",
         headers: {

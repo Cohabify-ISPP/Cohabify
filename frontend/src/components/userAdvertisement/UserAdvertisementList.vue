@@ -261,10 +261,10 @@ export default {
         </div>
       </div>
 
-      <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in currentAdvertisements" :key="anuncio" :class="{ highlighted: anuncio.promotionExpirationDate !== null }">
-        <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + anuncio?.id)">
+      <div class="box list-item" style="width:90%; align-items:center" v-for="advertisement in currentAdvertisements" :key="anuncio" :class="{ highlighted: advertisement.promotionExpirationDate !== null }">
+        <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + advertisement?.id)">
           <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
-            <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario"
+            <img class="imagen-circulo" :src="advertisement?.author?.imageUri" alt="Imagen del usuario"
               style="margin-right: 10px;">
               
           <div class="list-item-content">
@@ -296,12 +296,12 @@ export default {
                 </span>
               </div>
             </div>
-
           </div>
+          </div>
+        </a>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
@@ -485,8 +485,8 @@ export default {
 
 .imagen-circulo {
   position: relative;
-  width: 25vh;
-  height: 25vh;
+  width: 19vh;
+  height: 19vh;
   overflow: hidden;
   border-radius: 50%;
   display: flex;
