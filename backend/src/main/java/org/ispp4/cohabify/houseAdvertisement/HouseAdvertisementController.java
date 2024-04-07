@@ -37,6 +37,7 @@ import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/advertisements/houses")
@@ -77,6 +78,11 @@ public class HouseAdvertisementController {
     @GetMapping("/{id}")
     public ResponseEntity<HouseAdvertisement> getAdvertisement(@PathVariable String id) {
         Optional<HouseAdvertisement> advertisement = advertisementService.findById(new ObjectId(id));
+        if(global.getCurrentUser() == null || 
+            !advertisement.get().getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
+            advertisement.get().setViews(advertisement.get().getViews()+1);
+            advertisementService.update(advertisement.get().getId(), advertisement.get());
+        }
         if(advertisement.isPresent()){
             return new ResponseEntity<>(advertisement.get(), HttpStatus.OK);
         } else {
@@ -115,6 +121,7 @@ public class HouseAdvertisementController {
             
 
             HouseAdvertisement advertisement = new HouseAdvertisement();
+            advertisement.setViews(0);
             advertisement.setTitle(request.getTitle());
             advertisement.setDescription(request.getDescription());
             advertisement.setPrice(request.getPrice());
@@ -208,6 +215,8 @@ public class HouseAdvertisementController {
             house = houseService.save(house);
 
             HouseAdvertisement advertisement = advertisementService.findAdById(id);
+            
+            advertisement.setViews(request.getViews());
             advertisement.setTitle(request.getTitle());
             advertisement.setDescription(request.getDescription());
             advertisement.setPrice(request.getPrice());
@@ -264,4 +273,33 @@ public class HouseAdvertisementController {
         }
 
     }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/users/{userId}/ads/{adUserId}")
+    public ResponseEntity<List<HouseAdvertisement>> getSharedLikes(@PathVariable String userId, @PathVariable String adUserId) {
+        
+        // Si el usuario está viendo su propio anuncio, no devolver anuncios favoritos compartidos
+        if (userId.equals(adUserId)) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        }
+        
+        List<House> userHouses = houseService.getLikedHousesByUser(new ObjectId(userId));
+        List<House> adUserHouses = houseService.getLikedHousesByUser(new ObjectId(adUserId));
+        List<HouseAdvertisement> sharedLikes = new ArrayList<>();
+
+        for (House userHouse : userHouses) {
+            for (House adUserHouse : adUserHouses) {
+                if (userHouse.getId().equals(adUserHouse.getId())) {
+                    sharedLikes.add(advertisementService.findAdvertisementByHouseId(userHouse.getId()));
+                    break;
+                }
+            }
+        }
+
+        return new ResponseEntity<>(sharedLikes, HttpStatus.OK);
+    }
+
+
+    
+    
 }

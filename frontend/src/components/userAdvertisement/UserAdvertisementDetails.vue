@@ -4,7 +4,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 export default {
-    
+
+
     setup() {
 
         const userAdvertisementId = ref(""); 
@@ -20,6 +21,7 @@ export default {
         const clipboardMessage = ref(false);
         const currentUserAdvertisementRating = ref({});
         const erroresComentario = ref(null);
+        const commonFlats = ref([]);
 
         const fetchAdvertisement = async () => {
             try {
@@ -39,7 +41,7 @@ export default {
                     } else {
                         router.push(`/404`);
                     }
-
+                    getCommonFlats();
                 } catch (error) {
                 console.error("Error:", error);
             }
@@ -175,6 +177,31 @@ export default {
             }
         };
 
+        const getCommonFlats = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/users/'+currentUser.value.id+'/ads/'+userAdvertisement.value.author.id,
+                    {
+                        method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                        },
+                        credentials: "include",
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log(data)
+                        commonHouses.value = data;
+                    } else {
+                        router.push(`/404`);
+                    }
+
+                } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+        
+
         function copyToClipboard() {
             navigator.clipboard.writeText(window.location.href)
                 .then(function() {
@@ -201,6 +228,7 @@ export default {
             saveComment,
             userAdvertisement,
             commonHouses,
+            getCommonFlats,
             toggleLike,
             copyToClipboard,
             clipboardMessage,
@@ -208,14 +236,14 @@ export default {
             deleteUserAd,
             currentUser,
             currentUserAdvertisementRating,
-            erroresComentario
+            erroresComentario,
+            commonFlats,
         }
     }
 }
 </script>
 
 <template>
-
     <Navbar />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <div class="container d-flex align-items-center justify-content-center text-center mt-5">            
@@ -362,24 +390,22 @@ export default {
 
                 <div class="subseccion" style="overflow-y: auto;">
                     <div>
-                        <h4 style=" text-align: left;">Pisos en común</h4>
+                        <h4 style=" text-align: left;">Pisos con me gustas en común</h4>
                         <hr>
                     </div>
-
-                    <h5 style="text-align: left;color: #5D5E60"> Próximamente...</h5>
                         
                     <div v-for="anuncio in commonHouses" :key="anuncio">
 
                         <div class="piso">
-                            <img  class="img-piso" :src="anuncio.img" alt="Imagen del piso">
+                            <img  class="img-piso" :src="anuncio.images[0]" alt="Imagen del piso">
 
                             <div class="columna-informacion">
-                                <p style="text-align: left; font-weight: bold; margin: 0%;"> {{ anuncio.name }}</p>
+                                <p style="text-align: left; font-weight: bold; margin: 0%;"> {{ anuncio.title }}</p>
 
                                 <div style="display:flex; justify-content: space-between; align-content: left; margin-right: 20px;">
-                                    <span>{{ anuncio.monthly_price }}€/mes</span>
-                                    <span>{{ anuncio.size_m2 }}m2</span>
-                                    <span style="">{{ anuncio.floor }}</span>
+                                    <span>{{ anuncio.price }} €/mes</span>
+                                    <span>{{ anuncio.house.area }} m2</span>
+                                    <span style="">Planta {{ anuncio.house.floor }}</span>
                                 </div>
                                 <p class="text-truncate" style="text-align: left; word-wrap: break-word; margin: 10px 0;">{{ anuncio.description }}</p>
                             </div>
@@ -500,7 +526,7 @@ export default {
 
 .img-piso {
     width: 20%;
-    height: 25%;
+    height: 100px;
     object-fit: cover;
     border-radius: 5%;
     display: block;

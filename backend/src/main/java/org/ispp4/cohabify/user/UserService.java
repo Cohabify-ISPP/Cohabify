@@ -71,4 +71,8 @@ public class UserService {
         return currentDate.isBefore(user.getExpirationDate());
     }
 
+    public User findByVerificationCode(String verificationCode) {
+        return userRepository.findByVerificationCode(verificationCode).orElse(null);
+    }
+
 }

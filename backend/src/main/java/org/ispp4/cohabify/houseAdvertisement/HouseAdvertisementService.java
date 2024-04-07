@@ -1,6 +1,7 @@
 package org.ispp4.cohabify.houseAdvertisement;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class HouseAdvertisementService {
         if (existingAdvertisement.isPresent()) {
             HouseAdvertisement adv = existingAdvertisement.get();
 
+            adv.setViews(advertisement.getViews());
             adv.setTitle(advertisement.getTitle());
             adv.setDescription(advertisement.getDescription());
             adv.setPrice(advertisement.getPrice());
@@ -55,8 +57,16 @@ public class HouseAdvertisementService {
         }
 }
 
+    public List<HouseAdvertisement> getHousesByUser(ObjectId authorId) {
+        return advertisementRepository.findAll();
+    }
+
 
     public void deleteById(ObjectId id) {
         advertisementRepository.deleteById(id);
+    }
+
+    public HouseAdvertisement findAdvertisementByHouseId(ObjectId id) {
+        return advertisementRepository.findAdvertisementByHouseId(id).get();
     }
 }

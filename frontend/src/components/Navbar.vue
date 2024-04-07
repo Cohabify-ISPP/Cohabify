@@ -92,7 +92,7 @@ watch(user, (newValue) => {
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
         
         <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="#"><span class="badge rounded-pill badge-notification bg-danger">1</span> Chat</a>
+           <a class="nav-link" href="/chat"><span class="badge rounded-pill badge-notification bg-danger">1</span> Chat</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -182,7 +182,13 @@ watch(user, (newValue) => {
       </div>
     </div>
     <div class="d-flex align-items-center" v-if="!isLoggedIn">
-      <a href="/login" class="btn btn-primary">Iniciar sesión</a>
+      <a href="/login" class="text-decoration-none">
+          <button style="width:100%; height: 10%;">Iniciar sesión
+              <div class="arrow-wrapper">
+                  <div class="arrow"></div>
+              </div>
+          </button>
+       </a>
     </div>
   </div>
   </div>
@@ -210,5 +216,67 @@ watch(user, (newValue) => {
   border-top-color: #a4c7ff;
   transition: 0.2s;
 }
+
+button {
+  --primary-color: #a4c7ff;
+  --secondary-color: #28426b;
+  --hover-color: #ffffff;
+  --arrow-width: 10px; 
+  --arrow-stroke: 2px; 
+  border: 0;
+  border-radius: 20px; 
+  color: var(--secondary-color);
+  padding: 0.5em 1.2em; 
+  background: var(--primary-color);
+  display: flex;
+  transition: 0.2s background;
+  align-items: center;
+  gap: 0.3em; 
+  font-weight: bold;
+}
+
+button .arrow-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button .arrow {
+  margin-top: 1px;
+  width: var(--arrow-width);
+  background: var(--primary-color);
+  height: var(--arrow-stroke);
+  position: relative;
+  transition: 0.2s;
+}
+
+button .arrow::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  border: solid var(--secondary-color);
+  border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+  display: inline-block;
+  top: -3px; 
+  right: 3px; 
+  transition: 0.2s;
+  padding: 3px; 
+  transform: rotate(-45deg);
+  font-weight: bold;
+    
+}
+
+button:hover {
+  background-color: var(--hover-color);
+}
+
+button:hover .arrow {
+  background: var(--secondary-color);
+}
+
+button:hover .arrow:before {
+  right: 0;
+}
+
 
 </style>
