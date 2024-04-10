@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useStore } from "vuex";
 import Navbar from '../Navbar.vue'
 
 const price = ref(0)
@@ -18,6 +19,8 @@ const fetchError = ref(null)
 const isLoading = ref(true)
 const showFilters = ref(false)
 const searchTerm = ref('')
+const store = useStore();
+const currentUser = computed(() => store.state.user);
 
 onMounted(() => {
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses', {
@@ -193,6 +196,10 @@ const applyFilters = () => {
     }
 }
 
+const currentUserIsAuthor = (advertisement) => {
+    return currentUser.value.id === advertisement.author.id;
+}
+
 const fetchValoration = async (id) => {
   try {
     const response = await fetch(
@@ -341,9 +348,13 @@ const fetchValoration = async (id) => {
                                     <span> {{ advertisement.house.likes.length }} </span>
                                     <span style="color: #e87878;" class="material-icons">favorite</span>
                                     </div>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center" style="margin-right: 0.7vh;">
                                         <span> {{ advertisement.valoration }} </span>
                                         <span style="color: goldenrod;" class="material-icons">star</span>
+                                    </div>
+                                    <div v-if="currentUserIsAuthor(advertisement)" class="d-flex align-items-center">
+                                        <span>{{ advertisement.views }}</span>
+                                        <span class="material-symbols-outlined">visibility</span>
                                     </div>
                                 </div>
                             </div>
