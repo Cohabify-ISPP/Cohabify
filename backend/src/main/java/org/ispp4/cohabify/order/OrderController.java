@@ -41,6 +41,7 @@ public class OrderController {
         LineItemCollection lineItems = session.listLineItems(params);
         String plan = lineItems.getData().get(0).getDescription();
         //Si plan es null o el pago no se ha completado, devuelve un error 404
+        
         if (plan == null || session.getPaymentStatus().equals("unpaid")) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -51,6 +52,10 @@ public class OrderController {
             } else if (plan.equals("Explorador")) {
                 Map<String, String> responseBody = new HashMap<>();
                 responseBody.put("plan", "explorer");
+                return new ResponseEntity<>(responseBody, HttpStatus.OK);
+            }else if(plan.equals("Promocionar")){
+                Map<String, String> responseBody = new HashMap<>();
+                responseBody.put("plan", "promocionar");
                 return new ResponseEntity<>(responseBody, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
