@@ -30,7 +30,7 @@ const login = async() => {
       const element = await driver.findElement(By.id("loginModal"));
       const displayStyle = await element.getCssValue('display');
       return displayStyle === 'block';
-    }, 10000);
+    }, 10000, "El modal de login no se ha abierto");
   }finally {
     await driver.quit();
   }
@@ -46,16 +46,15 @@ const socialLogin = async() => {
     await driver.wait(until.elementLocated(By.name('name')), 10000).getAttribute('required') !== null;
     await driver.wait(until.elementLocated(By.name('username')), 10000).getAttribute('required') !== null;
     await driver.wait(until.elementLocated(By.name('phone')), 10000).getAttribute('required') !== null;
+    const emailInput = await driver.findElement(By.name('email'))
     
-    const emailInput = await driver.wait(until.elementLocated(By.name('email')), 10000);
-    const emailValue = await emailInput.getAttribute('value').then(text=> text.match('.*@.*\..*'));
-    const emailDisabled = await emailInput.getAttribute('readonly');
-
-    if (!emailValue) {
-      throw new Error("El correo no se ha rellenado correctamente")
-    } else if (!emailDisabled) {
-      throw new Error("El correo no está deshabilitado")
-    }
+    await driver.wait(async () => { 
+      const inputValue = await emailInput.getAttribute('value')
+      return inputValue.match('.*@.*\..*')
+    }, 10000, "El email no se ha rellenado correctamente.");
+    
+    await driver.wait(async () => {return emailInput.getAttribute('readonly')}, 10000, "El email no está deshabilitado.");
+  
   } catch (e) {
     throw new Error("Error en el login social: " + e);
   } finally {
