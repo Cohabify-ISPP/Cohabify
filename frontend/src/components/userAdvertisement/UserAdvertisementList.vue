@@ -281,8 +281,10 @@ export default {
             <img class="imagen-circulo" :src="advertisement?.author?.imageUri" alt="Imagen del usuario" style="margin-right: 10px;">
                
           <div class="list-item-content">
-            <div class="d-flex justify-content-between w-100" >
-                <h3>{{ advertisement?.author?.username }}</h3><img v-if="advertisement?.author?.plan === 'explorer'" style="margin-left: 6px; max-height: 35px;" src="/images/verificado.png" loading="lazy"/>  
+            <div class="d-flex justify-content-between align-items-center w-100" >
+              <div class="d-flex align-items-center">
+                <h3>{{ advertisement?.author?.username }}</h3><img v-if="advertisement?.author?.plan === 'explorer'" style="margin-left: 6px; max-height: 40px;" src="/images/verificado.png" loading="lazy"/>  
+              </div>
                 <h3><b>{{ advertisement.maxBudget }}€/mes</b></h3>
             </div>
             <div class="d-flex justify-content-between w-100">

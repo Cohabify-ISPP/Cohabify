@@ -386,7 +386,7 @@ export default {
                 <div class="subseccion">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <h1 style="text-align: left;"> {{ userAdvertisement.author?.username}} 
-                            <img v-if="userAdvertisement.author?.plan === 'explorer'"style="max-height: 35px;" src="/images/verificado.png" loading="lazy"/>
+                            <img v-if="userAdvertisement.author?.plan === 'explorer'"style="max-height: 55px;" src="/images/verificado.png" loading="lazy"/>
                             <i :class="{'bi':true,'bi-gender-male': userAdvertisement.author?.gender == 'MASCULINO', 'bi-gender-female':userAdvertisement.author?.gender == 'FEMENINO', 'bi-gender-ambiguous': userAdvertisement.author?.gender == 'OTRO'}"></i>
                         </h1>
                         <button class="btn btn-share" @click="copyToClipboard()">

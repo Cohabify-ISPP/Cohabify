@@ -79,7 +79,7 @@ watch(user, (newValue) => {
 
 <template>
 <nav class="navbar navbar-expand navbar-dark navbar-custom sticky-top">
-  <div class="container-fluid">
+  <div class="container-fluid" >
     <a class="navbar-brand mt-2 mt-lg-0" href="/" @click.prevent="$router.push('/')">
       <img style="max-height: 35px;"
         src="/images/LogoMonoColor.png"
@@ -87,7 +87,7 @@ watch(user, (newValue) => {
         loading="lazy"
       />
     </a>
-    <div class="d-flex"  style="padding-right: 1%;">
+    <div class="d-flex"  style="margin-right: 0px;">
     <div class="d-flex align-items-center">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
         <li class="nav-item" v-if="isLoggedIn" style="padding-right:1%">
@@ -109,9 +109,7 @@ watch(user, (newValue) => {
             <li><a class="dropdown-item" href="/advertisements/users" @click.prevent="$router.push('/advertisements/users')">Compañeros</a></li>
           </ul>
         </li>
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="/plan">Planes</a>
-        </li>
+       
         <li class="nav-item dropdown" v-if="isLoggedIn">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Anuncios de vivienda
@@ -131,10 +129,13 @@ watch(user, (newValue) => {
             <li><a class="dropdown-item" href="/advertisements/users/new" @click.prevent="$router.push('/advertisements/users/myAdvertisement')">Publicar/Editar</a></li>
           </ul>
         </li>
+        <li class="nav-item" v-if="isLoggedIn">
+          <a class="nav-link" href="/plan">Planes</a>
+        </li>
         
       </ul>
       
-      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw" v-if="isLoggedIn">
+      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 0px" v-if="isLoggedIn">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center hidden-arrow"
           href="#"
@@ -163,8 +164,8 @@ watch(user, (newValue) => {
           />
           {{ user?.username }}
           <img v-if="user?.plan === 'explorer'" 
-            style="max-height: 35px;"
-            src="/images/verificado.png"
+            style="max-height: 35px; margin-left: 0.3vw;"
+            src="/images/verificadoBlanco.png"
             loading="lazy"
           />
         </a>

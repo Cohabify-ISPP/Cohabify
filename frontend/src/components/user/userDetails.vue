@@ -93,7 +93,7 @@ export default {
                         <h5>Nombre de usuario <i style="font-size: large;" class="bi bi-person-fill"></i></h5>
                         <h6 style="color: #5D5E60">{{ user.username }}</h6>
                         
-                        <h5 v-if="user.plan === 'explorer'">Verificado <img style="margin-left: 5px; max-height: 35px;"
+                        <h5 v-if="user.plan === 'explorer'">Verificado <img style="margin-left: 2px; max-height: 35px;"
                                                                             src="/images/verificado.png"
                                                                             loading="lazy"
                                                                         />
