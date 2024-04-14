@@ -466,9 +466,9 @@ onMounted(() => {
 
           <div class="d-flex justify-content-center">
             <div class="d-flex justify-content-center align-items-center">
-              <div v-if="currentUser?.id === houseAdvertisement?.author?.id" class="d-flex align-items-center" style="margin-right: 0.7vh;">
-                <span>{{ houseAdvertisement.views }}</span>
-                <span class="material-symbols-outlined">visibility</span>
+              <div v-if="currentUser?.id === houseAdvertisement?.author?.id" class="d-flex align-items-center" style="margin-right: 1vh;">
+                <span style="font-weight: bold; font-size: large; color: #28426b">{{ houseAdvertisement.views }}</span>
+                <span class="material-symbols-outlined" style="color: #28426b; margin-left: 2px;">visibility</span>
               </div>
               <div class="likes" style="margin-right: 1vw">
                 <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id" @click="toggleLike">

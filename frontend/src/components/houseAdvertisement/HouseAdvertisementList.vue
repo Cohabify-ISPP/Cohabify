@@ -345,16 +345,16 @@ const fetchValoration = async (id) => {
 
                                 <div class="d-flex display-inline-flex">
                                     <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
-                                    <span> {{ advertisement.house.likes.length }} </span>
+                                    <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b;"> {{ advertisement.house.likes.length }} </span>
                                     <span style="color: #e87878;" class="material-icons">favorite</span>
                                     </div>
                                     <div class="d-flex align-items-center" style="margin-right: 0.7vh;">
-                                        <span> {{ advertisement.valoration }} </span>
-                                        <span style="color: goldenrod;" class="material-icons">star</span>
+                                        <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b"> {{ advertisement.valoration }} </span>
+                                        <span style="color: #ffa723;" class="material-icons">star</span>
                                     </div>
                                     <div v-if="currentUserIsAuthor(advertisement)" class="d-flex align-items-center">
-                                        <span>{{ advertisement.views }}</span>
-                                        <span class="material-symbols-outlined">visibility</span>
+                                        <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b">{{ advertisement.views }}</span>
+                                        <span class="material-symbols-outlined" style="color: #28426b">visibility</span>
                                     </div>
                                 </div>
                             </div>
