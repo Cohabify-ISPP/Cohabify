@@ -34,6 +34,3 @@ logging.level.org.springframework=INFO
 
 ## Debug
 #debug=true
-
-## Google
-google.public.keys=googlePublicKey1,googlePublicKey2
