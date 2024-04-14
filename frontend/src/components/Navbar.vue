@@ -104,7 +104,7 @@ watch(user, (newValue) => {
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg>
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/advertisements/houses" @click.prevent="$router.push('/advertisements/houses')">Viviendas</a></li>
             <li><a class="dropdown-item" href="/advertisements/users" @click.prevent="$router.push('/advertisements/users')">Compañeros</a></li>
           </ul>
@@ -291,5 +291,7 @@ button:hover .arrow:before {
   right: 0;
 }
 
-
+.dropdown-item:active {
+  background-color: #28426b;
+}
 </style>
