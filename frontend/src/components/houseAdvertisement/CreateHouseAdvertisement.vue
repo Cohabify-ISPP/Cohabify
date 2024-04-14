@@ -135,8 +135,8 @@
           <div class=" row d-flex mb-2">
             <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
           </div>   
-          <div class="row d-flex mb-2">
-            <div class="btn-group" role="group"  style="max-height: 60px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
+          <div class="row d-flex mb-4">
+            <div class="btn-group" role="group"  style="max-height: 90px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
               <div class="tags-container">
               <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
                 :class="{ 'selected': selectedTags.includes(tag), 'unselected': !selectedTags.includes(tag) }">
