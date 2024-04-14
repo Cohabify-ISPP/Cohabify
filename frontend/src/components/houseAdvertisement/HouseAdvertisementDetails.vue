@@ -472,9 +472,8 @@ onMounted(() => {
               </div>
               <div class="likes" style="margin-right: 1vw">
                 <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
-                    <i v-if="houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top: 2px; margin-right: 5px; color: #e87878"></i>
-                    <i v-else class="bi bi-heart" style="margin-top: 2px; margin-right: 5px; color: #28426b"></i>
-                </button>
+                  <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
+                </button>   
 
                 <span style="font-weight: bold; font-size: large; color: #28426b">
                   {{ houseAdvertisement.house?.likes.length }}
@@ -722,7 +721,9 @@ onMounted(() => {
   color: #ffa723;
 }
 
-
+.heart-transition {
+  transition: color 0.3s ease-in-out;
+}
 
 
 </style>

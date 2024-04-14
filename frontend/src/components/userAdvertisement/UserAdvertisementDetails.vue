@@ -313,8 +313,7 @@ export default {
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="likes" style="margin-right: 1vw;">
                                 <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || currentUser && userAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || userAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
-                                    <i v-if="userAdvertisement.author?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878" ></i>
-                                    <i v-else class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                                    <i :class="{ 'bi bi-heart-fill': userAdvertisement.author?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !userAdvertisement.author?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: userAdvertisement.author?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426B' }" class="heart-transition" style="margin-top:2px; margin-right: 5px;"></i>
                                 </button>
                                  
                                 <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
@@ -606,4 +605,7 @@ export default {
     cursor: not-allowed;
 }
 
+.heart-transition {
+  transition: color 0.3s ease-in-out;
+}
 </style>
