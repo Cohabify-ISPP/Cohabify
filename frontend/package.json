@@ -6,6 +6,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
+    "devtest": "cross-env NODE_ENV=test vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "cross-env NODE_ENV=test concurrently --kill-others \"vite\" \"node src/test/test.js\""
