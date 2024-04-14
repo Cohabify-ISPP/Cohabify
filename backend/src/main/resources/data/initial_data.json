@@ -209,7 +209,7 @@
               }
           ],
           "description": "Me encantan las charlas nocturnas. Me gusta mantener el hogar limpio y ordenado.",
-          "plan": "Owner",
+          "plan": "OWNER",
           "isVerified": true,
           "authorities": [
               "Admin"
@@ -236,7 +236,7 @@
               }
           ],
           "description": "Me encanta salir de fiesta y divertirme",
-          "plan": "Explorer",
+          "plan": "EXPLORER",
           "isVerified": false,
           "authorities": [
               "User"
