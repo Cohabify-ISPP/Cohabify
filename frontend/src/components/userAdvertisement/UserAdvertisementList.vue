@@ -19,6 +19,7 @@ export default {
     const filtered = ref(false);
     const empty = ref(false);
     const searchTerm = ref('');
+    const divIsHidden = ref(false);
 
     const fetchAdvertisements = async () => {
       try {
@@ -113,6 +114,11 @@ export default {
     })
 
     const toggleTag = (tag) => {
+      console.log(divIsHidden.value);
+      if (divIsHidden.value) {
+        
+        return;
+      }
       const index = tagsSeleccionadas.value.indexOf(tag);
       if (index !== -1) {
         tagsSeleccionadas.value.splice(index, 1);
@@ -123,6 +129,7 @@ export default {
 
     function toggleDivVisibility() {
       var div17 = document.getElementById('div-17');
+      divIsHidden.value = !divIsHidden.value;
       div17.classList.toggle('hidden');
       var filters = document.getElementById('filterContainer');
       filters.classList.toggle('hidden');
@@ -175,7 +182,8 @@ export default {
       empty,
       filtered,
       searchTerm,
-      search
+      search,
+      divIsHidden
     }
   },
 }
@@ -258,7 +266,7 @@ export default {
             <div class="div-17" id="div-17">
               <div class="tags-container">
                 <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)" :class="{
-              ' selected': tagsSeleccionadas.includes(tag), 'unselected': !tagsSeleccionadas.includes(tag)}">
+              ' selected': tagsSeleccionadas.includes(tag) && !divIsHidden, 'unselected': !tagsSeleccionadas.includes(tag) && !divIsHidden}" v-show="!divIsHidden">
                   <b>{{ tag.tag }}</b>
                 </span>
               </div>
@@ -266,18 +274,15 @@ export default {
           </div>
         </div>
       </div>
-
-      <div class="box list-item" style="width:90%; align-items:center" v-for="advertisement in currentAdvertisements" :key="anuncio" :class="{ highlighted: advertisement.promotionExpirationDate !== null }">
+      <div class="list-container mt-4" >
+      <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="anuncio" :class="{ highlighted: advertisement.promotionExpirationDate !== null }" >
         <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + advertisement?.id)">
-          <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
-            <img class="imagen-circulo" :src="advertisement?.author?.imageUri" alt="Imagen del usuario"
-              style="margin-right: 10px;">
-              
+          <div class="inside-box" >
+            <img class="imagen-circulo" :src="advertisement?.author?.imageUri" alt="Imagen del usuario" style="margin-right: 10px;">
+               
           <div class="list-item-content">
-            <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
-                <div class="d-flex">
+            <div class="d-flex justify-content-between w-100" >
                 <h3>{{ advertisement?.author?.username }}</h3><img v-if="advertisement?.author?.plan === 'explorer'" style="margin-left: 6px; max-height: 35px;" src="/images/verificado.png" loading="lazy"/>  
-                </div>
                 <h3><b>{{ advertisement.maxBudget }}€/mes</b></h3>
             </div>
             <div class="d-flex justify-content-between w-100">
@@ -285,7 +290,7 @@ export default {
 
                 <div class="d-flex display-inline-flex">
                     <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
-                    <span> {{ advertisement.author.likes.length }} </span>
+                    <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b;"> {{ advertisement.author.likes.length }} </span>
                     <span style="color: #e87878;" class="material-icons">favorite</span>
                     </div>
                 </div>
@@ -306,6 +311,7 @@ export default {
           </div>
         </a>
         </div>
+      </div>
       </div>
     </div>
 </template>
@@ -466,7 +472,8 @@ export default {
   display: flex;
   margin-left: 1vw;
   max-width: 100%;
-  justify-content: space-between;
+  justify-content: center; 
+  align-items: center; 
   gap: 20px;
 }
 
@@ -502,14 +509,13 @@ export default {
 
 .imagen-circulo {
   position: relative;
-  width: 15vh;
-  height: 15vh;
+  width: 17vh;
+  height: 17vh;
   overflow: hidden;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: auto;
 }
 
 .imagen-circulo img {
