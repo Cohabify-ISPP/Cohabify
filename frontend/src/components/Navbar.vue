@@ -135,7 +135,7 @@ watch(user, (newValue) => {
         
       </ul>
       
-      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 0px" v-if="isLoggedIn">
+      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 3px" v-if="isLoggedIn">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center hidden-arrow"
           href="#"
@@ -195,9 +195,9 @@ watch(user, (newValue) => {
         </ul>
       </div>
     </div>
-    <div class="d-flex align-items-center" v-if="!isLoggedIn">
+    <div class="d-flex align-items-center"  style="margin-left: 10px;margin-right: 10px" v-if="!isLoggedIn" >
       <a href="/login" class="text-decoration-none">
-          <button style="width:100%; height: 10%;">Iniciar sesión
+          <button style="width:100%; height: 10%; ">Iniciar sesión
               <div class="arrow-wrapper">
                   <div class="arrow"></div>
               </div>
