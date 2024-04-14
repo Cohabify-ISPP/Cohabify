@@ -243,7 +243,7 @@ const applyFilters = () => {
             <transition name="slide">
                 <div class="col-md-3 filter-column p-4" style="padding: 10px;" v-if="showFilters">
                     <div class="d-flex flex-row-reverse">
-                        <button class="btn btn-primary rounded-5" @click.prevent="showFilters=false" style="height: 40px;">
+                        <button class="form-button rounded-5 d-flex align-items-center" @click.prevent="showFilters=false" style="height: 40px;">
                             <span class="material-symbols-outlined">
                                 keyboard_double_arrow_left
                             </span>
@@ -313,7 +313,7 @@ const applyFilters = () => {
                     </form>
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
-                        <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar</button>
+                        <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
                         <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
                     </div>
                 </div>
@@ -322,14 +322,14 @@ const applyFilters = () => {
                 <div class="d-flex justify-content-center align-items-center mt-4">
                     <div class="search-bar">
                         <form class="d-flex w-100 justify-content-between">
-                            <div class="w-100 my-auto">
-                                <input class="search-input" v-model= "searchTerm" type="text" id="search-input" placeholder="Busco..."/>
+                            <div id="searchForm" style="width:90%; padding-top: 5px; padding-right: 1px;">
+                                <input class="searchInput" v-model= "searchTerm" type="text" style="color:black; padding-bottom: 1%;" id="searchInput" placeholder="Busco..." />
                             </div>
-                            <button class="search-button d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
-                                <i class="bi bi-search"></i>
+                            <button class="searchButton d-flex align-items-center" style="padding-top:15px; padding-right:1%;" type="submit" @click.prevent="search">
+                                <img src="/images/search.png" alt="Buscar" />
                             </button>
-                            <button @click.prevent="showFilters=!showFilters" class="search-button d-flex align-items-center">
-                                <i class="bi bi-funnel-fill"></i>
+                            <button @click.prevent="showFilters=!showFilters" class="searchButton d-flex align-items-center" style="margin-left: 2%; margin-right: 4%;">
+                                <img src="/images/filter.png" alt="Filter" />
                             </button>
                         </form>
                     </div>
@@ -409,6 +409,57 @@ const applyFilters = () => {
   transform: translateX(-100%);
 }
 
+.highlighted {
+    background-color: #bbeeff;
+    border: 2px solid black;
+}
+
+.searchInput {
+  background-color: #ffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  width: 90%;
+  margin-right: 10px;
+}
+
+.searchButton {
+  background-color: transparent;
+  border: none;
+  align-self: center;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+}
+
+.searchButton img {
+  width: 24px;
+  align-self: right;
+}
+
+.form-range::-webkit-slider-thumb {
+  background: #a4c7ff; 
+}
+
+.form-range::-moz-range-thumb {
+  background: #a4c7ff; 
+}
+
+.form-range::-ms-thumb {
+  background: #a4c7ff; 
+}
+
+.form-button {
+  background: #28426B;
+}
+
+.form-button:hover {
+    border-color:#ffffff;
+}
+
+.form-button:active {
+    background: #3f5982;
+}
 .highlighted {
     background-color: #bbeeff;
     border: 2px solid black;
