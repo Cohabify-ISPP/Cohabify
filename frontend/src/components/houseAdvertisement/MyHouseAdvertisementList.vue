@@ -372,14 +372,16 @@ const applyFilters = () => {
 
                                 <div class="d-flex justify-content-end w-50 mt-5 h-100 align-items-center">
                                     <div class="d-flex flex-column align-items-center">
-                                        <button class="btn btn-success" style="margin-right: 1vw; height: 5.5vh;" @click="goToEdit(advertisement.id)">
-                                            <span class="material-symbols-outlined">edit</span>
+                                        <button class="btn btn-warning" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="promoteHouseAd(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
+                                            Promocionar
+                                            <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
+                                            campaign
+                                            </span>
                                         </button>
                                     </div>
-                                    
                                     <div class="d-flex flex-column align-items-center">
-                                        <button class="btn btn-primary" style="margin-right: 1vw; height: 5.5vh;" @click="promoteHouseAd(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
-                                            Promocionar
+                                        <button class="btn btn-success" style="margin-right: 1vw; height: 5.5vh;" @click="goToEdit(advertisement.id)">
+                                            <span class="material-symbols-outlined">edit</span>
                                         </button>
                                     </div>
                                 
