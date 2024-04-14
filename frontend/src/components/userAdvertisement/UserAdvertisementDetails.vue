@@ -321,9 +321,14 @@ export default {
                             
                             <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                             <div class="d-flex col" v-else>
-                                <button type="button" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;" @click="promoteAd(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
-                                    <strong>Promocionar</strong>
-                                </button>
+                                <div class="d-flex flex-column align-items-center">
+                                        <button class="btn btn-warning" style=" height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="promoteAd(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
+                                            Promocionar
+                                            <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
+                                            campaign
+                                            </span>
+                                        </button>
+                                </div>
                                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
                                 <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
                             </div>
