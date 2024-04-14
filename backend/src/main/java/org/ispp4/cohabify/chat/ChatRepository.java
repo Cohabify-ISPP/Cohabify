@@ -11,5 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ChatRepository extends MongoRepository<Chat, ObjectId>{
 
     List<Chat> findByUsers(User user);
+
+    Chat findByUsers(List<User> users);
     
 }

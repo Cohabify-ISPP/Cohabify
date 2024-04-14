@@ -47,6 +47,10 @@ public class ChatService {
     @Transactional
     public List<Message> getMessagesFromChat(Chat chat){
         return chat.getMessages();
+    }
+
+    public Chat findByUsers(List<User> users) {
+        return chatRepository.findByUsers(users);
     } 
 
 }

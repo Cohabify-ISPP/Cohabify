@@ -24,7 +24,7 @@ public class Message extends BaseEntity{
     private String text;
 
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm")
     private LocalDateTime timeSent;
 
     @DBRef
