@@ -210,6 +210,7 @@
           ],
           "description": "Me encantan las charlas nocturnas. Me gusta mantener el hogar limpio y ordenado.",
           "plan": "OWNER",
+          "expirationDate": "2025-06-30",
           "isVerified": true,
           "authorities": [
               "Admin"
@@ -237,6 +238,7 @@
           ],
           "description": "Me encanta salir de fiesta y divertirme",
           "plan": "EXPLORER",
+          "expirationDate": "2025-06-30",
           "isVerified": false,
           "authorities": [
               "User"
