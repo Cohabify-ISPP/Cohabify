@@ -3,6 +3,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { jwtDecode } from 'jwt-decode'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { loadStripe } from '@stripe/stripe-js';
 
 const isLoggedIn = ref(false)
 const image = ref(null)
@@ -10,6 +11,10 @@ const store = useStore()
 const user = computed(() => store.state.user);
 const BACKEND_URL= import.meta.env.VITE_BACKEND_URL
 const router = useRouter()
+
+const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const loading = ref(false);
+const lineItems = ref(null);
 
 onMounted(async() => {
   const token = localStorage.getItem("authentication")
@@ -30,6 +35,27 @@ onMounted(async() => {
 
   }
 })
+
+const handleCheckout = async () => {
+        if(user.value.numAdvertisements > 0) {
+         window.location.href = '/advertisements/houses/new';
+        }else{
+          lineItems.value = [{ price: 'price_1P5NylBofFRUNSKswutv1DKV', quantity: 1}];
+        if (lineItems.value !== null) {
+            const stripe = await stripePromise;
+            const { error } = await stripe.redirectToCheckout({
+                lineItems: lineItems.value,
+                mode: 'payment',
+                successUrl: 'http://localhost:5173/advertisements/houses/new?session_id={CHECKOUT_SESSION_ID}',
+                cancelUrl: 'http://localhost:5173/',
+            });
+            if (error) {
+                console.error(error);
+            }
+        }
+        } 
+ 
+      };
 
 const logout = () => {
   localStorage.removeItem("authentication")
@@ -112,7 +138,8 @@ watch(user, (newValue) => {
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" @click.prevent="$router.push('/myAdvertisements/house')">Ver publicados</a></li>
-            <li v-if="user?.plan === 'owner'"><a class="dropdown-item" href="/advertisements/houses/new" @click.prevent="$router.push('/advertisements/houses/new')">Publicar</a></li>           
+            <li v-if="user?.plan === 'owner' && user.numAdvertisements>0"><a class="dropdown-item" href="/advertisements/houses/new" @click.prevent="$router.push('/advertisements/houses/new')">Publicar</a></li>
+            <li v-else-if="user?.plan === 'owner'" ><a class="dropdown-item" @click="handleCheckout">Publicar</a></li>           
           </ul>
         </li>
 
