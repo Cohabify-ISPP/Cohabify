@@ -371,6 +371,12 @@ const applyFilters = () => {
                                 </div>
 
                                 <div class="d-flex justify-content-end w-50 mt-5 h-100 align-items-center">
+                                    <div class="d-flex flex-column align-times-center">
+                                        <button  class="btn btn-warning active" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" v-if="advertisement.promotionExpirationDate !== null">
+                                                <b>Promocionado</b>
+                                                <div class="promo-icon"></div>
+                                        </button>
+                                    </div>
                                     <div class="d-flex flex-column align-items-center">
                                         <button class="btn btn-warning" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="promoteHouseAd(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
                                             Promocionar
@@ -463,7 +469,31 @@ const applyFilters = () => {
     background: #3f5982;
 }
 .highlighted {
-    background-color: #bbeeff;
-    border: 2px solid black;
+    background-color: #d4e4ff;
+    border: 2px solid rgb(5, 92, 167);
+}
+
+.promo-button {
+  margin-right: 1vw;
+  height: 5.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.promo-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  background-image: url('/public/images/megaphone.png');
+  background-size: cover;
+}
+
+.list-item:hover .promo-icon {
+  width: 30px;
+  height: 30px;
+  background-image: url('/public/images/megaphone.gif');
+  background-size: cover;
 }
 </style>

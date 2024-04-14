@@ -108,7 +108,6 @@ export default {
                     });
                 const data = await response.json();
                 valorations.value = data;
-                console.log(valorations.value);
                 for(const rating of valorations.value){
                     if(rating.user.username === currentUser.value.username){
                         currentUserAdvertisementRating.value = rating;
@@ -194,7 +193,6 @@ export default {
 
                     if (response.ok) {
                         const data = await response.json();
-                        console.log(data)
                         commonHouses.value = data;
                     } else {
                         router.push(`/404`);

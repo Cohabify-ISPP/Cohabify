@@ -114,7 +114,6 @@ export default {
     })
 
     const toggleTag = (tag) => {
-      console.log(divIsHidden.value);
       if (divIsHidden.value) {
         
         return;
@@ -301,14 +300,24 @@ export default {
             <div class="d-flex justify-content-between w-100">
               <b>Máximo {{ advertisement.maxCohabitants }} inquilino(s)</b>
             </div>
-
+          
+                                
             <div class="d-flex justify-content-between w-100 mt-3 h-100 align-items-center">
               <div class="d-flex align-items-center" style="width:100%;overflow: hidden;">
                 <span v-for="(tag, index) in advertisement?.author?.tag.slice(0, 6)" :key="index" class="tag selected" style=" white-space: nowrap;">
                   <b>{{ tag.tag }}</b>
                 </span>
               </div>
+              <div class="d-flex justify-content-end w-50 h-100 align-items-center">
+                  <div class="d-flex flex-column">
+                    <button  class="btn btn-warning active" style="height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" v-if="advertisement.promotionExpirationDate !== null">
+                      <b>Promocionado</b>
+                      <div class="promo-icon"></div>
+                    </button>
+                  </div>
+                </div>
             </div>
+            
           </div>
           </div>
         </a>
@@ -558,10 +567,9 @@ export default {
   transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 .highlighted {
-  background-color: #bbeeff;
-  border: 2px solid black;
+    background-color: #d4e4ff;
+    border: 2px solid rgb(5, 92, 167);
 }
-
 .form-range::-webkit-slider-thumb {
   background: #a4c7ff; 
 }
@@ -611,5 +619,30 @@ export default {
 
 .calendar-input:focus {
   background-color: #cce4f7;
+}
+
+
+.promo-button {
+  margin-right: 1vw;
+  height: 5.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.promo-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  background-image: url('/public/images/megaphone.png');
+  background-size: cover;
+}
+
+.list-item:hover .promo-icon {
+  width: 30px;
+  height: 30px;
+  background-image: url('/public/images/megaphone.gif');
+  background-size: cover;
 }
 </style>

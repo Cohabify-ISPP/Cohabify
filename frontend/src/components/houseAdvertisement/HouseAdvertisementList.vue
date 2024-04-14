@@ -118,15 +118,12 @@ const applyFilters = () => {
             console.log(errors.value.minBathroomsVal)
         } else if (minBathrooms.value < 0) {
             errors.value.minBathroomsVal = 'Valor negativo'
-            console.log(errors.value.minBathroomsVal)
         } else if (maxBathrooms.value == null) {
             errors.value.maxBathroomsVal = 'Valor no indicado'
-            console.log(errors.value.maxBathroomsVal)
         }
     } 
 
     else if (maxBathrooms.value !== null) {
-        console.log(maxBathrooms.value)
         if (typeof maxBathrooms.value !== 'number') {
             errors.value.maxBathroomsVal = 'Valor no numérico'
         } else if (maxBathrooms.value < 0) {
@@ -210,7 +207,6 @@ const fetchValoration = async (id) => {
       }
     );
     const valorations = await response.json();
-    console.log(valorations);
     let total = 0;
 
     for(const rating of valorations){
@@ -358,25 +354,36 @@ const fetchValoration = async (id) => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">bed</span>
-                                    <p>{{ advertisement.house.roomsNumber }} dorm.</p>
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">bed</span>
+                                        <p>{{ advertisement.house.roomsNumber }} dorm.</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">shower</span>
+                                        <p>{{ advertisement.house.bathroomsNumber }} baños</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">square_foot</span>
+                                        <p>{{ advertisement.house.area }} m²</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-symbols-outlined">floor</span>
+                                        <p>Planta {{ advertisement.house.floor }}</p>
+                                    </div>
+    
                                 </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">shower</span>
-                                    <p>{{ advertisement.house.bathroomsNumber }} baños</p>
+                                <div class="d-flex justify-content-end w-50 mt-4 h-100 align-items-center">
+                                    <div class="d-flex flex-column">
+                                    <button  class="btn btn-warning active" style="height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" v-if="advertisement.promotionExpirationDate !== null">
+                                            <b>Promocionado</b>
+                                            <div class="promo-icon"></div>
+                                    </button>
                                 </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">square_foot</span>
-                                    <p>{{ advertisement.house.area }} m²</p>
                                 </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-symbols-outlined">floor</span>
-                                    <p>Planta {{ advertisement.house.floor }}</p>
-                                </div>
-                            </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -449,7 +456,31 @@ const fetchValoration = async (id) => {
     background: #3f5982;
 }
 .highlighted {
-    background-color: #bbeeff;
-    border: 2px solid black;
+    background-color: #d4e4ff;
+    border: 2px solid rgb(5, 92, 167);
+}
+
+.promo-button {
+  margin-right: 1vw;
+  height: 5.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.promo-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  background-image: url('/public/images/megaphone.png');
+  background-size: cover;
+}
+
+.list-item:hover .promo-icon {
+  width: 30px;
+  height: 30px;
+  background-image: url('/public/images/megaphone.gif');
+  background-size: cover;
 }
 </style>
