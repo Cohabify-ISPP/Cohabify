@@ -227,7 +227,7 @@ export default {
               <div class="mt-3 d-flex" :invalid="true" style="width: 100%; height: 30px;">
                 <p >Fecha de entrada</p>
               </div>
-              <input type="date" v-model="entranceDate" id="entranceDate"  class="form-control" :class="{
+              <input type="date" v-model="entranceDate" id="entranceDate"  class="calendar-input" :class="{
                 ' is-invalid':
                   errors.includes('entranceDateVal')
               }">
@@ -237,7 +237,7 @@ export default {
                 <hr>
                 <div class="d-flex justify-content-between mb-2">
                           <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
-                          <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
+                          <button class="btn btn-danger" @click="errors=[]; filtered = false;filtered=false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
                       </div>
     
       </div>
@@ -593,4 +593,23 @@ export default {
     background: #3f5982;
 }
 
+.calendar-input {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  color-scheme: black;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+
+.calendar-input:focus {
+  background-color: #cce4f7;
+}
 </style>
