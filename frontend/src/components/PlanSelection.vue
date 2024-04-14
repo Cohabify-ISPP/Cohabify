@@ -1,36 +1,114 @@
 <script>
-    import { ref, onMounted, computed } from 'vue'
+    import { ref, onMounted, computed, watch } from 'vue'
     import { useStore } from 'vuex'
+    import { useRouter } from 'vue-router'
+    import { loadStripe } from '@stripe/stripe-js';
 
     export default {
+
         setup() {
-            //const currentUser = ref(null);
             const store = useStore()
             const currentUser = computed(() => store.state.user);
+            const router = useRouter();
             const plan = computed(() => currentUser.value.plan);
+            const loggedIn = ref(false);
+            const stripePromise = loadStripe('pk_test_51P2DTpBofFRUNSKsZLVQgYTOY0I6PLl4BP8w6a5y8IYZThREOk8a7dcqu7kXCg8aV9byhdSkZ98Sg3dFL24RzkON00R08XEGbM');
+            const loading = ref(false);
+            const lineItems = ref(null);
+            const isLoading = ref(true);
 
-            //Cambiar el plan del usuario
-            const changePlan = async (newPlan) => {
-                const response = await fetch(
-                    import.meta.env.VITE_BACKEND_URL + '/api/user/update/plan/'+ newPlan + '/'+currentUser.value.id,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Authentication': 'Bearer ' + localStorage.getItem('authentication')
-                        },
+            onMounted(async () => {
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            if (sessionId !== null) {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/stripe/session', {
+                    method: 'POST',
+                    headers: {
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ sessionId: sessionId })
+                }).then(response => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else { 
+                        throw new Error('Error al cargar el plan del usuario');
                     }
-                )
-                store.dispatch('cargarUser')
+                    }) 
+                    .then(jsonData => {
+                        changePlan(jsonData.plan)
+                        isLoading.value = false
+                    })
+                    .catch(error => {
+                        isLoading.value = false
+                        fetchError.value = error
+                    })
+            }else{
+                isLoading.value = false
             }
+                    });
+
+            const handleCheckout = async (newPlan) => {
+                if (await confirmChangePlan()){
+                    if (newPlan === 'basic') {
+                        changePlan(newPlan)
+                    } else if (newPlan === 'explorer') {
+                        lineItems.value = [{ price: 'price_1P2GsuBofFRUNSKsf2qfzvZr', quantity: 1}];
+                    } else if (newPlan === 'owner') {
+                        lineItems.value = [{ price: 'price_1P2WH6BofFRUNSKs24h67005', quantity: 1}];
+                    }
+                    if (lineItems.value !== null) {
+                        const stripe = await stripePromise;
+                        const { error } = await stripe.redirectToCheckout({
+                            lineItems: lineItems.value,
+                            mode: 'payment',
+                            successUrl: 'http://localhost:5173/plan?session_id={CHECKOUT_SESSION_ID}',
+                            cancelUrl: 'http://localhost:5173/',
+                        });
+
+                        if (error) {
+                            console.error(error);
+                        }
+                    } 
+                }
+
+            } ;
+
+            const changePlan = async (newPlan) => {
+                    const response = await fetch(
+                        import.meta.env.VITE_BACKEND_URL + '/api/user/update/plan/'+ newPlan + '/'+currentUser.value.id,
+                        {
+                            method: 'PUT',
+                            headers: {
+                                'Authentication': 'Bearer ' + localStorage.getItem('authentication')
+                            },
+                        }
+                    )
+                    store.dispatch('cargarUser')
+            } 
+            
+            const confirmChangePlan = async () => {
+                var response = confirm("¿Estás seguro de que quieres cambiar de plan?");
+                return response;
+            }
+
+            watch(currentUser, (newValue) => {
+                if (newValue !== null && newValue !== undefined && Object.keys(newValue).length !== 0) { 
+                    loggedIn.value = true;
+                }
+            });
         
             return { 
             currentUser,
             plan,
-            changePlan
+            changePlan,
+            loggedIn,
+            loading,
+            handleCheckout,
+            isLoading,
             }
-
-        }  
-        
+        }
     }
 
 </script>
@@ -38,7 +116,10 @@
 <template>
      <navbar />
      <h1 style="margin-top: 1vw; margin-bottom: 2vw;">Escoge tu plan</h1>
-    <div class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 15vw ;">
+     <div v-if="isLoading" class="spinner-border mt-5" role="status">
+                    <span class="visually-hidden">Loading...</span>
+    </div>
+    <div  v-else class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 15vw ;">
             <div class="col">
                 <div class="card card1">
                     <h2 class="fw-bold" style="color: #28426B;">Básico</h2>
@@ -58,8 +139,13 @@
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> Gratis</h2>
-                            <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'basic'" @click="changePlan('basic')">¡Lo quiero!</button>
-                            <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            <div v-if="!loggedIn">
+                                <button class="btn-plan" style="margin-top: 1vw;" >Inicia sesión para contratar un plan</button>
+                            </div>
+                            <div v-else>
+                                <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'basic'" @click="handleCheckout('basic')">¡Lo quiero!</button>
+                                <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -84,8 +170,13 @@
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> 5€</h2>
-                            <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'explorer'" @click="changePlan('explorer')">¡Lo quiero!</button>
-                            <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            <div v-if="!loggedIn">
+                                <button class="btn-plan" style="margin-top: 1vw;" >Inicia sesión para contratar un plan</button>
+                            </div>
+                            <div v-else>
+                                <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'explorer'" @click="handleCheckout('explorer')">¡Lo quiero!</button>
+                                <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -110,8 +201,13 @@
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> 15€ + 5€*</h2>
-                            <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'owner'" @click="changePlan('owner')">¡Lo quiero!</button>
-                            <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            <div v-if="!loggedIn">
+                                <button class="btn-plan" style="margin-top: 1vw;" >Inicia sesión para contratar un plan</button>
+                            </div>
+                            <div v-else>
+                                <button class="btn-primary" style="margin-top: 1vw;" v-if="plan !== 'owner'" @click="handleCheckout('owner')">¡Lo quiero!</button>
+                                <button class="btn-plan" style="margin-top: 1vw;" v-else>¡Ya lo tengo!</button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 export default {
-    
+
+
     setup() {
 
         const userAdvertisementId = ref(""); 
@@ -18,6 +19,9 @@ export default {
         const router = useRouter();
         const commonHouses = ref([]);
         const clipboardMessage = ref(false);
+        const currentUserAdvertisementRating = ref({});
+        const erroresComentario = ref(null);
+        const commonFlats = ref([]);
 
         const fetchAdvertisement = async () => {
             try {
@@ -37,20 +41,22 @@ export default {
                     } else {
                         router.push(`/404`);
                     }
-
+                    getCommonFlats();
                 } catch (error) {
                 console.error("Error:", error);
             }
         };
 
-        const deleteComment1 = () => {
-            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + currentUser.value.id + '/' + userAdvertisement.value.author.id, {
+        const deleteComment = () => {
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/' + currentUser.value.id + '/' + userAdvertisement.value.author.id, {
                 method: 'DELETE',
                 headers: {
                     'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
                 },
             })
                 .then(response => {
+                    currentUserAdvertisementRating.value = {};
+                    fetchAdvertisement();
                     if (!response.ok) {
                         console.error('Error al eliminar el comentario');
                     }
@@ -58,29 +64,11 @@ export default {
                 .catch(error => console.error('Error al enviar datos al backend:', error));
         };
 
-        const deleteComment2 = () => {
-            fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating/ratedUser/' + currentUser.value.id + '/' + userAdvertisement.value.author.id, {
-                method: 'DELETE',
-                headers: {
-                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
-                },
-            })
-                .then(response => {
-                    setTimeout(() => {
-                        fetchAdvertisement();
-                    }, 1000);
-                    if (!response.ok) {
-                        console.error('Error al eliminar el comentario');
-                    }
-                })
-                .catch(error => console.error('Error al enviar datos al backend:', error));
-        };
-
-        const register = () => {
+        const saveComment = () => {
             const formData = new FormData();
             formData.append("string-data", new Blob([JSON.stringify({
-                user: userAdvertisement.value.author,
-                ratedUser: currentUser.value,
+                user: currentUser.value,
+                ratedUser: userAdvertisement.value.author,
                 comment: text.value
             })], { type: "application/json" }));
             fetch(import.meta.env.VITE_BACKEND_URL + '/api/userRating', {
@@ -90,25 +78,27 @@ export default {
                             },
                 body: formData,
             })
-                .then(response => response.json())
-                .then(jsonData => {
-                    setTimeout(() => {
-                        fetchAdvertisement();
-                        closeModal();
-                    }, 1000);
-                }
-                
-                )
-                .catch(error => {
-                        console.error('Error al enviar datos al backend:', error);
-                        errorComentario.value = 'No puedes ponerte una reseña a ti mismo.';
+            .then((response) => {
+                if (response.ok) {
+                fetchValorations();
+                fetchAdvertisement();
+                closeModal();
+                } else {
+                    response.json()
+                    .then((body) => {
+                        erroresComentario.value = body ? body : [{"message": "Ha ocurrido un error inesperado"}];
                     });
-
+                }
+            })
+            .catch(error => {
+                    console.error('Error al enviar datos al backend:', error);
+                    errorComentario.value = 'No puedes ponerte una reseña a ti mismo.';
+                });
         };
 
         const fetchValorations = async () => {
             try {
-                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userRating/user/${userAdvertisement.value.author.id}`,
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/userRating/ratedUser/${userAdvertisement.value.author.id}`,
                     {
                         method: "GET",
                         headers: {
@@ -118,15 +108,22 @@ export default {
                     });
                 const data = await response.json();
                 valorations.value = data;
+                console.log(valorations.value);
+                for(const rating of valorations.value){
+                    if(rating.user.username === currentUser.value.username){
+                        currentUserAdvertisementRating.value = rating;
+                        break;
+                    }
+                }
             } catch (error) {
                 console.error("Error:", error);
             }
         };
         const openModal = () => {
-            deleteComment1();
             modalText.value = "";
             let modal = document.getElementById('loginModal');
             modal.style.display = "block";
+            erroresComentario.value = null;
         }
 
         const closeModal = () => {
@@ -180,6 +177,31 @@ export default {
             }
         };
 
+        const getCommonFlats = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/users/'+currentUser.value.id+'/ads/'+userAdvertisement.value.author.id,
+                    {
+                        method: "GET",
+                        headers: {
+                            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                        },
+                        credentials: "include",
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log(data)
+                        commonHouses.value = data;
+                    } else {
+                        router.push(`/404`);
+                    }
+
+                } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+        
+
         function copyToClipboard() {
             navigator.clipboard.writeText(window.location.href)
                 .then(function() {
@@ -197,28 +219,55 @@ export default {
             userAdvertisementId.value = route.params.id;
             fetchAdvertisement();
         });
+        const promoteAd = (id)=>{
+            fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/users/promote/' + id, {
+                method: "POST",
+                headers: {
+                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                },
+                credentials: "include"
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No se ha podido promocionar el anuncio de usuario')
+                }
+            })
+            .then(data => {
+                fetchAdvertisement()
+            })
+            .catch(error => {
+                fetchError.value = error
+            })
+
+        }
         return {
             errorComentario,
             modalText,
             closeModal,
-            deleteComment2,
+            deleteComment,
             openModal,
-            register,
+            saveComment,
             userAdvertisement,
             commonHouses,
+            getCommonFlats,
             toggleLike,
             copyToClipboard,
             clipboardMessage,
             valorations,
             deleteUserAd,
-            currentUser
+            currentUser,
+            promoteAd,
+            currentUserAdvertisementRating,
+            erroresComentario,
+            commonFlats,
         }
+        
     }
+    
 }
 </script>
 
 <template>
-
     <Navbar />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <div class="container d-flex align-items-center justify-content-center text-center mt-5">            
@@ -237,14 +286,14 @@ export default {
                                     </div>
                                 </div>
                                 <div class="modal-body">
-                                    <form @submit.prevent="register">
+                                    <form @submit.prevent="saveComment">
                                         <div class="form-group">
                                             <label for="commentText">Comentario</label>
-                                            <div class="alert alert-danger" role="alert" v-if="errorComentario">
-                                                <i class="fas fa-exclamation-triangle"></i> {{ errorComentario }}
-                                            </div>
                                             <textarea class="form-control" id="text" v-model="modalText"></textarea>
-
+                                        </div>
+                                        <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="erroresComentario !== null">
+                                            <i class="fas fa-exclamation-triangle"></i> {{ erroresComentario.message }}
+                                            
                                         </div>
                                         <button type="submit" class="button boton" style="position: relative; align-items:center; margin-top: 1vh; padding: 1vh; float: right;"><strong style="color:white">Enviar</strong></button>
                                     </form>
@@ -269,6 +318,9 @@ export default {
                             
                             <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                             <div class="d-flex col" v-else>
+                                <button type="button" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;" @click="promoteAd(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
+                                    <strong>Promocionar</strong>
+                                </button>
                                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
                                 <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
                             </div>
@@ -290,20 +342,29 @@ export default {
                     <div style="margin-top: 5%;"> 
                         <div class="d-flex justify-content-between">
                             <h4 style=" text-align: left;">Comentarios</h4>
-                            <i class="fas fa-trash-alt" @click="deleteComment2" 
-                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username">
+                            <i class="fas fa-trash-alt" @click="deleteComment" 
+                                style="cursor: pointer; width: 38px; height: 38px; border: 0.2em solid black; border-radius: 50%; padding: 0.5em; background-color: #f2f2f2;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username && Object.keys(currentUserAdvertisementRating).length !== 0">
                             </i>
-                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username"><strong style="color:white">Comentar</strong></button>
+                            <button type="button" @click="openModal" class="button boton" style="padding: 1vh;" 
+                            v-if="currentUser.username && userAdvertisement.author?.username !== currentUser.username && Object.keys(currentUserAdvertisementRating).length === 0">
+                                <strong style="color:white">Comentar</strong>
+                            </button>
                         </div>
                         <hr>
                         
                         <div v-if="valorations.length == 0" style="text-align: left;">Aún no hay comentarios...</div>
 
                         <div v-else style="overflow-y: auto; max-height: 50vh;">
+                            <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;" v-if="Object.keys(currentUserAdvertisementRating).length !== 0"> 
+                                <div class="card-body" >
+                                    <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="currentUserAdvertisementRating.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ currentUserAdvertisementRating.user.username}}</p>
+                                    <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ currentUserAdvertisementRating.comment }}</p>
+                                </div>
+                            </div>
                             <div v-for="comentario in valorations" :key="comentario">
-                                <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;"> 
+                                <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px;" v-if="comentario.user.username !== currentUser.username"> 
                                     <div class="card-body">
-                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.ratedUser.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.ratedUser.username}}</p>
+                                        <p style="font-weight:bold; text-align: left;" class="card-title"><img class="rounded-circle" :src="comentario.user.imageUri" style="width:3vw; height: 3vw; margin-right: 1vw;"/>{{ comentario.user.username}}</p>
                                         <p style="text-align: justify; word-wrap: break-word" class="card-text">{{ comentario.comment }}</p>
                                     </div>
                                 </div>
@@ -317,11 +378,7 @@ export default {
                 <div class="subseccion">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <h1 style="text-align: left;"> {{ userAdvertisement.author?.username}} 
-                            <img v-if="userAdvertisement.author?.plan === 'explorer'" 
-                                style="max-height: 35px;"
-                                src="/images/verificado.png"
-                                loading="lazy"
-                            />
+                            <img v-if="userAdvertisement.author?.plan === 'explorer'"style="max-height: 35px;" src="/images/verificado.png" loading="lazy"/>
                             <i :class="{'bi':true,'bi-gender-male': userAdvertisement.author?.gender == 'MASCULINO', 'bi-gender-female':userAdvertisement.author?.gender == 'FEMENINO', 'bi-gender-ambiguous': userAdvertisement.author?.gender == 'OTRO'}"></i>
                         </h1>
                         <button class="btn btn-share" @click="copyToClipboard()">
@@ -360,24 +417,22 @@ export default {
 
                 <div class="subseccion" style="overflow-y: auto;">
                     <div>
-                        <h4 style=" text-align: left;">Pisos en común</h4>
+                        <h4 style=" text-align: left;">Pisos con me gustas en común</h4>
                         <hr>
                     </div>
-
-                    <h5 style="text-align: left;color: #5D5E60"> Próximamente...</h5>
                         
                     <div v-for="anuncio in commonHouses" :key="anuncio">
 
                         <div class="piso">
-                            <img  class="img-piso" :src="anuncio.img" alt="Imagen del piso">
+                            <img  class="img-piso" :src="anuncio.images[0]" alt="Imagen del piso">
 
                             <div class="columna-informacion">
-                                <p style="text-align: left; font-weight: bold; margin: 0%;"> {{ anuncio.name }}</p>
+                                <p style="text-align: left; font-weight: bold; margin: 0%;"> {{ anuncio.title }}</p>
 
                                 <div style="display:flex; justify-content: space-between; align-content: left; margin-right: 20px;">
-                                    <span>{{ anuncio.monthly_price }}€/mes</span>
-                                    <span>{{ anuncio.size_m2 }}m2</span>
-                                    <span style="">{{ anuncio.floor }}</span>
+                                    <span>{{ anuncio.price }} €/mes</span>
+                                    <span>{{ anuncio.house.area }} m2</span>
+                                    <span style="">Planta {{ anuncio.house.floor }}</span>
                                 </div>
                                 <p class="text-truncate" style="text-align: left; word-wrap: break-word; margin: 10px 0;">{{ anuncio.description }}</p>
                             </div>
@@ -498,7 +553,7 @@ export default {
 
 .img-piso {
     width: 20%;
-    height: 25%;
+    height: 100px;
     object-fit: cover;
     border-radius: 5%;
     display: block;

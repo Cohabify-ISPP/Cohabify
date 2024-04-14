@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.tag.Tag;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -39,17 +41,25 @@ public class User extends BaseEntity {
     @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
+    @NotNull    
+    private Boolean enabled;
+
+    @NotBlank
+    private String verificationCode;
+
     @NotNull
     private Boolean isOwner;
     
     @NotNull
     @Size(max = 9)
     @Pattern(regexp = "^[0-9]{9}$")
+    @Indexed(unique = true)
     private String phone;
     
     @NotNull
     @Size(max = 255)
     @Email
+    @Indexed(unique = true)
     private String email;
     
     @DBRef

@@ -87,17 +87,16 @@ watch(user, (newValue) => {
         loading="lazy"
       />
     </a>
-
-    <div class="d-flex align-items-center" v-if="isLoggedIn">
+    <div class="d-flex"  style="padding-right: 1%;">
+    <div class="d-flex align-items-center">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
-        
-        <li class="nav-item" style="padding-right: 1%;">
+        <li class="nav-item" v-if="isLoggedIn" style="padding-right:1%">
           <a class="nav-link" href="/chat">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-left-text " viewBox="0 0 16 16">
                 <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
                 <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
-              </svg></a>
-
+              </svg>
+          </a>
         </li>
         <li class="nav-item dropdown pr-4" style="padding-right: 1%;">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -110,10 +109,10 @@ watch(user, (newValue) => {
             <li><a class="dropdown-item" href="/advertisements/users" @click.prevent="$router.push('/advertisements/users')">Compañeros</a></li>
           </ul>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isLoggedIn">
           <a class="nav-link" href="/plan">Planes</a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" v-if="isLoggedIn">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Anuncios de vivienda
           </a>
@@ -123,7 +122,7 @@ watch(user, (newValue) => {
           </ul>
         </li>
 
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" v-if="isLoggedIn">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Anuncios de compañero
           </a>
@@ -135,7 +134,7 @@ watch(user, (newValue) => {
         
       </ul>
       
-      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw">
+      <div class="dropdown navbar-nav" style="margin-left: 1vw; margin-right: 1vw" v-if="isLoggedIn">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center hidden-arrow"
           href="#"
@@ -169,10 +168,7 @@ watch(user, (newValue) => {
             loading="lazy"
           />
         </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuAvatar"
-        >
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
           <li>
             <a class="dropdown-item" href="/user/" @click.prevent="$router.push('/user/' + user?.id)">Perfil</a>
           </li>
@@ -198,9 +194,16 @@ watch(user, (newValue) => {
         </ul>
       </div>
     </div>
-    <div class="d-flex align-items-center" v-else>
-      <a href="/login" class="btn btn-primary">Iniciar sesión</a>
+    <div class="d-flex align-items-center" v-if="!isLoggedIn">
+      <a href="/login" class="text-decoration-none">
+          <button style="width:100%; height: 10%;">Iniciar sesión
+              <div class="arrow-wrapper">
+                  <div class="arrow"></div>
+              </div>
+          </button>
+       </a>
     </div>
+  </div>
   </div>
 </nav>
 </template>
@@ -226,5 +229,67 @@ watch(user, (newValue) => {
   border-top-color: #a4c7ff;
   transition: 0.2s;
 }
+
+button {
+  --primary-color: #a4c7ff;
+  --secondary-color: #28426b;
+  --hover-color: #ffffff;
+  --arrow-width: 10px; 
+  --arrow-stroke: 2px; 
+  border: 0;
+  border-radius: 20px; 
+  color: var(--secondary-color);
+  padding: 0.5em 1.2em; 
+  background: var(--primary-color);
+  display: flex;
+  transition: 0.2s background;
+  align-items: center;
+  gap: 0.3em; 
+  font-weight: bold;
+}
+
+button .arrow-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button .arrow {
+  margin-top: 1px;
+  width: var(--arrow-width);
+  background: var(--primary-color);
+  height: var(--arrow-stroke);
+  position: relative;
+  transition: 0.2s;
+}
+
+button .arrow::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  border: solid var(--secondary-color);
+  border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+  display: inline-block;
+  top: -3px; 
+  right: 3px; 
+  transition: 0.2s;
+  padding: 3px; 
+  transform: rotate(-45deg);
+  font-weight: bold;
+    
+}
+
+button:hover {
+  background-color: var(--hover-color);
+}
+
+button:hover .arrow {
+  background: var(--secondary-color);
+}
+
+button:hover .arrow:before {
+  right: 0;
+}
+
 
 </style>

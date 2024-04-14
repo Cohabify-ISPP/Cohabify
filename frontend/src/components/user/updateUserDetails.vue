@@ -142,6 +142,7 @@ export default {
                 }
             }
             deleteFile();
+            router.push("/user/" + user.value.id);
         };
 
         const onDragover = (event) => {

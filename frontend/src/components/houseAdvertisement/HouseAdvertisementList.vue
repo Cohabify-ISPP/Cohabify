@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useStore } from "vuex";
 import Navbar from '../Navbar.vue'
 
 const price = ref(0)
@@ -18,6 +19,8 @@ const fetchError = ref(null)
 const isLoading = ref(true)
 const showFilters = ref(false)
 const searchTerm = ref('')
+const store = useStore();
+const currentUser = computed(() => store.state.user);
 
 onMounted(() => {
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses', {
@@ -31,9 +34,17 @@ onMounted(() => {
             if (!response.ok) {
                 throw new Error('No se han podido cargar las viviendas')
             }
+
             return response.json()
         })
         .then(data => {
+
+            for (let i = 0; i < data.length; i++) {
+                fetchValoration(data[i].id).then((valoration) => {
+                    data[i].valoration = valoration;
+                });
+            }
+
             setTimeout(() => {
                 isLoading.value = false
                 advertisements.value = data
@@ -44,8 +55,24 @@ onMounted(() => {
             fetchError.value = error
         })
 })
+
 const currentAdvertisements = computed(() => {
- return filtered.value ? filteredAdvertisements.value : advertisements.value
+ const ads = filtered.value ? filteredAdvertisements.value : advertisements.value;
+
+ const orderedAds = ads.sort((a, b) => {
+    if (a.promotionExpirationDate === null && b.promotionExpirationDate === null) {
+        return 0; 
+    } else if (a.promotionExpirationDate === null) {
+        return 1; 
+    } else if (b.promotionExpirationDate === null) {
+        return -1; 
+    }
+
+    const dateA = new Date(a.promotionExpirationDate);
+    const dateB = new Date(b.promotionExpirationDate);
+    return dateA - dateB;
+    });
+ return orderedAds;
 })
 
 const getImageUrl = (image) => {
@@ -167,8 +194,39 @@ const applyFilters = () => {
         )
         filtered.value = true
     }
-
 }
+
+const currentUserIsAuthor = (advertisement) => {
+    return currentUser.value.id === advertisement.author.id;
+}
+
+const fetchValoration = async (id) => {
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_BACKEND_URL + `/api/houseRating/houseAdvertisements/${id}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+    const valorations = await response.json();
+    console.log(valorations);
+    let total = 0;
+
+    for(const rating of valorations){
+        total = total + rating.rating;        
+    }
+
+    if(valorations.length > 0){
+        return (total * 1.0) / valorations.length;
+    } else {
+        return 0;
+    }
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 </script>
 <template>
@@ -275,14 +333,31 @@ const applyFilters = () => {
                     {{ fetchError }}
                 </div>
                 <div class="list-container mt-4" v-else>
-                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
+                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)" :class="{ highlighted: advertisement.promotionExpirationDate !== null }">
                         <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image" style="width:20vw; max-width:20vw">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
                                 <h3>{{ advertisement.title }}</h3>
                                 <h3><b>{{ advertisement.price }}€/mes</b></h3>
                             </div>
-                            <b>{{ advertisement.house.location }}</b>
+                            <div class="d-flex justify-content-between w-100">
+                                <b>{{ advertisement.house.location }}</b>
+
+                                <div class="d-flex display-inline-flex">
+                                    <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
+                                    <span> {{ advertisement.house.likes.length }} </span>
+                                    <span style="color: #e87878;" class="material-icons">favorite</span>
+                                    </div>
+                                    <div class="d-flex align-items-center" style="margin-right: 0.7vh;">
+                                        <span> {{ advertisement.valoration }} </span>
+                                        <span style="color: goldenrod;" class="material-icons">star</span>
+                                    </div>
+                                    <div v-if="currentUserIsAuthor(advertisement)" class="d-flex align-items-center">
+                                        <span>{{ advertisement.views }}</span>
+                                        <span class="material-symbols-outlined">visibility</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
                                 <div class="d-flex flex-column align-items-center">
                                     <span class="material-icons">bed</span>
@@ -372,5 +447,9 @@ const applyFilters = () => {
 
 .form-button:active {
     background: #3f5982;
+}
+.highlighted {
+    background-color: #bbeeff;
+    border: 2px solid black;
 }
 </style>

@@ -15,6 +15,9 @@ public class UserRatingService {
     UserRatingRepository userRatingRepository;
 
     public UserRating save(UserRating userRating) {
+        if (userRating.getComment() == null || userRating.getComment().isEmpty()) {
+            throw new IllegalStateException("No se puede guardar un comentario vacío");
+        }
         return (UserRating) userRatingRepository.save(userRating);
     }
 

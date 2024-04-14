@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.Optional;
+import java.time.LocalDate;
 import java.util.List;
 
+import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisement;
 import org.ispp4.cohabify.utils.Global;
 //import org.ispp4.cohabify.user.User;
 
@@ -55,6 +57,17 @@ public class UserAdvertisementService {
 
     public UserAdvertisement save(UserAdvertisement userAdvertisement) {
         return userAdvertisementRepository.save(userAdvertisement);
+    }
+
+    public List<UserAdvertisement> checkPromotions(List<UserAdvertisement> advertisements) {
+        for (UserAdvertisement advertisement : advertisements) {
+            if (advertisement.getPromotionExpirationDate() != null && advertisement.getPromotionExpirationDate().isBefore(LocalDate.now())) {
+                advertisement.setPromotionExpirationDate(null);
+                userAdvertisementRepository.save(advertisement);
+            }
+        }
+        return advertisements;
+
     }
 
 }
