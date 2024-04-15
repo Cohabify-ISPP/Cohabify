@@ -635,14 +635,14 @@ export default {
   width: 24px;
   height: 24px;
   margin-left: 4px;
-  background-image: url('/public/images/megaphone.png');
+  background-image: url('/images/megaphone.png');
   background-size: cover;
 }
 
 .list-item:hover .promo-icon {
   width: 30px;
   height: 30px;
-  background-image: url('/public/images/megaphone.gif');
+  background-image: url('/images/megaphone.gif');
   background-size: cover;
 }
 </style>
