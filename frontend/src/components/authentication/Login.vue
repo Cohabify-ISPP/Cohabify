@@ -1,4 +1,5 @@
 <template>
+    <Navbar />
     <div class="container d-flex justify-content-center align-items-center  vh-100">
         <div class="text-center">
             <!-- Modal de Bootstrap que se mostrará -->
@@ -41,6 +42,7 @@
                             data-callback="handleGoogleOauth">
                         </div>
                         <div class="g_id_signin" data-type="standard"></div>
+                        <button v-if="test" id="bypass" type="button" @click.prevent="bypassOauth">Bypass</button>
                     </div>
                 </form>
             </div>
@@ -61,11 +63,11 @@ export default {
         const username = ref('');
         const password = ref('');
         const fetchError = ref(null);
-        const googleOauth = inject('Vue3GoogleOauth');
         const store = useStore();
         const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
         const router = useRouter();
-
+        const test = ref(false);
+        
         const login = async () => {
             const data = {
                 username: username.value,
@@ -141,12 +143,20 @@ export default {
             })
         };
 
+        const bypassOauth = async () => {
+            const googleData = import.meta.env.VITE_GOOGLE_TEST_TOKEN;
+            handleGoogleOauth(JSON.parse(googleData));
+        };
+
         onMounted(() => {
             const script = document.createElement('script');
             script.src = 'https://accounts.google.com/gsi/client';
             script.async = true;
             script.defer = true;
             document.body.appendChild(script);
+            if (process.env.NODE_ENV === "test") {
+                test.value = true;
+            }
         });
 
         window.handleGoogleOauth = handleGoogleOauth;
@@ -155,9 +165,10 @@ export default {
             username,
             password,
             fetchError,
-            googleOauth,
             clientId,
+            test,
             handleGoogleOauth,
+            bypassOauth,
             login,
             moveToRegister
         };

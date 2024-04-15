@@ -24,17 +24,33 @@
               <label for="cadastre" class="form-label text-white"><strong>Catastro</strong></label>
               <input type="text" class="form-control" id="cadastre" v-model="cadastre" required
                 placeholder="12345678901234567890..." minlength="20" maxlength="20">
+          
             </div>
             <div class="mb-3  text-start col">
               <label for="location" class="form-label text-white"><strong>Ubicación</strong></label>
-              <input type="text" class="form-control" id="location"  maxlength="100" v-model="location" required placeholder="C/...">
+              <input type="text" readonly class="form-control" id="location"  maxlength="100" v-model="location" required placeholder="C/...">
+            </div>
+          </div>
+          <div class="row  mb-3">
+            <div class="mb-3  text-start col" style="display: flex; justify-content: center;">
+              <button
+              style="margin-right: 10px; max-height: 36px;"
+              type="button"
+              class="btn btn-success"
+              @click.prevent="fetchCadastre"
+            >
+              Buscar
+            </button>
+            </div>
+            <div class="mb-3  text-start col">
+              <label for="location" class="form-label text-white"><strong>Seleccionado: {{ selectedCadastre }}</strong></label>
             </div>
           </div>
           <div class="row  mb-3">
             <div class="col text-start">
               <label for="area" class="form-label text-white"><strong>Superficie</strong></label>
               <div class="input-group">
-                <input type="number" class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
+                <input type="number" readonly class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
                 <span class="input-group-text" style="color: grey;">m²</span>
               </div>
 
@@ -123,7 +139,7 @@
             <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
           </div>   
           <div class="row d-flex mb-2">
-            <div class="btn-group" role="group"  style="max-height: 60px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
+            <div class="btn-group" role="group"  style="max-height: 180px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
               <div class="tags-container">
               <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
               :class="{ 'selected': selectedTags.some(selectedTag => selectedTag.id === tag.id), 'unselected': !selectedTags.some(selectedTag => selectedTag.id === tag.id) }">
@@ -194,6 +210,7 @@ export default {
     const selectedTags = ref([])
     const tags = ref([])
     const success = ref(false)
+    const selectedCadastre = ref('')
     
 
     //ADVERTISEMENT
@@ -251,6 +268,7 @@ export default {
         cadastre.value = ad.value.house.cadastre;
         heating.value = ad.value.house.heating;
         houseId.value = ad.value.house.id;
+        selectedCadastre.value = ad.value.house.cadastre;
         for (let i = 0; i < ad.value.house.tags.length; i++) {
           toggleTag(ad.value.house.tags[i]);
         }
@@ -370,7 +388,26 @@ export default {
           return image.startsWith('/') ? import.meta.env.VITE_BACKEND_URL + image : image
         }
 
-    
+    const fetchCadastre = async () => {
+      try{
+        const response = await fetch(`https://ovc.catastro.meh.es/OVCServWeb/OVCWcfCallejero/COVCCallejeroCodigos.svc/json/Consulta_DNPRC_Codigos?RefCat=${cadastre.value}`)
+        if (response.ok) {
+          const data = await response.json();
+          if (data.consulta_dnprcResult.control.cuerr){
+           console.error(data.consulta_dnprcResult.lerr[0].des);
+          }
+          location.value = data.consulta_dnprcResult.bico.bi.ldt;
+          area.value = data.consulta_dnprcResult.bico.bi.debi.sfc;
+          selectedCadastre.value = cadastre.value;
+
+        } else {
+          window.location.href = "/404";
+        }
+      }catch (error){
+        console.error("Error:", error);
+        alert("Catastro no encontrado");
+      }
+    }
 
     const register = () => {
 
@@ -379,10 +416,15 @@ export default {
         return;
       }
       if (selectedTags.value.length === 0) {
-        alert("Selecciona al menos un tag");
+        alert("Selecciona al menos una etiqueta");
         return;
       }
       
+      if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
+        alert("Selecciona un catastro válido");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("string-data", new Blob([JSON.stringify({
         id: ad.value.id,
@@ -399,7 +441,7 @@ export default {
           floor: floor.value,
           area: area.value,
           location: location.value,
-          cadastre: cadastre.value,
+          cadastre: selectedCadastre.value,
           heating: heating.value,
           tags: selectedTags.value
         }
@@ -418,7 +460,7 @@ export default {
         body: formData,
       })
         
-        .then(response => console.log(response.json()))
+        .then(response => response.json())
         .then(jsonData => {
           success.value = true;
           setTimeout(() => {
@@ -461,7 +503,9 @@ export default {
       auth,
       ad,
       imagesBack,
-      getImageUrl
+      getImageUrl,
+      fetchCadastre,
+      selectedCadastre
 
     }
   },

@@ -1,33 +1,21 @@
 package org.ispp4.cohabify.house;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.coyote.BadRequestException;
-import org.bson.types.ObjectId;
 import org.ispp4.cohabify.tag.Tag;
 import org.ispp4.cohabify.tag.TagService;
 import org.ispp4.cohabify.user.Gender;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BeanPropertyBindingResult;
 
-import jakarta.validation.Valid;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class HouseControllerTest {
@@ -53,11 +41,19 @@ public class HouseControllerTest {
 
     @Test
     public void testCreateNewHouseWithCorrectData() {
-        List<String> authorities = new ArrayList<String>();
+        List<String> authorities = new ArrayList<>();
         authorities.add("User");
-        User user = new User("test", "test", null, null, "test@gmail.com", null, "descripcion test", Plan.BASIC, Gender.FEMENINO, null, true, authorities, null, null);
-        user.setIsOwner(false);
-        user.setPhone("666777666");
+        User user = new User();
+        user.setUsername("test000000000000000000000000000000000000000000000000000000");
+        user.setPassword("test");
+        user.setIsOwner(true);
+        user.setPhone("test");
+        user.setEmail("test@gmail.com");
+        user.setDescription("test description");
+        user.setPlan(Plan.BASIC);
+        user.setGender(Gender.FEMENINO);
+        user.setIsVerified(false);
+        user.setAuthorities(authorities); 
         userService.save(user);
 
         House newHouse = new House();

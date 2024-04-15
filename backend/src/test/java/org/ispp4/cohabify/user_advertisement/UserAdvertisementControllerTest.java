@@ -1,20 +1,13 @@
 package org.ispp4.cohabify.user_advertisement;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.ispp4.cohabify.user.Gender;
-import org.ispp4.cohabify.user.Plan;
-import org.ispp4.cohabify.user.User;
-import org.ispp4.cohabify.user.UserService;
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisementController;
 import org.junit.jupiter.api.Test;
+
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisementController;
+import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -28,13 +21,10 @@ public class UserAdvertisementControllerTest {
     @Autowired
     private UserAdvertisementController userAdvertisementController;
 
-    @Autowired
-    private UserService userService;
-
     @Test
     public void testCreateExistingUserAdvertisement() {
         UserAdvertisement existingAd = userAdvertisementService.findAll().get(0);
-        ResponseEntity<UserAdvertisement> response = userAdvertisementController.processCreationForm(existingAd);
+        ResponseEntity<UserAdvertisement> response = userAdvertisementController.createOrEditUserAd(existingAd);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
@@ -65,7 +55,7 @@ public class UserAdvertisementControllerTest {
     //     newAd.setEntranceDate(LocalDate.now());
     //     newAd.setMaxCohabitants(2);
         
-    //     ResponseEntity<UserAdvertisement> response = userAdvertisementController.processCreationForm(newAd);
+    //     ResponseEntity<UserAdvertisement> response = userAdvertisementController.createOrEditUserAd(newAd);
     //     userService.deleteById(user.getId());
 
     //     assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -78,7 +68,7 @@ public class UserAdvertisementControllerTest {
     public void testCreateNewUserAdvertisementWithAllFieldsNull() {
         UserAdvertisement nullAd = new UserAdvertisement();
 
-        ResponseEntity<UserAdvertisement> response = userAdvertisementController.processCreationForm(nullAd);
+        ResponseEntity<UserAdvertisement> response = userAdvertisementController.createOrEditUserAd(nullAd);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }

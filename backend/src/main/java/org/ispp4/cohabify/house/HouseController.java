@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.user.User;
-import org.ispp4.cohabify.user.UserService;
+import org.ispp4.cohabify.utils.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +25,12 @@ import jakarta.validation.Valid;
 public class HouseController {
     
     private final HouseService houseService;
-    private final UserService userService;
-
+    private Global global;
 
     @Autowired
-    public HouseController(HouseService houseService, UserService userService) {
+    public HouseController(HouseService houseService, Global global) {
         this.houseService = houseService;
-        this.userService = userService;
+        this.global = global;
     }
 
     @Transactional(readOnly = true)
@@ -60,7 +59,6 @@ public class HouseController {
         }
     }
 
-
     @Transactional(readOnly = true)
     @GetMapping("/houses/{id}")
     public ResponseEntity<House> getHouseById(ObjectId id) {
@@ -72,24 +70,21 @@ public class HouseController {
         }
     }
 
-    @PutMapping("/houses/like/{id}/{raterId}")
-    public ResponseEntity<House> modifyRaters(@PathVariable("id") ObjectId id,
-            @PathVariable("raterId") ObjectId raterId) {
+    @PutMapping("/houses/like/{id}")
+    public ResponseEntity<House> toggleLike(@PathVariable("id") ObjectId id) {
 
-            House house = houseService.findById(id).get();
+        House house = houseService.findById(id).get();
+        User raterUser = global.getCurrentUser(); 
+
         try {
             if (house == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            
-            } else {    
-                Optional<User> optionalRaterUser = userService.findById(raterId);
-                if (optionalRaterUser.isPresent() == false) {
+            } else {
+                if (raterUser == null) {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
                 } else {
-                    User raterUser = optionalRaterUser.get();
                     List<User> raters = house.getLikes();
-                    Optional<User> foundUser = raters.stream().filter(x-> x.getId().equals(raterId)).findFirst();
+                    Optional<User> foundUser = raters.stream().filter(x-> x.getId().equals(raterUser.getId())).findFirst();
                     
                     if (foundUser.isPresent()) {
                         raters.remove(foundUser.get());

@@ -1,10 +1,8 @@
 package org.ispp4.cohabify.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -57,15 +55,16 @@ public class UserServiceTest {
         User foundUser = userService.getUserByUsername("test");
         assertNotNull(foundUser);
         userService.deleteById(user.getId());
+
     }
 
     @Test
     void shouldFindByNameAndTlf(){
         User user = new User();
-        user.setUsername("test");
+        user.setUsername("test2");
         user.setPhone("666666666");
         user = userService.save(user);
-        User foundUser = userService.getUserByUsernameAndPhone("test", "666666666");
+        User foundUser = userService.getUserByUsernameAndPhone("test2", "666666666");
         assertNotNull(foundUser);
         userService.deleteById(user.getId());
     }

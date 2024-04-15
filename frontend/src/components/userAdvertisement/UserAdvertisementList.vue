@@ -2,7 +2,6 @@
 import { ref, onMounted, computed } from 'vue';
 import Navbar from '../Navbar.vue';
 
-
 export default {
 
   setup() {
@@ -20,6 +19,7 @@ export default {
     const filtered = ref(false);
     const empty = ref(false);
     const searchTerm = ref('');
+    const divIsHidden = ref(false);
 
     const fetchAdvertisements = async () => {
       try {
@@ -95,10 +95,29 @@ export default {
     }
 
     const currentAdvertisements = computed(() => {
-      return filtered.value ? filteredAdvertisements.value : userAds.value
+      const ads = filtered.value ? filteredAdvertisements.value : userAds.value;
+
+      const orderedAds = ads.sort((a, b) => {
+          if (a.promotionExpirationDate === null && b.promotionExpirationDate === null) {
+              return 0; 
+          } else if (a.promotionExpirationDate === null) {
+              return 1; 
+          } else if (b.promotionExpirationDate === null) {
+              return -1; 
+          }
+
+          const dateA = new Date(a.promotionExpirationDate);
+          const dateB = new Date(b.promotionExpirationDate);
+          return dateA - dateB;
+          });
+      return orderedAds;
     })
 
     const toggleTag = (tag) => {
+      if (divIsHidden.value) {
+        
+        return;
+      }
       const index = tagsSeleccionadas.value.indexOf(tag);
       if (index !== -1) {
         tagsSeleccionadas.value.splice(index, 1);
@@ -109,11 +128,10 @@ export default {
 
     function toggleDivVisibility() {
       var div17 = document.getElementById('div-17');
+      divIsHidden.value = !divIsHidden.value;
       div17.classList.toggle('hidden');
       var filters = document.getElementById('filterContainer');
       filters.classList.toggle('hidden');
-      
-
     }
 
     const filteredUserAdsByTags = computed(() => {
@@ -140,7 +158,6 @@ export default {
         }
       })
       filtered.value = true;
-    
 }
 
     onMounted(() => {
@@ -164,7 +181,8 @@ export default {
       empty,
       filtered,
       searchTerm,
-      search
+      search,
+      divIsHidden
     }
   },
 }
@@ -173,64 +191,69 @@ export default {
 <template>
   <Navbar />
   <div style="display: flex; flex-direction: row; height:100%">
-    <div id="filterContainer" class="container-fluid" style="padding-left:0; flex-basis:20vw; flex-shrink:0; transition: opacity 0.3s ease, visibility 0.3s ease;">
-      <div class="col filter-column align-items-center" id="filters" style="height:auto;  overflow: hidden; ">
-        <form class="needs-validation mb-4" style="width:90%" novalidate>
-          <div class="d-flex justify-content-between m-1 mt-4 mr-3" style="width: 100%; height: 30px; border-bottom-right-radius: 0px;">
-            <div>
-              <p class="m-1">Máx. Presupuesto</p>
-            </div>
-            <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="budget = 0" style="width:2vw; height: 2vw;">
-              <i class="bi bi-x-lg"></i>
+    
+      <div id="filterContainer" class="container-fluid" style="padding-left:0; flex-basis:20vw; flex-shrink:0;">
+        
+        <div class="col filter-column pt-4" id="filters" style="height:auto;  overflow: hidden; padding: 10px;">
+          
+          <div class="d-flex flex-row-reverse">
+            <button class="form-button  rounded-5 d-flex align-items-center" @click.prevent="toggleDivVisibility" style="height: 40px;">
+              <span class="material-symbols-outlined">
+                keyboard_double_arrow_left
+              </span>
             </button>
           </div>
-          <input type="range" class="form-range" min="0" max="5000" step="50" v-model="budget" id="budgetVal"
-            :class="{ 'is-invalid': errors.includes('budgetVal') }">
-          <b>{{ budget == 0 ? '-' : budget == 5000 ? '+ ' + budget.toString() + '€/mes' : '<= ' + budget.toString() + '€/mes' }}</b>
-
-              <div v-if="!empty">
-                <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: auto; text-wrap:nowrap">
-                  <p class="m-1">Máx. Inquilinos</p>
-                  <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="cohabitants = 0" style="width:2vw; height: 2vw;">
-                    <i class="bi bi-x-lg"></i>
-                  </button>
-                </div>
-                <input type="range" class="form-range" min="0" max="10" step="1" v-model="cohabitants"
-                  id="cohabitantsVal" :class="{ 'is-invalid': errors.includes('cohabitantsVal') }">
-                <b>{{ cohabitants == 0 ? '-' : cohabitants == 10 ? '+ ' + cohabitants.toString() : '<= ' + cohabitants.toString() }}</b>
-          </div>
-
-          <div v-if="!empty">
-            <div class="mt-3 d-flex justify-content-between m-1" :invalid="true" style="width: 100%; height: 30px;">
-              <p class="m-1">Fecha de entrada</p>
-              <button class="btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center px-1 py-1" @click.prevent="cohabitants = null" style="width:2vw; height: 2vw;">
-                <i class="bi bi-x-lg"></i>
-              </button>
+          <form class="needs-validation mb-4" novalidate>
+            <div class="d-flexW " style="width: 100%; height: 30px;">
+              <div>
+                <p >Máx. Presupuesto</p>
+              </div>
             </div>
-            <input type="date" v-model="entranceDate" id="entranceDate"  class="form-control" :class="{
-              ' is-invalid':
-                errors.includes('entranceDateVal')
-            }">
-                    <b>{{ entranceDate ? entranceDate : '-' }}</b>
+            <input type="range" class="form-range" min="0" max="5000" step="50" v-model="budget" id="budgetVal"
+              :class="{ 'is-invalid': errors.includes('budgetVal') }">
+            <b>{{ budget == 0 ? '-' : budget == 5000 ? '+ ' + budget.toString() + '€/mes' : '<= ' + budget.toString() + '€/mes' }}</b>
+
+                <div v-if="!empty">
+                  <div class="mt-3 d-flex" :invalid="true" style="width: 100%; height: 30px; text-wrap:nowrap">
+                    <p>Máx. Inquilinos</p>
+                  </div>
+                  <input type="range" class="form-range" min="0" max="10" step="1" v-model="cohabitants"
+                    id="cohabitantsVal" :class="{ 'is-invalid': errors.includes('cohabitantsVal') }">
+                  <b>{{ cohabitants == 0 ? '-' : cohabitants == 10 ? '+ ' + cohabitants.toString() : '<= ' + cohabitants.toString() }}</b>
+            </div>
+
+            <div v-if="!empty">
+              <div class="mt-3 d-flex" :invalid="true" style="width: 100%; height: 30px;">
+                <p >Fecha de entrada</p>
               </div>
-              <hr>
-              <div class="d-flex justify-content-center mb-2" >
-                <button type="button" class="btn btn-primary" style="margin-right:4px" @click.prevent="errors = []; applyFilters()">Aplicar</button>
-                <button class="btn btn-danger ml-2" style="margin-left:4px" @click.prevent="errors = [];filtered=false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
-              </div>
-        </form>
+              <input type="date" v-model="entranceDate" id="entranceDate"  class="calendar-input" :class="{
+                ' is-invalid':
+                  errors.includes('entranceDateVal')
+              }">
+                      <b>{{ entranceDate ? entranceDate : '-' }}</b>
+                </div>
+              </form>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                          <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
+                          <button class="btn btn-danger" @click="errors=[]; filtered = false;filtered=false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
+                      </div>
+    
       </div>
+    
     </div>
+  
+    
     <div class="div-2" style="flex-basis:3">
       <div class="div-13">
         <div class="column-4">
           <div class="div-14">
-            <div class="search-bar">
+            <div class="search-bar w-100">
               <form class="d-flex w-100 justify-content-between">
-                <div id="searchForm" style="width:95%">
-                  <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
+                <div id="searchForm" style="width:90%">
+                  <input class="searchInput" v-model= "searchTerm" type="text" style="color:black; padding-bottom: 1%;" id="searchInput" placeholder="Busco..." />
                 </div>
-                <button class="searchButton d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
+                <button class="searchButton d-flex align-items-center" style="padding:1%;" type="submit" @click.prevent="search">
                   <img src="/images/search.png" alt="Buscar" />
                 </button>
                 <button @click.prevent="toggleDivVisibility" class="searchButton d-flex align-items-center">
@@ -242,8 +265,7 @@ export default {
             <div class="div-17" id="div-17">
               <div class="tags-container">
                 <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)" :class="{
-              ' selected': tagsSeleccionadas.includes(tag), 'unselected': !tagsSeleccionadas.includes(tag)
-            }">
+              ' selected': tagsSeleccionadas.includes(tag) && !divIsHidden, 'unselected': !tagsSeleccionadas.includes(tag) && !divIsHidden}" v-show="!divIsHidden">
                   <b>{{ tag.tag }}</b>
                 </span>
               </div>
@@ -251,41 +273,72 @@ export default {
           </div>
         </div>
       </div>
-      <div class="box list-item" style="width:90%; align-items:center" v-for="anuncio in currentAdvertisements" :key="anuncio">
-        <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + anuncio?.id)">
-          <div class="inside-box" style="width: 100%; display: flex; align-items: center;">
-            <img class="imagen-circulo" :src="anuncio?.author?.imageUri" alt="Imagen del usuario"
-              style="margin-right: 10px;">
-
-            <div class="columna-informacion" style="flex: 1;">
-              <div class="user-name" style="text-align: left;">{{ anuncio?.author?.username }}<img v-if="anuncio?.author?.plan === 'explorer'" 
-                style="margin-left: 6px; max-height: 35px;"
-                src="/images/verificado.png"
-                loading="lazy"
-              /></div>
-              <div class="text-truncate"
-                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-right: 4vh;">
-                <span>{{ anuncio?.desiredLocation }}</span>
-                <h3><b>{{ anuncio?.maxBudget }}€/mes</b></h3>
-                <h3><b>Máximo {{ anuncio?.maxCohabitants }} inquilinos</b></h3>
+      <div class="list-container mt-4" >
+      <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="anuncio" :class="{ highlighted: advertisement.promotionExpirationDate !== null }" >
+        <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + advertisement?.id)">
+          <div class="inside-box" >
+            <img class="imagen-circulo" :src="advertisement?.author?.imageUri" alt="Imagen del usuario" style="margin-right: 10px;">
+               
+          <div class="list-item-content">
+            <div class="d-flex justify-content-between align-items-center w-100" >
+              <div class="d-flex align-items-center">
+                <h3>{{ advertisement?.author?.username }}</h3><img v-if="advertisement?.author?.plan === 'explorer'" style="margin-left: 6px; max-height: 40px;" src="/images/verificado.png" loading="lazy"/>  
               </div>
-              <div class="tags-container" style="display: flex; align-items: center;">
-                <span v-for="(tag, index) in anuncio?.author?.tag.slice(0, 8)" :key="index" class="tag selected">
+                <h3><b>{{ advertisement.maxBudget }}€/mes</b></h3>
+            </div>
+            <div class="d-flex justify-content-between w-100">
+                <b>{{ advertisement.desiredLocation }}</b>
+
+                <div class="d-flex display-inline-flex">
+                    <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
+                    <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b;"> {{ advertisement.author.likes.length }} </span>
+                    <span style="color: #e87878;" class="material-icons">favorite</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between w-100">
+              <b>Máximo {{ advertisement.maxCohabitants }} inquilino(s)</b>
+            </div>
+          
+                                
+            <div class="d-flex justify-content-between w-100 mt-3 h-100 align-items-center">
+              <div class="d-flex align-items-center" style="width:100%;overflow: hidden;">
+                <span v-for="(tag, index) in advertisement?.author?.tag.slice(0, 6)" :key="index" class="tag selected" style=" white-space: nowrap;">
                   <b>{{ tag.tag }}</b>
                 </span>
               </div>
+              <div class="d-flex justify-content-end w-50 h-100 align-items-center">
+                  <div class="d-flex flex-column">
+                    <button  class="btn btn-warning active" style="height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" v-if="advertisement.promotionExpirationDate !== null">
+                      <b>Promocionado</b>
+                      <div class="promo-icon"></div>
+                    </button>
+                  </div>
+                </div>
             </div>
+            
           </div>
-
+          </div>
         </a>
+        </div>
+      </div>
       </div>
     </div>
-  </div>
 </template>
 
-
-
 <style scoped>
+.slide-enter-active, .slide-leave-active {
+  transition: .3s;
+}
+.slide-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+
 .div-2 {
   display: flex;
   flex-direction: column;
@@ -370,7 +423,7 @@ export default {
   align-items: center;
   flex-wrap: wrap;
   white-space: initial;
-  padding: 10px 50px;
+  padding: 0 50px 0 0;
 }
 
 @media (max-width: 991px) {
@@ -430,7 +483,8 @@ export default {
   display: flex;
   margin-left: 1vw;
   max-width: 100%;
-  justify-content: space-between;
+  justify-content: center; 
+  align-items: center; 
   gap: 20px;
 }
 
@@ -446,16 +500,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   background-color: rgba(182, 205, 239, 0);
-}
-
-.etiqueta {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 15px;
-  border: 1px solid #28426B;
-  background-color: #FFFFFF;
-  color: #28426B;
 }
 
 .tag {
@@ -474,23 +518,15 @@ export default {
   color: #FFFFFF;
 }
 
-.user-name {
-  color: #232323;
-  align-self: start;
-  margin-top: 15px;
-  font: 700 30px Karla, sans-serif;
-}
-
 .imagen-circulo {
   position: relative;
-  width: 15vh;
-  height: 15vh;
+  width: 17vh;
+  height: 17vh;
   overflow: hidden;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: auto;
 }
 
 .imagen-circulo img {
@@ -499,16 +535,6 @@ export default {
   object-fit: cover;
   border-radius: 50%;
   display: block;
-}
-
-.columna-informacion {
-  flex: 2;
-  padding: 1%;
-  max-height: 20vh;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font: 400 20px Karla, sans-serif;
 }
 
 .searchInput {
@@ -540,6 +566,83 @@ export default {
   max-width: 0;
   transition: opacity 0.2s ease, visibility 0.2s ease;
 }
+.highlighted {
+    background-color: #d4e4ff;
+    border: 2px solid rgb(5, 92, 167);
+}
+.form-range::-webkit-slider-thumb {
+  background: #a4c7ff; 
+}
+
+.form-range::-moz-range-thumb {
+  background: #a4c7ff; 
+}
+
+.form-range::-ms-thumb {
+  background: #a4c7ff;
+}
+
+.hidden {
+  opacity: 0;
+  max-height: 0;
+  max-width: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.form-button {
+  background: #28426B;
+}
+
+.form-button:hover {
+    border-color:#ffffff;
+}
+
+.form-button:active {
+    background: #3f5982;
+}
+
+.calendar-input {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  color-scheme: black;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+
+.calendar-input:focus {
+  background-color: #cce4f7;
+}
 
 
+.promo-button {
+  margin-right: 1vw;
+  height: 5.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.promo-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  background-image: url('/public/images/megaphone.png');
+  background-size: cover;
+}
+
+.list-item:hover .promo-icon {
+  width: 30px;
+  height: 30px;
+  background-image: url('/public/images/megaphone.gif');
+  background-size: cover;
+}
 </style>

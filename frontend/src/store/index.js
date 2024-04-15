@@ -4,6 +4,7 @@ const store = createStore({
   state: {
     user: {},
     googleUser: {},
+    houseAdvertisement: {},
   },
   mutations: {
     cargarUser(state, user) {
@@ -14,6 +15,12 @@ const store = createStore({
     },
     cargarGoogleUser(state, googleUser) {
       state.googleUser = googleUser;
+    },
+    cargarHouseAdvertisement(state, houseAdvertisement) {
+      state.houseAdvertisement = houseAdvertisement;
+    },
+    limpiarHouseAdvertisement(state) {
+      state.houseAdvertisement = {};
     },
   },
   actions: {

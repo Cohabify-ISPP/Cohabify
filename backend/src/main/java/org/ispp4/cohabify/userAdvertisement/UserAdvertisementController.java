@@ -1,10 +1,12 @@
 package org.ispp4.cohabify.userAdvertisement;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.ispp4.cohabify.utils.Global;
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisement;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.rpc.context.AttributeContext.Response;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -39,6 +43,7 @@ public class UserAdvertisementController {
     @GetMapping("")
     public ResponseEntity<List<UserAdvertisement>> getAllUserAdvertisements(@Nullable Principal principal) {
         List<UserAdvertisement> userAdvertisements = userAdvertisementService.findAll();
+		userAdvertisements = userAdvertisementService.checkPromotions(userAdvertisements);
 		if(principal != null) {
 			User user = userService.getUserByUsername(principal.getName());
 			if(user.getPlan().equals(Plan.BASIC)) {
@@ -109,14 +114,10 @@ public class UserAdvertisementController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<UserAdvertisement> processCreationForm(@RequestBody UserAdvertisement userAdvertisement) {		
+	public ResponseEntity<UserAdvertisement> createOrEditUserAd(@RequestBody UserAdvertisement userAdvertisement) {
+		
 		try {
 			if(userAdvertisement.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
-				Optional<UserAdvertisement> advertisement = userAdvertisementService.findByAuthorId(userAdvertisement.getAuthor().getId());
-				if(advertisement.isPresent()) {
-					throw new Exception("User already has an advertisement created");
-				}
-
 				UserAdvertisement res = userAdvertisementService.save(userAdvertisement);
 				return new ResponseEntity<UserAdvertisement>(res, HttpStatus.CREATED);
 			} else {
@@ -126,4 +127,17 @@ public class UserAdvertisementController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@PostMapping("promote/{id}")
+	public ResponseEntity<Void> promoteAd(@PathVariable ObjectId id) {
+		if(!userAdvertisementService.findById(id).get().getAuthor().getUsername().equals(global.getCurrentUser().getUsername())||!userAdvertisementService.findById(id).isPresent()){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }else{
+            UserAdvertisement ad = userAdvertisementService.findById(id).get();
+            ad.setPromotionExpirationDate(LocalDate.now().plusDays(1));
+            userAdvertisementService.save(ad);
+        return new ResponseEntity<>(HttpStatus.OK);
+        }
+	}
+	
 }

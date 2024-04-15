@@ -142,6 +142,7 @@ export default {
                 }
             }
             deleteFile();
+            router.push("/user/" + user.value.id);
         };
 
         const onDragover = (event) => {
@@ -291,7 +292,7 @@ export default {
                     <div class="botones" style="margin-top: 5%;">
                         <div class="d-flex justify-content-center align-items-center">
                             <button @click.prevent="updateUserProfile" type="button" class="button boton"
-                                style="text-wrap: nowrap; width:100%"><strong>Guardar cambios <i class="bi bi-check"
+                                style="text-wrap: nowrap; width:100%; margin-right: 45px;"><strong>Guardar cambios <i class="bi bi-check"
                                         style="margin-left: 5px;"></i></strong></button>
                             <button @click.prevent="cancelChanges" type="button" class="button boton-cancelar"
                                 style="text-wrap: nowrap; width:100%;"><strong>Cancelar cambios <i
@@ -441,7 +442,7 @@ export default {
     justify-content: center;
     align-items: center;
     margin-left: 1%;
-    background-color: #28426B;
+    background-color: #179112;
     border-radius: 10px;
     width: 27%;
     height: 5vh;
@@ -453,7 +454,7 @@ export default {
     justify-content: center;
     align-items: center;
     margin-left: 1%;
-    background-color:#922631;
+    background-color:#b32432;
     color: #FFFFFF;
     border-radius: 10px;
     width: 27%;

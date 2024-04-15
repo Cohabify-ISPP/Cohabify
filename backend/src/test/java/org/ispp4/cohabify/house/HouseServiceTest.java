@@ -1,15 +1,9 @@
 package org.ispp4.cohabify.house;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.ispp4.cohabify.user.Gender;
-import org.ispp4.cohabify.user.Plan;
-import org.ispp4.cohabify.user.User;
-import org.ispp4.cohabify.user.UserService;
-import org.ispp4.cohabify.userAdvertisement.UserAdvertisement;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
