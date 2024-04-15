@@ -16,6 +16,7 @@ import updateUserDetails from './components/user/updateUserDetails.vue';
 import Error from './components/Error.vue';
 import MyHouseAdvertisementList from './components/houseAdvertisement/MyHouseAdvertisementList.vue';
 import Chat from './components/chat/Chat.vue';
+import DeleteAccount from './components/DeleteAccount.vue';
 
 
 const routes = [
@@ -46,7 +47,10 @@ const routes = [
 
     
     { path: '/advertisements/users/edit/:id', component: EditUserAdvertisement },
-    { path: '/:pathMatch(.*)*', component: Error }
+    { path: '/:pathMatch(.*)*', component: Error },
+
+    { path: '/deleteAccount', component: DeleteAccount },
+
 
 ];
   

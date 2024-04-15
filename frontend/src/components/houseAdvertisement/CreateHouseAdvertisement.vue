@@ -135,8 +135,8 @@
           <div class=" row d-flex mb-2">
             <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
           </div>   
-          <div class="row d-flex mb-4">
-            <div class="btn-group" role="group"  style="max-height: 90px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
+          <div class="row d-flex mb-2">
+            <div class="btn-group" role="group"  style="max-height:  180px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
               <div class="tags-container">
               <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
                 :class="{ 'selected': selectedTags.includes(tag), 'unselected': !selectedTags.includes(tag) }">
@@ -172,7 +172,7 @@
             </div>
             <!--Success-->
             <div class="mt-3">
-              <button style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
+              <button id="btnPublicar" style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
               <button type="submit" class="btn btn-danger" @click="onCancel">Cancelar</button>
             </div>
             <div class="mt-3" v-if="authorAdvertisementsNumber > 0">
@@ -388,16 +388,20 @@ export default {
     
 
     const register = () => {
+      document.getElementById("btnPublicar").disabled = true;
 
       if (images.value.length === 0) {
         alert("Selecciona al menos una imagen");
+        document.getElementById("btnPublicar").disabled = false;
         return;
       }
       if (selectedTags.value.length === 0) {
         alert("Selecciona al menos una etiqueta");
+        document.getElementById("btnPublicar").disabled = false;
         return;
       }
       if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
+        document.getElementById("btnPublicar").disabled = false;
         alert("Selecciona un catastro válido");
         return;
       }

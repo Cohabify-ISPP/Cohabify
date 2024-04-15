@@ -65,7 +65,9 @@ export default {
     };
 
     const saveUserAd = async () => {
+      document.getElementById("btnPublicar").disabled = true;
       if (!validateForm()) {
+        document.getElementById("btnPublicar").disabled = false;
         return;
       }
       try {
@@ -88,6 +90,7 @@ export default {
           router.push(`/advertisements/users/${data.id}`);
         }, 2000);
       } catch (error) {
+        document.getElementById("btnPublicar").disabled = false;
         console.error("Error:", error);
       }
     };
@@ -303,6 +306,7 @@ export default {
             </div>
             <div class="mt-3">
               <button
+                id="btnPublicar"
                 style="margin-right: 10px"
                 type="button"
                 class="btn btn-success"

@@ -40,3 +40,4 @@ google.public.keys=googlePublicKey1,googlePublicKey2
 
 ## Stripe
 stripe.secret.key=stripeKey
+
