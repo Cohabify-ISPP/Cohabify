@@ -63,8 +63,8 @@
                         const { error } = await stripe.redirectToCheckout({
                             lineItems: lineItems.value,
                             mode: 'payment',
-                            successUrl: 'http://localhost:5173/plan?session_id={CHECKOUT_SESSION_ID}',
-                            cancelUrl: 'http://localhost:5173/',
+                            successUrl: window.location.origin+'/plan?session_id={CHECKOUT_SESSION_ID}',
+                            cancelUrl: window.location.origin,
                         });
 
                         if (error) {
