@@ -523,24 +523,34 @@ onMounted(() => {
             <div v-else style="overflow-y: auto; max-height: 50vh">
               <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px" v-if="Object.keys(currentUserHouseAdvertisementRating).length !== 0">
                 <div class="card-body">
-                  <div>
-                    <div class="stars">
-                      <span v-for="star in 5" :key="star" :class="{ active: star <= currentUserHouseAdvertisementRating.rating }">★</span>
+                    <div class="d-flex justify-content-between">
+                      <p style="font-weight: bold; text-align: left" class="card-title">
+                        <img class="rounded-circle" :src="currentUserHouseAdvertisementRating.user.imageUri" style="width: 3vw; height: 3vw; margin-right: 1vw"/>
+                        {{ currentUserHouseAdvertisementRating.user.username }}
+                      </p>
+                      <div class="stars" style="text-align: right;">
+                        <span
+                          v-for="star in 5"
+                          :key="star"
+                          :class="{ active: star <= currentUserHouseAdvertisementRating.rating }"
+                          style="font-size: 1.5em;"
+                          >★</span
+                        > 
+                      </div>
                     </div>
-                  </div>
-                  <p style="font-weight: bold; text-align: left" class="card-title">
-                    <img class="rounded-circle" :src="currentUserHouseAdvertisementRating.user.imageUri" style="width: 3vw; height: 3vw; margin-right: 1vw"/>
-                    {{ currentUserHouseAdvertisementRating.user.username }}
-                  </p>
-                  <p  style="text-align: justify; word-wrap: break-word" class="card-text">
-                    {{ currentUserHouseAdvertisementRating.comment }}
-                  </p>
-                </div>
+                    <p  style="text-align: justify; word-wrap: break-word" class="card-text">
+                      {{ currentUserHouseAdvertisementRating.comment }}
+                    </p>
+                  </div>  
               </div>
               <div v-for="comentario in valorations" :key="comentario">
                 <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px" v-if="comentario.user.username !== currentUser.username">
                   <div class="card-body">
-                    <div>
+                    <div class="d-flex justify-content-between">
+                      <p style="font-weight: bold; text-align: left" class="card-title">
+                        <img class="rounded-circle" :src="comentario.user.imageUri" style="width: 3vw; height: 3vw; margin-right: 1vw"/>
+                        {{ comentario.user.username }}
+                      </p>
                       <div class="stars" style="text-align: right;">
                         <span
                           v-for="star in 5"
@@ -551,10 +561,6 @@ onMounted(() => {
                         >
                       </div>
                     </div>
-                    <p style="font-weight: bold; text-align: left" class="card-title">
-                      <img class="rounded-circle" :src="comentario.user.imageUri" style="width: 3vw; height: 3vw; margin-right: 1vw"/>
-                      {{ comentario.user.username }}
-                    </p>
                     <p  style="text-align: justify; word-wrap: break-word" class="card-text">
                       {{ comentario.comment }}
                     </p>

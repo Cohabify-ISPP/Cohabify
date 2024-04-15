@@ -345,7 +345,7 @@ const fetchValoration = async (id) => {
                                     <span style="color: #e87878;" class="material-icons">favorite</span>
                                     </div>
                                     <div class="d-flex align-items-center" style="margin-right: 0.7vh;">
-                                        <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b"> {{ advertisement.valoration }} </span>
+                                        <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b"> {{ parseFloat(advertisement.valoration.toFixed(2)) }} </span>
                                         <span style="color: #ffa723;" class="material-icons">star</span>
                                     </div>
                                     <div v-if="currentUserIsAuthor(advertisement)" class="d-flex align-items-center">
