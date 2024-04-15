@@ -18,6 +18,7 @@ const fetchError = ref(null);
 const text = ref("");
 const currentUserHouseAdvertisementRating = ref({});
 const rating = ref(0);
+const chatError = ref("");
 function setRating(value) {
   rating.value = value;
 }
@@ -235,6 +236,36 @@ const fetchHouseAdvertisement = () => {
       fetchError.value = error.message;
     });
 };
+
+const openChat = () => {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/chat/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            users: houseAdvertisement.value.tenants,
+        }),
+    })
+    .then(async response => {
+        if (!response.ok) {
+            if(response.status == 409) {
+                chatError.value = "Ya posee un chat con esta persona";
+            } else {
+                throw new Error('No se ha podido crear el chat, código: ' + response.status);
+            }
+        } else {
+            router.push("/chat");
+        }
+        
+    })
+    .catch(error => {
+        console.error(error);
+        chatError.value = "Ha ocurrido un error creando el chat.";
+    })
+}
 
 onMounted(() => {
   fetchHouseAdvertisement();
@@ -480,7 +511,7 @@ onMounted(() => {
                 </span>
               </div>
               
-              <button v-if="currentUser.id !== houseAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
+              <button @click.prevent="openChat()" v-if="currentUser.id !== houseAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
                 <strong style="color: white"
                   >Iniciar chat
                   <i class="bi bi-chat" style="margin-left: 5px"></i
@@ -499,6 +530,9 @@ onMounted(() => {
                   <strong>Eliminar</strong>
                   <span class="material-symbols-outlined" style="margin-left: 0.5rem">delete</span>
                 </button>
+              </div>
+              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== houseAdvertisement.author?.id && chatError != ''">
+                  <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
               </div>
             </div>
           </div>

@@ -198,7 +198,8 @@
           "username": "javgaragu90",
           "name": "Javier García Aguado",
           "password": "$2a$10$N.YNWLUBuyZt3dawPCbTHe2.Ys8VXGglhmwXyAmiHi7uFkrYmfk9u",
-          "isOwner": true, 
+          "isOwner": true,
+          "numAdvertisements": 0, 
           "enabled": true,
           "verificationCode": "60d5ec9af682fbd39a1b8b9eUnStringDe64CaracteresConMuchoRelleno123",
           "phone": "618537466",
@@ -224,6 +225,7 @@
           "name": "Manuela López Pérez",
           "password": "$2a$10$4PzUQ8nmDn7h62ssxQcPwOKjBG3L8FQYVyFgwxHz02mILgwPO3qiG",
           "isOwner": false,
+          "numAdvertisements": 0,
           "enabled": true,
           "verificationCode": "60d5ec9af682fbd39a1b8b9eUnStringDe64CaracteresConMuchoRelleno123",
           "phone": "618592566",
@@ -486,5 +488,45 @@
           "date": "2024-02-25",
           "comment": "Es un piso muy sucio y con mala ventilación"
       }
+  ],
+  "messages": [
+    {
+        "id": "60d5ec9af682fbd39a1b8bfe",
+        "text": "Hola!",
+        "timeSent": "2024-04-10T14:30",
+        "sender": {
+            "id": "60d5ec9af682fbd39a1b8b9d"
+        }
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bff",
+        "text": "Buenos días!",
+        "timeSent": "2024-04-10T14:37",
+        "sender": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+        }
+    }
+  ],
+  "chats": [
+    {
+        "id": "60d5ec9af682fbd39a1b8c00",
+        "isAccepted": true,
+        "users": [
+            {
+                "id": "60d5ec9af682fbd39a1b8b9d"
+            },
+            {
+                "id": "60d5ec9af682fbd39a1b8b9e"
+            }
+        ],
+        "messages": [
+            {
+                "id": "60d5ec9af682fbd39a1b8bfe"
+            },
+            {
+                "id": "60d5ec9af682fbd39a1b8bff"
+            }
+        ]
+    }
   ]
 }

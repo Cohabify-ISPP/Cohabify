@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import Navbar from '../Navbar.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
+import { loadStripe } from '@stripe/stripe-js';
 
 const price = ref(0)
 const meters = ref(0)
@@ -21,23 +22,82 @@ const isLoading = ref(true)
 const showFilters = ref(false)
 const searchTerm = ref('')
 const router = useRouter()
-const user = computed(() => useStore().state.user)
+const store = useStore()
+const user = computed(() => store.state.user)
+const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const loading = ref(false);
+const lineItems = ref(null);
+
+
 
 onMounted(() => {
-
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    const houseId = urlParams.get('houseId');
     if (user) {
-        fetchMyAdvertisements()
+        console.log(user.value)
+        if (sessionId){
+            fetchPromotions(sessionId,houseId)
+        }else{
+            fetchMyAdvertisements()
+        }
     } else {
         const store = useStore()
         store.watch(
             () => store.state.user,
             (newValue, oldValue) => {
                 user.value = newValue
+                if (sessionId){
+                    fetchPromotions(sessionId,houseId)
+                }
                 fetchMyAdvertisements()
+                
             }
         )
-    }
+    }  
 })
+
+const handleCheckout = async (id) => {
+
+        lineItems.value = [{ price: 'price_1P4oHsBofFRUNSKsMTvgLfJE', quantity: 1}];
+        if (lineItems.value !== null) {
+            const stripe = await stripePromise;
+            const { error } = await stripe.redirectToCheckout({
+                lineItems: lineItems.value,
+                mode: 'payment',
+                successUrl: 'http://localhost:5173/myAdvertisements/house?session_id={CHECKOUT_SESSION_ID}&houseId=' + id,
+                cancelUrl: 'http://localhost:5173/',
+            });
+
+            if (error) {
+                console.error(error);
+            }
+        } 
+    };
+
+const fetchPromotions = (sessionId,houseId) => {
+    const response = fetch(import.meta.env.VITE_BACKEND_URL + '/api/stripe/session', {
+            method: 'POST',
+            headers: {
+                'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ sessionId: sessionId })
+        }).then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else { 
+                throw new Error('Error al cargar la sesión de stripe');
+            }
+            }) 
+            .then(jsonData => {
+                promoteHouseAd(houseId);
+            })
+            .catch(error => {
+                isLoading.value = false
+                fetchError.value = error
+            })
+}
 
 const fetchMyAdvertisements = () => {
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/owner/' + user.value.id, {
@@ -66,7 +126,7 @@ const fetchMyAdvertisements = () => {
 }
 
 const promoteHouseAd = (id) =>{
-    event.stopPropagation();
+    //event.stopPropagation();
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/promote/' + id, {
         method: "POST",
         headers: {
@@ -378,7 +438,7 @@ const applyFilters = () => {
                                         </button>
                                     </div>
                                     <div class="d-flex flex-column align-items-center">
-                                        <button class="btn btn-warning" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="promoteHouseAd(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
+                                        <button class="btn btn-warning" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="handleCheckout(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
                                             Promocionar
                                             <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
                                             campaign

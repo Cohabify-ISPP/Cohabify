@@ -3,6 +3,7 @@ package org.ispp4.cohabify.houseAdvertisement;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -160,6 +161,8 @@ public class HouseAdvertisementControllerTest {
         request.setHouseId(house3.getId());
         request.setImagesB(List.of());
 
+        when(advertisementService.checkPromotions(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
+
         when(houseService.findById(any(ObjectId.class))).thenReturn(Optional.of(house3));
 
         when(advertisementService.findById(advertisement2.getId())).thenReturn(Optional.of(advertisement2));
@@ -178,16 +181,16 @@ public class HouseAdvertisementControllerTest {
         }
     }
 
-    /*
-     * // Testea que un usuario anonimo no tiene acceso anticipado
-     * 
-     * @Test
-     * void testGetAllAdvertisements() throws Exception {
-     * controller.perform(get("/api/advertisements/houses"))
-     * .andExpect(status().isOk())
-     * .andExpect(jsonPath("$", hasSize(1)));
-     * }
-     */
+    
+    // Testea que un usuario anonimo no tiene acceso anticipado
+    
+    @Test
+    void testGetAllAdvertisements() throws Exception {
+        controller.perform(get("/api/advertisements/houses"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(1)));
+    }
+    
 
     // Testea con un usuario basico que no es dueño del anuncio recien creado (No lo
     // ve por falta de acceso anticipado)
