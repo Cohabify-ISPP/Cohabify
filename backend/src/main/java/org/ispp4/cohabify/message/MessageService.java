@@ -23,11 +23,12 @@ public class MessageService {
 
     @Transactional
     public Message saveMessage(Message message, Chat chat){
+        Message savedMessage = messageRepository.save(message);
         List<Message> messages = chat.getMessages();
-        messages.add(message);
+        messages.add(savedMessage);
         chat.setMessages(messages);
         chatService.saveChat(chat);
-        return messageRepository.save(message);
+        return savedMessage;
     }
 
     @Transactional

@@ -6,20 +6,23 @@
         <div class="contacts-list mt-5">
           <h5 class="text-white">Contactos</h5>
           <ul style="max-height: 70vh; overflow-y: auto;">
-            <div v-for="(tenant, index) in houseAdvertisement.tenants" :key="index">
-                <div class="card mb-3 mt-3" style="padding: 10px; background-color: #e1e9f7; height: 30%;">
-                    <div class="card-body">
-                        <div class="d-flex">
-                            <div class="mx-2">
-                                <img :src="tenant.image" style="border-radius: 50%; width: 10vh; height: 10vh;">
+            <div v-for="chat in chats">
+                <div class="card mb-3 mt-3" style="height: 100px; padding: 10px; background-color: #e1e9f7;" @click="selectChat(chat)">
+                    <div class="chat-card-body">
+                        <div class="flex-container" style="height: 100%; width: auto;">
+                            <div class="image-container" v-if="chat.users?.length == 1">
+                                <img :src="chat.users[0].imageUri" class="chat-profile-image">
                             </div>
-                            <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px">
+                            <div class="image-container" v-if="chat.users?.length > 1">
+                                <img :src="chat.users[0].imageUri" class="chat-profile-image">
+                                <img :src="chat.users[1].imageUri" class="chat-profile-image offset">
+                            </div>
+                            <div class="flex-column overflow-auto" style="padding-right: 5px; max-width: 70%; max-height: 100%;">
                                 <div class ="d-flex" style="margin-bottom: 5px;">
-                                    <div class="card-body d-flex align-items-center">
-                                      <h5 style="text-align: left;" class="card-title">{{ tenant.username }}</h5>
+                                    <div class="chat-card-body d-flex align-items-center">
+                                      <h5 style="text-align: left;" class="card-title">{{ chatMembers(chat) }}</h5>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>  
@@ -34,17 +37,20 @@
           <div>
             <div class="card mb-3 mt-5" style="padding: 10px; background-color: #28426bc2; height: 72%; width: 98%; ">
                     <div class="card-body">
-                        <div class="d-flex">
-                            <div class="mx-2">
-                                <img :src="tenant.image" style="border-radius: 50%; width: 10vh; height: 10vh;">
+                      <div class="flex-container" style="height: 100%; width: auto;" v-if="selectedChat != null && selectedChat != undefined">
+                            <div class="image-container" v-if="selectedChat.users?.length == 1">
+                                <img :src="selectedChat.users[0].imageUri" class="chat-profile-image">
                             </div>
-                            <div class="flex-column overflow-auto" style="height:10vh; padding-right: 5px">
+                            <div class="image-container" v-if="selectedChat.users?.length > 1">
+                                <img :src="selectedChat.users[0].imageUri" class="chat-profile-image">
+                                <img :src="selectedChat.users[1].imageUri" class="chat-profile-image offset">
+                            </div>
+                            <div class="flex-column overflow-auto" style="padding-right: 5px; max-width: 70%; max-height: 100%;">
                                 <div class ="d-flex" style="margin-bottom: 5px;">
                                     <div class="card-body d-flex align-items-center">
-                                      <h5 style="text-align: left;" class="card-title text-white">{{ tenant.username }}</h5>
+                                      <h5 style="text-align: left;" class="card-title">{{ chatMembers(selectedChat) }}</h5>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>  
@@ -52,28 +58,16 @@
           </div>
 
           <div class="messages-area" ref="messagesArea">
-                  
-            <div class="message one card c1" >
-                <div class="username">Jhon Doe</div>
-                <p style="padding: 15px;">Hola, soy Jhon Doe.</p>
-                <div class="date">06/04/2024 - 14:30</div>
+            <div v-for="message in selectedChat?.messages" :class="['message', 'one', 'card', message.sender.username === currentUser.username ? 'c2' : 'c1']">
+              <div class="username">{{ message.sender.username }}</div>
+              <p style="padding: 15px;">{{ message.text }}</p>
+              <div class="date">{{ message.timeSent }}</div>
             </div>
-            <div class="message two card c2">
-                <div class="username">Tú</div>
-                <p style="padding: 15px;">Hola Jhon Doe, ¡yo también busco piso! </p>
-                <div class="date">06/04/2024 - 14:30</div>
-            </div>
-            <div class="message one card c1" >
-                <div class="username">Jhon Doe</div>
-                <p style="padding: 15px;">Hola, estoy en búsqueda de un nuevo hogar en el área céntrica de la ciudad. Mi situación actual requiere una reubicación rápida y estoy emocionado por encontrar el lugar perfecto para establecerme. Necesito un apartamento con al menos dos habitaciones, ya que trabajo desde casa y necesito espacio adicional para mi oficina. Mi presupuesto mensual máximo es de $1000, pero estoy dispuesto a considerar ofertas un poco más altas si el lugar cumple con mis requisitos y ofrece comodidades adicionales como estacionamiento, acceso a áreas comunes o una ubicación conveniente cerca de transporte público y tiendas. Estoy buscando un contrato de alquiler a largo plazo, preferiblemente de un año o más, para establecer una sensación de estabilidad en mi vida y en mi trabajo. Además, me gustaría encontrar un lugar que acepte mascotas, ya que tengo un gato que es parte importante de mi vida y mi familia. Si tienes alguna propiedad disponible que pueda ser adecuada para mí, por favor házmelo saber lo antes posible. Estoy dispuesto a hacer una visita virtual o programar una cita para ver el lugar en persona si es necesario. Aprecio cualquier ayuda que puedas brindarme en mi búsqueda de un nuevo hogar. ¡Gracias de antemano por tu tiempo y consideración!</p>
-                <div class="date">06/04/2024 - 14:30</div>
-            </div>
-
           </div>
           <div class="sender-area">
             <div class="input-place">
-              <input placeholder="Send a message." class="send-input" type="text" maxlength="1500">
-                <div class="send">
+              <input v-model="messageInput" placeholder="Send a message." class="send-input" type="text" maxlength="1500">
+                <div class="send" @click="sendMessage()">
                   <i class="bi bi-send-fill"></i>
               </div>
             </div>
@@ -85,27 +79,16 @@
 </template>
 
 <script>
-import { ref, onMounted, onUpdated, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, onUpdated, nextTick } from 'vue';
+import { useStore } from 'vuex';
+import { CohabifyStompClient } from "../../utils/stomp.js";
 
 export default {
   setup() {
-    // Usuarios de ejemplo
-    const houseAdvertisement = ref({
-      tenants: [
-        {
-          username: 'John Doe',
-          genre: 'MASCULINO',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-          image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg'
-        },
-        {
-          username: 'Jane Smith',
-          genre: 'FEMENINO',
-          description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
-          image: 'https://secrecyjewels.es/blog/wp-content/uploads/2022/10/esencia-de-una-persona.jpg'
-        },
-      ]
-    })
+    const store = useStore()
+    const currentUser = computed(() => store.state.user);
+
+    const chats = ref([])
 
     const tenant = ref({
       username: 'John Doe',
@@ -114,7 +97,90 @@ export default {
       image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg'
     })
 
-    const messagesArea = ref(null)
+    const chatId = ref(null);
+    const selectedChat = ref(null);
+    const chatMembers = (chat) => {
+      console.log(chat);
+      return chat.users.map(u => u.username).join(", ");
+    }
+
+    const messagesArea = ref(null);
+    const messageInput = ref("");
+    const stompClient = new CohabifyStompClient();
+    let subscriptions = [];
+
+    onMounted(() => {
+      fetch(import.meta.env.VITE_BACKEND_URL + '/api/chat/', {
+          method: "GET",
+          headers: {
+              'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+          },
+          credentials: "include"
+      })
+      .then(async response => {
+        if (!response.ok) {
+            throw new Error('No se han podido cargar los chats, código: ' + response.status);
+        }
+
+        chats.value = await response.json();
+      })
+      .catch(error => {
+        console.error(error);
+        addSystemMessage("Ha ocurrido un error cargando los chats.");
+      })
+    })
+
+    const selectChat = (chat) => {
+      selectedChat.value = chat;
+      subscribe();
+    }
+
+    async function subscribe() {
+        await subscriptions.forEach(async subscription => {
+          await subscription.unsubscribe(subscription);
+        });
+
+        subscriptions.push(await stompClient.subscribe('/chat/'+ selectedChat.value.id, (ChatMessage) => {
+          addMessage(JSON.parse(ChatMessage.body));
+        }));
+    }
+
+    function getCurrentTimeFormatted() {
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
+      const year = now.getFullYear();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
+    }
+
+    function sendMessage() {
+      if(selectedChat.value != null && selectedChat.value != undefined && 
+        messageInput.value != null && messageInput.value != undefined && messageInput.value != "") {
+        try {
+            console.log("Sending msg: " + messageInput.value + " ; to /chat-msgs/" + selectedChat.value.id)
+            stompClient.send("/chat-msgs/" + selectedChat.value.id, {}, JSON.stringify({'msg': messageInput.value}));
+        } catch(error) {
+          console.error(error);
+          addSystemMessage("El servicio aún no se ha conectado, espere un poco o, si ya lo ha hecho, recargue la página.")
+        }
+      }
+    }
+
+    function addMessage(message) {
+      selectedChat.value.messages.push(message);
+      scrollToBottom();
+    }
+
+    function addSystemMessage(text) {
+      addMessage({
+          "sender": "Sistema",
+          "timeSent": getCurrentTimeFormatted(),
+          "text": text
+        });
+    } 
 
     onMounted(scrollToBottom)
     onUpdated(scrollToBottom)
@@ -126,9 +192,14 @@ export default {
     }
 
     return {
-      houseAdvertisement,
-      tenant,
-      messagesArea
+      currentUser,
+      chats,
+      chatMembers,
+      selectChat,
+      selectedChat,
+      messagesArea,
+      messageInput,
+      sendMessage
     }
   },
 }
@@ -328,5 +399,36 @@ export default {
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.219);
 }
 
+.chat-card-body {
+  height: 100%;
+  color: var(--bs-card-color);
+  padding: 0px;
+}
+
+.flex-container {
+ display: flex;
+ justify-content: space-between; 
+ align-items: center; 
+ padding: 4px 10px;
+ height: 100%;
+ position: relative; 
+}
+
+
+.image-container {
+ height: 90%; 
+}
+
+.chat-profile-image {
+  border-radius: 50%;
+  height: 80%;
+  width: auto;
+  max-width: 20%;
+  position: absolute;
+}
+
+.offset {
+  transform: translate(40%, 15%);
+}
 
 </style>

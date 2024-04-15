@@ -465,5 +465,45 @@
           "date": "2024-02-25",
           "comment": "Es un piso muy sucio y con mala ventilación"
       }
+  ],
+  "messages": [
+    {
+        "id": "60d5ec9af682fbd39a1b8bfe",
+        "text": "Hola!",
+        "timeSent": "2024-04-10T14:30",
+        "sender": {
+            "id": "60d5ec9af682fbd39a1b8b9d"
+        }
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bff",
+        "text": "Buenos días!",
+        "timeSent": "2024-04-10T14:37",
+        "sender": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+        }
+    }
+  ],
+  "chats": [
+    {
+        "id": "60d5ec9af682fbd39a1b8c00",
+        "isAccepted": true,
+        "users": [
+            {
+                "id": "60d5ec9af682fbd39a1b8b9d"
+            },
+            {
+                "id": "60d5ec9af682fbd39a1b8b9e"
+            }
+        ],
+        "messages": [
+            {
+                "id": "60d5ec9af682fbd39a1b8bfe"
+            },
+            {
+                "id": "60d5ec9af682fbd39a1b8bff"
+            }
+        ]
+    }
   ]
 }
