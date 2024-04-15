@@ -113,7 +113,6 @@ export default {
                     });
                 const data = await response.json();
                 valorations.value = data;
-                console.log(valorations.value);
                 for(const rating of valorations.value){
                     if(rating.user.username === currentUser.value.username){
                         currentUserAdvertisementRating.value = rating;
@@ -183,6 +182,10 @@ export default {
         };
 
         const getCommonFlats = async () => {
+            if (currentUser.username == null) {
+                commonHouses.value = [];
+                return;
+            }
             try {
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/users/'+currentUser.value.id+'/ads/'+userAdvertisement.value.author.id,
                     {
@@ -195,7 +198,6 @@ export default {
 
                     if (response.ok) {
                         const data = await response.json();
-                        console.log(data)
                         commonHouses.value = data;
                     } else {
                         router.push(`/404`);
@@ -398,8 +400,7 @@ export default {
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="likes" style="margin-right: 1vw;">
                                 <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || currentUser && userAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || userAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
-                                    <i v-if="userAdvertisement.author?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878" ></i>
-                                    <i v-else class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                                    <i :class="{ 'bi bi-heart-fill': userAdvertisement.author?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !userAdvertisement.author?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: userAdvertisement.author?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426B' }" class="heart-transition" style="margin-top:2px; margin-right: 5px;"></i>
                                 </button>
                                  
                                 <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
@@ -407,9 +408,14 @@ export default {
                             
                             <button @click.prevent="openChat()" v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                             <div class="d-flex col" v-else>
-                                <button type="button" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;" @click="handleCheckout(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
-                                    <strong>Promocionar</strong>
-                                </button>
+                                <div class="d-flex flex-column align-items-center">
+                                        <button class="btn btn-warning" style=" height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="handleCheckout(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
+                                            Promocionar
+                                            <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
+                                            campaign
+                                            </span>
+                                        </button>
+                                </div>
                                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
                                 <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
                             </div>
@@ -470,7 +476,7 @@ export default {
                 <div class="subseccion">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <h1 style="text-align: left;"> {{ userAdvertisement.author?.username}} 
-                            <img v-if="userAdvertisement.author?.plan === 'explorer'"style="max-height: 35px;" src="/images/verificado.png" loading="lazy"/>
+                            <img v-if="userAdvertisement.author?.plan === 'explorer'"style="max-height: 55px;" src="/images/verificado.png" loading="lazy"/>
                             <i :class="{'bi':true,'bi-gender-male': userAdvertisement.author?.gender == 'MASCULINO', 'bi-gender-female':userAdvertisement.author?.gender == 'FEMENINO', 'bi-gender-ambiguous': userAdvertisement.author?.gender == 'OTRO'}"></i>
                         </h1>
                         <button class="btn btn-share" @click="copyToClipboard()">
@@ -694,4 +700,7 @@ export default {
     cursor: not-allowed;
 }
 
+.heart-transition {
+  transition: color 0.3s ease-in-out;
+}
 </style>

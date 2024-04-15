@@ -460,7 +460,7 @@ export default {
         body: formData,
       })
         
-        .then(response => console.log(response.json()))
+        .then(response => response.json())
         .then(jsonData => {
           success.value = true;
           setTimeout(() => {

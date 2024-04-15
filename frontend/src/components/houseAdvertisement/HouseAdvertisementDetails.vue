@@ -291,13 +291,22 @@ onMounted(() => {
             </div>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="createHouseAdvertisementRating">
+            <form @submit.prevent="createHouseAdvertisementRating" class="d-flex flex-column align-items-center">
               <div>
-                <div class="stars-input">
-                  <span v-for="star in 5" :key="star" @click="setRating(star)" :class="{ active: star <= rating }">★</span>
-                </div>
+                  <div class="rating stars-input">
+                    <input value="5" name="rate" id="star5" type="radio" @click="setRating(5)">
+                    <label title="text" for="star5"></label>
+                    <input value="4" name="rate" id="star4" type="radio" @click="setRating(4)">
+                    <label title="text" for="star4"></label>
+                    <input value="3" name="rate" id="star3" type="radio" @click="setRating(3)">
+                    <label title="text" for="star3"></label>
+                    <input value="2" name="rate" id="star2" type="radio" @click="setRating(2)">
+                    <label title="text" for="star2"></label>
+                    <input value="1" name="rate" id="star1" type="radio" @click="setRating(1)">
+                    <label title="text" for="star1"></label>
+                  </div>
               </div>
-              <div class="form-group">
+              <div class="form-group container-fluid">
                 <label for="commentText">Comentario</label>
                 <textarea class="form-control" id="text" v-model="text"
                 ></textarea>
@@ -488,15 +497,14 @@ onMounted(() => {
 
           <div class="d-flex justify-content-center">
             <div class="d-flex justify-content-center align-items-center">
-              <div v-if="currentUser?.id === houseAdvertisement?.author?.id" class="d-flex align-items-center" style="margin-right: 0.7vh;">
-                <span>{{ houseAdvertisement.views }}</span>
-                <span class="material-symbols-outlined">visibility</span>
+              <div v-if="currentUser?.id === houseAdvertisement?.author?.id" class="d-flex align-items-center" style="margin-right: 1vh;">
+                <span style="font-weight: bold; font-size: large; color: #28426b">{{ houseAdvertisement.views }}</span>
+                <span class="material-symbols-outlined" style="color: #28426b; margin-left: 2px;">visibility</span>
               </div>
               <div class="likes" style="margin-right: 1vw">
                 <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
-                    <i v-if="houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top: 2px; margin-right: 5px; color: #e87878"></i>
-                    <i v-else class="bi bi-heart" style="margin-top: 2px; margin-right: 5px; color: #28426b"></i>
-                </button>
+                  <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
+                </button>   
 
                 <span style="font-weight: bold; font-size: large; color: #28426b">
                   {{ houseAdvertisement.house?.likes.length }}
@@ -549,32 +557,44 @@ onMounted(() => {
             <div v-else style="overflow-y: auto; max-height: 50vh">
               <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px" v-if="Object.keys(currentUserHouseAdvertisementRating).length !== 0">
                 <div class="card-body">
-                  <div>
-                    <div class="stars">
-                      <span v-for="star in 5" :key="star" :class="{ active: star <= currentUserHouseAdvertisementRating.rating }">★</span>
+                    <div class="d-flex justify-content-between">
+                      <p style="font-weight: bold; text-align: left" class="card-title">
+                        <img class="rounded-circle" :src="currentUserHouseAdvertisementRating.user.imageUri" style="width: 3vw; height: 3vw; margin-right: 1vw"/>
+                        {{ currentUserHouseAdvertisementRating.user.username }}
+                      </p>
+                      <div class="stars" style="text-align: right;">
+                        <span
+                          v-for="star in 5"
+                          :key="star"
+                          :class="{ active: star <= currentUserHouseAdvertisementRating.rating }"
+                          style="font-size: 1.5em;"
+                          >★</span
+                        > 
+                      </div>
                     </div>
-                  </div>
-                  <p style="font-weight: bold; text-align: left" class="card-title">
-                    <img class="rounded-circle" :src="currentUserHouseAdvertisementRating.user.imageUri" style="width: 3vw; height: 3vw; margin-right: 1vw"/>
-                    {{ currentUserHouseAdvertisementRating.user.username }}
-                  </p>
-                  <p  style="text-align: justify; word-wrap: break-word" class="card-text">
-                    {{ currentUserHouseAdvertisementRating.comment }}
-                  </p>
-                </div>
+                    <p  style="text-align: justify; word-wrap: break-word" class="card-text">
+                      {{ currentUserHouseAdvertisementRating.comment }}
+                    </p>
+                  </div>  
               </div>
               <div v-for="comentario in valorations" :key="comentario">
                 <div class="card card-user mb-3 mt-3 shadow-sm" style="padding: 10px" v-if="comentario.user.username !== currentUser.username">
                   <div class="card-body">
-                    <div>
-                      <div class="stars">
-                        <span v-for="star in 5" :key="star" :class="{ active: star <= comentario.rating }">★</span>
+                    <div class="d-flex justify-content-between">
+                      <p style="font-weight: bold; text-align: left" class="card-title">
+                        <img class="rounded-circle" :src="comentario.user.imageUri" style="width: 3vw; height: 3vw; margin-right: 1vw"/>
+                        {{ comentario.user.username }}
+                      </p>
+                      <div class="stars" style="text-align: right;">
+                        <span
+                          v-for="star in 5"
+                          :key="star"
+                          :class="{ active: star <= comentario.rating }"
+                          style="font-size: 1.5em;"
+                          >★</span
+                        >
                       </div>
                     </div>
-                    <p style="font-weight: bold; text-align: left" class="card-title">
-                      <img class="rounded-circle" :src="comentario.user.imageUri" style="width: 3vw; height: 3vw; margin-right: 1vw"/>
-                      {{ comentario.user.username }}
-                    </p>
                     <p  style="text-align: justify; word-wrap: break-word" class="card-text">
                       {{ comentario.comment }}
                     </p>
@@ -686,7 +706,7 @@ onMounted(() => {
 }
 
 .stars-input span.active {
-  color: gold;
+  color: #ffa723;
 }
 
 .stars span {
@@ -694,7 +714,7 @@ onMounted(() => {
 }
 
 .stars span.active {
-  color: gold;
+  color: #ffa723;
 }
 
 .like-button {
@@ -707,5 +727,43 @@ onMounted(() => {
 .no-clickable {
     cursor: not-allowed;
 }
+
+.rating:not(:checked) > input {
+  position: absolute;
+  appearance: none;
+}
+
+.rating:not(:checked) > label {
+  float: right;
+  cursor: pointer;
+  font-size: 30px;
+  color: #666;
+}
+
+.rating:not(:checked) > label:before {
+  content: '★';
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+  color: #e58e09;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: #ff9e0b;
+}
+
+.rating > input:checked ~ label {
+  color: #ffa723;
+}
+
+.heart-transition {
+  transition: color 0.3s ease-in-out;
+}
+
 
 </style>

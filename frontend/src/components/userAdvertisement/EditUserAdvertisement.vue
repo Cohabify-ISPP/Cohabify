@@ -235,34 +235,35 @@ export default {
               </div>
               <span class="text-danger">{{ errorMessages.desiredLocation }}</span>
               <h5>Estancia</h5>
-              <div class="input-group mb-3 d-flex w-75 align-items-center">
+              <div class="input-group mb-3 d-flex w-75 align-items-center active">
                 <div class="input-up">
                   <label for="entrada">Entrada</label>
                   <div class="d-flex align-items-center">
                     <input
                       type="date"
                       id="entrada"
-                      class="form-control"
-                      style="margin-right: 1vw"
                       aria-label="Cantidad mínima"
                       v-model="userAd.entranceDate"
                       required
                       placeholder="Min..."
+                      class="calendar-input"
+                      style="margin-right: 1vw;"
                     />
                     <h5 style="margin: 0 2vw">-</h5>
                   </div>
                 </div>
                 <div class="input-up">
-                  <label for="salida">Salida</label>
+                  <label for="salida" style="margin-left: 1vw;">Salida</label>
                   <input
                     type="date"
                     id="salida"
-                    class="form-control"
-                    style="margin-left: 1vw"
+                    class="calendar-input"
                     aria-label="Cantidad máxima"
                     v-model="userAd.exitDate"
                     placeholder="Max..."
+                    style="margin-left: 1vw;"
                   />
+                  
                 </div>
               </div>
               <span class="text-danger">{{ errorMessages.entranceDate }}</span>
@@ -391,4 +392,23 @@ input[type="number"] {
   color: white;
 }
 
+.calendar-input {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  color-scheme: black;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+
+.calendar-input:focus {
+  background-color: #cce4f7;
+}
 </style>

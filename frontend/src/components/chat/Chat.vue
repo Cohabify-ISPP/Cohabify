@@ -100,7 +100,6 @@ export default {
     const chatId = ref(null);
     const selectedChat = ref(null);
     const chatMembers = (chat) => {
-      console.log(chat);
       return chat.users.map(u => u.username).join(", ");
     }
 
@@ -160,7 +159,6 @@ export default {
       if(selectedChat.value != null && selectedChat.value != undefined && 
         messageInput.value != null && messageInput.value != undefined && messageInput.value != "") {
         try {
-            console.log("Sending msg: " + messageInput.value + " ; to /chat-msgs/" + selectedChat.value.id)
             stompClient.send("/chat-msgs/" + selectedChat.value.id, {}, JSON.stringify({'msg': messageInput.value}));
         } catch(error) {
           console.error(error);

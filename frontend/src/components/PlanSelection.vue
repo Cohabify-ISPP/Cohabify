@@ -119,7 +119,7 @@
      <div v-if="isLoading" class="spinner-border mt-5" role="status">
                     <span class="visually-hidden">Loading...</span>
     </div>
-    <div  v-else class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 15vw ;">
+    <div  v-else class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 14vw ;">
             <div class="col">
                 <div class="card card1">
                     <h2 class="fw-bold" style="color: #28426B;">Básico</h2>
@@ -221,7 +221,7 @@
 
 .modal-body {
     padding: 30px 15px;
-    text-align: justify;
+    text-align: left;
 }
 .card {
     padding-top: 20px;
