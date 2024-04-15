@@ -128,6 +128,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio</artifactId>
+			<version>10.1.3</version>
+			<scope>compile</scope>
+    </dependency>
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
@@ -136,6 +142,7 @@
 			<groupId>com.stripe</groupId>
 			<artifactId>stripe-java</artifactId>
 			<version>24.0.0</version>
+
 		</dependency>
 	</dependencies>
 
