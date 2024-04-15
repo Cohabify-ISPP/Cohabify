@@ -12,7 +12,7 @@
             const router = useRouter();
             const plan = computed(() => currentUser.value.plan);
             const loggedIn = ref(false);
-            const stripePromise = loadStripe('pk_test_51P2DTpBofFRUNSKsZLVQgYTOY0I6PLl4BP8w6a5y8IYZThREOk8a7dcqu7kXCg8aV9byhdSkZ98Sg3dFL24RzkON00R08XEGbM');
+            const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
             const loading = ref(false);
             const lineItems = ref(null);
             const isLoading = ref(true);

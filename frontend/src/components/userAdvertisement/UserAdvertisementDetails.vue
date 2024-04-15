@@ -2,6 +2,7 @@
 import { ref, onBeforeMount, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { loadStripe } from '@stripe/stripe-js';
 
 export default {
 
@@ -22,6 +23,9 @@ export default {
         const currentUserAdvertisementRating = ref({});
         const erroresComentario = ref(null);
         const commonFlats = ref([]);
+        const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+        const loading = ref(false);
+        const lineItems = ref(null);
 
         const fetchAdvertisement = async () => {
             try {
@@ -216,9 +220,59 @@ export default {
         }
 
         onBeforeMount(() => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            const userId = urlParams.get('userId');
             userAdvertisementId.value = route.params.id;
             fetchAdvertisement();
+            if(sessionId !== null){
+                fetchPromotions(sessionId,userId);
+            }
+            
         });
+
+        const handleCheckout = async (id) => {
+
+            lineItems.value = [{ price: 'price_1P4oHsBofFRUNSKsMTvgLfJE', quantity: 1}];
+            if (lineItems.value !== null) {
+                const stripe = await stripePromise;
+                const { error } = await stripe.redirectToCheckout({
+                    lineItems: lineItems.value,
+                    mode: 'payment',
+                    successUrl: 'http://localhost:5173/advertisements/users/'+ id +'?session_id={CHECKOUT_SESSION_ID}&userId=' + id,
+                    cancelUrl: 'http://localhost:5173/',
+                });
+
+                if (error) {
+                    console.error(error);
+                }
+            } 
+            };
+
+            const fetchPromotions = (sessionId,userId) => {
+            const response = fetch(import.meta.env.VITE_BACKEND_URL + '/api/stripe/session', {
+                method: 'POST',
+                headers: {
+                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sessionId: sessionId })
+            }).then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else { 
+                    throw new Error('Error al cargar la sesión de stripe');
+                }
+                }) 
+                .then(jsonData => {
+                    promoteAd(userId);
+                })
+                .catch(error => {
+                    isLoading.value = false
+                    fetchError.value = error
+                })
+            };
+
         const promoteAd = (id)=>{
             fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/users/promote/' + id, {
                 method: "POST",
@@ -260,6 +314,7 @@ export default {
             currentUserAdvertisementRating,
             erroresComentario,
             commonFlats,
+            handleCheckout,
         }
         
     }
@@ -318,7 +373,7 @@ export default {
                             
                             <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                             <div class="d-flex col" v-else>
-                                <button type="button" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;" @click="promoteAd(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
+                                <button type="button" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;" @click="handleCheckout(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
                                     <strong>Promocionar</strong>
                                 </button>
                                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>

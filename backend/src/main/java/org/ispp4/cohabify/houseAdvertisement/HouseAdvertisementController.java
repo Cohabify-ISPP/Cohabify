@@ -154,6 +154,9 @@ public class HouseAdvertisementController {
             }
             advertisement.setImages(imagesPath);
             advertisement = advertisementService.save(advertisement);
+            User user = global.getCurrentUser();
+            user.setNumAdvertisements(user.getNumAdvertisements() - 1);
+            userService.save(user);
             return ResponseEntity.status(HttpStatus.CREATED)
 							 .body(advertisement);  
         }else{
@@ -273,6 +276,12 @@ public class HouseAdvertisementController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }else{
             advertisementService.deleteById(id);
+            int numAdvertisements= advertisementService.getHousesByUser(global.getCurrentUser().getId()).size();
+            if (numAdvertisements <= 0) {
+                User user = global.getCurrentUser();
+                user.setNumAdvertisements(1);
+                userService.save(user);
+            }
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 

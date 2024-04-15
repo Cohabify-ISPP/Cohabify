@@ -22,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Builder.Default;
 
 @Getter
 @Setter
@@ -49,6 +50,9 @@ public class User extends BaseEntity {
 
     @NotNull
     private Boolean isOwner;
+
+    @NotNull
+    private int numAdvertisements = 0;
     
     @NotNull
     @Size(max = 9)
