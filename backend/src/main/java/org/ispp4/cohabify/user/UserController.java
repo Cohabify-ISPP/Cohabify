@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.authentication.JwtService;
@@ -157,7 +158,7 @@ public class UserController {
             if(request.getChangedImage()) {
                 // Save the image and add the static uri to the user
                 String[] filename_split = image.getOriginalFilename().split("\\.");
-                String filename = _user.getJsonId() + "." + filename_split[filename_split.length-1];
+                String filename = _user.getJsonId() + UUID.randomUUID().toString() + "." + filename_split[filename_split.length-1];
                 String static_path;
                 static_path = storageService.saveImage(filename, image); 
                 

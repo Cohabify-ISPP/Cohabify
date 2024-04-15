@@ -59,7 +59,7 @@ public class HouseAdvertisementService {
 }
 
     public List<HouseAdvertisement> getHousesByUser(ObjectId authorId) {
-        return advertisementRepository.findAll();
+        return advertisementRepository.findByAuthorId(authorId);
     }
 
 

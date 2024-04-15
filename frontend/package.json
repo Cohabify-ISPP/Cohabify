@@ -6,16 +6,19 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
+    "devtest": "cross-env NODE_ENV=test vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "cross-env NODE_ENV=test concurrently --kill-others \"vite\" \"node src/test/test.js\""
   },
   "dependencies": {
-    "@stripe/stripe-js": "^3.2.0",
+    "@stripe/stripe-js": "^3.3.0",
     "@vitejs/plugin-vue": "^5.0.3",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "jwt-decode": "^4.0.0",
     "sockjs-client": "^1.5.0",
+    "selenium-webdriver": "^4.19.0",
     "sonar-scanner": "^3.1.0",
     "stompjs": "^2.3.3",
     "vite": "^5.1.0",
@@ -24,5 +27,9 @@
     "vue-router": "^4.3.0",
     "vue-stripe-js": "^1.0.2",
     "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3"
   }
 }

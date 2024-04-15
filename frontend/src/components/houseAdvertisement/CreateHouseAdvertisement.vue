@@ -5,7 +5,7 @@
     <div v-show="success" class="alert alert-success alert-dismissible fade show" role="alert">
         Anuncio creado con éxito.
       </div>
-    <form @submit.prevent="register">
+    <form v-if="user.numAdvertisements > 0" @submit.prevent="register">
       <div class="row mt-2 justify-content-center">
 
         <div class=" col  justify-content-center" style="padding-right:35px;">
@@ -136,7 +136,7 @@
             <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
           </div>   
           <div class="row d-flex mb-2">
-            <div class="btn-group" role="group"  style="max-height: 60px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
+            <div class="btn-group" role="group"  style="max-height:  180px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
               <div class="tags-container">
               <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
                 :class="{ 'selected': selectedTags.includes(tag), 'unselected': !selectedTags.includes(tag) }">
@@ -172,11 +172,8 @@
             </div>
             <!--Success-->
             <div class="mt-3">
-              <button style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
+              <button id="btnPublicar" style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
               <button type="submit" class="btn btn-danger" @click="onCancel">Cancelar</button>
-            </div>
-            <div class="mt-3" v-if="authorAdvertisementsNumber > 0">
-              <strong>El propietario deberá pagar 5€ por publicar esta nueva vivienda.</strong>
             </div>
           </div>
           </div>
@@ -186,8 +183,9 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, computed } from 'vue'
+import { ref, onBeforeMount, computed,watch } from 'vue'
 import { useStore } from 'vuex'
+import { loadStripe } from '@stripe/stripe-js';
 
 export default {
   setup() {
@@ -222,13 +220,44 @@ export default {
     const auth = ref();
     const authorAdvertisementsNumber = ref([]);
 
+    const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+    const loading = ref(false);
+    const lineItems = ref(null);
+
     const store = useStore()
     const user = computed(() => store.state.user);
 
-
     onBeforeMount(() => {
       fetchTags();
-    });
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session_id');
+      if (sessionId) {
+        fetchHouseAdvertisement(sessionId);
+      }
+      });
+
+      const fetchHouseAdvertisement = (sessionId) => {
+      const response = fetch(import.meta.env.VITE_BACKEND_URL + '/api/stripe/session', {
+          method: 'POST',
+          headers: {
+              'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ sessionId: sessionId })
+      }).then(response => {
+          if (response.status === 200) {
+              return response.json();
+          } else { 
+              throw new Error('Error al cargar la sesión de stripe');
+          }
+          }) 
+          .then(jsonData => {
+            user.value.numAdvertisements = 1;
+          })
+          .catch(error => {
+              console.error('Error al cargar la sesión de stripe:', error);
+          })
+      }
 
     const fetchAuthorAdvertisements = async () => {
       fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/owner/' + user.value.id, {
@@ -385,19 +414,44 @@ export default {
         alert("Catastro no encontrado");
       }
     }
-    
+    const send = (formData) =>{
+      fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses', {
+        method: 'POST',
+        headers: {
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                    },
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(jsonData => {
+          success.value = true;
+          user.numAdvertisements -= 1;
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1000);
+        }
+        
+        
+        )
+        .catch(error => console.error('Error al enviar datos al backend:', error));
+
+    }
 
     const register = () => {
+      document.getElementById("btnPublicar").disabled = true;
 
       if (images.value.length === 0) {
         alert("Selecciona al menos una imagen");
+        document.getElementById("btnPublicar").disabled = false;
         return;
       }
       if (selectedTags.value.length === 0) {
         alert("Selecciona al menos una etiqueta");
+        document.getElementById("btnPublicar").disabled = false;
         return;
       }
       if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
+        document.getElementById("btnPublicar").disabled = false;
         alert("Selecciona un catastro válido");
         return;
       }
@@ -423,27 +477,8 @@ export default {
       for (let i = 0; i < images.value.length; i++) {
         formData.append("images", images.value[i]);
       }
-      fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses', {
-        method: 'POST',
-        headers: {
-                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
-                    },
-        body: formData,
-      })
-        .then(response => response.json())
-        .then(jsonData => {
-          success.value = true;
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 1000);
-        }
-        
-        
-        )
-        .catch(error => console.error('Error al enviar datos al backend:', error));
-
+      send(formData);
     };
-
     return {
       roomsNumber,
       bathroomsNumber,
@@ -474,7 +509,8 @@ export default {
       fetchCadastre,
       selectedCadastre,
       auth,
-      authorAdvertisementsNumber
+      authorAdvertisementsNumber,
+      user
 
     }
   },
