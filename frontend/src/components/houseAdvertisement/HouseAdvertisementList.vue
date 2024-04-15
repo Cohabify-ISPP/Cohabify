@@ -115,7 +115,6 @@ const applyFilters = () => {
     }else if (minBathrooms.value !== null) {
        if (typeof minBathrooms.value !== 'number') {
             errors.value.minBathroomsVal = 'Valor no numérico'
-            console.log(errors.value.minBathroomsVal)
         } else if (minBathrooms.value < 0) {
             errors.value.minBathroomsVal = 'Valor negativo'
         } else if (maxBathrooms.value == null) {

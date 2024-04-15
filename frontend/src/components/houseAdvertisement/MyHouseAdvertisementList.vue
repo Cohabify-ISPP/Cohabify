@@ -35,7 +35,6 @@ onMounted(() => {
     const sessionId = urlParams.get('session_id');
     const houseId = urlParams.get('houseId');
     if (user) {
-        console.log(user.value)
         if (sessionId){
             fetchPromotions(sessionId,houseId)
         }else{
@@ -58,7 +57,8 @@ onMounted(() => {
 })
 
 const handleCheckout = async (id) => {
-
+        
+        event.stopPropagation();
         lineItems.value = [{ price: 'price_1P4oHsBofFRUNSKsMTvgLfJE', quantity: 1}];
         if (lineItems.value !== null) {
             const stripe = await stripePromise;
@@ -438,7 +438,7 @@ const applyFilters = () => {
                                         </button>
                                     </div>
                                     <div class="d-flex flex-column align-items-center">
-                                        <button class="btn btn-warning" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="handleCheckout(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
+                                        <button class="btn btn-warning" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click.prevent="handleCheckout(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
                                             Promocionar
                                             <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
                                             campaign
