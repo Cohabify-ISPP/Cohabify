@@ -182,10 +182,6 @@ export default {
         };
 
         const getCommonFlats = async () => {
-            if (currentUser.username == null) {
-                commonHouses.value = [];
-                return;
-            }
             try {
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/users/'+currentUser.value.id+'/ads/'+userAdvertisement.value.author.id,
                     {
@@ -198,7 +194,9 @@ export default {
 
                     if (response.ok) {
                         const data = await response.json();
-                        commonHouses.value = data;
+                        if (currentUser.value.username != null) {
+                            commonHouses.value = data;
+                        }
                     } else {
                         router.push(`/404`);
                     }
