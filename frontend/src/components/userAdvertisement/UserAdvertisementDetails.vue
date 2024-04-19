@@ -242,8 +242,8 @@ export default {
                 const { error } = await stripe.redirectToCheckout({
                     lineItems: lineItems.value,
                     mode: 'payment',
-                    successUrl: 'http://localhost:5173/advertisements/users/'+ id +'?session_id={CHECKOUT_SESSION_ID}&userId=' + id,
-                    cancelUrl: 'http://localhost:5173/',
+                    successUrl: window.location.origin+'/advertisements/users/'+ id +'?session_id={CHECKOUT_SESSION_ID}&userId=' + id,
+                    cancelUrl: window.location.origin,
                 });
 
                 if (error) {

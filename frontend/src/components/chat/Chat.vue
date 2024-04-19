@@ -160,6 +160,7 @@ export default {
         messageInput.value != null && messageInput.value != undefined && messageInput.value != "") {
         try {
             stompClient.send("/chat-msgs/" + selectedChat.value.id, {}, JSON.stringify({'msg': messageInput.value}));
+            messageInput.value = "";
         } catch(error) {
           console.error(error);
           addSystemMessage("El servicio aún no se ha conectado, espere un poco o, si ya lo ha hecho, recargue la página.")

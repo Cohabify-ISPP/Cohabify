@@ -65,8 +65,8 @@ const handleCheckout = async (id) => {
             const { error } = await stripe.redirectToCheckout({
                 lineItems: lineItems.value,
                 mode: 'payment',
-                successUrl: 'http://localhost:5173/myAdvertisements/house?session_id={CHECKOUT_SESSION_ID}&houseId=' + id,
-                cancelUrl: 'http://localhost:5173/',
+                successUrl: window.location.origin+'/myAdvertisements/house?session_id={CHECKOUT_SESSION_ID}&houseId=' + id,
+                cancelUrl: window.location.origin,
             });
 
             if (error) {
@@ -546,14 +546,14 @@ const applyFilters = () => {
   width: 24px;
   height: 24px;
   margin-left: 4px;
-  background-image: url('/public/images/megaphone.png');
+  background-image: url('/images/megaphone.png');
   background-size: cover;
 }
 
 .list-item:hover .promo-icon {
   width: 30px;
   height: 30px;
-  background-image: url('/public/images/megaphone.gif');
+  background-image: url('/images/megaphone.gif');
   background-size: cover;
 }
 </style>

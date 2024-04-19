@@ -53,7 +53,7 @@ public class User extends BaseEntity {
     private Boolean isOwner;
 
     @NotNull
-    private int numAdvertisements = 0;
+    private int numAdvertisements = 1;
     
     @NotNull
     @Size(max = 9)

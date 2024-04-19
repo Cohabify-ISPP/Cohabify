@@ -344,7 +344,7 @@ const fetchValoration = async (id) => {
                                     <span style="color: #e87878;" class="material-icons">favorite</span>
                                     </div>
                                     <div class="d-flex align-items-center" style="margin-right: 0.7vh;">
-                                        <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b"> {{ parseFloat(advertisement.valoration.toFixed(2)) }} </span>
+                                        <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b"> {{ parseFloat(advertisement.valoration ? advertisement.valoration.toFixed(2) : 0) }} </span>
                                         <span style="color: #ffa723;" class="material-icons">star</span>
                                     </div>
                                     <div v-if="currentUserIsAuthor(advertisement)" class="d-flex align-items-center">
@@ -472,14 +472,14 @@ const fetchValoration = async (id) => {
   width: 24px;
   height: 24px;
   margin-left: 4px;
-  background-image: url('/public/images/megaphone.png');
+  background-image: url('/images/megaphone.png');
   background-size: cover;
 }
 
 .list-item:hover .promo-icon {
   width: 30px;
   height: 30px;
-  background-image: url('/public/images/megaphone.gif');
+  background-image: url('/images/megaphone.gif');
   background-size: cover;
 }
 </style>
