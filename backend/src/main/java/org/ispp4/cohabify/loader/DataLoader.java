@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.chat.Chat;
+import org.ispp4.cohabify.chat.ChatRepository;
 import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
 import org.ispp4.cohabify.house.HouseRepository;
@@ -12,6 +14,8 @@ import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisement;
 import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisementRepository;
 import org.ispp4.cohabify.houseRating.HouseRating;
 import org.ispp4.cohabify.houseRating.HouseRatingRepository;
+import org.ispp4.cohabify.message.Message;
+import org.ispp4.cohabify.message.MessageRepository;
 import org.ispp4.cohabify.tag.Tag;
 import org.ispp4.cohabify.tag.TagRepository;
 import org.ispp4.cohabify.user.User;
@@ -29,6 +33,7 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.AllArgsConstructor;
 
 @Component
@@ -43,6 +48,8 @@ public class DataLoader implements ApplicationRunner {
     private UserAdvertisementRepository userAdvertisementRepository;
     private UserRatingRepository userRatingRepository;
     private HouseRatingRepository houseRatingRepository;
+    private ChatRepository chatRepository;
+    private MessageRepository messageRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -61,6 +68,8 @@ public class DataLoader implements ApplicationRunner {
         userAdvertisementRepository.deleteAll();
         userRatingRepository.deleteAll();
         houseRatingRepository.deleteAll();
+        chatRepository.deleteAll();
+        messageRepository.deleteAll();
 
         // Procesa las etiquetas
         JsonNode tagsNode = rootNode.get("tags");
@@ -166,11 +175,27 @@ public class DataLoader implements ApplicationRunner {
         }
         // Procesa las valoraciones de usuarios
         JsonNode houseRatingNode = rootNode.get("houseRatings");
-        if (tagsNode != null) {
+        if (houseRatingNode != null) {
             List<HouseRating> ratingsToInsert = Arrays
                     .asList(objectMapper.readValue(houseRatingNode.toString(), HouseRating[].class));
             houseRatingRepository.saveAll(ratingsToInsert);
             System.out.println(ratingsToInsert.size() + " valoraciones insertadas correctamente.");
+        }
+        // Procesa los mensajes
+        JsonNode messagesNode = rootNode.get("messages");
+        if (messagesNode != null) {
+            List<Message> messagesToInsert = Arrays
+                    .asList(objectMapper.readValue(messagesNode.toString(), Message[].class));
+            messageRepository.saveAll(messagesToInsert);
+            System.out.println(messagesToInsert.size() + " mensajes insertados correctamente.");
+        }
+        // Procesa los chats
+        JsonNode chatNode = rootNode.get("chats");
+        if (chatNode != null) {
+            List<Chat> chatsToInsert = Arrays
+                    .asList(objectMapper.readValue(chatNode.toString(), Chat[].class));
+            chatRepository.saveAll(chatsToInsert);
+            System.out.println(chatsToInsert.size() + " chats insertados correctamente.");
         }
     }
 

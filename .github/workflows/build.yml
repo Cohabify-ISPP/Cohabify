@@ -40,9 +40,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          TOKEN_SECRET_KEY: 29da297b4fbb85dca0da6aea2f758819a9be22dcd308bab2ce3d4c6677841f31
+          TOKEN_SECRET_KEY: 29da297b4fbb85dca0da6aea2f758819a9be22dcd308bab2ce3d4c6677841f31 # random key
           TOKEN_EXPIRATIONMS: 86400000
           STATIC_FILES_HOST: http://localhost:8080
+          FRONTEND_URL: http://localhost:5173
+          SPRING_MAIL_HOST: smtp.gmail.com
+          SPRING_MAIL_PORT: 587
+          SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
+          SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
+          SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
+          SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_SERVICE_SID: ${{ secrets.TWILIO_SERVICE_SID }}
+          GOOGLE_PUBLIC_KEYS: ${{ secrets.GOOGLE_PUBLIC_KEYS }}
         run: |
           cd backend
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Cohabify

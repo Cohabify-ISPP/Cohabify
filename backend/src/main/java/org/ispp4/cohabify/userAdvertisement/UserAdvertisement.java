@@ -37,6 +37,8 @@ public class UserAdvertisement extends BaseEntity {
     @DBRef
     private User author;
 
+    private LocalDate promotionExpirationDate;
+    
     public UserAdvertisement() {
         
     } 

@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-                true, // TODO: Add attribute isEnabled to user and put user.isEnabled() here
+                user.getEnabled(),
                 true, true, true,
                 authorities);
     }
@@ -48,7 +48,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-                true, // TODO: Add attribute isEnabled to user and put user.isEnabled() here
+                user.getEnabled(),
                 true, true, true,
                 authorities);
     }

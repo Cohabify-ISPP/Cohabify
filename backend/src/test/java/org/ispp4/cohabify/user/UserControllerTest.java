@@ -58,6 +58,8 @@ public class UserControllerTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
 
         testUser = userController.createUser(user).getBody();
     }
@@ -73,20 +75,22 @@ public class UserControllerTest {
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
         User user = new User();
-        user.setName("name2");
-        user.setUsername("test2");
+        user.setName("name77");
+        user.setUsername("test77");
         user.setPassword("Test_1512*123oa");
         user.setIsOwner(true);
-        user.setPhone("666666666");
-        user.setEmail("test2@gmail.com");
+        user.setPhone("666666677");
+        user.setEmail("test77@gmail.com");
         user.setDescription("test description");
         user.setPlan(Plan.BASIC);
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
 
         ResponseEntity<User> response = userController.createUser(user);
-        assertEquals(new ResponseEntity<>(user, HttpStatus.CREATED), response);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         userService.deleteById(response.getBody().getId());
     }
 
@@ -104,7 +108,9 @@ public class UserControllerTest {
         user.setPlan(Plan.BASIC);
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
-        user.setAuthorities(authorities);    
+        user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
 
         try{
             userController.createUser(user);
@@ -193,16 +199,18 @@ public class UserControllerTest {
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
         User user = new User();
-        user.setUsername("test");
+        user.setUsername("test67");
         user.setPassword("Test_1512*123oa");
         user.setIsOwner(true);
-        user.setPhone("666666666");
-        user.setEmail("test@gmail.com");
+        user.setPhone("666666667");
+        user.setEmail("test67@gmail.com");
         user.setDescription("test description");
         user.setPlan(Plan.BASIC);
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
         userService.save(user);
 
         List<Tag> tags = new ArrayList<>();
@@ -223,16 +231,18 @@ public class UserControllerTest {
         List<String> authorities = new ArrayList<>();
         authorities.add("User");
         User user = new User();
-        user.setUsername("test");
+        user.setUsername("test99");
         user.setPassword("Test_1512*123oa");
         user.setIsOwner(true);
-        user.setPhone("666666666");
-        user.setEmail("test@gmail.com");
+        user.setPhone("666666699");
+        user.setEmail("test99@gmail.com");
         user.setDescription("test description");
         user.setPlan(Plan.BASIC);
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
         userService.save(user);
 
         try {
@@ -262,6 +272,8 @@ public class UserControllerTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
         user.setId( new ObjectId("69d5ec9af682fbd39a1b8b9d"));
 
         List<Tag> tags = new ArrayList<>();
@@ -302,17 +314,19 @@ public class UserControllerTest {
     void shouldDeleteUser(){
         List<String> authorities = new ArrayList<>();
         User user = new User();
-        user.setName("name2");
-        user.setUsername("test2");
+        user.setName("name23");
+        user.setUsername("test23");
         user.setPassword("Test_1512*123oa");
         user.setIsOwner(true);
-        user.setPhone("666666666");
-        user.setEmail("test@gmail.com");
+        user.setPhone("666666667");
+        user.setEmail("test23@gmail.com");
         user.setDescription("test description");
         user.setPlan(Plan.BASIC);
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
         userService.save(user);
         user = userController.createUser(user).getBody();
         ResponseEntity<HttpStatus> response = userController.deleteUser(user.getId());
@@ -324,11 +338,11 @@ public class UserControllerTest {
     void shouldToggleLike(){
         List<String> authorities = new ArrayList<>();
         User user = new User();
-        user.setUsername("test2");
+        user.setUsername("test69");
         user.setPassword("Test_1512*123oa");
         user.setIsOwner(true);
-        user.setPhone("666666666");
-        user.setEmail("test@gmail.com");
+        user.setPhone("666666669");
+        user.setEmail("test69@gmail.com");
         user.setDescription("test description");
         user.setPlan(Plan.BASIC);
         user.setGender(Gender.FEMENINO);

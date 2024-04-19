@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import Navbar from '../Navbar.vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex';
+import { loadStripe } from '@stripe/stripe-js';
 
 const price = ref(0)
 const meters = ref(0)
@@ -21,23 +22,82 @@ const isLoading = ref(true)
 const showFilters = ref(false)
 const searchTerm = ref('')
 const router = useRouter()
-const user = computed(() => useStore().state.user)
+const store = useStore()
+const user = computed(() => store.state.user)
+const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const loading = ref(false);
+const lineItems = ref(null);
+
+
 
 onMounted(() => {
-
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    const houseId = urlParams.get('houseId');
     if (user) {
-        fetchMyAdvertisements()
+        if (sessionId){
+            fetchPromotions(sessionId,houseId)
+        }else{
+            fetchMyAdvertisements()
+        }
     } else {
         const store = useStore()
         store.watch(
             () => store.state.user,
             (newValue, oldValue) => {
                 user.value = newValue
+                if (sessionId){
+                    fetchPromotions(sessionId,houseId)
+                }
                 fetchMyAdvertisements()
+                
             }
         )
-    }
+    }  
 })
+
+const handleCheckout = async (id) => {
+        
+        event.stopPropagation();
+        lineItems.value = [{ price: 'price_1P4oHsBofFRUNSKsMTvgLfJE', quantity: 1}];
+        if (lineItems.value !== null) {
+            const stripe = await stripePromise;
+            const { error } = await stripe.redirectToCheckout({
+                lineItems: lineItems.value,
+                mode: 'payment',
+                successUrl: window.location.origin+'/myAdvertisements/house?session_id={CHECKOUT_SESSION_ID}&houseId=' + id,
+                cancelUrl: window.location.origin,
+            });
+
+            if (error) {
+                console.error(error);
+            }
+        } 
+    };
+
+const fetchPromotions = (sessionId,houseId) => {
+    const response = fetch(import.meta.env.VITE_BACKEND_URL + '/api/stripe/session', {
+            method: 'POST',
+            headers: {
+                'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ sessionId: sessionId })
+        }).then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else { 
+                throw new Error('Error al cargar la sesión de stripe');
+            }
+            }) 
+            .then(jsonData => {
+                promoteHouseAd(houseId);
+            })
+            .catch(error => {
+                isLoading.value = false
+                fetchError.value = error
+            })
+}
 
 const fetchMyAdvertisements = () => {
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/owner/' + user.value.id, {
@@ -63,6 +123,29 @@ const fetchMyAdvertisements = () => {
             isLoading.value = false
             fetchError.value = error
         })
+}
+
+const promoteHouseAd = (id) =>{
+    //event.stopPropagation();
+    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/promote/' + id, {
+        method: "POST",
+        headers: {
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+        credentials: "include"
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se ha podido promocionar el anuncio de vivienda')
+            }
+        })
+        .then(data => {
+            fetchMyAdvertisements()
+        })
+        .catch(error => {
+            fetchError.value = error
+        })
+
 }
 
 const deleteHouseAd = (id) => {
@@ -220,7 +303,7 @@ const applyFilters = () => {
             <transition name="slide">
                 <div class="col-md-3 filter-column p-4" style="padding: 10px;" v-if="showFilters">
                     <div class="d-flex flex-row-reverse">
-                        <button class="btn btn-primary rounded-5" @click.prevent="showFilters=false" style="height: 40px;">
+                        <button class="form-button rounded-5 d-flex align-items-center" @click.prevent="showFilters=false" style="height: 40px;">
                             <span class="material-symbols-outlined">
                                 keyboard_double_arrow_left
                             </span>
@@ -290,7 +373,7 @@ const applyFilters = () => {
                     </form>
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
-                        <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar</button>
+                        <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
                         <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
                     </div>
                 </div>
@@ -299,14 +382,14 @@ const applyFilters = () => {
                 <div class="d-flex justify-content-center align-items-center mt-4">
                     <div class="search-bar">
                         <form class="d-flex w-100 justify-content-between">
-                            <div class="w-100 my-auto">
-                                <input class="search-input" v-model= "searchTerm" type="text" id="search-input" placeholder="Busco..."/>
+                            <div id="searchForm" style="width:90%; padding-top: 5px; padding-right: 1px;">
+                                <input class="searchInput" v-model= "searchTerm" type="text" style="color:black; padding-bottom: 1%;" id="searchInput" placeholder="Busco..." />
                             </div>
-                            <button class="search-button d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
-                                <i class="bi bi-search"></i>
+                            <button class="searchButton d-flex align-items-center" style="padding-top:15px; padding-right:1%;" type="submit" @click.prevent="search">
+                                <img src="/images/search.png" alt="Buscar" />
                             </button>
-                            <button @click.prevent="showFilters=!showFilters" class="search-button d-flex align-items-center">
-                                <i class="bi bi-funnel-fill"></i>
+                            <button @click.prevent="showFilters=!showFilters" class="searchButton d-flex align-items-center" style="margin-left: 2%; margin-right: 4%;">
+                                <img src="/images/filter.png" alt="Filter" />
                             </button>
                         </form>
                     </div>
@@ -318,7 +401,7 @@ const applyFilters = () => {
                     {{ fetchError }}
                 </div>
                 <div class="list-container mt-4" v-else>
-                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)">
+                    <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="advertisement.id" @click="$router.push(`/advertisements/houses/${advertisement.id}`)" :class="{ highlighted: advertisement.promotionExpirationDate !== null }">
                         <img :src="getImageUrl(advertisement.images[0])" alt="house" class="list-item-image">
                         <div class="list-item-content">
                             <div class="d-flex justify-content-between w-100" style="margin-right: 2vw;">
@@ -348,11 +431,26 @@ const applyFilters = () => {
                                 </div>
 
                                 <div class="d-flex justify-content-end w-50 mt-5 h-100 align-items-center">
+                                    <div class="d-flex flex-column align-times-center">
+                                        <button  class="btn btn-warning active" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" v-if="advertisement.promotionExpirationDate !== null">
+                                                <b>Promocionado</b>
+                                                <div class="promo-icon"></div>
+                                        </button>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <button class="btn btn-warning" style="margin-right: 1vw; height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click.prevent="handleCheckout(advertisement.id)" v-if="advertisement.promotionExpirationDate === null">
+                                            Promocionar
+                                            <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
+                                            campaign
+                                            </span>
+                                        </button>
+                                    </div>
                                     <div class="d-flex flex-column align-items-center">
                                         <button class="btn btn-success" style="margin-right: 1vw; height: 5.5vh;" @click="goToEdit(advertisement.id)">
                                             <span class="material-symbols-outlined">edit</span>
                                         </button>
                                     </div>
+                                
                                     <div class="d-flex flex-column align-items-center">
                                         <button class="btn btn-danger" style="height: 5.5vh;" @click="deleteHouseAd(advertisement.id)">
                                             <span class="material-symbols-outlined">delete</span>
@@ -377,5 +475,85 @@ const applyFilters = () => {
 
 .slide-enter-from {
   transform: translateX(-100%);
+}
+
+.highlighted {
+    background-color: #bbeeff;
+    border: 2px solid black;
+}
+
+.searchInput {
+  background-color: #ffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  width: 90%;
+  margin-right: 10px;
+}
+
+.searchButton {
+  background-color: transparent;
+  border: none;
+  align-self: center;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+}
+
+.searchButton img {
+  width: 24px;
+  align-self: right;
+}
+
+.form-range::-webkit-slider-thumb {
+  background: #a4c7ff; 
+}
+
+.form-range::-moz-range-thumb {
+  background: #a4c7ff; 
+}
+
+.form-range::-ms-thumb {
+  background: #a4c7ff; 
+}
+
+.form-button {
+  background: #28426B;
+}
+
+.form-button:hover {
+    border-color:#ffffff;
+}
+
+.form-button:active {
+    background: #3f5982;
+}
+.highlighted {
+    background-color: #d4e4ff;
+    border: 2px solid rgb(5, 92, 167);
+}
+
+.promo-button {
+  margin-right: 1vw;
+  height: 5.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.promo-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  background-image: url('/images/megaphone.png');
+  background-size: cover;
+}
+
+.list-item:hover .promo-icon {
+  width: 30px;
+  height: 30px;
+  background-image: url('/images/megaphone.gif');
+  background-size: cover;
 }
 </style>

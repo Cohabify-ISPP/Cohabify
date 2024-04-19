@@ -139,7 +139,7 @@
             <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
           </div>   
           <div class="row d-flex mb-2">
-            <div class="btn-group" role="group"  style="max-height: 60px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
+            <div class="btn-group" role="group"  style="max-height: 180px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
               <div class="tags-container">
               <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
               :class="{ 'selected': selectedTags.some(selectedTag => selectedTag.id === tag.id), 'unselected': !selectedTags.some(selectedTag => selectedTag.id === tag.id) }">
@@ -416,7 +416,7 @@ export default {
         return;
       }
       if (selectedTags.value.length === 0) {
-        alert("Selecciona al menos un tag");
+        alert("Selecciona al menos una etiqueta");
         return;
       }
       
@@ -460,7 +460,7 @@ export default {
         body: formData,
       })
         
-        .then(response => console.log(response.json()))
+        .then(response => response.json())
         .then(jsonData => {
           success.value = true;
           setTimeout(() => {

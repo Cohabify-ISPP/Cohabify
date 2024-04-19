@@ -1,244 +1,532 @@
 {
   "tags": [
     {
-      "id": "60d5ec9af682fbd39a1b8b9a",
-      "tag": "Ordenado",
-      "tagType": "USER_TAG"
+        "id": "60d5ec9af682fbd39a1b8b9a",
+        "tag": "Ordenado",
+        "tagType": "USER_TAG"
     },
     {
-      "id": "60d5ec9af682fbd39a1b8b9b",
-      "tag": "Extrovertido",
-      "tagType": "USER_TAG"
+        "id": "60d5ec9af682fbd39a1b8b9b",
+        "tag": "Extrovertido",
+        "tagType": "USER_TAG"
     },
     {
-      "id": "60d5ec9af682fbd39a1b8b9c",
-      "tag": "Amueblado",
-      "tagType": "FLAT_TAG"
-    }],
-  "users": [
-    {
-      "id": "60d5ec9af682fbd39a1b8b9d",
-      "username": "javgaragu90",
-      "name": "Javier García Aguado", 
-      "password": "$2a$10$N.YNWLUBuyZt3dawPCbTHe2.Ys8VXGglhmwXyAmiHi7uFkrYmfk9u",
-      "isOwner": true,
-      "phone": "618537466",
-      "email": "javgaragu90@alum.us.es",
-      "tag": [
-        {
-          "id": "60d5ec9af682fbd39a1b8b9b"
-        }],
-      "description": "Me encantan las charlas nocturnas. Me gusta mantener el hogar limpio y ordenado.",
-      "plan": "Basic",
-      "isVerified": true,
-      "authorities": ["Admin"],
-      "gender": "MASCULINO",
-      "imageUri": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
+        "id": "60d5ec9af682fbd39a1b8b9d",
+        "tag": "Organizado",
+        "tagType": "USER_TAG"
     },
     {
-      "id": "60d5ec9af682fbd39a1b8b9e",
-      "username": "manlovper90",
-      "name": "Manuela Lovato Pérez",
-      "password": "$2a$10$4PzUQ8nmDn7h62ssxQcPwOKjBG3L8FQYVyFgwxHz02mILgwPO3qiG",
-      "isOwner": false,
-      "phone": "618592566",
-      "email": "manlovper90@us.es",
-      "tag": [
-        {
-          "id": "60d5ec9af682fbd39a1b8b9a"
-        }, {
-          "id": "60d5ec9af682fbd39a1b8b9b"
-        }],
-      "description": "Me encanta salir de fiesta y divertirme",
-      "plan": "Explorer",
-      "isVerified": false,
-      "authorities": ["User"],
-      "gender": "OTRO",
-      "imageUri": "https://hips.hearstapps.com/hmg-prod/images/demi-lovaro-ge-nero-no-binario-1-1622484860.jpg?crop=0.669xw:1.00xh;0.166xw,0&resize=1200:*"
+        "id": "60d5ec9af682fbd39a1b8b9e",
+        "tag": "Introvertido",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8b9f",
+        "tag": "Tranquilo",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba0",
+        "tag": "Desordenado",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba1",
+        "tag": "Activo",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba2",
+        "tag": "Responsable",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba3",
+        "tag": "Creativo",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba4",
+        "tag": "Silencioso",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba5",
+        "tag": "Dinámico",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba6",
+        "tag": "Fiestero",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba7",
+        "tag": "Gamer",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba8",
+        "tag": "Respetuoso",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba9",
+        "tag": "Amigable",
+        "tagType": "USER_TAG"
+    },
+    {
+    "id": "60d5ec9af682fbd39a1b8bac",
+    "tag": "Cinéfilo",
+    "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bbe",
+        "tag": "LGTBIQ+ friendly",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8b9c",
+        "tag": "Amueblado",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8baa",
+        "tag": "Espacioso",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bab",
+        "tag": "Céntrico",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bac",
+        "tag": "Luminoso",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bad",
+        "tag": "Bien ubicado",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bae",
+        "tag": "Acogedor",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8baf",
+        "tag": "Modernizado",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb0",
+        "tag": "Confortable",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb1",
+        "tag": "Seguro",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb2",
+        "tag": "Económico",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb3",
+        "tag": "Con vistas",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb4",
+        "tag": "Cálido",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb5",
+        "tag": "Minimalista",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb6",
+        "tag": "Amplio",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb7",
+        "tag": "Silencioso",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb8",
+        "tag": "Moderno",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb9",
+        "tag": "Ecológico",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bba",
+        "tag": "Se admiten mascotas",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bbb",
+        "tag": "No se admiten mascotas",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bbc",
+        "tag": "Con ascensor",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bbd",
+        "tag": "Sin ascensor",
+        "tagType": "FLAT_TAG"
     }
+
+  ],
+  "users": [
+      {
+          "id": "60d5ec9af682fbd39a1b8b9d",
+          "username": "javgaragu90",
+          "name": "Javier García Aguado",
+          "password": "$2a$10$N.YNWLUBuyZt3dawPCbTHe2.Ys8VXGglhmwXyAmiHi7uFkrYmfk9u",
+          "isOwner": true,
+          "numAdvertisements": 0, 
+          "enabled": true,
+          "verificationCode": "60d5ec9af682fbd39a1b8b9eUnStringDe64CaracteresConMuchoRelleno123",
+          "phone": "618537466",
+          "email": "javgaragu90@alum.us.es",
+          "tag": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9b"
+              }
+          ],
+          "description": "Me encantan las charlas nocturnas. Me gusta mantener el hogar limpio y ordenado.",
+          "plan": "OWNER",
+          "expirationDate": "2025-06-30",
+          "isVerified": true,
+          "authorities": [
+              "Admin"
+          ],
+          "gender": "MASCULINO",
+          "imageUri": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg"
+      },
+      {
+          "id": "60d5ec9af682fbd39a1b8b9e",
+          "username": "manlovper90",
+          "name": "Manuela López Pérez",
+          "password": "$2a$10$4PzUQ8nmDn7h62ssxQcPwOKjBG3L8FQYVyFgwxHz02mILgwPO3qiG",
+          "isOwner": false,
+          "numAdvertisements": 0,
+          "enabled": true,
+          "verificationCode": "60d5ec9af682fbd39a1b8b9eUnStringDe64CaracteresConMuchoRelleno123",
+          "phone": "618592566",
+          "email": "manlovper90@us.es",
+          "tag": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9a"
+              },
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9b"
+              }
+          ],
+          "description": "Me encanta salir de fiesta y divertirme",
+          "plan": "EXPLORER",
+          "expirationDate": "2025-06-30",
+          "isVerified": false,
+          "authorities": [
+              "User"
+          ],
+          "gender": "OTRO",
+          "imageUri": "https://media.istockphoto.com/id/1289220949/photo/successful-smiling-woman-wearing-eyeglasses-on-grey-wall.jpg?s=612x612&w=0&k=20&c=BjyPRn28F3mc6IiBCf4Ko-lFZisaNUYXBBnAcO47ZgE="
+      }
   ],
   "houses": [
-    {
-      "id": "60d5ec9af682fbd39a1b8b9f",
-      "location":"Triana, Sevilla", 
-      "roomsNumber":"5", 
-      "bathroomsNumber":"1",
-      "area":"10", 
-      "heating":"CENTRAL_HEATING", 
-      "floor":"1",
-      "cadastre": "12345678901234567890",  
-      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
-      "locationPoint" : {
-        "x": -2.6637, 
-        "y": 54.6944
-      }
-    },
-    {
-      "id": "60d5ec9af682fbd39a1b8b8f",
-      "location":"Vallecas, Madrid", 
-      "roomsNumber":"4", 
-      "bathroomsNumber":"2",
-      "area":"105", 
-      "heating":"AIR_CONDITIONING", 
-      "floor":"9",  
-      "cadastre": "12345678901234567891", 
-      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
-      "locationPoint" : {
-        "x": 40.3437, 
-        "y": -3.6124
-      }
-    },
-    {
-      "id": "60d5ec9af682fbd39a1b8b7f",
-      "location":"Guarromán, Jaén", 
-      "roomsNumber":"5", 
-      "bathroomsNumber":"2",
-      "area":"120", 
-      "heating":"NATURAL_GAS", 
-      "floor":"9", 
-      "cadastre": "12345678901234567892",  
-      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
-      "locationPoint" : {
-        "x": 38.184049, 
-        "y": -3.685237
-      }
-    },
-    { 
-      "id": "60d5ec9af682fbd39a1b8b6f",
-      "location":"Cabra, Córdoba", 
-      "roomsNumber":"3", 
-      "bathroomsNumber":"1",
-      "area":"200", 
-      "heating":"RADIATOR", 
-      "floor":"0",  
-      "cadastre": "12345678901234567893", 
-      "tags": [{"id": "60d5ec9af682fbd39a1b8b9c"}],
-      "locationPoint" : {
-        "x": 37.471815, 
-        "y": -4.433562
-      }
-    }
-  ],"houseAdvertisements": [
-    {
-      "id": "60d5ec9af682fbd39a1b8b1a",
-      "title": "Bonito y amplio piso en Triana",
-      "description": "Se busca compañero de piso para compartir gastos. El piso está a 5 minutos de una parada de metro y tiene varios establecimientos cercanos. ",
-      "price": 1000,
-      "house": {"id": "60d5ec9af682fbd39a1b8b9f"},
-      "author": {
-        "id": "60d5ec9af682fbd39a1b8b9e"
+      {
+          "id": "60d5ec9af682fbd39a1b8b9f",
+          "location": "Triana, Sevilla",
+          "roomsNumber": "5",
+          "bathroomsNumber": "1",
+          "area": "95",
+          "heating": "CENTRAL_HEATING",
+          "floor": "1",
+          "cadastre": "12345678901234567890",
+          "tags": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9c"
+              }
+          ],
+          "locationPoint": {
+              "x": -2.6637,
+              "y": 54.6944
+          }
       },
-      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images":["https://images.pexels.com/photos/276625/pexels-photo-276625.jpeg",
-      "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
-      "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"]
+      {
+          "id": "60d5ec9af682fbd39a1b8b8f",
+          "location": "Vallecas, Madrid",
+          "roomsNumber": "4",
+          "bathroomsNumber": "2",
+          "area": "105",
+          "heating": "AIR_CONDITIONING",
+          "floor": "9",
+          "cadastre": "12345678901234567891",
+          "tags": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9c"
+              }
+          ],
+          "locationPoint": {
+              "x": 40.3437,
+              "y": -3.6124
+          }
+      },
+      {
+          "id": "60d5ec9af682fbd39a1b8b7f",
+          "location": "Guarromán, Jaén",
+          "roomsNumber": "5",
+          "bathroomsNumber": "2",
+          "area": "120",
+          "heating": "NATURAL_GAS",
+          "floor": "9",
+          "cadastre": "12345678901234567892",
+          "tags": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9c"
+              }
+          ],
+          "locationPoint": {
+              "x": 38.184049,
+              "y": -3.685237
+          }
+      },
+      {
+          "id": "60d5ec9af682fbd39a1b8b6f",
+          "location": "Cabra, Córdoba",
+          "roomsNumber": "3",
+          "bathroomsNumber": "1",
+          "area": "200",
+          "heating": "RADIATOR",
+          "floor": "0",
+          "cadastre": "12345678901234567893",
+          "tags": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9c"
+              }
+          ],
+          "locationPoint": {
+              "x": 37.471815,
+              "y": -4.433562
+          }
+      }
+  ],
+  "houseAdvertisements": [
+      {
+          "id": "60d5ec9af682fbd39a1b8b1a",
+          "title": "Piso espacioso y amueblado en Triana",
+          "description": "Se busca compañero de piso para compartir gastos. El piso está a 5 minutos de una parada de metro y tiene varios establecimientos cercanos. ",
+          "price": 1000,
+          "house": {
+              "id": "60d5ec9af682fbd39a1b8b9f"
+          },
+          "views": 0,
+          "author": {
+              "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "tenants": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9e"
+              }
+          ],
+          "images": [
+              "https://images.pexels.com/photos/276625/pexels-photo-276625.jpeg",
+              "https://www.texturasymatices.com/wp-content/uploads/2017/07/piso-de-madera-roble-markant-haro-1080x675.jpg",
+              "https://elcomercio.pe/resizer/6nPMfg6MC9Airtessy0LtxsEE5o=/620x0/smart/filters:format(jpeg):quality(75)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/4A2ESLPEQ5C5VP6FBQDLFFVIUE.jpg"
+          ]
+      },
+      {
+          "id": "60d5ec9af682fbd39a1b8b2a",
+          "title": "Piso reformado en Vallecas",
+          "description": "El piso se encuentra recién reformado y amueblado. Es muy luminoso y tiene una terraza con vistas a la ciudad.",
+          "price": 900,
+          "house": {
+              "id": "60d5ec9af682fbd39a1b8b8f"
+          },
+          "views": 0,
+          "author": {
+              "id": "60d5ec9af682fbd39a1b8b9d"
+          },
+          "tenants": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9e"
+              }
+          ],
+          "images": [
+              "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+              "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg",
+              "https://images.pexels.com/photos/3288104/pexels-photo-3288104.png"
+          ]
+      },
+      {
+          "id": "60d5ec9af682fbd39a1b8b3a",
+          "title": "Acogedor estudio en Guarromán",
+          "description": "Estudio en buena localización de Guarromán. EL precio incluye los gastos de comunidad, pero no los suministros.",
+          "price": 200,
+          "house": {
+              "id": "60d5ec9af682fbd39a1b8b7f"
+          },
+          "views": 0,
+          "author": {
+              "id": "60d5ec9af682fbd39a1b8b9d"
+          },
+          "tenants": [],
+          "images": [
+              "https://images.pexels.com/photos/4119831/pexels-photo-4119831.jpeg",
+              "https://images.pexels.com/photos/7587472/pexels-photo-7587472.jpeg",
+              "https://images.pexels.com/photos/1714430/pexels-photo-1714430.jpeg"
+          ]
+      },
+      {
+          "id": "60d5ec9af682fbd39a1b8b4a",
+          "title": "Casa amplia en Cabra",
+          "description": "La casa tiene un jardín y está cerca de un parque. Además, dispone de un garaje espacioso para un coche.",
+          "price": 350,
+          "house": {
+              "id": "60d5ec9af682fbd39a1b8b6f"
+          },
+          "views": 0,
+          "author": {
+              "id": "60d5ec9af682fbd39a1b8b9d"
+          },
+          "tenants": [
+              {
+                  "id": "60d5ec9af682fbd39a1b8b9e"
+              }
+          ],
+          "images": [
+              "https://images.pexels.com/photos/59321/pexels-photo-59321.jpeg",
+              "https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg",
+              "https://images.pexels.com/photos/4480448/pexels-photo-4480448.jpeg"
+          ]
+      }
+  ],
+  "userRatings": [
+      {
+          "id": "65e305e4597c9969f3b36f10",
+          "user": {
+              "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "ratedUser": {
+              "id": "60d5ec9af682fbd39a1b8b9d"
+          },
+          "comment": "He convivido con este usuario y es muy interesante, además de ordenado."
+      },
+      {
+          "id": "65e305e4597c9969f3b36f11",
+          "user": {
+              "id": "60d5ec9af682fbd39a1b8b9d"
+          },
+          "ratedUser": {
+              "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "comment": "Aunque parezca que pueda hacer mucho ruido, es una persona tranquila para convivir."
+      }
+  ],
+  "userAdvertisements": [
+      {
+          "id": "65e326184510d9c9a7c48173",
+          "description": "Busco 2 compañeros organizados por Avenida Reina Mercedes",
+          "maxBudget": 600,
+          "desiredLocation": "Avenida Reina Mercedes, Sevilla",
+          "entranceDate": "2025-03-01",
+          "exitDate": "2025-06-30",
+          "maxCohabitants": 2,
+          "author": {
+              "id": "60d5ec9af682fbd39a1b8b9e"
+          }
+      },
+      {
+          "id": "65e326184510d9c9a7c48174",
+          "description": "Busco 2 compañeros por Calle Vencejo",
+          "maxBudget": 444,
+          "desiredLocation": "Calle Vencejo, Sevilla",
+          "entranceDate": "2025-03-01",
+          "exitDate": "2025-06-30",
+          "maxCohabitants": 4,
+          "author": {
+              "id": "60d5ec9af682fbd39a1b8b9d"
+          }
+      }
+  ],
+  "houseRatings": [
+      {
+          "houseAdvertisement": {
+              "id": "60d5ec9af682fbd39a1b8b1a"
+          },
+          "user": {
+              "id": "60d5ec9af682fbd39a1b8b9d"
+          },
+          "rating": 3,
+          "date": "2024-03-25",
+          "comment": "Es muy luminoso y está bien cuidado"
+      },
+      {
+          "houseAdvertisement": {
+              "id": "60d5ec9af682fbd39a1b8b2a"
+          },
+          "user": {
+              "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "rating": 1,
+          "date": "2024-02-25",
+          "comment": "Es un piso muy sucio y con mala ventilación"
+      }
+  ],
+  "messages": [
+    {
+        "id": "60d5ec9af682fbd39a1b8bfe",
+        "text": "Hola!",
+        "timeSent": "2024-04-10T14:30",
+        "sender": {
+            "id": "60d5ec9af682fbd39a1b8b9d"
+        }
     },
     {
-      "id": "60d5ec9af682fbd39a1b8b2a",
-      "title": "Amplio piso en Vallecas",
-      "description": "El piso se encuentra recién reformado y amueblado. Es muy luminoso y tiene una terraza con vistas a la ciudad.",
-      "price": 900,
-      "house": {"id": "60d5ec9af682fbd39a1b8b8f"},
-      "author": {
-        "id": "60d5ec9af682fbd39a1b8b9d"
-      },
-      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-      "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg",
-      "https://images.pexels.com/photos/3288104/pexels-photo-3288104.png"]
-    },
-    {
-      "id": "60d5ec9af682fbd39a1b8b3a",
-      "title": "Acogedor estudio en Guarromán",
-      "description": "Estudio en buena localización de Guarromán. EL precio incluye los gastos de comunidad, pero no los suministros.",
-      "price": 200,
-      "house": {"id": "60d5ec9af682fbd39a1b8b7f"},
-      "author": {
-        "id": "60d5ec9af682fbd39a1b8b9d"
-      },
-      "tenants": [],
-      "images": ["https://images.pexels.com/photos/4119831/pexels-photo-4119831.jpeg",
-      "https://images.pexels.com/photos/7587472/pexels-photo-7587472.jpeg",
-      "https://images.pexels.com/photos/1714430/pexels-photo-1714430.jpeg"]
-    },
-    {
-      "id": "60d5ec9af682fbd39a1b8b4a",
-      "title": "Casa amplia en Cabra",
-      "description": "La casa tiene un jardín y está cerca de un parque. Además, dispone de un garaje espacioso para un coche.",
-      "price": 350,
-      "house": {"id": "60d5ec9af682fbd39a1b8b6f"},
-      "author": {
-        "id": "60d5ec9af682fbd39a1b8b9d"
-      },
-      "tenants": [{"id": "60d5ec9af682fbd39a1b8b9e"}],
-      "images": ["https://images.pexels.com/photos/59321/pexels-photo-59321.jpeg",
-                "https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg",
-                "https://images.pexels.com/photos/4480448/pexels-photo-4480448.jpeg"]
+        "id": "60d5ec9af682fbd39a1b8bff",
+        "text": "Buenos días!",
+        "timeSent": "2024-04-10T14:37",
+        "sender": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+        }
     }
   ],
-  
-  "userRatings":[
+  "chats": [
     {
-      "id": "65e305e4597c9969f3b36f10",
-      "user": {"id" : "60d5ec9af682fbd39a1b8b9e"},
-      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9d"},
-      "comment": "He convivido con este usuario y es muy interesante, además de ordenado."
-    },
-    {
-      "id": "65e305e4597c9969f3b36f11",
-      "user": {"id": "60d5ec9af682fbd39a1b8b9d"},
-      "ratedUser": {"id": "60d5ec9af682fbd39a1b8b9e"},
-      "comment": "Aunque parezca que pueda hacer mucho ruido, es una persona tranquila para convivir."
+        "id": "60d5ec9af682fbd39a1b8c00",
+        "isAccepted": true,
+        "users": [
+            {
+                "id": "60d5ec9af682fbd39a1b8b9d"
+            },
+            {
+                "id": "60d5ec9af682fbd39a1b8b9e"
+            }
+        ],
+        "messages": [
+            {
+                "id": "60d5ec9af682fbd39a1b8bfe"
+            },
+            {
+                "id": "60d5ec9af682fbd39a1b8bff"
+            }
+        ]
     }
-  ],
-  "userAdvertisements":[
-    {
-      "id": "65e326184510d9c9a7c48173",
-      "description": "Busco 2 compañeros organizados por Avenida Reina Mercedes",
-      "maxBudget": 600,
-      "desiredLocation": "Avenida Reina Mercedes, Sevilla",
-      "entranceDate": "2025-03-01",
-      "exitDate": "2025-06-30",
-      "maxCohabitants": 2,
-      "author": {
-        "id": "60d5ec9af682fbd39a1b8b9e"
-      }
-    },
-    {
-      "id": "65e326184510d9c9a7c48174",
-      "description": "Busco 2 compañeros por Calle Vencejo",
-      "maxBudget": 444,
-      "desiredLocation": "Calle Vencejo, Sevilla",
-      "entranceDate": "2025-03-01",
-      "exitDate": "2025-06-30",
-      "maxCohabitants": 4,
-      "author": {
-        "id": "60d5ec9af682fbd39a1b8b9d"
-      }
-    }
-  ],
-  "houseRatings":[
-    {
-    "houseAdvertisement": {
-      "id": "60d5ec9af682fbd39a1b8b1a"
-    },
-    "user": {
-      "id": "60d5ec9af682fbd39a1b8b9d"
-    },
-    "rating": 3,
-    "date": "2024-03-25",
-    "comment": "Es muy luminoso y está bien cuidado"
-    },
-    {
-    "houseAdvertisement": {
-      "id": "60d5ec9af682fbd39a1b8b2a"
-    },
-    "user":{
-      "id": "60d5ec9af682fbd39a1b8b9e"
-    },
-    "rating": 1,
-    "date": "2024-02-25",
-    "comment": "Es un piso muy sucio y con mala ventilación"
-
-    }]
+  ]
 }
