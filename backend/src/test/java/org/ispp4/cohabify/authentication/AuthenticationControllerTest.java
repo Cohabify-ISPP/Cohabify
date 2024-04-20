@@ -160,22 +160,6 @@ public class AuthenticationControllerTest {
                 .andExpect(status().isOk());
     }
 
-    /* 
-    @Test
-    public void testLoginGoogle() throws Exception {
-        String googleAuthToken = "mocked_google_auth_token";
-
-        mockMvc.perform(
-                post("/auth/login/google")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("\"" + googleAuthToken + "\"")
-        )
-                .andExpect(status().isOk()) 
-                .andExpect(jsonPath("$.token").exists());
-    }
-    */
-
-
     @Test
     public void testGetUser() throws Exception {
         mockMvc.perform(
