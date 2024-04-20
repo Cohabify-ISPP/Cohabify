@@ -2,6 +2,7 @@
 import { ref, onBeforeMount, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { loadStripe } from '@stripe/stripe-js';
 
 export default {
 
@@ -22,6 +23,10 @@ export default {
         const currentUserAdvertisementRating = ref({});
         const erroresComentario = ref(null);
         const commonFlats = ref([]);
+        const chatError = ref("");
+        const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+        const loading = ref(false);
+        const lineItems = ref(null);
 
         const fetchAdvertisement = async () => {
             try {
@@ -108,7 +113,6 @@ export default {
                     });
                 const data = await response.json();
                 valorations.value = data;
-                console.log(valorations.value);
                 for(const rating of valorations.value){
                     if(rating.user.username === currentUser.value.username){
                         currentUserAdvertisementRating.value = rating;
@@ -178,6 +182,10 @@ export default {
         };
 
         const getCommonFlats = async () => {
+            if (currentUser.username == null) {
+                commonHouses.value = [];
+                return;
+            }
             try {
                 const response = await fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/users/'+currentUser.value.id+'/ads/'+userAdvertisement.value.author.id,
                     {
@@ -190,7 +198,6 @@ export default {
 
                     if (response.ok) {
                         const data = await response.json();
-                        console.log(data)
                         commonHouses.value = data;
                     } else {
                         router.push(`/404`);
@@ -216,9 +223,59 @@ export default {
         }
 
         onBeforeMount(() => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            const userId = urlParams.get('userId');
             userAdvertisementId.value = route.params.id;
             fetchAdvertisement();
+            if(sessionId !== null){
+                fetchPromotions(sessionId,userId);
+            }
+            
         });
+
+        const handleCheckout = async (id) => {
+
+            lineItems.value = [{ price: 'price_1P4oHsBofFRUNSKsMTvgLfJE', quantity: 1}];
+            if (lineItems.value !== null) {
+                const stripe = await stripePromise;
+                const { error } = await stripe.redirectToCheckout({
+                    lineItems: lineItems.value,
+                    mode: 'payment',
+                    successUrl: window.location.origin+'/advertisements/users/'+ id +'?session_id={CHECKOUT_SESSION_ID}&userId=' + id,
+                    cancelUrl: window.location.origin,
+                });
+
+                if (error) {
+                    console.error(error);
+                }
+            } 
+            };
+
+            const fetchPromotions = (sessionId,userId) => {
+            const response = fetch(import.meta.env.VITE_BACKEND_URL + '/api/stripe/session', {
+                method: 'POST',
+                headers: {
+                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sessionId: sessionId })
+            }).then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else { 
+                    throw new Error('Error al cargar la sesión de stripe');
+                }
+                }) 
+                .then(jsonData => {
+                    promoteAd(userId);
+                })
+                .catch(error => {
+                    isLoading.value = false
+                    fetchError.value = error
+                })
+            };
+
         const promoteAd = (id)=>{
             fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/users/promote/' + id, {
                 method: "POST",
@@ -240,6 +297,37 @@ export default {
             })
 
         }
+
+        function openChat() {
+            fetch(import.meta.env.VITE_BACKEND_URL + '/api/chat/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    users: [userAdvertisement.value.author],
+                }),
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    if(response.status == 409) {
+                        chatError.value = "Ya posee un chat con esta persona";
+                    } else {
+                        throw new Error('No se ha podido crear el chat, código: ' + response.status);
+                    }
+                } else {
+                    router.push("/chat");
+                }
+                
+            })
+            .catch(error => {
+                console.error(error);
+                chatError.value = "Ha ocurrido un error creando el chat.";
+            })
+    }
+
         return {
             errorComentario,
             modalText,
@@ -260,6 +348,9 @@ export default {
             currentUserAdvertisementRating,
             erroresComentario,
             commonFlats,
+            openChat,
+            chatError,
+            handleCheckout,
         }
         
     }
@@ -309,20 +400,27 @@ export default {
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="likes" style="margin-right: 1vw;">
                                 <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || currentUser && userAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || userAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
-                                    <i v-if="userAdvertisement.author?.likes.some((like) => like.id === currentUser.id)" class="bi bi-heart-fill" style="margin-top:2px; margin-right: 5px; color:#e87878" ></i>
-                                    <i v-else class="bi bi-heart" style="margin-top:2px; margin-right: 5px; color:#28426B"></i>
+                                    <i :class="{ 'bi bi-heart-fill': userAdvertisement.author?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !userAdvertisement.author?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: userAdvertisement.author?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426B' }" class="heart-transition" style="margin-top:2px; margin-right: 5px;"></i>
                                 </button>
                                  
                                 <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
                             </div>
                             
-                            <button v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                            <button @click.prevent="openChat()" v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
                             <div class="d-flex col" v-else>
-                                <button type="button" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;" @click="promoteAd(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
-                                    <strong>Promocionar</strong>
-                                </button>
+                                <div class="d-flex flex-column align-items-center">
+                                        <button class="btn btn-warning" style=" height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="handleCheckout(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
+                                            Promocionar
+                                            <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
+                                            campaign
+                                            </span>
+                                        </button>
+                                </div>
                                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
                                 <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
+                            </div>
+                            <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== userAdvertisement.author?.id && chatError != ''">
+                                <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
                             </div>
                         </div>
                     </div>
@@ -378,7 +476,7 @@ export default {
                 <div class="subseccion">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
                         <h1 style="text-align: left;"> {{ userAdvertisement.author?.username}} 
-                            <img v-if="userAdvertisement.author?.plan === 'explorer'"style="max-height: 35px;" src="/images/verificado.png" loading="lazy"/>
+                            <img v-if="userAdvertisement.author?.plan === 'explorer'"style="max-height: 55px;" src="/images/verificado.png" loading="lazy"/>
                             <i :class="{'bi':true,'bi-gender-male': userAdvertisement.author?.gender == 'MASCULINO', 'bi-gender-female':userAdvertisement.author?.gender == 'FEMENINO', 'bi-gender-ambiguous': userAdvertisement.author?.gender == 'OTRO'}"></i>
                         </h1>
                         <button class="btn btn-share" @click="copyToClipboard()">
@@ -602,4 +700,7 @@ export default {
     cursor: not-allowed;
 }
 
+.heart-transition {
+  transition: color 0.3s ease-in-out;
+}
 </style>

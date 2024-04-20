@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useStore } from "vuex";
 import Navbar from '../Navbar.vue'
 
 const price = ref(0)
@@ -18,6 +19,8 @@ const fetchError = ref(null)
 const isLoading = ref(true)
 const showFilters = ref(false)
 const searchTerm = ref('')
+const store = useStore();
+const currentUser = computed(() => store.state.user);
 
 onMounted(() => {
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses', {
@@ -112,18 +115,14 @@ const applyFilters = () => {
     }else if (minBathrooms.value !== null) {
        if (typeof minBathrooms.value !== 'number') {
             errors.value.minBathroomsVal = 'Valor no numérico'
-            console.log(errors.value.minBathroomsVal)
         } else if (minBathrooms.value < 0) {
             errors.value.minBathroomsVal = 'Valor negativo'
-            console.log(errors.value.minBathroomsVal)
         } else if (maxBathrooms.value == null) {
             errors.value.maxBathroomsVal = 'Valor no indicado'
-            console.log(errors.value.maxBathroomsVal)
         }
     } 
 
     else if (maxBathrooms.value !== null) {
-        console.log(maxBathrooms.value)
         if (typeof maxBathrooms.value !== 'number') {
             errors.value.maxBathroomsVal = 'Valor no numérico'
         } else if (maxBathrooms.value < 0) {
@@ -193,6 +192,10 @@ const applyFilters = () => {
     }
 }
 
+const currentUserIsAuthor = (advertisement) => {
+    return currentUser.value.id === advertisement.author.id;
+}
+
 const fetchValoration = async (id) => {
   try {
     const response = await fetch(
@@ -203,7 +206,6 @@ const fetchValoration = async (id) => {
       }
     );
     const valorations = await response.json();
-    console.log(valorations);
     let total = 0;
 
     for(const rating of valorations){
@@ -228,7 +230,7 @@ const fetchValoration = async (id) => {
             <transition name="slide">
                 <div class="col-md-3 filter-column p-4" style="padding: 10px;" v-if="showFilters">
                     <div class="d-flex flex-row-reverse">
-                        <button class="btn btn-primary rounded-5" @click.prevent="showFilters=false" style="height: 40px;">
+                        <button class="form-button rounded-5 d-flex align-items-center" @click.prevent="showFilters=false" style="height: 40px;">
                             <span class="material-symbols-outlined">
                                 keyboard_double_arrow_left
                             </span>
@@ -298,7 +300,7 @@ const fetchValoration = async (id) => {
                     </form>
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
-                        <button class="btn btn-primary" @click="errors=[]; applyFilters()">Aplicar</button>
+                        <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
                         <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
                     </div>
                 </div>
@@ -307,14 +309,14 @@ const fetchValoration = async (id) => {
                 <div class="d-flex justify-content-center align-items-center mt-4">
                     <div class="search-bar">
                         <form class="d-flex w-100 justify-content-between">
-                            <div class="w-100 my-auto">
-                                <input class="search-input" v-model= "searchTerm" type="text" id="search-input" placeholder="Busco..."/>
+                            <div id="searchForm" style="width:90%;  padding-top: 5px; padding-right: 1px;">
+                                <input class="searchInput" v-model= "searchTerm" type="text" style="color:black" id="searchInput" placeholder="Busco..." />
                             </div>
-                            <button class="search-button d-flex align-items-center" style="padding: 0" type="submit" @click.prevent="search">
-                                <i class="bi bi-search"></i>
+                            <button class="searchButton d-flex align-items-center" style="padding-top:15px; padding-right: 1%; " type="submit" @click.prevent="search" >
+                                <img src="/images/search.png" alt="Buscar" />
                             </button>
-                            <button @click.prevent="showFilters=!showFilters" class="search-button d-flex align-items-center">
-                                <i class="bi bi-funnel-fill"></i>
+                            <button @click.prevent="showFilters=!showFilters" class="searchButton d-flex align-items-center" style="margin-left: 2%; margin-right: 4%;">
+                                <img src="/images/filter.png" alt="Filter" />
                             </button>
                         </form>
                     </div>
@@ -338,34 +340,49 @@ const fetchValoration = async (id) => {
 
                                 <div class="d-flex display-inline-flex">
                                     <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
-                                    <span> {{ advertisement.house.likes.length }} </span>
+                                    <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b;"> {{ advertisement.house.likes.length }} </span>
                                     <span style="color: #e87878;" class="material-icons">favorite</span>
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                        <span> {{ advertisement.valoration }} </span>
-                                        <span style="color: goldenrod;" class="material-icons">star</span>
+                                    <div class="d-flex align-items-center" style="margin-right: 0.7vh;">
+                                        <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b"> {{ parseFloat(advertisement.valoration ? advertisement.valoration.toFixed(2) : 0) }} </span>
+                                        <span style="color: #ffa723;" class="material-icons">star</span>
+                                    </div>
+                                    <div v-if="currentUserIsAuthor(advertisement)" class="d-flex align-items-center">
+                                        <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b">{{ advertisement.views }}</span>
+                                        <span class="material-symbols-outlined" style="color: #28426b">visibility</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">bed</span>
-                                    <p>{{ advertisement.house.roomsNumber }} dorm.</p>
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="d-flex justify-content-between w-50 mt-5 h-100 align-items-center">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">bed</span>
+                                        <p>{{ advertisement.house.roomsNumber }} dorm.</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">shower</span>
+                                        <p>{{ advertisement.house.bathroomsNumber }} baños</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-icons">square_foot</span>
+                                        <p>{{ advertisement.house.area }} m²</p>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <span class="material-symbols-outlined">floor</span>
+                                        <p>Planta {{ advertisement.house.floor }}</p>
+                                    </div>
+    
                                 </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">shower</span>
-                                    <p>{{ advertisement.house.bathroomsNumber }} baños</p>
+                                <div class="d-flex justify-content-end w-50 mt-4 h-100 align-items-center">
+                                    <div class="d-flex flex-column">
+                                    <button  class="btn btn-warning active" style="height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" v-if="advertisement.promotionExpirationDate !== null">
+                                            <b>Promocionado</b>
+                                            <div class="promo-icon"></div>
+                                    </button>
                                 </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-icons">square_foot</span>
-                                    <p>{{ advertisement.house.area }} m²</p>
                                 </div>
-                                <div class="d-flex flex-column align-items-center">
-                                    <span class="material-symbols-outlined">floor</span>
-                                    <p>Planta {{ advertisement.house.floor }}</p>
-                                </div>
-                            </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -383,8 +400,86 @@ const fetchValoration = async (id) => {
 .slide-enter-from {
   transform: translateX(-100%);
 }
+
+.searchInput {
+  background-color: #ffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  width: 90%;
+  margin-right: 10px;
+}
+
+.searchButton {
+  background-color: transparent;
+  border: none;
+  align-self: center;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+}
+
+.searchButton img {
+  width: 24px;
+  align-self: right;
+}
+
+.hidden {
+  opacity: 0;
+  max-height: 0;
+  max-width: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.form-range::-webkit-slider-thumb {
+  background: #a4c7ff; 
+}
+
+.form-range::-moz-range-thumb {
+  background: #a4c7ff; 
+}
+
+.form-range::-ms-thumb {
+  background: #a4c7ff; 
+}
+
+.form-button {
+  background: #28426B;
+}
+
+.form-button:hover {
+    border-color:#ffffff;
+}
+
+.form-button:active {
+    background: #3f5982;
+}
 .highlighted {
-    background-color: #bbeeff;
-    border: 2px solid black;
+    background-color: #d4e4ff;
+    border: 2px solid rgb(5, 92, 167);
+}
+
+.promo-button {
+  margin-right: 1vw;
+  height: 5.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+}
+
+.promo-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  background-image: url('/images/megaphone.png');
+  background-size: cover;
+}
+
+.list-item:hover .promo-icon {
+  width: 30px;
+  height: 30px;
+  background-image: url('/images/megaphone.gif');
+  background-size: cover;
 }
 </style>

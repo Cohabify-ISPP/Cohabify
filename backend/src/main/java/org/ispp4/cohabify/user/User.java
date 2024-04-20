@@ -3,6 +3,7 @@ package org.ispp4.cohabify.user;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.ispp4.cohabify.model.BaseEntity;
 import org.ispp4.cohabify.tag.Tag;
@@ -22,6 +23,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Builder.Default;
 
 @Getter
 @Setter
@@ -49,6 +51,9 @@ public class User extends BaseEntity {
 
     @NotNull
     private Boolean isOwner;
+
+    @NotNull
+    private int numAdvertisements = 1;
     
     @NotNull
     @Size(max = 9)
@@ -93,5 +98,22 @@ public class User extends BaseEntity {
     public Boolean isAdmin() {
         return this.authorities.contains("Admin");
     }
+
+    @Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(id, other.id);
+	}
 
 }

@@ -18,7 +18,9 @@ import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
 import org.ispp4.cohabify.utils.MailHelper;
 import org.ispp4.cohabify.utils.RandomStringGenerator;
-import org.springframework.beans.factory.annotation.Value;
+import org.ispp4.cohabify.utils.WebPageService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/auth")
@@ -53,8 +56,7 @@ public class AuthenticationController {
 	private StorageService storageService;
 	private RandomStringGenerator randomStringGenerator;
 	private MailHelper mailHelper;
-
-	@Value("${google.public.keys:default}")
+	private WebPageService webPageService;
 	private String[] googlePublicKeys;
 	
 	@PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -186,7 +188,22 @@ public class AuthenticationController {
 	
 	@PostMapping("/login/google")
 	public ResponseEntity<?> loginGoogle(@RequestBody String request) {
+		
 		UserDetails userDetails;
+		Mono<String> response = webPageService.getPageContent("https://www.googleapis.com/oauth2/v1/certs");
+		
+		response.subscribe(s -> {
+			try {
+				JSONObject jsonObject = new JSONObject(s);
+				googlePublicKeys = new String[jsonObject.length()];
+				for (int i = 0; i < jsonObject.length(); i++) {
+					googlePublicKeys[i] = jsonObject.getString(jsonObject.names().get(i).toString());
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		});
+
 		try {
 			userDetails = (UserDetails) authenticationManager.authenticate(new GoogleAuthenticationToken(request, Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")), googlePublicKeys)).getPrincipal();
 		} catch (Exception e) {

@@ -86,6 +86,8 @@ public class UserControllerTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
 
         ResponseEntity<User> response = userController.createUser(user);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -106,7 +108,9 @@ public class UserControllerTest {
         user.setPlan(Plan.BASIC);
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
-        user.setAuthorities(authorities);    
+        user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
 
         try{
             userController.createUser(user);
@@ -205,6 +209,8 @@ public class UserControllerTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
         userService.save(user);
 
         List<Tag> tags = new ArrayList<>();
@@ -235,6 +241,8 @@ public class UserControllerTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
         userService.save(user);
 
         try {
@@ -264,6 +272,8 @@ public class UserControllerTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
         user.setId( new ObjectId("69d5ec9af682fbd39a1b8b9d"));
 
         List<Tag> tags = new ArrayList<>();
@@ -315,6 +325,8 @@ public class UserControllerTest {
         user.setGender(Gender.FEMENINO);
         user.setIsVerified(false);
         user.setAuthorities(authorities);
+        user.setEnabled(true);
+        user.setVerificationCode("UnStringDe64CaracteresConMuchoRellenoParaLlegarALaLongitud123456");
         userService.save(user);
         user = userController.createUser(user).getBody();
         ResponseEntity<HttpStatus> response = userController.deleteUser(user.getId());

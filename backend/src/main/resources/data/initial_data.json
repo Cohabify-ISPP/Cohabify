@@ -1,175 +1,196 @@
 {
   "tags": [
-      {
-          "id": "60d5ec9af682fbd39a1b8b9a",
-          "tag": "Ordenado",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8b9b",
-          "tag": "Extrovertido",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8b9d",
-          "tag": "Organizado",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8b9e",
-          "tag": "Introvertido",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8b9f",
-          "tag": "Tranquilo",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba0",
-          "tag": "Desordenado",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba1",
-          "tag": "Activo",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba2",
-          "tag": "Responsable",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba3",
-          "tag": "Creativo",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba4",
-          "tag": "Silencioso",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba5",
-          "tag": "Dinámico",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba6",
-          "tag": "Fiestero",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba7",
-          "tag": "Gamer",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba8",
-          "tag": "Respetuoso",
-          "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba9",
-          "tag": "Amigable",
-          "tagType": "USER_TAG"
-      },
-      {
-        "id": "60d5ec9af682fbd39a1b8bac",
-        "tag": "Cinéfilo",
+    {
+        "id": "60d5ec9af682fbd39a1b8b9a",
+        "tag": "Ordenado",
         "tagType": "USER_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8b9c",
-          "tag": "Amueblado",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8baa",
-          "tag": "Espacioso",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bab",
-          "tag": "Céntrico",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bac",
-          "tag": "Luminoso",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bad",
-          "tag": "Bien ubicado",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bae",
-          "tag": "Acogedor",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8baf",
-          "tag": "Modernizado",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb0",
-          "tag": "Confortable",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb1",
-          "tag": "Seguro",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb2",
-          "tag": "Económico",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb3",
-          "tag": "Con vistas",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb4",
-          "tag": "Cálido",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb5",
-          "tag": "Minimalista",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb6",
-          "tag": "Amplio",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb7",
-          "tag": "Silencioso",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb8",
-          "tag": "Moderno",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bb9",
-          "tag": "Ecológico",
-          "tagType": "FLAT_TAG"
-      },
-      {
-          "id": "60d5ec9af682fbd39a1b8bba",
-          "tag": "Pet-friendly",
-          "tagType": "FLAT_TAG"
-      }
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8b9b",
+        "tag": "Extrovertido",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8b9d",
+        "tag": "Organizado",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8b9e",
+        "tag": "Introvertido",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8b9f",
+        "tag": "Tranquilo",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba0",
+        "tag": "Desordenado",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba1",
+        "tag": "Activo",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba2",
+        "tag": "Responsable",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba3",
+        "tag": "Creativo",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba4",
+        "tag": "Silencioso",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba5",
+        "tag": "Dinámico",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba6",
+        "tag": "Fiestero",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba7",
+        "tag": "Gamer",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba8",
+        "tag": "Respetuoso",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8ba9",
+        "tag": "Amigable",
+        "tagType": "USER_TAG"
+    },
+    {
+    "id": "60d5ec9af682fbd39a1b8bac",
+    "tag": "Cinéfilo",
+    "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bbe",
+        "tag": "LGTBIQ+ friendly",
+        "tagType": "USER_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8b9c",
+        "tag": "Amueblado",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8baa",
+        "tag": "Espacioso",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bab",
+        "tag": "Céntrico",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bac",
+        "tag": "Luminoso",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bad",
+        "tag": "Bien ubicado",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bae",
+        "tag": "Acogedor",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8baf",
+        "tag": "Modernizado",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb0",
+        "tag": "Confortable",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb1",
+        "tag": "Seguro",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb2",
+        "tag": "Económico",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb3",
+        "tag": "Con vistas",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb4",
+        "tag": "Cálido",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb5",
+        "tag": "Minimalista",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb6",
+        "tag": "Amplio",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb7",
+        "tag": "Silencioso",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb8",
+        "tag": "Moderno",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bb9",
+        "tag": "Ecológico",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bba",
+        "tag": "Se admiten mascotas",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bbb",
+        "tag": "No se admiten mascotas",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bbc",
+        "tag": "Con ascensor",
+        "tagType": "FLAT_TAG"
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bbd",
+        "tag": "Sin ascensor",
+        "tagType": "FLAT_TAG"
+    }
+
   ],
   "users": [
       {
@@ -177,7 +198,8 @@
           "username": "javgaragu90",
           "name": "Javier García Aguado",
           "password": "$2a$10$N.YNWLUBuyZt3dawPCbTHe2.Ys8VXGglhmwXyAmiHi7uFkrYmfk9u",
-          "isOwner": true, 
+          "isOwner": true,
+          "numAdvertisements": 0, 
           "enabled": true,
           "verificationCode": "60d5ec9af682fbd39a1b8b9eUnStringDe64CaracteresConMuchoRelleno123",
           "phone": "618537466",
@@ -188,7 +210,8 @@
               }
           ],
           "description": "Me encantan las charlas nocturnas. Me gusta mantener el hogar limpio y ordenado.",
-          "plan": "Basic",
+          "plan": "OWNER",
+          "expirationDate": "2025-06-30",
           "isVerified": true,
           "authorities": [
               "Admin"
@@ -202,6 +225,7 @@
           "name": "Manuela López Pérez",
           "password": "$2a$10$4PzUQ8nmDn7h62ssxQcPwOKjBG3L8FQYVyFgwxHz02mILgwPO3qiG",
           "isOwner": false,
+          "numAdvertisements": 0,
           "enabled": true,
           "verificationCode": "60d5ec9af682fbd39a1b8b9eUnStringDe64CaracteresConMuchoRelleno123",
           "phone": "618592566",
@@ -215,7 +239,8 @@
               }
           ],
           "description": "Me encanta salir de fiesta y divertirme",
-          "plan": "Explorer",
+          "plan": "EXPLORER",
+          "expirationDate": "2025-06-30",
           "isVerified": false,
           "authorities": [
               "User"
@@ -230,7 +255,7 @@
           "location": "Triana, Sevilla",
           "roomsNumber": "5",
           "bathroomsNumber": "1",
-          "area": "10",
+          "area": "95",
           "heating": "CENTRAL_HEATING",
           "floor": "1",
           "cadastre": "12345678901234567890",
@@ -463,5 +488,45 @@
           "date": "2024-02-25",
           "comment": "Es un piso muy sucio y con mala ventilación"
       }
+  ],
+  "messages": [
+    {
+        "id": "60d5ec9af682fbd39a1b8bfe",
+        "text": "Hola!",
+        "timeSent": "2024-04-10T14:30",
+        "sender": {
+            "id": "60d5ec9af682fbd39a1b8b9d"
+        }
+    },
+    {
+        "id": "60d5ec9af682fbd39a1b8bff",
+        "text": "Buenos días!",
+        "timeSent": "2024-04-10T14:37",
+        "sender": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+        }
+    }
+  ],
+  "chats": [
+    {
+        "id": "60d5ec9af682fbd39a1b8c00",
+        "isAccepted": true,
+        "users": [
+            {
+                "id": "60d5ec9af682fbd39a1b8b9d"
+            },
+            {
+                "id": "60d5ec9af682fbd39a1b8b9e"
+            }
+        ],
+        "messages": [
+            {
+                "id": "60d5ec9af682fbd39a1b8bfe"
+            },
+            {
+                "id": "60d5ec9af682fbd39a1b8bff"
+            }
+        ]
+    }
   ]
 }

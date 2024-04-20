@@ -12,7 +12,7 @@
             const router = useRouter();
             const plan = computed(() => currentUser.value.plan);
             const loggedIn = ref(false);
-            const stripePromise = loadStripe('pk_test_51P2DTpBofFRUNSKsZLVQgYTOY0I6PLl4BP8w6a5y8IYZThREOk8a7dcqu7kXCg8aV9byhdSkZ98Sg3dFL24RzkON00R08XEGbM');
+            const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
             const loading = ref(false);
             const lineItems = ref(null);
             const isLoading = ref(true);
@@ -63,8 +63,8 @@
                         const { error } = await stripe.redirectToCheckout({
                             lineItems: lineItems.value,
                             mode: 'payment',
-                            successUrl: 'http://localhost:5173/plan?session_id={CHECKOUT_SESSION_ID}',
-                            cancelUrl: 'http://localhost:5173/',
+                            successUrl: window.location.origin+'/plan?session_id={CHECKOUT_SESSION_ID}',
+                            cancelUrl: window.location.origin,
                         });
 
                         if (error) {
@@ -119,7 +119,7 @@
      <div v-if="isLoading" class="spinner-border mt-5" role="status">
                     <span class="visually-hidden">Loading...</span>
     </div>
-    <div  v-else class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 15vw ;">
+    <div  v-else class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 14vw ;">
             <div class="col">
                 <div class="card card1">
                     <h2 class="fw-bold" style="color: #28426B;">Básico</h2>
@@ -221,7 +221,7 @@
 
 .modal-body {
     padding: 30px 15px;
-    text-align: justify;
+    text-align: left;
 }
 .card {
     padding-top: 20px;

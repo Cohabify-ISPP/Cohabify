@@ -36,6 +36,7 @@ public class UserRatingServiceTest {
     @Test
     public void testSaveUserRating() {
         UserRating userRating = new UserRating();
+        userRating.setComment("Texto");
         UserRating savedUserRating = userRatingService.save(userRating);
 
         assertNotNull(savedUserRating);
