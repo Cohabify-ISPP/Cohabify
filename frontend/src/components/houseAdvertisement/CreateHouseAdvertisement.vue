@@ -1,7 +1,7 @@
 <template>
   <Navbar />
   <h1 class="text-center mt-4">Anuncio de vivienda</h1>
-  <div class="container card2" style="margin-top: 40px;margin-bottom: 40px;">
+  <div class="container card2" style="margin-top: 20px;margin-bottom: 20px;">
     <div v-show="success" class="alert alert-success alert-dismissible fade show" role="alert">
         Anuncio creado con éxito.
       </div>
@@ -128,11 +128,7 @@
                 </div>
               </div>
             
-          
-          </div>
-        </div>
-        <div class="col  justify-content-center">
-          <div class=" row d-flex mb-2">
+            <div class=" row d-flex mb-2">
             <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
           </div>   
           <div class="row d-flex mb-2">
@@ -145,9 +141,12 @@
               </div>
             </div>
           </div>
+          </div>
+        </div>
+        <div class="col  justify-content-center">
             <!--IMAGES-->
             <div class="row d-flex mb-2">
-            <div class="card mt-3">
+            <div class="card mt-2">
               <div class="top">
                 <p>Arrastra aquí tus imágenes</p>
               </div>
@@ -170,6 +169,23 @@
                 </div>
               </div>
             </div>
+            <GMapAutocomplete
+                placeholder="Busca cualquier lugar"
+                @place_changed="setPlace"
+                style="margin-right: 20px; padding: 10px; margin-top: 15px;;" class="form-control col"
+                ></GMapAutocomplete>
+            <GMapMap
+            :center="mapCenter"
+            :zoom="12"
+            map-type-id="roadmap"
+            style="height: 50vh; width: 100%; padding: 10px; margin-top: 10px; border-radius: 10px;"
+            @click="handleMapClick"
+            >
+            <GMapMarker
+              v-for="(m, index) in marker"
+              :key="index"
+              :position="m.position"/>
+          </GMapMap>
             <!--Success-->
             <div class="mt-3">
               <button id="btnPublicar" style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
@@ -217,6 +233,7 @@ export default {
     const selectedTenants = ref([])
     const imagesUrl = ref([])
     const images = ref([])
+    const locationPoint = ref({})
     const auth = ref();
     const authorAdvertisementsNumber = ref([]);
 
@@ -227,6 +244,8 @@ export default {
     const store = useStore()
     const user = computed(() => store.state.user);
 
+    const marker = ref([]);
+
     onBeforeMount(() => {
       fetchTags();
       const urlParams = new URLSearchParams(window.location.search);
@@ -234,8 +253,31 @@ export default {
       if (sessionId) {
         fetchHouseAdvertisement(sessionId);
       }
-      });
 
+      });
+    
+    const mapCenter = ref({ lat: 40.416775, lng: -3.703790 });
+    
+    const handleMapClick = (event) => {
+      const newMarker = {
+          position: {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng(),
+          },
+      };
+      marker.value = [];
+      marker.value.push(newMarker);
+      locationPoint.value = {
+        x: event.latLng.lng(),
+        y: event.latLng.lat(),
+      };}
+    
+    const setPlace= (place) =>{
+          mapCenter.value = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+          };
+        }
       const fetchHouseAdvertisement = (sessionId) => {
       const response = fetch(import.meta.env.VITE_BACKEND_URL + '/api/stripe/session', {
           method: 'POST',
@@ -450,11 +492,6 @@ export default {
         document.getElementById("btnPublicar").disabled = false;
         return;
       }
-      if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
-        document.getElementById("btnPublicar").disabled = false;
-        alert("Selecciona un catastro válido");
-        return;
-      }
       
       const formData = new FormData();
       formData.append("string-data", new Blob([JSON.stringify({
@@ -471,7 +508,8 @@ export default {
           location: location.value,
           cadastre: selectedCadastre.value,
           heating: heating.value,
-          tags: selectedTags.value
+          tags: selectedTags.value,
+          locationPoint: locationPoint.value
         }
       })], { type: "application/json" }));
       for (let i = 0; i < images.value.length; i++) {
@@ -510,8 +548,11 @@ export default {
       selectedCadastre,
       auth,
       authorAdvertisementsNumber,
-      user
-
+      user,
+      mapCenter,
+      setPlace,
+      handleMapClick,
+      marker,
     }
   },
   watch: {
