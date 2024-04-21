@@ -310,12 +310,26 @@ export default {
         heating.value = ad.value.house.heating;
         houseId.value = ad.value.house.id;
         selectedCadastre.value = ad.value.house.cadastre;
+        x.value =ad.value.house.locationPoint.x;
+        y.value =ad.value.house.locationPoint.y;
         for (let i = 0; i < ad.value.house.tags.length; i++) {
           toggleTag(ad.value.house.tags[i]);
         }
         imagesBack.value = ad.value.images;
         
-        
+        const newMarker = {
+          position: {
+            lat: ad.value.house.locationPoint.y,
+            lng: ad.value.house.locationPoint.x,
+          },
+        };
+
+        marker.value.push(newMarker);
+
+        mapCenter.value = {
+          lat: ad.value.house.locationPoint.y,
+          lng: ad.value.house.locationPoint.x,
+        };
         
     }
 
@@ -463,6 +477,11 @@ export default {
       
       if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
         alert("Selecciona un catastro válido");
+        return;
+      }
+
+      if(x.value === null || y.value === null){
+        alert("Selecciona una ubicación en el mapa");
         return;
       }
 

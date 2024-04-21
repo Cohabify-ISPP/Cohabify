@@ -233,8 +233,8 @@ export default {
     const selectedTenants = ref([])
     const imagesUrl = ref([])
     const images = ref([])
-    const x = ref(0)
-    const y = ref(0)
+    const x = ref(null)
+    const y = ref(null)
     const auth = ref();
     const authorAdvertisementsNumber = ref([]);
 
@@ -495,7 +495,15 @@ export default {
 
       if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
         alert("Selecciona un catastro válido");
+        document.getElementById("btnPublicar").disabled = false;
         return;
+      }
+
+      if(x.value === null || y.value === null){
+        alert("Selecciona una ubicación en el mapa");
+        document.getElementById("btnPublicar").disabled = false;
+        return;
+        
       }
       
       const formData = new FormData();
