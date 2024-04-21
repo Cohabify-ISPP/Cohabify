@@ -1,10 +1,67 @@
 <script setup>
 import Navbar from './Navbar.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from "vuex";
 
 const store = useStore()
 const currentUser = computed(() => store.state.user);
+
+const showMap = ref(false);
+const locations = ref([]);
+const auth = ref({});
+
+function onClickShowMap(){
+  showMap.value = !showMap.value;
+  if(showMap.value){
+    fetchLocations();
+  }
+}
+  const fetchLocations = async () => {
+      try {
+        const userFetch = await fetch(
+          import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
+          {
+            method: "POST",
+            headers: {
+              "Authentication":
+                "Bearer " + localStorage.getItem("authentication"),
+            },
+          }
+        );
+
+        const userData = await userFetch.json();
+        auth.value = userData;
+
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/houses`,
+          {
+            method: "GET",
+            headers: {
+                        'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+                    },
+            credentials: "include",
+          });
+
+        if (response.ok) {
+          const data = await response.json();
+          locations.value = data;
+
+        } else {
+          window.location.href = "/404";
+        }
+
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    const mapCenter = ref({ lat: 40.416775, lng: -3.703790 });
+    
+    const setPlace= (place) =>{
+          mapCenter.value = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+          };
+        }
 </script>
 
 <template>
@@ -29,7 +86,34 @@ const currentUser = computed(() => store.state.user);
   </div>
     <div class="mb-auto">
       <!-- meter aquí relleno para que no quede tan vacío-->
+      <a class="btn btn-primary" @click="onClickShowMap" v-if="!showMap" style="background: radial-gradient(circle, rgb(168, 126, 237), rgb(64, 105, 255));margin-top:15px; margin-bottom:15px"><b>Mostrar pisos en el mapa</b></a>
+      <a class="btn btn-primary" @click="onClickShowMap" v-else style="background: radial-gradient(circle, rgb(168, 126, 237), rgb(64, 105, 255));margin-top:15px; margin-bottom:15px"><b>Ocultar mapa</b></a>
+      
+      <div class="d-flex align-items-end justify-content-center">
+        <GMapAutocomplete
+                  placeholder="Busca cualquier lugar"
+                  @place_changed="setPlace"
+                  style="margin-right: 20px; padding: 10px; margin-top: 15px;width: 40vh;background-color: white; color: black"
+                  v-if="showMap"
+                  ></GMapAutocomplete>
+        </div>
+        <div class="d-flex align-items-end justify-content-center">
+              <GMapMap
+              :center="mapCenter"
+              :zoom="12"
+              map-type-id="roadmap"
+              style="height: 60vh; width: 90vh; padding: 10px; margin-top: 10px; border-radius: 10px;"
+              v-if="showMap"
+              >
+              <GMapMarker
+                v-for="(a, index) in locations"
+                :key="a.id"
+                :position="{lat: a.house.locationPoint.x, lng: a.house.locationPoint.y}"
+                @click="$router.push(`/advertisements/houses/${a.id}`)"/>
+            </GMapMap>
+      </div>
     </div>
+    
     <div class="justify-content-start mt-6 mb-3">
       <h3 style="font-size: 2em">¡No te pierdas esto!</h3>
     </div>

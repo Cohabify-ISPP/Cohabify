@@ -267,6 +267,7 @@ const openChat = () => {
     })
 }
 
+
 onMounted(() => {
   fetchHouseAdvertisement();
 });
@@ -477,7 +478,25 @@ onMounted(() => {
               <h5>{{ houseAdvertisement.house.location }}</h5>
               <i class="bi bi-geo-alt" style="margin-left: 1%"></i>
             </div>
-            <img src="https://motor.elpais.com/wp-content/uploads/2022/01/google-maps-22-1046x616.jpg" class="rounded-4" style="max-width: 100%; max-height: 100%"/>
+            <!--Aqui el mapa-->
+            <GMapMap
+            :center="{
+              lat: houseAdvertisement.house.locationPoint.y,
+              lng: houseAdvertisement.house.locationPoint.x,
+              }"
+            :zoom="12"
+            map-type-id="roadmap"
+            style="height: 50vh; width: 100%"
+           >
+              <GMapMarker
+              :key="houseAdvertisement.house.id"
+              :position="{
+                lat: houseAdvertisement.house.locationPoint.y,
+                lng: houseAdvertisement.house.locationPoint.x,
+                }"
+              :clickable="true"
+            />
+          </GMapMap>
           </div>
         </div>
 

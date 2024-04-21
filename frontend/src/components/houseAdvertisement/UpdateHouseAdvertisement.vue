@@ -130,24 +130,23 @@
                   </ul>
                 </div>
               </div>
-            
+              <div class=" row d-flex mb-2">
+                <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
+              </div>   
+              <div class="row d-flex mb-2">
+                <div class="btn-group" role="group"  style="max-height: 180px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
+                  <div class="tags-container">
+                  <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
+                  :class="{ 'selected': selectedTags.some(selectedTag => selectedTag.id === tag.id), 'unselected': !selectedTags.some(selectedTag => selectedTag.id === tag.id) }">
+                    {{ tag.tag }}
+                  </span>
+                  </div>
+                </div>
+              </div>
           
           </div>
         </div>
         <div class="col  justify-content-center">
-          <div class=" row d-flex mb-2">
-            <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
-          </div>   
-          <div class="row d-flex mb-2">
-            <div class="btn-group" role="group"  style="max-height: 180px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
-              <div class="tags-container">
-              <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
-              :class="{ 'selected': selectedTags.some(selectedTag => selectedTag.id === tag.id), 'unselected': !selectedTags.some(selectedTag => selectedTag.id === tag.id) }">
-                {{ tag.tag }}
-              </span>
-              </div>
-            </div>
-          </div>
             <!--IMAGES-->
             <div class="row d-flex mb-2">
             <div class="card mt-3">
@@ -177,6 +176,23 @@
                 </div>
               </div>
             </div>
+            <GMapAutocomplete
+                placeholder="Busca cualquier lugar"
+                @place_changed="setPlace"
+                style="margin-right: 20px; padding: 10px; margin-top: 15px;;" class="form-control col"
+                ></GMapAutocomplete>
+            <GMapMap
+            :center="mapCenter"
+            :zoom="12"
+            map-type-id="roadmap"
+            style="height: 50vh; width: 100%; padding: 10px; margin-top: 10px; border-radius: 10px;"
+            @click="handleMapClick"
+            >
+            <GMapMarker
+              v-for="(m, index) in marker"
+              :key="index"
+              :position="m.position"/>
+          </GMapMap>
             <!--Success-->
             <div class="mt-3">
               <button style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
@@ -227,8 +243,33 @@ export default {
     const images = ref([])
     const auth = ref()
     const ad = ref()
-  
+    const x = ref(0)
+    const y = ref(0)
 
+    const marker = ref([]);
+  
+    const mapCenter = ref({ lat: 40.416775, lng: -3.703790 });
+    
+    const handleMapClick = (event) => {
+      const newMarker = {
+          position: {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng(),
+          },
+      };
+      marker.value = [];
+      marker.value.push(newMarker);
+      x.value=  event.latLng.lng();
+      y.value=  event.latLng.lat();
+    }
+
+    const setPlace= (place) =>{
+          mapCenter.value = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+          };
+        }
+    
 
   
 
@@ -269,12 +310,26 @@ export default {
         heating.value = ad.value.house.heating;
         houseId.value = ad.value.house.id;
         selectedCadastre.value = ad.value.house.cadastre;
+        x.value =ad.value.house.locationPoint.x;
+        y.value =ad.value.house.locationPoint.y;
         for (let i = 0; i < ad.value.house.tags.length; i++) {
           toggleTag(ad.value.house.tags[i]);
         }
         imagesBack.value = ad.value.images;
         
-        
+        const newMarker = {
+          position: {
+            lat: ad.value.house.locationPoint.y,
+            lng: ad.value.house.locationPoint.x,
+          },
+        };
+
+        marker.value.push(newMarker);
+
+        mapCenter.value = {
+          lat: ad.value.house.locationPoint.y,
+          lng: ad.value.house.locationPoint.x,
+        };
         
     }
 
@@ -425,6 +480,11 @@ export default {
         return;
       }
 
+      if(x.value === null || y.value === null){
+        alert("Selecciona una ubicación en el mapa");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("string-data", new Blob([JSON.stringify({
         id: ad.value.id,
@@ -435,6 +495,8 @@ export default {
         tenants: selectedTenants.value,
         author: auth.value,
         imagesB: imagesBack.value,
+        x: x.value,
+        y: y.value,
         house: {
           roomsNumber: roomsNumber.value,
           bathroomsNumber: bathroomsNumber.value,
@@ -443,7 +505,7 @@ export default {
           location: location.value,
           cadastre: selectedCadastre.value,
           heating: heating.value,
-          tags: selectedTags.value
+          tags: selectedTags.value,
         }
         
       })], { type: "application/json" }));
@@ -505,7 +567,11 @@ export default {
       imagesBack,
       getImageUrl,
       fetchCadastre,
-      selectedCadastre
+      selectedCadastre,
+      setPlace,
+      handleMapClick,
+      mapCenter,
+      marker,
 
     }
   },
