@@ -270,6 +270,7 @@ export default {
       marker.value.push(newMarker);
       x.value=  event.latLng.lng();
       y.value =  event.latLng.lat();
+      console.log(x.value, y.value)
     }
 
     const setPlace= (place) =>{
@@ -482,23 +483,6 @@ export default {
     const register = () => {
       document.getElementById("btnPublicar").disabled = true;
 
-      if (images.value.length === 0) {
-        alert("Selecciona al menos una imagen");
-        document.getElementById("btnPublicar").disabled = false;
-        return;
-      }
-      if (selectedTags.value.length === 0) {
-        alert("Selecciona al menos una etiqueta");
-        document.getElementById("btnPublicar").disabled = false;
-        return;
-      }
-
-      if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
-        alert("Selecciona un catastro válido");
-        document.getElementById("btnPublicar").disabled = false;
-        return;
-      }
-
       if(x.value === null || y.value === null){
         alert("Selecciona una ubicación en el mapa");
         document.getElementById("btnPublicar").disabled = false;
@@ -513,6 +497,8 @@ export default {
         price: price.value,
         tenants: selectedTenants.value,
         author: auth.value,
+        x: x.value,
+        y: y.value,
         house: {
           roomsNumber: roomsNumber.value,
           bathroomsNumber: bathroomsNumber.value,
@@ -522,8 +508,6 @@ export default {
           cadastre: selectedCadastre.value,
           heating: heating.value,
           tags: selectedTags.value,
-          x: x.value,
-          y: y.value
         }
       })], { type: "application/json" }));
       for (let i = 0; i < images.value.length; i++) {
