@@ -233,7 +233,8 @@ export default {
     const selectedTenants = ref([])
     const imagesUrl = ref([])
     const images = ref([])
-    const locationPoint = ref({})
+    const x = ref(0)
+    const y = ref(0)
     const auth = ref();
     const authorAdvertisementsNumber = ref([]);
 
@@ -267,11 +268,10 @@ export default {
       };
       marker.value = [];
       marker.value.push(newMarker);
-      locationPoint.value = {
-        x: event.latLng.lng(),
-        y: event.latLng.lat(),
-      };}
-    
+      x.value=  event.latLng.lng();
+      y.value =  event.latLng.lat();
+    }
+
     const setPlace= (place) =>{
           mapCenter.value = {
           lat: place.geometry.location.lat(),
@@ -492,6 +492,11 @@ export default {
         document.getElementById("btnPublicar").disabled = false;
         return;
       }
+
+      if (selectedCadastre.value === '' || location.value === '' || area.value === '') {
+        alert("Selecciona un catastro válido");
+        return;
+      }
       
       const formData = new FormData();
       formData.append("string-data", new Blob([JSON.stringify({
@@ -509,7 +514,8 @@ export default {
           cadastre: selectedCadastre.value,
           heating: heating.value,
           tags: selectedTags.value,
-          locationPoint: locationPoint.value
+          x: x.value,
+          y: y.value
         }
       })], { type: "application/json" }));
       for (let i = 0; i < images.value.length; i++) {

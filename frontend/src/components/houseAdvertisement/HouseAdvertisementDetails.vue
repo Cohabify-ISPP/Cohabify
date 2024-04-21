@@ -481,8 +481,8 @@ onMounted(() => {
             <!--Aqui el mapa-->
             <GMapMap
             :center="{
-              lat: houseAdvertisement.house.locationPoint.x,
-              lng: houseAdvertisement.house.locationPoint.y,
+              lat: houseAdvertisement.house.locationPoint.y,
+              lng: houseAdvertisement.house.locationPoint.x,
               }"
             :zoom="12"
             map-type-id="roadmap"
@@ -491,8 +491,8 @@ onMounted(() => {
               <GMapMarker
               :key="houseAdvertisement.house.id"
               :position="{
-                lat: houseAdvertisement.house.locationPoint.x,
-                lng: houseAdvertisement.house.locationPoint.y,
+                lat: houseAdvertisement.house.locationPoint.y,
+                lng: houseAdvertisement.house.locationPoint.x,
                 }"
               :clickable="true"
             />

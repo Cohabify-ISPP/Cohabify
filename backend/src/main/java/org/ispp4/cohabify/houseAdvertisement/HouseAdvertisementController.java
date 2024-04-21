@@ -119,7 +119,7 @@ public class HouseAdvertisementController {
             house.setCadastre(request.getHouse().getCadastre());
             house.setHeating(request.getHouse().getHeating());
             house.setTags(request.getHouse().getTags());
-            GeoJsonPoint point = new GeoJsonPoint(2, 2);
+            GeoJsonPoint point = new GeoJsonPoint(request.getX(), request.getY());
             house.setLocationPoint(point);
             house = houseService.save(house);
             
@@ -217,7 +217,7 @@ public class HouseAdvertisementController {
             house.setCadastre(request.getHouse().getCadastre());
             house.setHeating(request.getHouse().getHeating());
             house.setTags(request.getHouse().getTags());
-            GeoJsonPoint point = new GeoJsonPoint(2, 2);
+            GeoJsonPoint point = new GeoJsonPoint(request.getX(), request.getY());
             house.setLocationPoint(point);
             house = houseService.save(house);
 
