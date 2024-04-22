@@ -160,6 +160,8 @@ public class HouseAdvertisementControllerTest {
         request.setHouse(advertisement3.getHouse());
         request.setHouseId(house3.getId());
         request.setImagesB(List.of());
+        request.setX(2.);
+        request.setY(2.);
 
         when(advertisementService.checkPromotions(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
 
