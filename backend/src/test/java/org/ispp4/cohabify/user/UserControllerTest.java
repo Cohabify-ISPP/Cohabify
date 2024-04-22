@@ -305,6 +305,7 @@ public class UserControllerTest {
         User user = new User();
         user.setUsername("test");
         user.setEmail("test@test.com");
+        user.setPhone("666666666");
         userService.save(user);
         ObjectId id= user.getId();
         userService.deleteById(id);

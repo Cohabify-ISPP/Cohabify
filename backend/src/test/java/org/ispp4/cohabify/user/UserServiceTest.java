@@ -35,6 +35,7 @@ public class UserServiceTest {
         User user = new User();
         user.setUsername("test");
         user.setEmail("test@test.com");
+        user.setPhone("666666666");
         User savedUser = userService.save(user);
         assertNotNull(savedUser);
         userService.deleteById(savedUser.getId());
@@ -45,6 +46,7 @@ public class UserServiceTest {
         User user = new User();
         user.setUsername("test");
         user.setEmail("test@test.com");
+        user.setPhone("666666666");
         userService.save(user);
         userService.deleteById(user.getId());
         assertThat(userService.findById(user.getId()).isEmpty());
@@ -56,6 +58,7 @@ public class UserServiceTest {
         User user = new User();
         user.setUsername("test");
         user.setEmail("test@test.com");
+        user.setPhone("666666666");
         user = userService.save(user);
         User foundUser = userService.getUserByUsername("test");
         assertNotNull(foundUser);
@@ -80,6 +83,7 @@ public class UserServiceTest {
         User user = new User();
         user.setUsername("test");
         user.setEmail("test@test.com");
+        user.setPhone("666666666");
         user.setIsOwner(true);
         user = userService.save(user);
         List<User> foundUsers = userService.findByIsOwner(true);
@@ -93,6 +97,7 @@ public class UserServiceTest {
         User user2 = new User();
         user2.setUsername("test2");
         user.setEmail("test@test.com");
+        user.setPhone("666666666");
         user2.setIsOwner(false);
         user2 = userService.save(user2);
         foundUsers = userService.findByIsOwner(false);
