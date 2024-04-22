@@ -96,8 +96,8 @@ public class UserServiceTest {
 
         User user2 = new User();
         user2.setUsername("test2");
-        user.setEmail("test@test.com");
-        user.setPhone("666666666");
+        user2.setEmail("test@test.com");
+        user2.setPhone("666666666");
         user2.setIsOwner(false);
         user2 = userService.save(user2);
         foundUsers = userService.findByIsOwner(false);
