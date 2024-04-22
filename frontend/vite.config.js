@@ -1,33 +1,29 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
+import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
   plugins: [
-    vue(),
-    VitePWA({
-      manifest: {
-        // content of manifest
-      },
-      workbox: {
-        // workbox options for generateSW
-      }
-    })
+     vue(),
+     VitePWA({
+       manifest: {
+         // content of manifest
+       },
+       workbox: {
+         // workbox options for generateSW
+       }
+     })
   ],
   resolve: {
-    alias: [
-      {
-        find: 'eventsource',
-        replacement: './node_modules/sockjs-client/lib/transport/browser/eventsource.js',
-      },
-      {
-        find: 'events',
-        replacement: './node_modules/sockjs-client/lib/event/emitter.js',
-      },
-      {
-        find: 'crypto',
-        replacement: './node_modules/sockjs-client/lib/utils/browser-crypto.js',
-      },
-    ],
- },
-});
+     alias: {
+       'eventsource': './node_modules/sockjs-client/lib/transport/browser/eventsource.js',
+       'events': './node_modules/sockjs-client/lib/event/emitter.js',
+       'crypto': './node_modules/sockjs-client/lib/utils/browser-crypto.js',
+       '@': fileURLToPath(new URL("./src", import.meta.url)),
+     },
+  },
+  optimizeDeps: {
+     include: ["@fawmi/vue-google-maps", "fast-deep-equal"],
+  },
+ });
