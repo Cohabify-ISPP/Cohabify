@@ -303,6 +303,8 @@ public class UserControllerTest {
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
         
         User user = new User();
+        user.setUsername("test");
+        user.setEmail("test@test.com");
         userService.save(user);
         ObjectId id= user.getId();
         userService.deleteById(id);
