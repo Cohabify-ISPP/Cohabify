@@ -53,8 +53,8 @@ public class AdvertisementHouseRequest {
 
     private List<String> imagesB;
 
-    private Double X;
+    private Float x;
 
-    private Double Y;
+    private Float y;
 
 }

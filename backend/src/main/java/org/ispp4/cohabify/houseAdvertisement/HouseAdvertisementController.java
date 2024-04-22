@@ -119,7 +119,7 @@ public class HouseAdvertisementController {
             house.setCadastre(request.getHouse().getCadastre());
             house.setHeating(request.getHouse().getHeating());
             house.setTags(request.getHouse().getTags());
-            GeoJsonPoint point = new GeoJsonPoint(2, 2);
+            GeoJsonPoint point = new GeoJsonPoint(request.getX(), request.getY());
             house.setLocationPoint(point);
             house = houseService.save(house);
             
@@ -192,7 +192,7 @@ public class HouseAdvertisementController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAdvertisement(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
-    @RequestPart(value = "images",required = true) List<MultipartFile> images,@PathVariable ObjectId id) throws BadRequestException {
+    @RequestPart(value = "images",required = false) List<MultipartFile> images,@PathVariable ObjectId id) throws BadRequestException {
 		
 		if(result.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -201,10 +201,6 @@ public class HouseAdvertisementController {
 										 	 	.map(fe -> new FormItemValidationError(fe))
 										 	 	.toList());
 		}
-
-        if (images == null || images.size() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "images are required");
-        }
 
         if(request.getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
             
@@ -217,7 +213,7 @@ public class HouseAdvertisementController {
             house.setCadastre(request.getHouse().getCadastre());
             house.setHeating(request.getHouse().getHeating());
             house.setTags(request.getHouse().getTags());
-            GeoJsonPoint point = new GeoJsonPoint(2, 2);
+            GeoJsonPoint point = new GeoJsonPoint(request.getX(), request.getY());
             house.setLocationPoint(point);
             house = houseService.save(house);
 
