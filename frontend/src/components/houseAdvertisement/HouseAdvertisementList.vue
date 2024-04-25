@@ -22,7 +22,14 @@ const searchTerm = ref('')
 const store = useStore();
 const currentUser = computed(() => store.state.user);
 
+const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
 onMounted(() => {
+    updateMeta('Encuentra tu Vivienda Ideal en Cohabify: Búsqueda Personalizada y Filtros Avanzados', 'Utiliza nuestros filtros avanzados para encontrar viviendas en alquiler que se ajusten a tus necesidades específicas. Explora opciones por precio, tamaño, y más en Cohabify y descubre tu hogar ideal rápidamente.');
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses', {
         method: "GET",
         headers: {

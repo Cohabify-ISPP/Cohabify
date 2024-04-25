@@ -21,6 +21,12 @@ export default {
     const searchTerm = ref('');
     const divIsHidden = ref(false);
 
+    const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
     const fetchAdvertisements = async () => {
       try {
         const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users`,
@@ -161,6 +167,7 @@ export default {
 }
 
     onMounted(() => {
+      updateMeta('Explora Anuncios y Aplica Filtros en Cohabify', 'Busca y filtra anuncios de vivienda en Cohabify basados en tu presupuesto, ubicación deseada y más. Conecta con anunciantes y explora opciones de vivienda adaptadas a tus necesidades.');
       fetchAdvertisements();
       fetchTags();
       toggleDivVisibility();

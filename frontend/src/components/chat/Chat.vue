@@ -88,6 +88,16 @@ export default {
     const store = useStore()
     const currentUser = computed(() => store.state.user);
 
+    const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+    onMounted(() => {
+      updateMeta('Panel de Chat - Cohabify: Conecta y Comunícate Sin Interrupciones', 'Accede a tu panel de chat en Cohabify para interactuar con contactos, ver mensajes y mantenerte conectado. Simplifica la comunicación con una interfaz de chat intuitiva diseñada para mejorar tus interacciones.');
+    });
+
     const chats = ref([])
 
     const tenant = ref({

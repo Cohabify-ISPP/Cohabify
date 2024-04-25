@@ -67,6 +67,12 @@ export default {
         const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
         const router = useRouter();
         const test = ref(false);
+
+        const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
         
         const login = async () => {
             const data = {
@@ -153,6 +159,7 @@ export default {
             script.src = 'https://accounts.google.com/gsi/client';
             script.async = true;
             script.defer = true;
+            updateMeta('Iniciar Sesión en Cohabify', 'Accede a tu cuenta para explorar viviendas y encontrar compañeros de piso ideales. Utiliza nuestro servicio para mejorar tu experiencia.');
             document.body.appendChild(script);
             if (process.env.NODE_ENV === "test") {
                 test.value = true;

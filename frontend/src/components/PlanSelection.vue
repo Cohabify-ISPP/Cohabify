@@ -17,6 +17,16 @@
             const lineItems = ref(null);
             const isLoading = ref(true);
 
+            const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+            onMounted(() => {
+                updateMeta('Escoge tu plan en Cohabify', 'Selecciona entre Básico, Explorador, y Propietario para maximizar tu experiencia en Cohabify.');
+            });
+
             onMounted(async () => {
             
             const urlParams = new URLSearchParams(window.location.search);

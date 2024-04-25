@@ -158,6 +158,12 @@ export default {
     const validationErrors = ref([])
     const termsAccepted = ref(false);
 
+    const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
     const validatePassword = () => {
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
 
@@ -321,7 +327,7 @@ export default {
     };
 
     onMounted(() => {
-      
+      updateMeta('Registro - Cohabify', 'Únete a Cohabify hoy para encontrar tu espacio ideal y compañeros de piso. Regístrate ahora para comenzar tu búsqueda.');
       fileInput.value = ref('fileInput');
       fetch(import.meta.env.VITE_BACKEND_URL + '/api/tag/types/USER_TAG')
         .then(response => {

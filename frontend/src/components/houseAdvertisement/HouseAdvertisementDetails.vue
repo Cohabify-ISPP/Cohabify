@@ -32,6 +32,12 @@ const truncateDescription = (description) => {
   }
 };
 
+const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
 function parseHeating(heating) {
   if (heating === "CENTRAL_HEATING") {
     return "Calefacción central";
@@ -270,6 +276,7 @@ const openChat = () => {
 
 onMounted(() => {
   fetchHouseAdvertisement();
+  updateMeta('Explora Detalles de la Vivienda en Cohabify: Encuentra tu Hogar Ideal', 'Descubre todos los detalles de nuestras viviendas en Cohabify. Evalúa características, lee comentarios de otros usuarios y conecta con los inquilinos o propietarios para encontrar tu hogar ideal.');
 });
 </script>
 
