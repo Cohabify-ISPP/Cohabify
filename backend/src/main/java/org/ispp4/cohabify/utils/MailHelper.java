@@ -65,4 +65,44 @@ public class MailHelper {
         return message;
     }
 
+    public Boolean sendResetPasswordEmail(User user) {
+        try {
+            MimeMessage mimeMessage = createResetPasswordMessage(user);
+
+            mailSender.send(mimeMessage);
+                
+            return true;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private MimeMessage createResetPasswordMessage(User user) throws AddressException, MessagingException {
+        String resetURL = frontendUrl + "/reset-password/" + user.getVerificationCode();
+        String toAddress = user.getEmail();
+        String subject = "Restablecimiento de su contraseña de Cohabify";
+        String content = "<html>\n" +
+                         "<body>\n" +
+                         "<p>Estimado/a " + user.getUsername() + ",</p>\n" +
+                         "<p>Por favor, entre en el siguiente enlace para restablecer su contraseña:</p>\n" +
+                         "<p><a href=\"" + resetURL + "\">" + resetURL + "</a></p>\n" +
+                         "<p>Si no ha pedido restablecer su contraseña, puede ignorar este mensaje.</p>\n" +
+                         "<p>Muchas gracias por su confianza,</p>\n" +
+                         "<p>Cohabify</p>\n" +
+                         "</body>\n" +
+                         "</html>";
+        
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+     
+        helper.setFrom(new InternetAddress(fromMailAddress));
+        helper.setTo(new InternetAddress(toAddress));
+        helper.setSubject(subject);
+        helper.setText(content, true);
+
+        return message;
+    }
+
 }

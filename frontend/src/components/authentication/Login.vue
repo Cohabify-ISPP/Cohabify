@@ -48,6 +48,8 @@
             </div>
             <div>
                 <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿No tienes cuenta? <button type="button" class="text-clickable" @click="moveToRegister">Regístrate</button></h3>
+                <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿Has olvidado tu contraseña?</h3>
+                <h3 style="color: rgb(0, 0, 0); padding-top: 2%;"><button type="button" class="text-clickable" @click.prevent="router.push('/reset-password')">Restablece tu contraseña</button></h3>
             </div>
         </div>
     </div>
@@ -170,7 +172,8 @@ export default {
             handleGoogleOauth,
             bypassOauth,
             login,
-            moveToRegister
+            moveToRegister,
+            router
         };
 
     }

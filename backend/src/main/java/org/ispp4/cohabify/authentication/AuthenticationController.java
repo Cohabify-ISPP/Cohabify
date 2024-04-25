@@ -11,6 +11,7 @@ import org.ispp4.cohabify.dto.ErrorResponse;
 import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.dto.JwtTokenDto;
 import org.ispp4.cohabify.dto.LoginRequest;
+import org.ispp4.cohabify.dto.UpdatePasswordRequest;
 import org.ispp4.cohabify.dto.UserRegisterRequest;
 import org.ispp4.cohabify.storage.StorageService;
 import org.ispp4.cohabify.user.Plan;
@@ -92,7 +93,7 @@ public class AuthenticationController {
 		user.setDescription("¡Hola, estoy utilizando Cohabify!");
 		try{
 			user = userService.save(user);
-      user.setVerificationCode(randomStringGenerator.extendStringWithRandomCharactersUrlSafe(user.getId().toString(), 64));
+      		user.setVerificationCode(randomStringGenerator.extendStringWithRandomCharactersUrlSafe(user.getId().toString(), 64));
 		} catch (IllegalStateException e) {
 			if (e.getMessage().contains("nombre de usuario")) {
 				FormItemValidationError error = new FormItemValidationError();
@@ -181,6 +182,7 @@ public class AuthenticationController {
 		}
 
 		user.setEnabled(true);
+		user.setVerificationCode(randomStringGenerator.extendStringWithRandomCharactersUrlSafe(user.getId().toString(), 64));
 		userService.save(user);
 
 		return ResponseEntity.status(200).build();
@@ -230,5 +232,45 @@ public class AuthenticationController {
 		return ResponseEntity.status(HttpStatus.OK)
 							 .body(user);
 	}
+
+	@GetMapping("/reset-password/{username}")
+	public ResponseEntity<?> requestPasswordReset(@PathVariable("username") String username) {
+		User user = userService.getUserByUsername(username);
+		if(user == null) {
+			return ResponseEntity.status(401).body(new ErrorResponse("No existe una cuenta con ese nombre de usuario."));
+		}
+
+		if(user.getEnabled()) {
+			user.setVerificationCode(randomStringGenerator.extendStringWithRandomCharactersUrlSafe(user.getId().toString(), 64));
+			user = userService.save(user);
+
+			Boolean mailResult = mailHelper.sendResetPasswordEmail(user);
+			if(!mailResult) {
+				return ResponseEntity.status(500)
+									 .body(new ErrorResponse("Algo ha fallado enviando el correo de restablecimiento de contraseña."));
+			}
+
+		} else {
+			return ResponseEntity.status(401).body(new ErrorResponse("Esta cuenta está desactivada."));
+		}
+
+		return ResponseEntity.ok().build();
+	}
+	
+
+	@PostMapping("/reset-password")
+	public ResponseEntity<?> doResetPassword(@RequestBody UpdatePasswordRequest request) {
+		User user = userService.findByVerificationCode(request.getVerificationCode());
+		if(user.getEnabled()) {
+			user.setPassword(passwordEncoder.encode(request.getPassword()));
+			user.setVerificationCode(randomStringGenerator.extendStringWithRandomCharactersUrlSafe(user.getId().toString(), 64));
+			user = userService.save(user);
+		} else {
+			return ResponseEntity.status(401).body(new ErrorResponse("Esta cuenta aún no ha sido activada."));
+		}
+
+		return ResponseEntity.ok().build();
+	}
+	
 
 }
