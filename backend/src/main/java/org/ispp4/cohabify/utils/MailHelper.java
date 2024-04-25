@@ -10,8 +10,10 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class MailHelper {
     
     @Value("${frontend.url}")
@@ -35,7 +37,7 @@ public class MailHelper {
             return true;
             
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage());
             return false;
         }
     }
@@ -74,7 +76,7 @@ public class MailHelper {
             return true;
             
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage());
             return false;
         }
     }
