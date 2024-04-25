@@ -1,5 +1,5 @@
 <script>
-import { ref, onBeforeMount, computed } from 'vue';
+import { ref, onBeforeMount, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { loadStripe } from '@stripe/stripe-js';
@@ -27,6 +27,16 @@ export default {
         const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
         const loading = ref(false);
         const lineItems = ref(null);
+
+        const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+        onMounted(() => {
+        updateMeta('Visualiza y Gestiona Anuncios en Cohabify', 'Explora, comenta, califica y gestiona anuncios de vivienda en Cohabify. Conecta con otros usuarios, promociona tus anuncios y participa en la comunidad.');
+        });
 
         const fetchAdvertisement = async () => {
             try {

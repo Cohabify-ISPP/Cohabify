@@ -1,5 +1,5 @@
 <script>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
@@ -10,6 +10,16 @@ export default {
         const user = ref(""); 
         const route = useRoute();
         const router = useRouter();
+
+        const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+        onMounted(() => {
+        updateMeta('Perfil de Usuario en Cohabify - Edita y Visualiza tu Perfil', 'Accede a la configuración de tu perfil para actualizar tu información personal, cambiar tu imagen de perfil y ajustar tus preferencias de seguridad en Cohabify.');
+        });
 
         const fetchUser = async () => {
             try {

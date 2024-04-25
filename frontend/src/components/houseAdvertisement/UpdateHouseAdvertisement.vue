@@ -206,7 +206,7 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, h} from 'vue'
+import { ref, onBeforeMount, onMounted, h} from 'vue'
 import { useRoute } from 'vue-router';
 
 export default {
@@ -227,7 +227,6 @@ export default {
     const tags = ref([])
     const success = ref(false)
     const selectedCadastre = ref('')
-    
 
     //ADVERTISEMENT
     const userSearch = ref('')
@@ -247,6 +246,16 @@ export default {
     const y = ref(0)
 
     const marker = ref([]);
+
+    const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+    onMounted(() => {
+      updateMeta('Editar Anuncio de Vivienda en Cohabify', 'Actualiza los detalles de tu anuncio de vivienda para reflejar cambios o mejorar la información disponible para los posibles inquilinos o compradores.');
+    });
   
     const mapCenter = ref({ lat: 40.416775, lng: -3.703790 });
     

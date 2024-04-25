@@ -199,7 +199,7 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, computed,watch } from 'vue'
+import { ref, onBeforeMount, onMounted, computed,watch } from 'vue'
 import { useStore } from 'vuex'
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -241,6 +241,17 @@ export default {
     const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
     const loading = ref(false);
     const lineItems = ref(null);
+
+    const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+    onMounted(() => {
+      updateMeta('Publica tu Anuncio de Vivienda en Cohabify: Rápido y Efectivo', 'Publica anuncios de vivienda en Cohabify y alcanza a potenciales inquilinos rápidamente. Aprovecha una plataforma intuitiva para listar las características, ubicación y precio de tu propiedad.');
+    });
+
 
     const store = useStore()
     const user = computed(() => store.state.user);

@@ -23,6 +23,12 @@ export default {
         const isDragging = ref(false);
         let userTags = [];
 
+        const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
         const imgUrl = computed(() => {
             if (img.value) {
                 return URL.createObjectURL(img.value);
@@ -228,6 +234,7 @@ export default {
         });
 
         onMounted(() => {
+            updateMeta('Editar Perfil de Usuario en Cohabify.', 'Actualiza tu perfil de usuario, cambia tu imagen, ajusta tu información personal y configura tu seguridad en Cohabify.');
             fileInput.value = "";
         })
 
