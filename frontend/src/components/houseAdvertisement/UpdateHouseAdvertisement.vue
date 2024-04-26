@@ -27,7 +27,7 @@
                   <span style="color: red;"> *</span>
                 </strong>
               </label>
-              <div class="wrapper">
+              <div class="wrapper" style="padding-top:2px">
                 <div class="icon">
                   <span class="tooltip">Al buscar un número de catastro se rellenará la <strong>ubicación</strong> y la <strong>superficie</strong> automáticamente</span>
                   <span class="bi bi-info-lg"></span>
@@ -122,7 +122,7 @@
                 <h5>¿Hay inquilinos ya en la vivienda utilizando Cohabify? Añádelos</h5>
                 <div class="d-flex">
                   <p class="form-label text-white" style="padding-right: 5px;"><strong>Inquilinos</strong></p>
-                    <div class="wrapper">
+                    <div class="wrapper" style="padding-top:2px">
                       <div class="icon">
                         <span class="tooltip">Para añadir un inquilino deberás introducir su <strong>nombre de usuario</strong> y su <strong>número de teléfono</strong></span>
                         <span class="bi bi-info-lg"></span>
@@ -866,8 +866,8 @@ color: #ffff;
   background: #fff;
   color: black;
   border-radius: 50%;
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   font-size: 18px;
   display: flex;
   justify-content: center;
