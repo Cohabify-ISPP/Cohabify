@@ -176,18 +176,8 @@
         "tagType": "FLAT_TAG"
     },
     {
-        "id": "60d5ec9af682fbd39a1b8bbb",
-        "tag": "No se admiten mascotas",
-        "tagType": "FLAT_TAG"
-    },
-    {
         "id": "60d5ec9af682fbd39a1b8bbc",
         "tag": "Con ascensor",
-        "tagType": "FLAT_TAG"
-    },
-    {
-        "id": "60d5ec9af682fbd39a1b8bbd",
-        "tag": "Sin ascensor",
         "tagType": "FLAT_TAG"
     }
 
@@ -265,8 +255,8 @@
               }
           ],
           "locationPoint": {
-              "x": -2.6637,
-              "y": 54.6944
+              "x": 54.6944,
+              "y": -2.6637
           }
       },
       {
@@ -284,8 +274,8 @@
               }
           ],
           "locationPoint": {
-              "x": 40.3437,
-              "y": -3.6124
+              "x": -3.6124,
+              "y": 40.3437
           }
       },
       {
@@ -303,8 +293,8 @@
               }
           ],
           "locationPoint": {
-              "x": 38.184049,
-              "y": -3.685237
+              "x": -3.685237,
+              "y":  38.184049
           }
       },
       {
@@ -322,8 +312,8 @@
               }
           ],
           "locationPoint": {
-              "x": 37.471815,
-              "y": -4.433562
+              "x": -4.433562,
+              "y": 37.471815
           }
       }
   ],
