@@ -24,12 +24,18 @@
                         <div class="form-group" style="padding: 20px;">
                             <label for="password" class="form-label text-white fw-bold">Contraseña</label>
                             <input type="password" class="form-control" id="password" v-model="password"
-                                placeholder="Contraseña">
+                                placeholder="Contraseña" :class="{ 'is-invalid': !isPasswordSafe}">
+                        </div>
+                        <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px; max-width: 300px;" v-if="!isPasswordSafe">
+                            <p><i class="fas fa-exclamation-triangle"></i> {{ passwordError }}</p>
                         </div>
 						<div class="form-group" style="padding: 20px;">
                             <label for="confirmPassword" class="form-label text-white fw-bold">Confirmar contraseña</label>
                             <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword"
-                                placeholder="Confirmar contraseña">
+                                placeholder="Confirmar contraseña" :class="{ 'is-invalid': password !== confirmPassword }">
+                        </div>
+                        <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px; max-width: 300px;" v-if="confirmPasswordError != ''">
+                            <p><i class="fas fa-exclamation-triangle"></i> {{ confirmPasswordError }}</p>
                         </div>
                         <div class="form-group" style="padding: 20px;">
                             <button type="button" class="btn-primary" @click="postResetPassword">Enviar restablecimiento de contraseña</button>
@@ -45,9 +51,8 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useStore } from 'vuex';
 
 export default {
     setup() {
@@ -57,29 +62,56 @@ export default {
         const router = useRouter();
 		const route = useRoute();
 		const verificationCode = route.params.verificationCode;
+        const isPasswordSafe = ref(true);
+        const passwordError = ref("");
+        const confirmPasswordError = ref("");
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
 		
+        watch(password, () => {
+            console.log(passwordRegex.test(password.value))
+            if(!passwordRegex.test(password.value)) {
+                isPasswordSafe.value = false;
+				passwordError.value = 'Contraseña no segura: la contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial  (!@#$%^&*).';
+			} else {
+                isPasswordSafe.value = true;
+            }
+        })
+
+        watch(confirmPassword, () => {
+            if(password.value != confirmPassword.value) {
+				confirmPasswordError.value = "Las contraseñas no coinciden.";
+			} else {
+                confirmPasswordError.value = "";
+            }
+        })
+
 		const postResetPassword = async () => {
 			error.value = "";
 			if(password.value == null || password.value == undefined || password.value == "") {
-				error.value = "Escriba su contraseña en ambos campos.";
+                isPasswordSafe.value = false;
+				passwordError.value = "Escriba su contraseña en ambos campos.";
 				return;
 			}
 
 			if(confirmPassword.value == null || confirmPassword.value == undefined || confirmPassword.value == "") {
-				error.value = "Escriba su contraseña en ambos campos.";
+                isPasswordSafe.value = false;
+				passwordError.value = "Escriba su contraseña en ambos campos.";
 				return;
 			}
 
 			if(password.value != confirmPassword.value) {
-				error.value = "Las contraseñas no coinciden.";
+                isPasswordSafe.value = false;
+				passwordError.value = "Las contraseñas no coinciden.";
 				return;
 			}
-
-			const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+			
 			if(!passwordRegex.test(password.value)) {
-				error.value = 'Contraseña no segura: la contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial  (!@#$%^&*).';
+                isPasswordSafe.value = false;
+				passwordError.value = 'Contraseña no segura: la contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial  (!@#$%^&*).';
 				return
 			}
+
+            isPasswordSafe.value = true;
 
 			fetch(import.meta.env.VITE_BACKEND_URL + '/auth/reset-password', {
 				method: 'POST',
@@ -110,7 +142,10 @@ export default {
             password,
 			confirmPassword,
             error,
-			postResetPassword
+			postResetPassword,
+            isPasswordSafe,
+            passwordError,
+            confirmPasswordError
         };
 
     }
