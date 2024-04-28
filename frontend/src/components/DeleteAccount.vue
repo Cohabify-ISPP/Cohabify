@@ -68,14 +68,14 @@ export default{
 
 button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #28426b;;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+button:active {
+  background-color: #3d5c8e;
 }
 </style>
