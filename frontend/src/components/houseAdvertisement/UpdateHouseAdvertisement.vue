@@ -60,9 +60,9 @@
           </div>
           <div class="row  mb-3">
             <div class="col text-start">
-              <label for="area" class="form-label text-white"><strong>Superficie</strong></label>
+              <label for="area" class="form-label text-white"><strong>Superficie<span style="color: red;"> *</span></strong></label>
               <div class="input-group">
-                <input type="number" readonly class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
+                <input type="number" class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
                 <span class="input-group-text" style="color: grey;">m²</span>
               </div>
 
