@@ -192,7 +192,7 @@ export default {
         };
 
         const getCommonFlats = async () => {
-            if (currentUser.username == null) {
+            if (currentUser.value.username == null) {
                 commonHouses.value = [];
                 return;
             }
