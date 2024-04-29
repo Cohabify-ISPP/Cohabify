@@ -13,7 +13,7 @@
           <div class="form-group" style="padding: 20px;">
             <label for="name" class="form-label text-white fw-bold">Nombre completo</label>
             <input name="name" type="text" maxlength="255" required class="form-control" id="name" v-model="name"
-              placeholder="Nombre completo">
+              placeholder="Nombre completo" @input="validateName">
             <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!nameError==''">
               <p><i class="fas fa-exclamation-triangle"></i> {{ nameError }}</p>  
             </div>
@@ -56,7 +56,7 @@
             <label for="email" class="form-label text-white fw-bold">Email</label>
             <input name="email" :readonly="googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== ''"
               :class="{ 'form-control': true, 'readonly': googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== '' }" type="email"
-              maxlength="255" required id="email" v-model="email" placeholder="email">
+              maxlength="255" required id="email" v-model="email" placeholder="email" @input="validateEmail">
               <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!emailError==''">
                 <p><i class="fas fa-exclamation-triangle"></i> {{ emailError }}</p>  
               </div>
@@ -86,6 +86,9 @@
               <option value="FEMENINO">Femenino</option>
               <option value="OTRO">Otro</option>
             </select>
+            <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!genderError==''">
+              <p><i class="fas fa-exclamation-triangle"></i> {{ genderError }}</p>  
+            </div>
           </div>
           <label for="tags" class="form-label text-white fw-bold">¿Cómo te describirías?</label>
           <br>
@@ -165,6 +168,7 @@ export default {
     const telephoneError = ref('');
     const nameError = ref('');
     const emailError = ref('');
+    const genderError = ref('');
     const isPasswordSafe = ref('true');
     const isUsernameValid = ref('true');
     const store = useStore();
@@ -218,6 +222,14 @@ export default {
         telephoneError.value = 'El teléfono debe tener 9 dígitos';
       }else{
         telephoneError.value = '';
+      }
+    }
+
+    const validateGender = () => {
+      if(gender.value==''){
+        genderError.value = 'Introduzca un género';
+      }else{
+        genderError.value = '';
       }
     }
     
@@ -304,6 +316,13 @@ export default {
       validateTelephone();
       validateName();
       validateEmail();
+      validateGender();
+      if(passwordError.value !== '' || usernameError.value !== '' || telephoneError.value !== '' || nameError.value !== '' || emailError.value !== '') 
+      return;
+      if (!termsAccepted.value) {
+        alert('Debes aceptar los términos y condiciones para registrarte.');
+        return;
+      }
   
       if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
         if (name.value && username.value && email.value && phone.value && phone.value.length === 9 && !isNaN(phone.value)
@@ -318,17 +337,16 @@ export default {
           validationErrors.value = [];
         }
       }
-      if (!termsAccepted.value) {
-        alert('Debes aceptar los términos y condiciones para registrarte.');
-        return;
-      }
+
+      
     };
 
     const register = () => {
       disableRegisterButton.value = true;
 
-      if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value) {
+      if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value || genderError.value === '') {
         alert('Las contraseñas no coinciden');
+        disableRegisterButton.value = false;
       } else {
         const formData = new FormData();  
         formData.append("string-data", new Blob([JSON.stringify({
@@ -445,6 +463,9 @@ export default {
       nameError,
       validateName,
       emailError,
+      genderError,
+      validateEmail,
+      validateGender,
     };
   }
 }
