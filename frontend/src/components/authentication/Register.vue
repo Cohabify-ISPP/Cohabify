@@ -14,11 +14,17 @@
             <label for="name" class="form-label text-white fw-bold">Nombre completo</label>
             <input name="name" type="text" maxlength="255" required class="form-control" id="name" v-model="name"
               placeholder="Nombre completo">
+            <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!nameError==''">
+              <p><i class="fas fa-exclamation-triangle"></i> {{ nameError }}</p>  
+            </div>
           </div>
           <div class="form-group" style="padding: 20px;">
             <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
             <input name="phone" type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" required class="form-control" id="phone"
-              v-model="phone" placeholder="XXXXXXXXX">
+              v-model="phone" placeholder="XXXXXXXXX" @input="validateTelephone">
+              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!telephoneError==''">
+                <p><i class="fas fa-exclamation-triangle"></i> {{ telephoneError }}</p>  
+              </div>
           </div>
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
@@ -34,6 +40,7 @@
             <label class="form-check-label" for="termsAndConditions">
               <p style="color: white;">Acepto los <a style="color: darkblue;"  href="https://cohabify.github.io/ca" target="_blank">Términos y condiciones de uso</a></p>
             </label>
+            
           </div>
         </div>
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
@@ -50,6 +57,9 @@
             <input name="email" :readonly="googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== ''"
               :class="{ 'form-control': true, 'readonly': googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== '' }" type="email"
               maxlength="255" required id="email" v-model="email" placeholder="email">
+              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!emailError==''">
+                <p><i class="fas fa-exclamation-triangle"></i> {{ emailError }}</p>  
+              </div>
           </div>
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
@@ -63,7 +73,7 @@
 
         </div>
         <div style="padding-top: 20px;">
-          <button type="submit" class="btn-primary" @click="changePage">Siguiente</button>
+          <button type="button" class="btn-primary" @click="changePage">Siguiente</button>
         </div>
       </form>
 
@@ -116,7 +126,7 @@
         </div>
         <div class="mt-3" style="padding-top: 20px;" v-if="secondPage">
           <button type="submit" class="btn-primary " @click="changePage" style="margin-right: 20px;">Anterior</button>
-          <button type="submit" class="btn-green " @click="register">Registrarse</button>
+          <button type="submit" class="btn-green " :disabled="disableRegisterButton" @click="register">Registrarse</button>
         </div>
       </form>
     </div>
@@ -152,11 +162,15 @@ export default {
     const fileInput = ref(null);
     const passwordError = ref('');
     const usernameError = ref('');
+    const telephoneError = ref('');
+    const nameError = ref('');
+    const emailError = ref('');
     const isPasswordSafe = ref('true');
     const isUsernameValid = ref('true');
     const store = useStore();
     const validationErrors = ref([])
     const termsAccepted = ref(false);
+    const disableRegisterButton =ref(false);
 
     const updateMeta = (title, description) => {
             document.querySelector('meta[name="description"]').setAttribute('content', description);
@@ -166,13 +180,10 @@ export default {
 
     const validatePassword = () => {
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
-
-      if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
-        isPasswordSafe.value = true;
-        return '';
-      } 
-      if (password.value.length == 0 && googleOAuthToken.value !== null) {
-        isPasswordSafe.value = true;
+ 
+      if (password.value.length == 0) {
+        isPasswordSafe.value = false;
+        passwordError.value = 'Introduzca una contraseña'
       } else if (!passwordRegex.test(password.value) && password.value.length > 0) {
         passwordError.value = 'Contraseña no segura: la contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial  (!@#$%^&*).';
         isPasswordSafe.value = false;
@@ -180,16 +191,51 @@ export default {
         passwordError.value = '';
         isPasswordSafe.value = true;
       }
-    };
 
+      if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
+        isPasswordSafe.value = true;
+        passwordError.value = '';
+        return '';
+      }
+    };
+    
     const validateUsername = () => {
       const usernameRegex = /^.*\s.*$/;
       if (usernameRegex.test(username.value)) {
         usernameError.value = 'El nombre de usuario no puede contener espacios.';
         isUsernameValid.value = false;
-      } else {
+      }else if (username.value.length == 0) {
+        usernameError.value = 'Introduzca un nombre de usuario';
+        isUsernameValid.value = false;
+      }else {
         usernameError.value = '';
         isUsernameValid.value = true;
+      }
+    }
+
+    const validateTelephone = () => {
+      if(phone.value.length !== 9 || isNaN(phone.value)){
+        telephoneError.value = 'El teléfono debe tener 9 dígitos';
+      }else{
+        telephoneError.value = '';
+      }
+    }
+    
+    const validateName = () => {
+      if(name.value.length == 0){
+        nameError.value = 'Introduzca un nombre';
+      }else{
+        nameError.value = '';}
+    }
+
+    const validateEmail = () => {
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if(email.value.length == 0){
+        emailError.value = 'Introduzca un email';
+      }else if(!emailRegex.test(email.value)){
+        emailError.value = 'Introduzca un email válido';
+      }else{
+        emailError.value = '';
       }
     }
 
@@ -255,10 +301,9 @@ export default {
     const changePage = () => {
       validatePassword();
       validateUsername();
-      if (!termsAccepted.value) {
-        alert('Debes aceptar los términos y condiciones para registrarte.');
-        return;
-      }
+      validateTelephone();
+      validateName();
+      validateEmail();
   
       if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
         if (name.value && username.value && email.value && phone.value && phone.value.length === 9 && !isNaN(phone.value)
@@ -273,10 +318,14 @@ export default {
           validationErrors.value = [];
         }
       }
+      if (!termsAccepted.value) {
+        alert('Debes aceptar los términos y condiciones para registrarte.');
+        return;
+      }
     };
 
     const register = () => {
-      
+      disableRegisterButton.value = true;
 
       if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value) {
         alert('Las contraseñas no coinciden');
@@ -311,14 +360,16 @@ export default {
             } else {
               response.json()
                 .then((body) => {
-                  if(body.length === undefined)
+                  if(body.length === undefined){
                     body = [body]
+                }
                   validationErrors.value = body ? body : [{"message": "Ha ocurrido un error inesperado al procesar el registro"}];
                 })
                 .catch(error => console.error(error));
             }
           })
           .catch(error => console.error(error));
+          disableRegisterButton.value = false;
       }
     };
 
@@ -388,6 +439,12 @@ export default {
       termsAccepted,
       usernameError,
       validateUsername,
+      telephoneError,
+      disableRegisterButton,
+      validateTelephone,
+      nameError,
+      validateName,
+      emailError,
     };
   }
 }
@@ -557,5 +614,9 @@ button {
     text-decoration: underline;
     background-color: transparent;
 }
+.btn-green:disabled {
+  background-color: darkgreen;
+  color: rgb(175, 175, 175);
+ }
 
 </style>
