@@ -18,10 +18,11 @@ const lineItems = ref(null);
 
 onMounted(async() => {
   const token = localStorage.getItem("authentication")
-
+  let response = {error: false}
   if (token) {
     if (user.value ===null || user.value === undefined || Object.keys(user.value).length === 0) {
-      await store.dispatch('cargarUser')
+      response = await store.dispatch('cargarUser')
+      console.log(response)
     }
      
     const decoded = jwtDecode(token)
@@ -29,7 +30,9 @@ onMounted(async() => {
     image.value = user.value?.imageUri?.startsWith('/') ? `${BACKEND_URL}${user.value?.imageUri}` : user.value?.imageUri
     if(decoded.exp < now) {
       logout()
-    } else{
+    } else if (response.error){
+      logout()
+    } else {
       isLoggedIn.value = true
     }
 
