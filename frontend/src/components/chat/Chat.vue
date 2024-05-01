@@ -61,12 +61,12 @@
             <div v-for="message in selectedChat?.messages" :class="['message', 'one', 'card', message.sender.username === currentUser.username ? 'c2' : 'c1']">
               <div class="username">{{ message.sender.username }}</div>
               <p style="padding: 15px;">{{ message.text }}</p>
-              <div class="date">{{ message.timeSent }}</div>
+              <div class="date">{{ formatDate(message.timeSent) }}</div>
             </div>
           </div>
           <div class="sender-area">
             <div class="input-place">
-              <input v-model="messageInput" placeholder="Send a message." class="send-input" type="text" maxlength="1500">
+              <input v-model="messageInput" placeholder="Escribe un mensaje..." @keyup.enter="sendMessage" class="send-input" type="text" maxlength="1500">
                 <div class="send" @click="sendMessage()">
                   <i class="bi bi-send-fill"></i>
               </div>
@@ -117,6 +117,11 @@ export default {
     const messageInput = ref("");
     const stompClient = new CohabifyStompClient();
     let subscriptions = [];
+
+    const formatDate = (date) => {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+      return new Date(date).toLocaleDateString('es-ES', options);
+    }
 
     onMounted(() => {
       fetch(import.meta.env.VITE_BACKEND_URL + '/api/chat/', {
@@ -208,7 +213,8 @@ export default {
       selectedChat,
       messagesArea,
       messageInput,
-      sendMessage
+      sendMessage,
+      formatDate,
     }
   },
 }
