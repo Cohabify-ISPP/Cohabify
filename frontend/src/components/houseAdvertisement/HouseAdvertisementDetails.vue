@@ -244,6 +244,11 @@ const fetchHouseAdvertisement = () => {
 };
 
 const openChat = () => {
+    if(houseAdvertisement.value.tenants.length < 1) {
+      chatError.value = "Este piso no tiene inquilinos con los que iniciar un chat.";
+      return;
+    }
+
     fetch(import.meta.env.VITE_BACKEND_URL + '/api/chat/', {
         method: 'POST',
         headers: {
