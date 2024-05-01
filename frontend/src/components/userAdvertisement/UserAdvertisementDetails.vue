@@ -529,7 +529,7 @@ export default {
                         <hr>
                     </div>
                         
-                    <div v-for="anuncio in commonHouses" :key="anuncio">
+                    <div v-if="commonHouses.length > 0" v-for="anuncio in commonHouses" :key="anuncio">
 
                         <div class="piso">
                             <img  class="img-piso" :src="anuncio.images[0]" alt="Imagen del piso">
@@ -546,6 +546,7 @@ export default {
                             </div>
                         </div>
                    </div>
+                   <h5 style="color: #5D5E60; text-align: left;" v-else>Este usuario y tú no tenéis pisos en común</h5>
                 </div>
             </div>
         </div>
