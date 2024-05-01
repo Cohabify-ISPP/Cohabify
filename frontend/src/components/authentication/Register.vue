@@ -5,9 +5,6 @@
       style="max-width: 400px; padding-top: 20px;padding-bottom: 2%;">
     <h1 style="padding-bottom: 30px;">Registro</h1>
     <div class="card">
-      <div v-show="success" class="alert alert-success alert-dismissible fade show" role="alert">
-        Registro completado con éxito. Se le ha enviado un correo para verificar su cuenta. Se le redireccionará en 5 segundos...
-      </div>
       <form id="form1" class="row justify-content-center" @submit.prevent="[changePage]" v-if="!secondPage">
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
           <div class="form-group" style="padding: 20px;">
@@ -114,6 +111,12 @@
         <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="secondPage && validationErrors.length > 0" v-for="error in validationErrors" :key="error.message">
           <i class="fas fa-exclamation-triangle"></i> {{ error.message }} 
         </div>
+        <div v-show="success && (googleOAuthToken === null || googleOAuthToken === undefined)" class="alert alert-success alert-dismissible fade show" role="alert">
+          Registro completado con éxito. Se le ha enviado un correo para verificar su cuenta. Se le redireccionará en 5 segundos...
+        </div>
+        <div v-show="success && !(googleOAuthToken === null || googleOAuthToken === undefined)" class="alert alert-success alert-dismissible fade show" role="alert">
+          Registro completado con éxito. Se le redireccionará en 5 segundos...
+        </div>
         <div class="mt-3" style="padding-top: 20px;" v-if="secondPage">
           <button type="submit" class="btn-primary " @click="changePage" style="margin-right: 20px;">Anterior</button>
           <button type="submit" class="btn-green " @click="register">Registrarse</button>
@@ -121,7 +124,7 @@
       </form>
     </div>
     <div>
-        <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿Ya tienes cuenta? <button type="button" class="text-clickable" @click="redirectToLogin">Inicia sesión</button></h3>
+      <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿Ya tienes cuenta? <button type="button" class="text-clickable" @click="redirectToLogin">Inicia sesión</button></h3>
     </div>
   </div>
 </template>
