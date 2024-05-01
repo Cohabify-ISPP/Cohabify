@@ -24,22 +24,29 @@ const store = createStore({
     },
   },
   actions: {
-    cargarUser({ commit }) {
-        try {
-            fetch(
-                import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
-                {
-                  method: "POST",
-                  headers: {
-                    "Authentication":
-                      "Bearer " + localStorage.getItem("authentication"),
-                  },
-                }
-            ).then(response => response.json().then(data =>commit('cargarUser', data)));
-            
-        } catch (error) {
-            console.errror(error);
+    async cargarUser({ commit }) {
+      try {
+        const response = await fetch(
+            import.meta.env.VITE_BACKEND_URL + "/auth/getUser",
+            {
+              method: "POST",
+              headers: {
+                "Authentication":
+                  "Bearer " + localStorage.getItem("authentication"),
+              },
+            }
+        )
+        
+        if (response.status == 500){
+          commit('cargarUser', undefined);
+          return { error: true };
+        }else{
+          response.json().then(data =>commit('cargarUser', data))
+          return {error: false};
         }
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 });
