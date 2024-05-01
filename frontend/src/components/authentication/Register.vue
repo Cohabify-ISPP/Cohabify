@@ -23,8 +23,16 @@
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
             <label for="password" class="form-label text-white fw-bold">Contraseña</label>
-            <input name="password" type="password" maxlength="255" required class="form-control" id="password" v-model="password"
+            
+            <div class="input-with-toggle">
+              <input name="password" :type="visiblePassword ? 'text':'password'" maxlength="255" required class="form-control" id="password" v-model="password"
               placeholder="Contraseña" @input="validatePassword" :class="{ 'is-invalid': !isPasswordSafe}">
+              <button @click.prevent="togglePasswordVisibility" class="toggle-password-button">
+                  <span v-if="visiblePassword"><i class="bi bi-eye-slash-fill"></i></span>
+                  <span v-else><i class="bi bi-eye-fill"></i></span>
+              </button>
+          </div>
+
             <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!isPasswordSafe">
               <p><i class="fas fa-exclamation-triangle"></i> {{ passwordError }}</p>
             </div>
@@ -54,8 +62,16 @@
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
             <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña</label>
-            <input name="confirmPassword" type="password" required class="form-control" id="confirmPassword" v-model="confirmPassword"
-              placeholder="repetir contraseña" :class="{ 'is-invalid': password !== confirmPassword }">
+
+            <div class="input-with-toggle">
+                <input name="confirmPassword" :type="visibleConfirmPassword ? 'text':'password'" required class="form-control" id="confirmPassword" v-model="confirmPassword" 
+                placeholder="repetir contraseña" :class="{ 'is-invalid': password !== confirmPassword }">
+                <button @click.prevent="toggleConfirmPasswordVisibility" class="toggle-password-button">
+                    <span v-if="visibleConfirmPassword"><i class="bi bi-eye-slash-fill"></i></span>
+                    <span v-else><i class="bi bi-eye-fill"></i></span>
+                </button>
+            </div>
+
             <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="password !== confirmPassword && confirmPassword !== ''">
                 <i class="fas fa-exclamation-triangle"></i> Las contraseñas no coinciden
             </div>
@@ -157,6 +173,8 @@ export default {
     const store = useStore();
     const validationErrors = ref([])
     const termsAccepted = ref(false);
+    const visiblePassword = ref(false);
+    const visibleConfirmPassword = ref(false);
 
     const updateMeta = (title, description) => {
             document.querySelector('meta[name="description"]').setAttribute('content', description);
@@ -275,6 +293,15 @@ export default {
       }
     };
 
+    const togglePasswordVisibility = () => {
+            event.stopPropagation();
+            visiblePassword.value = !visiblePassword.value;
+    };
+    const toggleConfirmPasswordVisibility = () => {
+            event.stopPropagation();
+            visibleConfirmPassword.value = !visibleConfirmPassword.value;
+    };
+
     const register = () => {
       
 
@@ -388,6 +415,10 @@ export default {
       termsAccepted,
       usernameError,
       validateUsername,
+      visiblePassword,
+      togglePasswordVisibility,
+      visibleConfirmPassword,
+      toggleConfirmPasswordVisibility,
     };
   }
 }
@@ -556,6 +587,25 @@ button {
 .text-clickable:hover {
     text-decoration: underline;
     background-color: transparent;
+}
+
+.input-with-toggle {
+    position: relative;
+}
+
+.input-with-toggle input {
+    padding-right: 40px;
+}
+
+.input-with-toggle .toggle-password-button {
+    color: black;
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
 </style>
