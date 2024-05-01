@@ -84,7 +84,9 @@ public class AuthenticationControllerTest {
         });
         when(jwtService.generateToken(any())).thenReturn("mocked_jwt_token");
 
-        when(userService.findByVerificationCode(any())).thenReturn(new User());
+        User verificationCodeUser = new User();
+        verificationCodeUser.setId(new ObjectId());
+        when(userService.findByVerificationCode(any())).thenReturn(verificationCodeUser);
 
         // Mock the behavior of jwtService.generateToken() to return a mock JWT token
         String mockJwtToken = "mocked_jwt_token";
