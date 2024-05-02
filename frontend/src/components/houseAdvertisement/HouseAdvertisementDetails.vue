@@ -264,6 +264,8 @@ const openTenantsChat = () => {
         if (!response.ok) {
             if(response.status == 409) {
                 chatError.value = "Ya posee un chat con esta persona";
+            } else if (response.status == 403) {
+                chatError.value = "Has alcanzado el límite de chats de tu plan actual";
             } else {
                 throw new Error('No se ha podido crear el chat, código: ' + response.status);
             }
@@ -273,8 +275,14 @@ const openTenantsChat = () => {
         
     })
     .catch(error => {
+      if (error.toString().includes("403")) {
+        chatError.value = "Has alcanzado el límite de chats de tu plan actual";
+      } else if (error.toString().includes("409")) {
+        chatError.value = "Ya posee un chat con esta persona";
+      } else{
         console.error(error);
         chatError.value = "Ha ocurrido un error creando el chat.";
+      }
     })
 }
 
@@ -304,8 +312,14 @@ const openOwnerChat = () => {
         
     })
     .catch(error => {
+      if (error.toString().includes("403")) {
+        chatError.value = "Has alcanzado el límite de chats de tu plan actual";
+      } else if (error.toString().includes("409")) {
+        chatError.value = "Ya posee un chat con esta persona";
+      } else{
         console.error(error);
         chatError.value = "Ha ocurrido un error creando el chat.";
+      }
     })
 }
 
@@ -557,34 +571,49 @@ onMounted(() => {
 
           <div class="d-flex justify-content-center">
             <div class="d-flex justify-content-center align-items-center">
-              <div v-if="currentUser?.id === houseAdvertisement?.author?.id" class="d-flex align-items-center" style="margin-right: 1vh;">
-                <span style="font-weight: bold; font-size: large; color: #28426b">{{ houseAdvertisement.views }}</span>
-                <span class="material-symbols-outlined" style="color: #28426b; margin-left: 2px;">visibility</span>
-              </div>
-              <div class="likes" style="margin-right: 1vw">
-                <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id" @click="toggleLike">
-                  <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
-                </button>   
+              
+              <div v-if="currentUser?.id !== houseAdvertisement?.author?.id" class="d-flex col" style="flex-direction: column;">
+                <div class="d-flex">
+                  <div class="likes" style="margin-right: 1vw">
+                    <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id" @click="toggleLike">
+                      <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
+                    </button>   
 
-                <span style="font-weight: bold; font-size: large; color: #28426b">
-                  {{ houseAdvertisement.house?.likes.length }}
-                </span>
+                    <span style="font-weight: bold; font-size: large; color: #28426b">
+                      {{ houseAdvertisement.house?.likes.length }}
+                    </span>
+                  </div>
+                  <button @click.prevent="openTenantsChat()"type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
+                    <strong style="color: white">Iniciar chat inquilinos
+                      <i class="bi bi-chat" style="margin-left: 5px"></i>
+                    </strong>
+                  </button>
+
+                  <button @click.prevent="openOwnerChat()" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
+                    <strong style="color: white">Iniciar chat dueño
+                      <i class="bi bi-chat" style="margin-left: 5px"></i>
+                    </strong>
+                  </button>
+                </div>
+                <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== houseAdvertisement?.author?.id && chatError != ''">
+                    <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
+                </div>
               </div>
               
-              <button @click.prevent="openTenantsChat()" v-if="currentUser.id !== houseAdvertisement?.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
-                <strong style="color: white">Iniciar chat inquilinos
-                  <i class="bi bi-chat" style="margin-left: 5px"></i>
-                </strong>
-              </button>
-
-              <button @click.prevent="openOwnerChat()" v-if="currentUser.id !== houseAdvertisement?.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
-                <strong style="color: white">Iniciar chat dueño
-                  <i class="bi bi-chat" style="margin-left: 5px"></i>
-                </strong>
-              </button>
-              
-
               <div class="d-flex col" v-else>
+                <div class="d-flex align-items-center" style="margin-right: 1vh;">
+                  <span style="font-weight: bold; font-size: large; color: #28426b">{{ houseAdvertisement.views }}</span>
+                  <span class="material-symbols-outlined" style="color: #28426b; margin-left: 2px;">visibility</span>
+                </div>
+                <div class="likes" style="margin-right: 1vw">
+                  <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id" @click="toggleLike">
+                    <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
+                  </button>   
+
+                  <span style="font-weight: bold; font-size: large; color: #28426b">
+                    {{ houseAdvertisement.house?.likes.length }}
+                  </span>
+                </div>
                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/houses/edit/${houseAdvertisement.id}`)
                   "style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;">
                   <strong>Editar</strong>
@@ -596,9 +625,7 @@ onMounted(() => {
                   <strong>Eliminar</strong>
                   <span class="material-symbols-outlined" style="margin-left: 0.5rem">delete</span>
                 </button>
-              </div>
-              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== houseAdvertisement?.author?.id && chatError != ''">
-                  <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
+                
               </div>
             </div>
           </div>

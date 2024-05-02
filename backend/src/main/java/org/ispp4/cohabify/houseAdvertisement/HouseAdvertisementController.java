@@ -38,8 +38,6 @@ import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import java.util.UUID;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -133,9 +131,7 @@ public class HouseAdvertisementController {
             advertisement.setHouse(house);
             advertisement.setAuthor(request.getAuthor());
             advertisement = advertisementService.save(advertisement);
-            
-            // Save the image and add the static uri to the user
-            
+                        
             List<String> imagesPath = new ArrayList<>();
             for(int i = 0; i < images.size(); i++){
                 MultipartFile image = images.get(i);
@@ -163,13 +159,8 @@ public class HouseAdvertisementController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                                 .body("You can't create an advertisement for yourself");
         } 
-       
-
     }
 		
-    
-
-
     @GetMapping("/heating")
     public ResponseEntity<List<Heating>> findHeating() {
         try {
@@ -183,12 +174,6 @@ public class HouseAdvertisementController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    /*@PutMapping("/{id}")
-    public ResponseEntity<HouseAdvertisement> updateAdvertisement(@PathVariable ObjectId id, @RequestBody HouseAdvertisement advertisement) {
-        HouseAdvertisement updatedAdvertisement = advertisementService.update(id, advertisement);
-        return new ResponseEntity<>(updatedAdvertisement, HttpStatus.OK);
-    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAdvertisement(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
@@ -227,9 +212,7 @@ public class HouseAdvertisementController {
             advertisement.setHouse(house);
             advertisement.setAuthor(request.getAuthor());
             advertisement = advertisementService.save(advertisement);
-            
-            // Save the image and add the static uri to the user
-            
+                        
             List<String> imagesPath = request.getImagesB();
             if(images != null){
                 
@@ -283,7 +266,6 @@ public class HouseAdvertisementController {
 
     }
 
-
     @PostMapping("/promote/{id}")
     public ResponseEntity<Void> promoteHouseAd(@PathVariable ObjectId id) {
         if(!advertisementService.findAdById(id).getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
@@ -320,6 +302,5 @@ public class HouseAdvertisementController {
 
         return new ResponseEntity<>(sharedLikes, HttpStatus.OK);
     }
-
-    
+  
 }

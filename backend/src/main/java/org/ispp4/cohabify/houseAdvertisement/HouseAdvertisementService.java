@@ -1,7 +1,6 @@
 package org.ispp4.cohabify.houseAdvertisement;
 
 import org.bson.types.ObjectId;
-import org.ispp4.cohabify.user.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
