@@ -1,6 +1,7 @@
 package org.ispp4.cohabify.chat;
 
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 
 import org.ispp4.cohabify.dto.CreateChatRequest;
@@ -46,16 +47,19 @@ public class ChatController {
     public ResponseEntity<?> createChat(@RequestBody CreateChatRequest request, Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
         List<Chat> chats = chatService.getChatsByUser(user);
+
         for(Chat chat:chats) {
             chat.getUsers().remove(user);
-            for(User requestUser:request.getUsers()) {
+            Iterator<User> iter = request.getUsers().iterator();
+            for(; iter.hasNext();) {
+                User requestUser = iter.next();
                 if(chat.getUsers().contains(requestUser)) {
                     chat.getUsers().remove(requestUser);
                 } else {
                     break;
                 }
 
-                if(chat.getUsers().isEmpty()) {
+                if(chat.getUsers().isEmpty() && !iter.hasNext()) {
                     return ResponseEntity.status(409).build();
                 }
             }

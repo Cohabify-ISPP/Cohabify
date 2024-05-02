@@ -22,7 +22,6 @@ onMounted(async() => {
   if (token) {
     if (user.value ===null || user.value === undefined || Object.keys(user.value).length === 0) {
       response = await store.dispatch('cargarUser')
-      console.log(response)
     }
      
     const decoded = jwtDecode(token)
