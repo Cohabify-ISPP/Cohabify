@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockPart;
@@ -103,7 +104,8 @@ public class HouseAdvertisementControllerTest {
         userOwner.setAuthorities(List.of("USER"));
         when(userService.getUserByUsername("test_user_owner")).thenReturn(userOwner);
 
-        when(advertisementService.findAll()).thenReturn(Arrays.asList(
+        PageRequest pageable = PageRequest.of(0, 10);
+        when(advertisementService.findAll(pageable).getContent()).thenReturn(Arrays.asList(
                 new HouseAdvertisement(),
                 new HouseAdvertisement()));
 
@@ -123,7 +125,7 @@ public class HouseAdvertisementControllerTest {
         advertisement2.setAuthor(userBasic);
         advertisement2.setHouse(house2);
 
-        when(advertisementService.findAll()).thenReturn(List.of(advertisement1, advertisement2));
+        when(advertisementService.findAll(pageable).getContent()).thenReturn(List.of(advertisement1, advertisement2));
 
         when(advertisementService.findByAuthorId(userBasic.getId())).thenReturn(List.of(advertisement2));
         when(advertisementService.findByAuthorId(userBasic2.getId())).thenReturn(List.of(advertisement1));

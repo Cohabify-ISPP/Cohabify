@@ -12,6 +12,7 @@ import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 
 @SpringBootTest
 public class HouseAdvertisementServiceTest {
@@ -25,8 +26,9 @@ public class HouseAdvertisementServiceTest {
     @Test
     public void testFindAll() {
         List<HouseAdvertisement> houseAdvertisements = houseAdvertisementRepository.findAll();
+        PageRequest pageable = PageRequest.of(0, 10);
 
-        List<HouseAdvertisement> result = houseAdvertisementService.findAll();
+        List<HouseAdvertisement> result = houseAdvertisementService.findAll(pageable).getContent();
 
         assertEquals(houseAdvertisements.size(), result.size());
     }

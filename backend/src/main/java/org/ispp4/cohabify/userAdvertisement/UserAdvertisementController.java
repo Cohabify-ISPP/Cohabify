@@ -10,6 +10,8 @@ import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisement;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -40,9 +42,12 @@ public class UserAdvertisementController {
 	}
 
 	@Transactional(readOnly = true)
-    @GetMapping("")
-    public ResponseEntity<List<UserAdvertisement>> getAllUserAdvertisements(@Nullable Principal principal) {
-        List<UserAdvertisement> userAdvertisements = userAdvertisementService.findAll();
+    @GetMapping("/all/{pageNumber}")
+    public ResponseEntity<List<Object>> getAllUserAdvertisements(@Nullable Principal principal, @PathVariable Integer pageNumber) {
+		PageRequest pageable = PageRequest.of(pageNumber, 20);
+		Page page = userAdvertisementService.findAll(pageable);
+        List<UserAdvertisement> userAdvertisements = page.getContent();
+		Integer numPages = page.getTotalPages();
 		userAdvertisements = userAdvertisementService.checkPromotions(userAdvertisements);
 		if(principal != null) {
 			User user = userService.getUserByUsername(principal.getName());
@@ -53,7 +58,7 @@ public class UserAdvertisementController {
 														.toList();
 			}
 		}
-        return new ResponseEntity<>(userAdvertisements, HttpStatus.OK);
+        return new ResponseEntity<>(List.of(userAdvertisements, numPages), HttpStatus.OK);
     }
 
 	@GetMapping("/{id}")

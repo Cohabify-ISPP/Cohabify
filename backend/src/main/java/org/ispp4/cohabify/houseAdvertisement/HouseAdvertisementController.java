@@ -18,6 +18,9 @@ import org.ispp4.cohabify.storage.StorageService;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +57,12 @@ public class HouseAdvertisementController {
     private Global global;
 
     @Transactional(readOnly = true)
-    @GetMapping("")
-    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(@Nullable Principal principal) {
-        List<HouseAdvertisement> advertisements = advertisementService.findAll();
+    @GetMapping("/all/{pageNumber}")
+    public ResponseEntity<List<Object>> getAllAdvertisements(@Nullable Principal principal, @PathVariable int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 20);
+        Page page = advertisementService.findAll(pageable);
+        List<HouseAdvertisement> advertisements = page.getContent();
+        Integer numPages = page.getTotalPages();
         advertisements = advertisementService.checkPromotions(advertisements);
         if (principal == null) {
             advertisements = advertisements.stream() 
@@ -74,7 +80,7 @@ public class HouseAdvertisementController {
             }
         } 
         
-        return new ResponseEntity<>(advertisements, HttpStatus.OK);
+        return new ResponseEntity<>(List.of(advertisements, numPages), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)

@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import Navbar from '../Navbar.vue';
 
 export default {
@@ -20,16 +20,21 @@ export default {
     const empty = ref(false);
     const searchTerm = ref('');
     const divIsHidden = ref(false);
+    const pageNumber = ref(0);
+    const hasNextPage = computed(() => pageNumber.value < totalPages.value - 1);
+    const hasPreviousPage = computed(() => pageNumber.value > 0);
+    const totalPages = ref(0);
 
     const updateMeta = (title, description) => {
             document.querySelector('meta[name="description"]').setAttribute('content', description);
             document.querySelector('meta[property="og:title"]').setAttribute('content', title);
             document.querySelector('meta[property="og:description"]').setAttribute('content', description);
             };
+    
 
     const fetchAdvertisements = async () => {
       try {
-        const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users`,
+        const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/all/`+pageNumber.value,
           {
             method: "GET",
             headers: {
@@ -40,7 +45,8 @@ export default {
 
         if (response.ok) {
           const data = await response.json();
-          userAds.value = data;
+          userAds.value = data[0];
+          totalPages.value = data[1];
         } else {
           window.location.href = "/404";
         }
@@ -49,6 +55,9 @@ export default {
         console.error("Error:", error);
       }
     };
+    watch(pageNumber=> {
+      fetchAdvertisements();
+    });
 
     const fetchTags = async () => {
       try {
@@ -165,6 +174,25 @@ export default {
       })
       filtered.value = true;
 }
+    const goToLastPage = () => {
+        window.scrollTo(0, 0);
+        pageNumber.value = totalPages.value - 1;
+    };
+
+    const goToFirstPage = () => {
+      window.scrollTo(0, 0);
+        pageNumber.value = 0;
+    };
+
+    const goToNextPage = () => {
+      window.scrollTo(0, 0);
+        pageNumber.value += 1;
+    };
+
+    const goToPreviousPage = () => {
+      window.scrollTo(0, 0);
+        pageNumber.value -= 1;
+    };
 
     onMounted(() => {
       updateMeta('Explora Anuncios y Aplica Filtros en Cohabify', 'Busca y filtra anuncios de vivienda en Cohabify basados en tu presupuesto, ubicación deseada y más. Conecta con anunciantes y explora opciones de vivienda adaptadas a tus necesidades.');
@@ -189,7 +217,15 @@ export default {
       filtered,
       searchTerm,
       search,
-      divIsHidden
+      divIsHidden,
+      pageNumber,
+      totalPages,
+      hasNextPage,
+      hasPreviousPage,
+      goToLastPage,
+      goToFirstPage,
+      goToNextPage,
+      goToPreviousPage
     }
   },
 }
@@ -198,35 +234,36 @@ export default {
 <template>
   <Navbar />
   <div style="display: flex; flex-direction: row; height:100%">
-    
-      <div id="filterContainer" class="container-fluid" style="padding-left:0; flex-basis:20vw; flex-shrink:0;">
-        
-        <div class="col filter-column pt-4" id="filters" style="height:auto;  overflow: hidden; padding: 10px;">
-          
-          <div class="d-flex flex-row-reverse">
-            <button class="form-button  rounded-5 d-flex align-items-center" @click.prevent="toggleDivVisibility" style="height: 40px;">
-              <span class="material-symbols-outlined">
-                keyboard_double_arrow_left
-              </span>
-            </button>
-          </div>
-          <form class="needs-validation mb-4" novalidate>
-            <div class="d-flexW " style="width: 100%; height: 30px;">
-              <div>
-                <p >Máx. Presupuesto</p>
-              </div>
-            </div>
-            <input type="range" class="form-range" min="0" max="5000" step="50" v-model="budget" id="budgetVal"
-              :class="{ 'is-invalid': errors.includes('budgetVal') }">
-            <b>{{ budget == 0 ? '-' : budget == 5000 ? '+ ' + budget.toString() + '€/mes' : '<= ' + budget.toString() + '€/mes' }}</b>
 
-                <div v-if="!empty">
-                  <div class="mt-3 d-flex" :invalid="true" style="width: 100%; height: 30px; text-wrap:nowrap">
-                    <p>Máx. Inquilinos</p>
-                  </div>
-                  <input type="range" class="form-range" min="0" max="10" step="1" v-model="cohabitants"
-                    id="cohabitantsVal" :class="{ 'is-invalid': errors.includes('cohabitantsVal') }">
-                  <b>{{ cohabitants == 0 ? '-' : cohabitants == 10 ? '+ ' + cohabitants.toString() : '<= ' + cohabitants.toString() }}</b>
+    <div id="filterContainer" class="container-fluid" style="padding-left:0; flex-basis:20vw; flex-shrink:0;">
+
+      <div class="col filter-column pt-4" id="filters" style="height:auto;  overflow: hidden; padding: 10px;">
+
+        <div class="d-flex flex-row-reverse">
+          <button class="form-button  rounded-5 d-flex align-items-center" @click.prevent="toggleDivVisibility"
+            style="height: 40px;">
+            <span class="material-symbols-outlined">
+              keyboard_double_arrow_left
+            </span>
+          </button>
+        </div>
+        <form class="needs-validation mb-4" novalidate>
+          <div class="d-flexW " style="width: 100%; height: 30px;">
+            <div>
+              <p>Máx. Presupuesto</p>
+            </div>
+          </div>
+          <input type="range" class="form-range" min="0" max="5000" step="50" v-model="budget" id="budgetVal"
+            :class="{ 'is-invalid': errors.includes('budgetVal') }">
+          <b>{{ budget == 0 ? '-' : budget == 5000 ? '+ ' + budget.toString() + '€/mes' : '<= ' + budget.toString() + '€/mes' }}</b>
+
+              <div v-if="!empty">
+                <div class="mt-3 d-flex" :invalid="true" style="width: 100%; height: 30px; text-wrap:nowrap">
+                  <p>Máx. Inquilinos</p>
+                </div>
+                <input type="range" class="form-range" min="0" max="10" step="1" v-model="cohabitants"
+                  id="cohabitantsVal" :class="{ 'is-invalid': errors.includes('cohabitantsVal') }">
+                <b>{{ cohabitants == 0 ? '-' : cohabitants == 10 ? '+ ' + cohabitants.toString() : '<= ' + cohabitants.toString() }}</b>
             </div>
 
             <div v-if="!empty">
@@ -234,23 +271,23 @@ export default {
                 <p >Fecha de entrada</p>
               </div>
               <input type="date" v-model="entranceDate" id="entranceDate"  class="calendar-input" :class="{
-                ' is-invalid':
-                  errors.includes('entranceDateVal')
-              }">
-                      <b>{{ entranceDate ? entranceDate : '-' }}</b>
-                </div>
-              </form>
-                <hr>
-                <div class="d-flex justify-content-between mb-2">
-                          <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
-                          <button class="btn btn-danger" @click="errors=[]; filtered = false;filtered=false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
-                      </div>
-    
+            ' is-invalid': errors.includes('entranceDateVal')
+          }">
+                    <b>{{ entranceDate ? entranceDate : '-' }}</b>
+              </div>
+        </form>
+        <hr>
+        <div class="d-flex justify-content-between mb-2">
+          <button class="btn btn-success" @click="errors = []; applyFilters()">Aplicar</button>
+          <button class="btn btn-danger"
+            @click="errors = []; filtered = false; filtered = false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
+        </div>
+
       </div>
-    
+
     </div>
-  
-    
+
+
     <div class="div-2" style="flex-basis:3">
       <div class="div-13">
         <div class="column-4">
@@ -258,9 +295,11 @@ export default {
             <div class="search-bar w-100">
               <form class="d-flex w-100 justify-content-between">
                 <div id="searchForm" style="width:90%">
-                  <input class="searchInput" v-model= "searchTerm" type="text" style="color:black; padding-bottom: 1%;" id="searchInput" placeholder="Busco..." />
+                  <input class="searchInput" v-model="searchTerm" type="text" style="color:black; padding-bottom: 1%;"
+                    id="searchInput" placeholder="Busco..." />
                 </div>
-                <button class="searchButton d-flex align-items-center" style="padding:1%;" type="submit" @click.prevent="search">
+                <button class="searchButton d-flex align-items-center" style="padding:1%;" type="submit"
+                  @click.prevent="search">
                   <img src="/images/search.png" alt="Buscar" />
                 </button>
                 <button @click.prevent="toggleDivVisibility" class="searchButton d-flex align-items-center">
@@ -271,8 +310,10 @@ export default {
 
             <div class="div-17" id="div-17">
               <div class="tags-container">
-                <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)" :class="{
-              ' selected': tagsSeleccionadas.includes(tag) && !divIsHidden, 'unselected': !tagsSeleccionadas.includes(tag) && !divIsHidden}" v-show="!divIsHidden">
+                <span class="tag" v-for="tag in tags" :key="tag.tag" @click="toggleTag(tag)"
+                  :class="{
+            ' selected': tagsSeleccionadas.includes(tag) && !divIsHidden, 'unselected': !tagsSeleccionadas.includes(tag) && !divIsHidden
+          }" v-show="!divIsHidden">
                   <b>{{ tag.tag }}</b>
                 </span>
               </div>
@@ -280,58 +321,90 @@ export default {
           </div>
         </div>
       </div>
-      <div class="list-container mt-4" >
-      <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="anuncio" :class="{ highlighted: advertisement.promotionExpirationDate !== null }" >
-        <a style="color: inherit; text-decoration: none; width:100%"  @click="$router.push('/advertisements/users/' + advertisement?.id)">
-          <div class="inside-box" >
-            <img class="imagen-circulo" :src="advertisement?.author?.imageUri" alt="Imagen del usuario" style="margin-right: 10px;">
-               
-          <div class="list-item-content">
-            <div class="d-flex justify-content-between align-items-center w-100" >
-              <div class="d-flex align-items-center">
-                <h3>{{ advertisement?.author?.username }}</h3><img v-if="advertisement?.author?.plan === 'explorer'" style="margin-left: 6px; max-height: 40px;" src="/images/verificado.png" loading="lazy"/>  
-              </div>
-                <h3><b>{{ advertisement.maxBudget }}€/mes</b></h3>
-            </div>
-            <div class="d-flex justify-content-between w-100">
-                <b>{{ advertisement.desiredLocation }}</b>
+      <div class="list-container mt-4">
+        <div class="list-item mt-2" v-for="advertisement in currentAdvertisements" :key="anuncio"
+          :class="{ highlighted: advertisement.promotionExpirationDate !== null }">
+          <a style="color: inherit; text-decoration: none; width:100%"
+            @click="$router.push('/advertisements/users/' + advertisement?.id)">
+            <div class="inside-box">
+              <img class="imagen-circulo" :src="advertisement?.author?.imageUri" alt="Imagen del usuario"
+                style="margin-right: 10px;">
 
-                <div class="d-flex display-inline-flex">
-                    <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
-                    <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b;"> {{ advertisement.author.likes.length }} </span>
-                    <span style="color: #e87878;" class="material-icons">favorite</span>
-                    </div>
+              <div class="list-item-content">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <div class="d-flex align-items-center">
+                    <h3>{{ advertisement?.author?.username }}</h3><img v-if="advertisement?.author?.plan === 'explorer'"
+                      style="margin-left: 6px; max-height: 40px;" src="/images/verificado.png" loading="lazy" />
+                  </div>
+                  <h3><b>{{ advertisement.maxBudget }}€/mes</b></h3>
                 </div>
-            </div>
-            
-            <div class="d-flex justify-content-between w-100">
-              <b>Máximo {{ advertisement.maxCohabitants }} inquilino(s)</b>
-            </div>
-          
-                                
-            <div class="d-flex justify-content-between w-100 mt-3 h-100 align-items-center">
-              <div class="d-flex align-items-center" style="width:100%;overflow: hidden;">
-                <span v-for="(tag, index) in advertisement?.author?.tag.slice(0, 6)" :key="index" class="tag selected" style=" white-space: nowrap;">
-                  <b>{{ tag.tag }}</b>
-                </span>
-              </div>
-              <div class="d-flex justify-content-end w-50 h-100 align-items-center">
-                  <div class="d-flex flex-column">
-                    <button  class="btn btn-warning active" style="height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" v-if="advertisement.promotionExpirationDate !== null">
-                      <b>Promocionado</b>
-                      <div class="promo-icon"></div>
-                    </button>
+                <div class="d-flex justify-content-between w-100">
+                  <b>{{ advertisement.desiredLocation }}</b>
+
+                  <div class="d-flex display-inline-flex">
+                    <div style="margin-right: 0.7vh;" class="d-flex align-items-center">
+                      <span style="font-weight: bold; font-size: large; margin-right: 2px;color: #28426b;"> {{
+            advertisement.author.likes.length }} </span>
+                      <span style="color: #e87878;" class="material-icons">favorite</span>
+                    </div>
                   </div>
                 </div>
+
+                <div class="d-flex justify-content-between w-100">
+                  <b>Máximo {{ advertisement.maxCohabitants }} inquilino(s)</b>
+                </div>
+
+
+                <div class="d-flex justify-content-between w-100 mt-3 h-100 align-items-center">
+                  <div class="d-flex align-items-center" style="width:100%;overflow: hidden;">
+                    <span v-for="(tag, index) in advertisement?.author?.tag.slice(0, 6)" :key="index"
+                      class="tag selected" style=" white-space: nowrap;">
+                      <b>{{ tag.tag }}</b>
+                    </span>
+                  </div>
+                  <div class="d-flex justify-content-end w-50 h-100 align-items-center">
+                    <div class="d-flex flex-column">
+                      <button class="btn btn-warning active"
+                        style="height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;"
+                        v-if="advertisement.promotionExpirationDate !== null">
+                        <b>Promocionado</b>
+                        <div class="promo-icon"></div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
-            
-          </div>
-          </div>
-        </a>
+          </a>
         </div>
-      </div>
+        <nav v-if="totalPages > 1" aria-label="Page navigation example" style="padding: 10px;">
+          <b>Page {{ pageNumber + 1 }} of {{ totalPages }}</b>
+          <ul class="pagination">
+            <li class="page-item" @click="goToFirstPage">
+              <t class="page-link" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </t>
+            </li>
+            <li class="page-item" v-if="hasPreviousPage" @click="goToPreviousPage">
+              <t class="page-link">{{ pageNumber }}</t>
+            </li>
+            <li class="page-item active">
+              <t class="page-link">{{ pageNumber + 1 }}</t>
+            </li>
+            <li class="page-item" v-if="hasNextPage" @click="goToNextPage">
+              <t class="page-link">{{ pageNumber + 2 }}</t>
+            </li>
+            <li class="page-item" @click="goToLastPage">
+              <t class="page-link" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </t>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
+  </div>
 </template>
 
 <style scoped>

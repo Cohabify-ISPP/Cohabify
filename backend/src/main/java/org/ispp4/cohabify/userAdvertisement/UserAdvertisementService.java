@@ -3,6 +3,8 @@ package org.ispp4.cohabify.userAdvertisement;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.Optional;
@@ -24,8 +26,8 @@ public class UserAdvertisementService {
         //this.globalVariables = globalVariables;
     }
 
-    public List<UserAdvertisement> findAll() {
-        return userAdvertisementRepository.findAll();
+    public Page<UserAdvertisement> findAll(Pageable pageable) {
+        return userAdvertisementRepository.findAll(pageable);
     }
 
     public Optional<UserAdvertisement> findById(ObjectId id) {

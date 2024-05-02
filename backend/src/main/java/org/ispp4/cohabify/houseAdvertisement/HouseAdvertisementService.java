@@ -2,6 +2,8 @@ package org.ispp4.cohabify.houseAdvertisement;
 
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,8 +19,8 @@ public class HouseAdvertisementService {
         this.advertisementRepository = advertisementRepository;
     }
 
-    public List<HouseAdvertisement> findAll() {
-        return advertisementRepository.findAll();
+    public Page<HouseAdvertisement> findAll(Pageable pageable) {
+        return advertisementRepository.findAll(pageable);
     }
 
     public List<HouseAdvertisement> findByAuthorId(ObjectId authorId) {
