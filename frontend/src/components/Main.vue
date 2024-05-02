@@ -126,11 +126,10 @@ const setPlace = (place) => {
     <div class="justify-content-start mt-6 mb-3">
       <h3 style="font-size: 2em">¡No te pierdas esto!</h3>
     </div>
-    <div class="row align-items-center justify-content-center">
-      <div class="col-auto">
-    <div id="adCarousel" class="carousel slide " data-bs-ride="carousel">
+    <div class="d-flex justify-content-center align-items-end">
+    <div id="adCarousel" class="carousel slide " data-bs-ride="carousel" style="max-width: 685px;">
       <div class="carousel-inner">
-        <div class="carousel-item active  ">
+        <div class="carousel-item active">
           <div class="d-block card mb-3 bg-dark " style="max-width: 680px;">
             <div class="row g-0">
               <div class="col-md-8 ">
@@ -195,9 +194,8 @@ const setPlace = (place) => {
           </div>
         </div>
       </div>
-      </div>
-      </div>
     </div>
+  </div>
   </div>
   <div class="mt-16"></div>
   <div class="relative container-fluid text-start"
