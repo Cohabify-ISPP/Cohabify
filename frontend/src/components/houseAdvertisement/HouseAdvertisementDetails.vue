@@ -574,7 +574,7 @@ onMounted(() => {
               
               <div v-if="currentUser?.id !== houseAdvertisement?.author?.id" class="d-flex col" style="flex-direction: column;">
                 <div class="d-flex">
-                  <div class="likes" style="margin-right: 1vw">
+                  <div class="likes align-items-center " style="margin-right: 1vw">
                     <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id" @click="toggleLike">
                       <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
                     </button>   
@@ -605,7 +605,7 @@ onMounted(() => {
                   <span style="font-weight: bold; font-size: large; color: #28426b">{{ houseAdvertisement.views }}</span>
                   <span class="material-symbols-outlined" style="color: #28426b; margin-left: 2px;">visibility</span>
                 </div>
-                <div class="likes" style="margin-right: 1vw">
+                <div class="likes align-items-center" style="margin-right: 1vw">
                   <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id" @click="toggleLike">
                     <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
                   </button>   
