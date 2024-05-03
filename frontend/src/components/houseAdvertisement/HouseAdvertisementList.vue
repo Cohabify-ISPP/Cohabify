@@ -172,31 +172,41 @@ const applyFilters = () => {
     }
 
     if(Object.keys(errors.value).length === 0){
-        
-        filtered.value ? (
-        filteredAdvertisements.value = filteredAdvertisements.value.filter(a => {
-            return (price.value >= a.price || price.value == 0) &&
-            (meters.value <= a.house.area || meters.value == 0) &&
-            (!empty.value && tenants.value>=a.tenants.length|| tenants.value ==0 || empty.value) &&
-            (empty.value && a.tenants.length==0 || !empty.value) &&
-            (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
-            (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
-            (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
-            (maxBedrooms.value >= a.house.roomsNumber || maxBedrooms.value == null);
-        })):(
-        filteredAdvertisements.value = advertisements.value.filter(a => {
-            return (price.value >= a.price || price.value == 0) &&
-            (meters.value <= a.house.area || meters.value == 0) &&
-            (!empty.value && tenants.value>=a.tenants.length|| tenants.value ==0 || empty.value) &&
-            (empty.value && a.tenants.length==0 || !empty.value) &&
-            (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
-            (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
-            (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
-            (maxBedrooms.value >= a.house.roomsNumber || maxBedrooms.value == null);
-        })
-        )
-        filtered.value = true
+        fetchFilteredAdvertisements();
     }
+    
+   
+}
+const fetchFilteredAdvertisements = async () => {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/filter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            price: price.value,
+            meters: meters.value,
+            empty: empty.value,
+            tenants: tenants.value,
+            minBathrooms: minBathrooms.value,
+            maxBathrooms: maxBathrooms.value,
+            minBedrooms: minBedrooms.value,
+            maxBedrooms: maxBedrooms.value
+        }),
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                throw new Error('Error al aplicar los filtros.');
+            }
+        })
+        .then(data => {
+            filteredAdvertisements.value = data;
+            filtered.value = true;
+        })
+        .catch(error => fetchError.value = error.message);
 }
 
 const currentUserIsAuthor = (advertisement) => {

@@ -139,5 +139,23 @@ public class UserAdvertisementController {
         return new ResponseEntity<>(HttpStatus.OK);
         }
 	}
+
+	@Transactional(readOnly = true)
+    @PostMapping("/filter")
+    public ResponseEntity<List<UserAdvertisement>> getAllUserAdvertisementsFiltered(@Nullable Principal principal, @RequestBody FiltersDTO filters) {
+        List<UserAdvertisement> userAdvertisements = userAdvertisementService.findAll();
+		userAdvertisements = userAdvertisementService.checkPromotions(userAdvertisements);
+		if(principal != null) {
+			User user = userService.getUserByUsername(principal.getName());
+			if(user.getPlan().equals(Plan.BASIC)) {
+				userAdvertisements = userAdvertisements.stream()
+														// Filter advertisements to leave the ones that are owned or that were created at least a day before now
+														.filter(a -> a.getAuthor().getId().equals(user.getId()) || System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+														.toList();
+			}
+		}
+		userAdvertisements = userAdvertisementService.filterAdvertisements(userAdvertisements, filters);
+        return new ResponseEntity<>(userAdvertisements, HttpStatus.OK);
+    }
 	
 }

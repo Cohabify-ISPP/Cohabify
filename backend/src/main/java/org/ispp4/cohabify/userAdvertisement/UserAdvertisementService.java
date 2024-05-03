@@ -70,4 +70,18 @@ public class UserAdvertisementService {
 
     }
 
+    public List<UserAdvertisement> filterAdvertisements(List<UserAdvertisement> ads, FiltersDTO filters) {
+        if(filters != null) {
+            ads = ads.stream()
+                     .filter(a -> {
+                        return (filters.getMaxBudget() == 0 || filters.getMaxBudget() >= a.getMaxBudget()) &&
+                        (filters.getMaxCohabitants() == 0 || filters.getMaxCohabitants() <= a.getMaxCohabitants()) &&
+                        (filters.getEntranceDate() == null || filters.getEntranceDate().isBefore(a.getEntranceDate()));
+                    })
+                     .toList();
+        }
+
+        return ads;
+    }
+
 }
