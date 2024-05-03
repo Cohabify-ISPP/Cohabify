@@ -1,4 +1,4 @@
-package org.ispp4.cohabify.userAdvertisement;
+package org.ispp4.cohabify.dto;
 
 import java.time.LocalDate;
 
@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class FiltersDTO {
+public class UserAdvertisementFiltersDTO {
 
     private Integer maxBudget = 0;
     private Integer maxCohabitants = 0;
-    private LocalDate entranceDate = null ;
+    private LocalDate entranceDate = null;
 
 
 }

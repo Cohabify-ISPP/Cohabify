@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.ispp4.cohabify.utils.Global;
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.dto.UserAdvertisementFiltersDTO;
 import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisement;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
@@ -142,7 +143,7 @@ public class UserAdvertisementController {
 
 	@Transactional(readOnly = true)
     @PostMapping("/filter")
-    public ResponseEntity<List<UserAdvertisement>> getAllUserAdvertisementsFiltered(@Nullable Principal principal, @RequestBody FiltersDTO filters) {
+    public ResponseEntity<List<UserAdvertisement>> getAllUserAdvertisementsFiltered(@Nullable Principal principal, @RequestBody UserAdvertisementFiltersDTO filters) {
         List<UserAdvertisement> userAdvertisements = userAdvertisementService.findAll();
 		userAdvertisements = userAdvertisementService.checkPromotions(userAdvertisements);
 		if(principal != null) {

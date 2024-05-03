@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.ispp4.cohabify.dto.UserAdvertisementFiltersDTO;
 import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisement;
 import org.ispp4.cohabify.utils.Global;
 //import org.ispp4.cohabify.user.User;
@@ -70,7 +71,7 @@ public class UserAdvertisementService {
 
     }
 
-    public List<UserAdvertisement> filterAdvertisements(List<UserAdvertisement> ads, FiltersDTO filters) {
+    public List<UserAdvertisement> filterAdvertisements(List<UserAdvertisement> ads, UserAdvertisementFiltersDTO filters) {
         if(filters != null) {
             ads = ads.stream()
                      .filter(a -> {
