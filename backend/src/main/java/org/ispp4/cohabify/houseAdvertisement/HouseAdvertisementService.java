@@ -1,6 +1,7 @@
 package org.ispp4.cohabify.houseAdvertisement;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.dto.HouseAdvertisementFiltersDTO;
 import org.ispp4.cohabify.user.User;
 import org.springframework.stereotype.Service;
 
@@ -82,5 +83,22 @@ public class HouseAdvertisementService {
     public HouseAdvertisement findAdvertisementByHouseId(ObjectId id) {
         return advertisementRepository.findAdvertisementByHouseId(id).get();
 
+    }
+
+    public List<HouseAdvertisement> filterAdvertisements(List<HouseAdvertisement> ads, HouseAdvertisementFiltersDTO filters) {
+        if(filters != null) {
+            ads = ads.stream()
+                     .filter(a -> {
+                        return (filters.getPrice() == 0 || filters.getPrice() <= a.getPrice()) &&
+                        (filters.getMeters() == 0 || filters.getMeters() <= a.getHouse().getArea()) &&
+                        (filters.getEmpty() || !filters.getEmpty() && filters.getTenants() >= a.getTenants().size() || filters.getTenants() == 0) &&
+                        (!filters.getEmpty() || filters.getEmpty() && a.getTenants().size() == 0) &&
+                        (filters.getMinBathrooms() == null || filters.getMinBathrooms() <= a.getHouse().getBathroomsNumber()) &&
+                        (filters.getMinBedrooms() == null || filters.getMinBedrooms() <= a.getHouse().getRoomsNumber());
+                    })
+                     .toList();
+        }
+
+        return ads;
     }
 }

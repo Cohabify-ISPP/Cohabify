@@ -10,6 +10,7 @@ import org.ispp4.cohabify.utils.Global;
 import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.AdvertisementHouseRequest;
+import org.ispp4.cohabify.dto.HouseAdvertisementFiltersDTO;
 import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
@@ -321,5 +322,37 @@ public class HouseAdvertisementController {
         return new ResponseEntity<>(sharedLikes, HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    @PostMapping("/filter")
+    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisementsFiltered(@Nullable Principal principal, @RequestBody HouseAdvertisementFiltersDTO filters) {
+        List<HouseAdvertisement> advertisements = advertisementService.findAll();
+        advertisements = advertisementService.checkPromotions(advertisements);
+        if (principal == null) {
+            advertisements = advertisements.stream() 
+            // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+        .filter(a -> System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000).toList();
+        }else{
+            User user = userService.getUserByUsername(principal.getName());
+            if(user.getPlan().equals(Plan.BASIC) ) {
+
+                advertisements = advertisements.stream() 
+                                                // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+                                            .filter(a -> a.getAuthor().getId().equals(user.getId()) ||
+                                                            System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+                                            .toList();
+            }
+        } 
+        advertisements = advertisementService.filterAdvertisements(advertisements, filters);
+        return new ResponseEntity<>(advertisements, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @PostMapping("/owner/{id}/filter")
+    public ResponseEntity<List<HouseAdvertisement>> getFilteredAdvertisementsByAuthor(@PathVariable String id, @RequestBody HouseAdvertisementFiltersDTO filters) {
+        List<HouseAdvertisement> advertisements = advertisementService.findByAuthorId(new ObjectId(id));
+        advertisements = advertisementService.checkPromotions(advertisements);
+        advertisements = advertisementService.filterAdvertisements(advertisements, filters);
+        return new ResponseEntity<>(advertisements, HttpStatus.OK);
+    }
     
 }
