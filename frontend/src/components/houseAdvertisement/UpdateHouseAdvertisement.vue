@@ -149,12 +149,16 @@
               </div>
               <p class="text-white text-start"><strong>Inquilinos seleccionados:</strong></p>
               <div class="text-start mb-3" v-if="selectedTenants.length > 0">
-                <div style="max-height: 60px; overflow-y: auto;">
-                  <ul>
-                    <li class="text-white" v-for="(tenant, index) in selectedTenants" :key="'selected' + index">{{ tenant.username }}</li>
-                  </ul>
+                <div style="max-height: 120px; overflow-y: auto;">
+                  <table>
+                    <tr v-for="(tenant, index) in selectedTenants" :key="'selected' + index">
+                      <td>{{ tenant.username }}</td>
+                      <td class="d-flex justify-content-center align-items-center" style="margin:0.5vh 1vw"><span style="color:#E84743; cursor: pointer" @click.prevent="selectedTenants = selectedTenants.filter(x => x !== tenant)" class="material-symbols-outlined">cancel</span></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
+
               <div class=" row d-flex mb-2">
                 <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda? <span style="color: red;"> *</span></label>
               </div>   
@@ -263,7 +267,6 @@ export default {
     const description = ref('')
     const price = ref()
     const tenants = ref([])
-    const tenantsSelect = ref([])
     const selectedTenants = ref([])
     const imagesUrl = ref([])
     const imagesBack= ref([])
@@ -587,7 +590,6 @@ export default {
       description,
       price,
       tenants,
-      tenantsSelect,
       images,
       imagesUrl,
       register,

@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.ispp4.cohabify.utils.Global;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.UserAdvertisementFiltersDTO;
-import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisement;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.google.rpc.context.AttributeContext.Response;
 
 import org.springframework.web.bind.annotation.RequestBody;
 

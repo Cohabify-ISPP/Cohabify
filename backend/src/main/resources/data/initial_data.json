@@ -501,6 +501,9 @@
     {
         "id": "60d5ec9af682fbd39a1b8c00",
         "isAccepted": true,
+        "openedBy": {
+            "id": "60d5ec9af682fbd39a1b8b9d"
+        },
         "users": [
             {
                 "id": "60d5ec9af682fbd39a1b8b9d"
