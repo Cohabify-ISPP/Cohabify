@@ -35,7 +35,7 @@ public class ChatService {
     
     @Transactional
     public List<Chat> getChatsByUser(User user){
-        return chatRepository.findByUsers(user);
+        return chatRepository.findByUsersAndIsActive(user, true);
     }
 
     @Transactional
