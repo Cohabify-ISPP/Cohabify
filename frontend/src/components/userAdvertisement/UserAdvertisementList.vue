@@ -82,23 +82,37 @@ export default {
         errors.value.push('entranceDateVal');
       }
       else{
-        filtered.value ? filteredAdvertisements.value = filteredAdvertisements.value.filter(a => {
-        const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
-        const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
-        return (budget.value >= a.maxBudget || budget.value == 0) &&
-            (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
-            isDateValid;
-        }):(
-        filteredAdvertisements.value = userAds.value.filter(a => {
-          const advertisementDate = a.entranceDate ? new Date(a.entranceDate) : null;
-          const isDateValid = selectedDate === null || (advertisementDate && selectedDate <= advertisementDate);
-          return (budget.value >= a.maxBudget || budget.value == 0) &&
-              (cohabitants.value <= a.maxCohabitants || cohabitants.value == 0) &&
-              isDateValid;
-        }))
-        filtered.value = true
+        fetchFilteredAdvertisements();
       }
     }
+
+    const fetchFilteredAdvertisements = async () => {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/users/filter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          maxBudget: budget.value,
+          maxCohabitants: cohabitants.value,
+          entranceDate: entranceDate.value
+
+        }),
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                throw new Error('Error al aplicar los filtros.');
+            }
+        })
+        .then(data => {
+            filteredAdvertisements.value = data;
+            filtered.value = true;
+        })
+        .catch(error => fetchError.value = error.message);
+}
 
     const currentAdvertisements = computed(() => {
       const ads = filtered.value ? filteredAdvertisements.value : userAds.value;

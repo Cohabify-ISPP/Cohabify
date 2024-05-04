@@ -10,6 +10,7 @@ import org.ispp4.cohabify.utils.Global;
 import org.apache.coyote.BadRequestException;
 import org.bson.types.ObjectId;
 import org.ispp4.cohabify.dto.AdvertisementHouseRequest;
+import org.ispp4.cohabify.dto.HouseAdvertisementFiltersDTO;
 import org.ispp4.cohabify.dto.FormItemValidationError;
 import org.ispp4.cohabify.house.Heating;
 import org.ispp4.cohabify.house.House;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,8 +40,6 @@ import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import java.util.UUID;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -133,9 +133,7 @@ public class HouseAdvertisementController {
             advertisement.setHouse(house);
             advertisement.setAuthor(request.getAuthor());
             advertisement = advertisementService.save(advertisement);
-            
-            // Save the image and add the static uri to the user
-            
+                        
             List<String> imagesPath = new ArrayList<>();
             for(int i = 0; i < images.size(); i++){
                 MultipartFile image = images.get(i);
@@ -163,13 +161,8 @@ public class HouseAdvertisementController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                                 .body("You can't create an advertisement for yourself");
         } 
-       
-
     }
 		
-    
-
-
     @GetMapping("/heating")
     public ResponseEntity<List<Heating>> findHeating() {
         try {
@@ -183,12 +176,6 @@ public class HouseAdvertisementController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    /*@PutMapping("/{id}")
-    public ResponseEntity<HouseAdvertisement> updateAdvertisement(@PathVariable ObjectId id, @RequestBody HouseAdvertisement advertisement) {
-        HouseAdvertisement updatedAdvertisement = advertisementService.update(id, advertisement);
-        return new ResponseEntity<>(updatedAdvertisement, HttpStatus.OK);
-    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAdvertisement(@Valid @RequestPart("string-data") AdvertisementHouseRequest request, BindingResult result, 
@@ -227,9 +214,7 @@ public class HouseAdvertisementController {
             advertisement.setHouse(house);
             advertisement.setAuthor(request.getAuthor());
             advertisement = advertisementService.save(advertisement);
-            
-            // Save the image and add the static uri to the user
-            
+                        
             List<String> imagesPath = request.getImagesB();
             if(images != null){
                 
@@ -283,7 +268,6 @@ public class HouseAdvertisementController {
 
     }
 
-
     @PostMapping("/promote/{id}")
     public ResponseEntity<Void> promoteHouseAd(@PathVariable ObjectId id) {
         if(!advertisementService.findAdById(id).getAuthor().getUsername().equals(global.getCurrentUser().getUsername())){
@@ -321,5 +305,37 @@ public class HouseAdvertisementController {
         return new ResponseEntity<>(sharedLikes, HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    @PostMapping("/filter")
+    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisementsFiltered(@Nullable Principal principal, @RequestBody HouseAdvertisementFiltersDTO filters) {
+        List<HouseAdvertisement> advertisements = advertisementService.findAll();
+        advertisements = advertisementService.checkPromotions(advertisements);
+        if (principal == null) {
+            advertisements = advertisements.stream() 
+            // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+        .filter(a -> System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000).toList();
+        }else{
+            User user = userService.getUserByUsername(principal.getName());
+            if(user.getPlan().equals(Plan.BASIC) ) {
+
+                advertisements = advertisements.stream() 
+                                                // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+                                            .filter(a -> a.getAuthor().getId().equals(user.getId()) ||
+                                                            System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+                                            .toList();
+            }
+        } 
+        advertisements = advertisementService.filterAdvertisements(advertisements, filters);
+        return new ResponseEntity<>(advertisements, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @PostMapping("/owner/{id}/filter")
+    public ResponseEntity<List<HouseAdvertisement>> getFilteredAdvertisementsByAuthor(@PathVariable String id, @RequestBody HouseAdvertisementFiltersDTO filters) {
+        List<HouseAdvertisement> advertisements = advertisementService.findByAuthorId(new ObjectId(id));
+        advertisements = advertisementService.checkPromotions(advertisements);
+        advertisements = advertisementService.filterAdvertisements(advertisements, filters);
+        return new ResponseEntity<>(advertisements, HttpStatus.OK);
+    }
     
 }

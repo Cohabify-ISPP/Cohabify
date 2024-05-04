@@ -53,7 +53,7 @@
               Buscar
             </button>
             </div>
-            <div class="mb-3  text-start col">
+            <div class="mb-3 text-start col">
               <label for="location" class="form-label text-white"><strong>Seleccionado: {{ selectedCadastre }}</strong></label>
             </div>
           </div>
@@ -147,7 +147,7 @@
                   <table>
                     <tr v-for="(tenant, index) in selectedTenants" :key="'selected' + index">
                       <td>{{ tenant.username }}</td>
-                      <td class="d-flex justify-content-center align-items-center" style="margin:0.5vh 1vw"><span style="color:red; cursor: pointer" @click.prevent="selectedTenants = selectedTenants.filter(x => x !== tenant)" class="material-symbols-outlined">cancel</span></td>
+                      <td class="d-flex justify-content-center align-items-center" style="margin:0.5vh 1vw"><span style="color:#E84743; cursor: pointer" @click.prevent="selectedTenants = selectedTenants.filter(x => x !== tenant)" class="material-symbols-outlined">cancel</span></td>
                     </tr>
                   </table>
                 </div>

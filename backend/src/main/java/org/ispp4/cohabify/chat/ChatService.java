@@ -39,6 +39,11 @@ public class ChatService {
     }
 
     @Transactional
+    public List<Chat> getChatsOpenedByUser(User user){
+        return chatRepository.findByOpenedBy(user);
+    }   
+
+    @Transactional
     public Chat acceptChat(Chat chat){
         chat.setIsAccepted(true);
         return chatRepository.save(chat);

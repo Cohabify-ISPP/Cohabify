@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.ispp4.cohabify.dto.CreateChatRequest;
+import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
 import org.springframework.http.ResponseEntity;
@@ -65,13 +66,19 @@ public class ChatController {
             }
         }
 
+        if (user.getPlan().equals(Plan.BASIC) && chatService.getChatsOpenedByUser(user).size() >= 3){
+            return ResponseEntity.status(403).build();
+        }
+                
         request.getUsers().add(user);
         Chat chat = new Chat();
         chat.setIsAccepted(true);
         chat.setMessages(List.of());
         chat.setUsers(request.getUsers());
+        chat.setOpenedBy(user);
         chatService.saveChat(chat);
         return ResponseEntity.status(201).build();
     }
+
 
 }
