@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
 				.allowedOrigins("http://localhost:8080", "ws://localhost:8080",
 								"http://localhost:5173", "ws://localhost:5173",
 								"https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com/")
-				.allowedOriginPatterns("^(.)*://(.)*-cohabify.onrender.com$")
+				.allowedOriginPatterns("*://*-cohabify.onrender.com")
 				.allowedMethods("*") 
 				.allowedHeaders("Authentication", "content-type")
 				.allowCredentials(true)

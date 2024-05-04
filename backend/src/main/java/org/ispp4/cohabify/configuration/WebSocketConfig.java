@@ -21,7 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/chat-ws")
 				.setAllowedOrigins("http://localhost:5173", "https://localhost:5173", "ws://localhost:5173")
-				.setAllowedOriginPatterns("^(.)*://(.)*-cohabify.onrender.com$")
+				.setAllowedOriginPatterns("*://*-cohabify.onrender.com")
 				.withSockJS();
 	}
 
