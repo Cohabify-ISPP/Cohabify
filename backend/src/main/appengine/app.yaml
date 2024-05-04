@@ -1,4 +1,4 @@
 runtime: java17
-service: s3-v2-backend
+service: ppl-backend
 env_variables:
   SPRING_PROFILES_ACTIVE: "prod"
