@@ -500,6 +500,7 @@
     "chats": [
       {
           "id": "60d5ec9af682fbd39a1b8c00",
+          "isAccepted": true,
           "isActive": true,
           "openedBy": {
               "id": "60d5ec9af682fbd39a1b8b9d"

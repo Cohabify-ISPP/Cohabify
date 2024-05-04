@@ -16,6 +16,8 @@ public interface ChatRepository extends MongoRepository<Chat, ObjectId>{
 
     List<Chat> findByOpenedBy(User user);
 
+    List<Chat> findByOpenedByAndIsActive(User user, Boolean isActive);
+
     Chat findByUsers(List<User> users);
 
 }

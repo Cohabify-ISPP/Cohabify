@@ -34,7 +34,7 @@ public class ChatController {
     @GetMapping("")
     public ResponseEntity<List<Chat>> getAllChats(Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
-        List<Chat> chats = chatService.getChatsByUser(user);
+        List<Chat> chats = chatService.getActiveChatsByUser(user);
         for(int i = 0; i < chats.size(); i++) {
             Chat chat = chats.get(i);
             for(int j = 0; j < chat.getUsers().size(); j++) {
@@ -51,7 +51,7 @@ public class ChatController {
     @PostMapping("")
     public ResponseEntity<?> createChat(@RequestBody CreateChatRequest request, Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
-        List<Chat> chats = chatService.getChatsByUser(user);
+        List<Chat> chats = chatService.getActiveChatsByUser(user);
 
         for(Chat chat:chats) {
             chat.getUsers().remove(user);
@@ -70,13 +70,14 @@ public class ChatController {
             }
         }
 
-        if (user.getPlan().equals(Plan.BASIC) && chatService.getChatsOpenedByUser(user).size() >= 3){
+        if (user.getPlan().equals(Plan.BASIC) && chatService.getActiveChatsOpenedByUser(user).size() >= 3){
             return ResponseEntity.status(403).build();
         }
                 
         request.getUsers().add(user);
         Chat chat = new Chat();
         chat.setIsAccepted(true);
+        chat.setIsActive(true);
         chat.setMessages(List.of());
         chat.setUsers(request.getUsers());
         chat.setOpenedBy(user);
