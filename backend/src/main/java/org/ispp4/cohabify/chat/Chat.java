@@ -22,6 +22,9 @@ public class Chat extends BaseEntity{
     @NotNull
     private Boolean isAccepted;
 
+    @NotNull
+    private Boolean isActive;
+
     @DBRef
     @NotNull
     private List<User> users;

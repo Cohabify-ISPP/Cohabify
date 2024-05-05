@@ -32,16 +32,26 @@ public class ChatService {
     public void deleteChat(ObjectId id){
         chatRepository.deleteById(id);
     }
-    
+
     @Transactional
     public List<Chat> getChatsByUser(User user){
-        return chatRepository.findByUsers(user);
+        return chatRepository.findByUsersAndIsActive(user, true);
+    }
+    
+    @Transactional
+    public List<Chat> getActiveChatsByUser(User user){
+        return chatRepository.findByUsersAndIsActive(user, true);
     }
 
     @Transactional
     public List<Chat> getChatsOpenedByUser(User user){
         return chatRepository.findByOpenedBy(user);
     }   
+    
+    @Transactional
+    public List<Chat> getActiveChatsOpenedByUser(User user){
+        return chatRepository.findByOpenedByAndIsActive(user, true);
+    } 
 
     @Transactional
     public Chat acceptChat(Chat chat){
