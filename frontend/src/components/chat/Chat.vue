@@ -64,7 +64,7 @@
 
           <div class="messages-area" ref="messagesArea">
             <div v-for="message in selectedChat?.messages" :class="['message', 'one', 'card', message.sender.username === currentUser.username ? 'c2' : 'c1']">
-              <div class="username">{{ message.sender.username }}</div>
+              <div :class="['username', message.sender.username === currentUser.username ? 'u2' : 'u1']">{{ message.sender.username }}</div>
               <p style="padding: 15px;">{{ message.text }}</p>
               <div class="date">{{ formatDate(message.timeSent) }}</div>
             </div>
@@ -172,7 +172,7 @@ export default {
 
     function sendMessage() {
       if(selectedChat.value != null && selectedChat.value != undefined && 
-        messageInput.value != null && messageInput.value != undefined && messageInput.value != "") {
+        messageInput.value != null && messageInput.value != undefined && messageInput.value.replace(/\s/g, '') != "") {
         try {
             stompClient.send("/chat-msgs/" + selectedChat.value.id, {}, JSON.stringify({'msg': messageInput.value}));
             messageInput.value = "";
@@ -493,6 +493,10 @@ export default {
 
 .offset {
   transform: translate(40%, 15%);
+}
+
+.u1{
+  color: white;
 }
 
 </style>
