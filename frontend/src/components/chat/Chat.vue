@@ -48,7 +48,7 @@
                             <div class="flex-column overflow-auto" style="padding-right: 5px; max-width: 70%; max-height: 100%;">
                                 <div class ="d-flex" style="margin-bottom: 5px;">
                                     <div class="card-body d-flex align-items-center">
-                                      <h5 style="text-align: left;" class="card-title">{{ chatMembers(selectedChat) }}</h5>
+                                      <h5 style="text-align: left;color: white;" class="card-title">{{ chatMembers(selectedChat) }}</h5>
                                     </div>
                                     <div class="card-body d-flex align-items-center" v-if="selectedChat.isChatOwned">
                                       <button @click.prevent="deleteChat" type="button" class="button boton-cancelar"
