@@ -44,7 +44,7 @@ public class UserAdvertisementController {
 	@Transactional(readOnly = true)
     @GetMapping("/all/{pageNumber}")
     public ResponseEntity<List<Object>> getAllUserAdvertisements(@Nullable Principal principal, @PathVariable Integer pageNumber) {
-		PageRequest pageable = PageRequest.of(pageNumber, 20);
+		PageRequest pageable = PageRequest.of(pageNumber, 10);
 		Page page = userAdvertisementService.findAll(pageable);
         List<UserAdvertisement> userAdvertisements = page.getContent();
 		Integer numPages = page.getTotalPages();

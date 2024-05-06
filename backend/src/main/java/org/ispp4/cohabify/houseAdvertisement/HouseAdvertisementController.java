@@ -59,7 +59,7 @@ public class HouseAdvertisementController {
     @Transactional(readOnly = true)
     @GetMapping("/all/{pageNumber}")
     public ResponseEntity<List<Object>> getAllAdvertisements(@Nullable Principal principal, @PathVariable int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, 20);
+        Pageable pageable = PageRequest.of(pageNumber, 10);
         Page page = advertisementService.findAll(pageable);
         List<HouseAdvertisement> advertisements = page.getContent();
         Integer numPages = page.getTotalPages();

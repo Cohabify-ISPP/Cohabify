@@ -423,7 +423,7 @@ const goToPreviousPage = () => {
                     </div>
                     </div>
                     <nav v-if="totalPages > 1" aria-label="Page navigation example" style="padding: 10px;">
-                        <b>Page {{ pageNumber + 1 }} of {{ totalPages }}</b>
+                        <b>Página  {{ pageNumber + 1 }} de {{ totalPages }}</b>
                         <ul class="pagination">
                           <li class="page-item" @click="goToFirstPage">
                             <t class="page-link" aria-label="Previous" style="color: #28426b">
