@@ -8,9 +8,7 @@ const meters = ref(0)
 const empty = ref(false)
 const tenants = ref(0)
 const minBathrooms = ref(null)
-const maxBathrooms = ref(null)
 const minBedrooms = ref(null)
-const maxBedrooms = ref(null)
 const errors = ref({})
 const advertisements = ref([])
 const filteredAdvertisements = ref([])
@@ -22,7 +20,14 @@ const searchTerm = ref('')
 const store = useStore();
 const currentUser = computed(() => store.state.user);
 
+const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
 onMounted(() => {
+    updateMeta('Encuentra tu Vivienda Ideal en Cohabify: Búsqueda Personalizada y Filtros Avanzados', 'Utiliza nuestros filtros avanzados para encontrar viviendas en alquiler que se ajusten a tus necesidades específicas. Explora opciones por precio, tamaño, y más en Cohabify y descubre tu hogar ideal rápidamente.');
     fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses', {
         method: "GET",
         headers: {
@@ -85,9 +90,7 @@ const search =  () => {
     empty.value = false;
     tenants.value = 0;
     minBathrooms.value = null;
-    maxBathrooms.value = null;
     minBedrooms.value = null;
-    maxBedrooms.value = null;
     
     filteredAdvertisements.value = advertisements.value.filter(a => {
         if(searchTerm.value === ''){
@@ -105,91 +108,71 @@ const applyFilters = () => {
         errors.value.priceVal = 'Precio fuera de rango'
     }
 
-    else if (meters.value < 0 || meters.value > 350) {
+    if (meters.value < 0 || meters.value > 350) {
         errors.value.metersVal = 'Metros cuadrados fuera de rango'
     }
 
-    else if (tenants.value < 0 || tenants.value > 10) {
+    if (tenants.value < 0 || tenants.value > 10) {
         errors.value.tenantsVal = 'Número de inquilinos fuera de rango'
+    }
 
-    }else if (minBathrooms.value !== null) {
+    if (minBathrooms.value !== null) {
        if (typeof minBathrooms.value !== 'number') {
-            errors.value.minBathroomsVal = 'Valor no numérico'
+            if(minBathrooms.value === '') {
+                minBathrooms.value = null;
+            } else {
+                errors.value.minBathroomsVal = 'Valor no numérico'
+            }
         } else if (minBathrooms.value < 0) {
             errors.value.minBathroomsVal = 'Valor negativo'
-        } else if (maxBathrooms.value == null) {
-            errors.value.maxBathroomsVal = 'Valor no indicado'
         }
     } 
 
-    else if (maxBathrooms.value !== null) {
-        if (typeof maxBathrooms.value !== 'number') {
-            errors.value.maxBathroomsVal = 'Valor no numérico'
-        } else if (maxBathrooms.value < 0) {
-            errors.value.maxBathroomsVal = 'Valor negativo'
-        } else if (minBathrooms.value == null) {
-            errors.value.minBathroomsVal = 'Valor no indicado'
-        }
-    }
-
-    else if (minBathrooms.value !== null && maxBathrooms.value !== null && minBathrooms.value > maxBathrooms.value) {
-        if (!errors.value.minBathroomsVal) {
-            errors.value.minBathroomsVal = 'Valor mayor que el máximo seleccionado'
-        }
-    }
-
-    else if (minBedrooms.value !== null) {
+    if (minBedrooms.value !== null) {
         if (typeof minBedrooms.value !== 'number') {
-            errors.value.minRoomsVal = 'Valor no numérico'
+            if(minBedrooms.value === '') {
+                minBedrooms.value = null;
+            } else {
+                errors.value.minRoomsVal = 'Valor no numérico'
+            }
         } else if (minBedrooms.value < 0) {
             errors.value.minRoomsVal = 'Valor negativo'
-        } else if (maxBedrooms.value == null) {
-            errors.value.minRoomsVal = 'Valor no indicado'
-        }
-    }
-
-    else if (maxBedrooms.value !== null) {
-        if (typeof maxBedrooms.value !== 'number') {
-            errors.value.maxRoomsVal = 'Valor no numérico'
-        } else if (maxBedrooms.value < 0) {
-            errors.value.maxRoomsVal = 'Valor negativo'
-        } else if (minBedrooms.value == null) {
-            errors.value.maxRoomsVal = 'Valor no indicado'
-        }
-    }
-
-    else if (minBedrooms.value !== null && maxBedrooms.value !== null && minBedrooms.value > maxBedrooms.value) {
-        if (!errors.value.minRoomsVal) {
-            errors.value.minRoomsVal = 'Valor mayor que el máximo seleccionado'
         }
     }
 
     if(Object.keys(errors.value).length === 0){
-        
-        filtered.value ? (
-        filteredAdvertisements.value = filteredAdvertisements.value.filter(a => {
-            return (price.value >= a.price || price.value == 0) &&
-            (meters.value <= a.house.area || meters.value == 0) &&
-            (!empty.value && tenants.value>=a.tenants.length|| tenants.value ==0 || empty.value) &&
-            (empty.value && a.tenants.length==0 || !empty.value) &&
-            (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
-            (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
-            (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
-            (maxBedrooms.value >= a.house.roomsNumber || maxBedrooms.value == null);
-        })):(
-        filteredAdvertisements.value = advertisements.value.filter(a => {
-            return (price.value >= a.price || price.value == 0) &&
-            (meters.value <= a.house.area || meters.value == 0) &&
-            (!empty.value && tenants.value>=a.tenants.length|| tenants.value ==0 || empty.value) &&
-            (empty.value && a.tenants.length==0 || !empty.value) &&
-            (minBathrooms.value <= a.house.bathroomsNumber || minBathrooms.value == null) &&
-            (maxBathrooms.value >= a.house.bathroomsNumber || maxBathrooms.value == null) &&
-            (minBedrooms.value <= a.house.roomsNumber || minBedrooms.value == null) &&
-            (maxBedrooms.value >= a.house.roomsNumber || maxBedrooms.value == null);
+        fetchFilteredAdvertisements();
+    }   
+}
+
+const fetchFilteredAdvertisements = async () => {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/advertisements/houses/filter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            price: price.value,
+            meters: meters.value,
+            empty: empty.value,
+            tenants: tenants.value,
+            minBathrooms: minBathrooms.value,
+            minBedrooms: minBedrooms.value,
+        }),
+    })
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                throw new Error('Error al aplicar los filtros.');
+            }
         })
-        )
-        filtered.value = true
-    }
+        .then(data => {
+            filteredAdvertisements.value = data;
+            filtered.value = true;
+        })
+        .catch(error => fetchError.value = error.message);
 }
 
 const currentUserIsAuthor = (advertisement) => {
@@ -272,30 +255,24 @@ const fetchValoration = async (id) => {
                         <!-- Baños -->
                         <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
                             <p>Baños</p>
-                            <p><b>(Mínimo - Máximo)</b></p>
+                            <p><b>(Mínimo)</b></p>
                         </div>
-                        <div class="mt-2">
-                            <div class="d-flex">
-                                <div>
-                                    <input type="number" class="form-control" v-model="minBathrooms" min="0" id="minBathroomsVal" :class="{'is-invalid': errors.minBathroomsVal}">
-                                    <p v-if="errors.minBathroomsVal" class="text-danger">{{ errors.minBathroomsVal }}</p>
-                                </div>
-                                <b style="margin: 0 10px;"> - </b>
-                                <div>
-                                    <input type="number" class="form-control" v-model="maxBathrooms" id="maxBathroomsVal" :class="{'is-invalid': errors.maxBathroomsVal}">
-                                    <p v-if="errors.maxBathroomsVal" class="text-danger">{{ errors.maxBathroomsVal }}</p>
-                                </div>
+                        <div class="mt-3 d-flex">
+                            <div>
+                                <input type="number" class="form-control" v-model="minBathrooms" min="0" id="minBathroomsVal" :class="{'is-invalid': errors.minBathroomsVal}">
+                                <p v-if="errors.minBathroomsVal" class="text-danger">{{ errors.minBathroomsVal }}</p>
                             </div>
                         </div>
                         <!-- Habitaciones -->
                         <div class="mt-3 d-flex justify-content-between" style="width: 100%; height: 30px;">
                             <p>Habitaciones</p>
-                            <p><b>(Mínimo - Máximo)</b></p>
+                            <p><b>(Mínimo)</b></p>
                         </div>
-                        <div class="d-flex justify-content-between mt-2">
-                            <input type="number" class="form-control" v-model="minBedrooms" min="0" id="minRoomsVal" :class="{'is-invalid': errors.minRoomsVal}">
-                            <b style="margin: 0 10px;"> - </b>
-                            <input type="number" class="form-control" v-model="maxBedrooms" id="maxRoomsVal" :class="{'is-invalid': errors.maxRoomsVal}">
+                        <div class="mt-3 d-flex">
+                            <div>
+                                <input type="number" class="form-control" v-model="minBedrooms" min="0" id="minRoomsVal" :class="{'is-invalid': errors.minRoomsVal}">
+                                <p v-if="errors.minRoomsVal" class="text-danger">{{ errors.minRoomsVal }}</p>
+                            </div>
                         </div>
                     </form>
                     <hr>

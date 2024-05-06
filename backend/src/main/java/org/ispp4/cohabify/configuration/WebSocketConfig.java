@@ -20,8 +20,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/chat-ws")
-				.setAllowedOrigins("http://localhost:5173", "https://localhost:5173", "ws://localhost:5173",
-									"http://s3-cohabify.onrender.com", "https://s3-cohabify.onrender.com", "ws://s3-cohabify.onrender.com")
+				.setAllowedOrigins("http://localhost:5173", "https://localhost:5173", "ws://localhost:5173")
+				.setAllowedOriginPatterns("*://*-cohabify.onrender.com")
 				.withSockJS();
 	}
 

@@ -32,6 +32,12 @@ const truncateDescription = (description) => {
   }
 };
 
+const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
 function parseHeating(heating) {
   if (heating === "CENTRAL_HEATING") {
     return "Calefacción central";
@@ -237,7 +243,12 @@ const fetchHouseAdvertisement = () => {
     });
 };
 
-const openChat = () => {
+const openTenantsChat = () => {
+    if(houseAdvertisement.value.tenants.length < 1) {
+      chatError.value = "Este piso no tiene inquilinos con los que iniciar un chat.";
+      return;
+    }
+
     fetch(import.meta.env.VITE_BACKEND_URL + '/api/chat/', {
         method: 'POST',
         headers: {
@@ -253,6 +264,8 @@ const openChat = () => {
         if (!response.ok) {
             if(response.status == 409) {
                 chatError.value = "Ya posee un chat con esta persona";
+            } else if (response.status == 403) {
+                chatError.value = "Has alcanzado el límite de chats de tu plan actual";
             } else {
                 throw new Error('No se ha podido crear el chat, código: ' + response.status);
             }
@@ -262,14 +275,57 @@ const openChat = () => {
         
     })
     .catch(error => {
+      if (error.toString().includes("403")) {
+        chatError.value = "Has alcanzado el límite de chats de tu plan actual";
+      } else if (error.toString().includes("409")) {
+        chatError.value = "Ya posee un chat con esta persona";
+      } else{
         console.error(error);
         chatError.value = "Ha ocurrido un error creando el chat.";
+      }
     })
 }
 
+const openOwnerChat = () => {
+
+    fetch(import.meta.env.VITE_BACKEND_URL + '/api/chat/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            users: [houseAdvertisement.value.author],
+        }),
+    })
+    .then(async response => {
+        if (!response.ok) {
+            if(response.status == 409) {
+                chatError.value = "Ya posee un chat con esta persona";
+            } else {
+                throw new Error('No se ha podido crear el chat, código: ' + response.status);
+            }
+        } else {
+            router.push("/chat");
+        }
+        
+    })
+    .catch(error => {
+      if (error.toString().includes("403")) {
+        chatError.value = "Has alcanzado el límite de chats de tu plan actual";
+      } else if (error.toString().includes("409")) {
+        chatError.value = "Ya posee un chat con esta persona";
+      } else{
+        console.error(error);
+        chatError.value = "Ha ocurrido un error creando el chat.";
+      }
+    })
+}
 
 onMounted(() => {
   fetchHouseAdvertisement();
+  updateMeta('Explora Detalles de la Vivienda en Cohabify: Encuentra tu Hogar Ideal', 'Descubre todos los detalles de nuestras viviendas en Cohabify. Evalúa características, lee comentarios de otros usuarios y conecta con los inquilinos o propietarios para encontrar tu hogar ideal.');
 });
 </script>
 
@@ -478,7 +534,6 @@ onMounted(() => {
               <h5>{{ houseAdvertisement.house.location }}</h5>
               <i class="bi bi-geo-alt" style="margin-left: 1%"></i>
             </div>
-            <!--Aqui el mapa-->
             <GMapMap
             :center="{
               lat: houseAdvertisement.house.locationPoint.y,
@@ -516,28 +571,49 @@ onMounted(() => {
 
           <div class="d-flex justify-content-center">
             <div class="d-flex justify-content-center align-items-center">
-              <div v-if="currentUser?.id === houseAdvertisement?.author?.id" class="d-flex align-items-center" style="margin-right: 1vh;">
-                <span style="font-weight: bold; font-size: large; color: #28426b">{{ houseAdvertisement.views }}</span>
-                <span class="material-symbols-outlined" style="color: #28426b; margin-left: 2px;">visibility</span>
-              </div>
-              <div class="likes" style="margin-right: 1vw">
-                <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement.author?.id == currentUser?.id" @click="toggleLike">
-                  <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
-                </button>   
+              
+              <div v-if="currentUser?.id !== houseAdvertisement?.author?.id" class="d-flex col" style="flex-direction: column;">
+                <div class="d-flex">
+                  <div class="likes align-items-center " style="margin-right: 1vw">
+                    <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id" @click="toggleLike">
+                      <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
+                    </button>   
 
-                <span style="font-weight: bold; font-size: large; color: #28426b">
-                  {{ houseAdvertisement.house?.likes.length }}
-                </span>
+                    <span style="font-weight: bold; font-size: large; color: #28426b">
+                      {{ houseAdvertisement.house?.likes.length }}
+                    </span>
+                  </div>
+                  <button @click.prevent="openTenantsChat()"type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
+                    <strong style="color: white">Iniciar chat inquilinos
+                      <i class="bi bi-chat" style="margin-left: 5px"></i>
+                    </strong>
+                  </button>
+
+                  <button @click.prevent="openOwnerChat()" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
+                    <strong style="color: white">Iniciar chat dueño
+                      <i class="bi bi-chat" style="margin-left: 5px"></i>
+                    </strong>
+                  </button>
+                </div>
+                <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== houseAdvertisement?.author?.id && chatError != ''">
+                    <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
+                </div>
               </div>
               
-              <button @click.prevent="openChat()" v-if="currentUser.id !== houseAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
-                <strong style="color: white"
-                  >Iniciar chat
-                  <i class="bi bi-chat" style="margin-left: 5px"></i
-                ></strong>
-              </button>
-
               <div class="d-flex col" v-else>
+                <div class="d-flex align-items-center" style="margin-right: 1vh;">
+                  <span style="font-weight: bold; font-size: large; color: #28426b">{{ houseAdvertisement.views }}</span>
+                  <span class="material-symbols-outlined" style="color: #28426b; margin-left: 2px;">visibility</span>
+                </div>
+                <div class="likes align-items-center" style="margin-right: 1vw">
+                  <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id" @click="toggleLike">
+                    <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
+                  </button>   
+
+                  <span style="font-weight: bold; font-size: large; color: #28426b">
+                    {{ houseAdvertisement.house?.likes.length }}
+                  </span>
+                </div>
                 <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/houses/edit/${houseAdvertisement.id}`)
                   "style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;">
                   <strong>Editar</strong>
@@ -549,9 +625,7 @@ onMounted(() => {
                   <strong>Eliminar</strong>
                   <span class="material-symbols-outlined" style="margin-left: 0.5rem">delete</span>
                 </button>
-              </div>
-              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== houseAdvertisement.author?.id && chatError != ''">
-                  <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
+                
               </div>
             </div>
           </div>
@@ -559,7 +633,7 @@ onMounted(() => {
           <div style="margin-top: 5%">
             <div class="d-flex justify-content-between">
               <h4 style="text-align: left">Comentarios</h4>
-              <div v-if="currentUser.username && houseAdvertisement.author?.username !== currentUser.username">
+              <div v-if="currentUser.username && houseAdvertisement?.author?.username !== currentUser.username">
               <i class="fas fa-trash-alt" @click="deleteComment" style="cursor: pointer;width: 38px;height: 38px;border: 0.2em solid black;border-radius: 50%;padding: 0.5em;background-color: #f2f2f2;"
                  v-if="Object.keys(currentUserHouseAdvertisementRating).length !== 0">
               </i>

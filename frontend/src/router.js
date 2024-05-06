@@ -17,6 +17,8 @@ import Error from './components/Error.vue';
 import MyHouseAdvertisementList from './components/houseAdvertisement/MyHouseAdvertisementList.vue';
 import Chat from './components/chat/Chat.vue';
 import DeleteAccount from './components/DeleteAccount.vue';
+import RequestPasswordReset from './components/authentication/RequestPasswordReset.vue';
+import ResetPassword from './components/authentication/ResetPassword.vue';
 
 
 const routes = [
@@ -25,6 +27,8 @@ const routes = [
     { path: '/login', component: Login },
     { path: '/register', component: Register },
     { path: '/register/verify/:verificationCode', component: RegisterVerification },
+    { path: '/reset-password', component: RequestPasswordReset },
+    { path: '/reset-password/:verificationCode', component: ResetPassword },
     
     { path: '/chat', component: Chat},
 

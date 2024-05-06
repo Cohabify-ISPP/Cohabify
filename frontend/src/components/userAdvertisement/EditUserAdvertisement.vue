@@ -18,7 +18,13 @@ export default {
       exitDate: "",
       maxCohabitants: "",
     });
-    
+
+    const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
     const fetchUserAd = async () => {
       try {
           const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/users/myAdvertisement/${user.value.id}`,
@@ -162,6 +168,7 @@ export default {
     };
 
     onMounted(() => {
+      updateMeta('Crear/Editar Anuncio de Búsqueda de Piso en Cohabify', 'Gestiona tu anuncio de búsqueda de piso en Cohabify. Define tu presupuesto, ubicación deseada, fechas de estancia y más para encontrar el espacio ideal que se ajuste a tus necesidades.');
       if (localStorage.getItem("authentication") === null) {
         router.push("/login");
       }

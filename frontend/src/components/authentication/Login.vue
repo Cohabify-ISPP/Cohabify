@@ -2,9 +2,7 @@
     <Navbar />
     <div class="container d-flex justify-content-center align-items-center  vh-100">
         <div class="text-center">
-            <!-- Modal de Bootstrap que se mostrará -->
             <div id="loginModal" class="modal">
-                <!-- Modal content -->
                 <div class="modal-content">
                     <div class="modal-header">
                         <span class="success-checkmark">✓</span>
@@ -28,11 +26,18 @@
                         </div>
                         <div class="form-group" style="padding: 20px;">
                             <label for="password" class="form-label text-white fw-bold">Contraseña</label>
-                            <input type="password" class="form-control" id="password" v-model="password"
-                                placeholder="Contraseña">
+
+                            <div class="input-with-toggle">
+                                <input :type="visiblePassword ? 'text':'password'" class="form-control" id="password" v-model="password" placeholder="Contraseña">
+                                <button @click.prevent="togglePasswordVisibility" class="toggle-password-button">
+                                    <span v-if="visiblePassword"><i class="bi bi-eye-slash-fill"></i></span>
+                                    <span v-else><i class="bi bi-eye-fill"></i></span>
+                                </button>
+                            </div>
+                            
                         </div>
                         <div class="form-group" style="padding: 20px;">
-                            <button type="button" class="btn-primary" @click="login">Iniciar sesión</button>
+                            <button type="button" class="btn-primary" @click.prevent="login">Iniciar sesión</button>
                         </div>
                         <div v-if="fetchError" class="alert alert-danger" role="alert">
                             {{ fetchError }}
@@ -41,13 +46,15 @@
                             :data-client_id="clientId"
                             data-callback="handleGoogleOauth">
                         </div>
-                        <div class="g_id_signin" data-type="standard"></div>
+                        <div class="g_id_signin d-flex justify-content-center" data-type="standard"></div>
                         <button v-if="test" id="bypass" type="button" @click.prevent="bypassOauth">Bypass</button>
                     </div>
                 </form>
             </div>
             <div>
                 <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿No tienes cuenta? <button type="button" class="text-clickable" @click="moveToRegister">Regístrate</button></h3>
+                <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿Has olvidado tu contraseña?</h3>
+                <h3 style="color: rgb(0, 0, 0); padding-top: 2%;"><button type="button" class="text-clickable" @click.prevent="router.push('/reset-password')">Restablece tu contraseña</button></h3>
             </div>
         </div>
     </div>
@@ -67,6 +74,13 @@ export default {
         const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
         const router = useRouter();
         const test = ref(false);
+        const visiblePassword = ref(false);
+
+        const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
         
         const login = async () => {
             const data = {
@@ -109,6 +123,10 @@ export default {
             window.location.href='/register';
         };
         
+        const togglePasswordVisibility = () => {
+            event.stopPropagation();
+            visiblePassword.value = !visiblePassword.value;
+        };
 
         const handleGoogleOauth = async (googleData) => {
             await fetch (import.meta.env.VITE_BACKEND_URL + '/auth/login/google', {
@@ -153,6 +171,7 @@ export default {
             script.src = 'https://accounts.google.com/gsi/client';
             script.async = true;
             script.defer = true;
+            updateMeta('Iniciar Sesión en Cohabify', 'Accede a tu cuenta para explorar viviendas y encontrar compañeros de piso ideales. Utiliza nuestro servicio para mejorar tu experiencia.');
             document.body.appendChild(script);
             if (process.env.NODE_ENV === "test") {
                 test.value = true;
@@ -170,7 +189,10 @@ export default {
             handleGoogleOauth,
             bypassOauth,
             login,
-            moveToRegister
+            moveToRegister,
+            visiblePassword,
+            togglePasswordVisibility,
+            router
         };
 
     }
@@ -258,6 +280,25 @@ button:hover {
 .text-clickable:hover {
     text-decoration: underline;
     background-color: transparent;
+}
+
+.input-with-toggle {
+    position: relative;
+}
+
+.input-with-toggle input {
+    padding-right: 40px;
+}
+
+.input-with-toggle .toggle-password-button {
+    color: black;
+    position: absolute;
+    top: 50%;
+    right: 0.5%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
 </style>

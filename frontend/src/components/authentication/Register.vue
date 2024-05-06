@@ -5,26 +5,37 @@
       style="max-width: 400px; padding-top: 20px;padding-bottom: 2%;">
     <h1 style="padding-bottom: 30px;">Registro</h1>
     <div class="card">
-      <div v-show="success" class="alert alert-success alert-dismissible fade show" role="alert">
-        Registro completado con éxito. Se le ha enviado un correo para verificar su cuenta. Se le redireccionará en 5 segundos...
-      </div>
       <form id="form1" class="row justify-content-center" @submit.prevent="[changePage]" v-if="!secondPage">
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
           <div class="form-group" style="padding: 20px;">
             <label for="name" class="form-label text-white fw-bold">Nombre completo</label>
             <input name="name" type="text" maxlength="255" required class="form-control" id="name" v-model="name"
-              placeholder="Nombre completo">
+              placeholder="Nombre completo" @input="validateName">
+            <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!nameError==''">
+              <p><i class="fas fa-exclamation-triangle"></i> {{ nameError }}</p>  
+            </div>
           </div>
           <div class="form-group" style="padding: 20px;">
             <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
             <input name="phone" type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" required class="form-control" id="phone"
-              v-model="phone" placeholder="XXXXXXXXX">
+              v-model="phone" placeholder="XXXXXXXXX" @input="validateTelephone">
+              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!telephoneError==''">
+                <p><i class="fas fa-exclamation-triangle"></i> {{ telephoneError }}</p>  
+              </div>
           </div>
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
             <label for="password" class="form-label text-white fw-bold">Contraseña</label>
-            <input name="password" type="password" maxlength="255" required class="form-control" id="password" v-model="password"
+            
+            <div class="input-with-toggle">
+              <input name="password" :type="visiblePassword ? 'text':'password'" maxlength="255" required class="form-control" id="password" v-model="password"
               placeholder="Contraseña" @input="validatePassword" :class="{ 'is-invalid': !isPasswordSafe}">
+              <button @click.prevent="togglePasswordVisibility" class="toggle-password-button">
+                  <span v-if="visiblePassword"><i class="bi bi-eye-slash-fill"></i></span>
+                  <span v-else><i class="bi bi-eye-fill"></i></span>
+              </button>
+          </div>
+
             <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!isPasswordSafe">
               <p><i class="fas fa-exclamation-triangle"></i> {{ passwordError }}</p>
             </div>
@@ -34,6 +45,7 @@
             <label class="form-check-label" for="termsAndConditions">
               <p style="color: white;">Acepto los <a style="color: darkblue;"  href="https://cohabify.github.io/ca" target="_blank">Términos y condiciones de uso</a></p>
             </label>
+            
           </div>
         </div>
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
@@ -49,13 +61,24 @@
             <label for="email" class="form-label text-white fw-bold">Email</label>
             <input name="email" :readonly="googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== ''"
               :class="{ 'form-control': true, 'readonly': googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== '' }" type="email"
-              maxlength="255" required id="email" v-model="email" placeholder="email">
+              maxlength="255" required id="email" v-model="email" placeholder="email" @input="validateEmail">
+              <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!emailError==''">
+                <p><i class="fas fa-exclamation-triangle"></i> {{ emailError }}</p>  
+              </div>
           </div>
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
             <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña</label>
-            <input name="confirmPassword" type="password" required class="form-control" id="confirmPassword" v-model="confirmPassword"
-              placeholder="repetir contraseña" :class="{ 'is-invalid': password !== confirmPassword }">
+
+            <div class="input-with-toggle">
+                <input name="confirmPassword" :type="visibleConfirmPassword ? 'text':'password'" required class="form-control" id="confirmPassword" v-model="confirmPassword" 
+                placeholder="repetir contraseña" :class="{ 'is-invalid': password !== confirmPassword }">
+                <button @click.prevent="toggleConfirmPasswordVisibility" class="toggle-password-button">
+                    <span v-if="visibleConfirmPassword"><i class="bi bi-eye-slash-fill"></i></span>
+                    <span v-else><i class="bi bi-eye-fill"></i></span>
+                </button>
+            </div>
+
             <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="password !== confirmPassword && confirmPassword !== ''">
                 <i class="fas fa-exclamation-triangle"></i> Las contraseñas no coinciden
             </div>
@@ -63,7 +86,7 @@
 
         </div>
         <div style="padding-top: 20px;">
-          <button type="submit" class="btn-primary" @click="changePage">Siguiente</button>
+          <button type="button" class="btn-primary" @click="changePage">Siguiente</button>
         </div>
       </form>
 
@@ -76,6 +99,9 @@
               <option value="FEMENINO">Femenino</option>
               <option value="OTRO">Otro</option>
             </select>
+            <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!genderError==''">
+              <p><i class="fas fa-exclamation-triangle"></i> {{ genderError }}</p>  
+            </div>
           </div>
           <label for="tags" class="form-label text-white fw-bold">¿Cómo te describirías?</label>
           <br>
@@ -114,14 +140,20 @@
         <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="secondPage && validationErrors.length > 0" v-for="error in validationErrors" :key="error.message">
           <i class="fas fa-exclamation-triangle"></i> {{ error.message }} 
         </div>
+        <div v-show="success && (googleOAuthToken === null || googleOAuthToken === undefined)" class="alert alert-success alert-dismissible fade show" role="alert">
+          Registro completado con éxito. Se le ha enviado un correo para verificar su cuenta. Se le redireccionará en 5 segundos...
+        </div>
+        <div v-show="success && !(googleOAuthToken === null || googleOAuthToken === undefined)" class="alert alert-success alert-dismissible fade show" role="alert">
+          Registro completado con éxito. Se le redireccionará en 5 segundos...
+        </div>
         <div class="mt-3" style="padding-top: 20px;" v-if="secondPage">
           <button type="submit" class="btn-primary " @click="changePage" style="margin-right: 20px;">Anterior</button>
-          <button type="submit" class="btn-green " @click="register">Registrarse</button>
+          <button type="submit" class="btn-green " :disabled="disableRegisterButton" @click="register">Registrarse</button>
         </div>
       </form>
     </div>
     <div>
-        <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿Ya tienes cuenta? <button type="button" class="text-clickable" @click="redirectToLogin">Inicia sesión</button></h3>
+      <h3 style="color: rgb(0, 0, 0); padding-top: 2%;">¿Ya tienes cuenta? <button type="button" class="text-clickable" @click="redirectToLogin">Inicia sesión</button></h3>
     </div>
   </div>
 </template>
@@ -152,21 +184,31 @@ export default {
     const fileInput = ref(null);
     const passwordError = ref('');
     const usernameError = ref('');
+    const telephoneError = ref('');
+    const nameError = ref('');
+    const emailError = ref('');
+    const genderError = ref('');
     const isPasswordSafe = ref('true');
     const isUsernameValid = ref('true');
     const store = useStore();
     const validationErrors = ref([])
     const termsAccepted = ref(false);
+    const disableRegisterButton =ref(false);
+    const visiblePassword = ref(false);
+    const visibleConfirmPassword = ref(false);
+
+    const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
 
     const validatePassword = () => {
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
-
-      if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
-        isPasswordSafe.value = true;
-        return '';
-      } 
-      if (password.value.length == 0 && googleOAuthToken.value !== null) {
-        isPasswordSafe.value = true;
+ 
+      if (password.value.length == 0) {
+        isPasswordSafe.value = false;
+        passwordError.value = 'Introduzca una contraseña'
       } else if (!passwordRegex.test(password.value) && password.value.length > 0) {
         passwordError.value = 'Contraseña no segura: la contraseña debe contener al menos 8 caracteres, una letra mayúscula, una minúscula, un número y un carácter especial  (!@#$%^&*).';
         isPasswordSafe.value = false;
@@ -174,16 +216,59 @@ export default {
         passwordError.value = '';
         isPasswordSafe.value = true;
       }
-    };
 
+      if (googleOAuthToken.value !== null && googleOAuthToken.value !== undefined && googleOAuthToken.value !== "") {
+        isPasswordSafe.value = true;
+        passwordError.value = '';
+        return '';
+      }
+    };
+    
     const validateUsername = () => {
       const usernameRegex = /^.*\s.*$/;
       if (usernameRegex.test(username.value)) {
         usernameError.value = 'El nombre de usuario no puede contener espacios.';
         isUsernameValid.value = false;
-      } else {
+      }else if (username.value.length == 0) {
+        usernameError.value = 'Introduzca un nombre de usuario';
+        isUsernameValid.value = false;
+      }else {
         usernameError.value = '';
         isUsernameValid.value = true;
+      }
+    }
+
+    const validateTelephone = () => {
+      if(phone.value.length !== 9 || isNaN(phone.value)){
+        telephoneError.value = 'El teléfono debe tener 9 dígitos';
+      }else{
+        telephoneError.value = '';
+      }
+    }
+
+    const validateGender = () => {
+      if(gender.value==''){
+        genderError.value = 'Introduzca un género';
+      }else{
+        genderError.value = '';
+      }
+    }
+    
+    const validateName = () => {
+      if(name.value.length == 0){
+        nameError.value = 'Introduzca un nombre';
+      }else{
+        nameError.value = '';}
+    }
+
+    const validateEmail = () => {
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if(email.value.length == 0){
+        emailError.value = 'Introduzca un email';
+      }else if(!emailRegex.test(email.value)){
+        emailError.value = 'Introduzca un email válido';
+      }else{
+        emailError.value = '';
       }
     }
 
@@ -249,6 +334,12 @@ export default {
     const changePage = () => {
       validatePassword();
       validateUsername();
+      validateTelephone();
+      validateName();
+      validateEmail();
+      validateGender();
+      if(passwordError.value !== '' || usernameError.value !== '' || telephoneError.value !== '' || nameError.value !== '' || emailError.value !== '') 
+      return;
       if (!termsAccepted.value) {
         alert('Debes aceptar los términos y condiciones para registrarte.');
         return;
@@ -267,13 +358,25 @@ export default {
           validationErrors.value = [];
         }
       }
+
+      
+    };
+
+    const togglePasswordVisibility = () => {
+            event.stopPropagation();
+            visiblePassword.value = !visiblePassword.value;
+    };
+    const toggleConfirmPasswordVisibility = () => {
+            event.stopPropagation();
+            visibleConfirmPassword.value = !visibleConfirmPassword.value;
     };
 
     const register = () => {
-      
+      disableRegisterButton.value = true;
 
-      if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value) {
+      if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value || genderError.value === '') {
         alert('Las contraseñas no coinciden');
+        disableRegisterButton.value = false;
       } else {
         const formData = new FormData();  
         formData.append("string-data", new Blob([JSON.stringify({
@@ -305,14 +408,16 @@ export default {
             } else {
               response.json()
                 .then((body) => {
-                  if(body.length === undefined)
+                  if(body.length === undefined){
                     body = [body]
+                }
                   validationErrors.value = body ? body : [{"message": "Ha ocurrido un error inesperado al procesar el registro"}];
                 })
                 .catch(error => console.error(error));
             }
           })
           .catch(error => console.error(error));
+          disableRegisterButton.value = false;
       }
     };
 
@@ -321,7 +426,7 @@ export default {
     };
 
     onMounted(() => {
-      
+      updateMeta('Registro - Cohabify', 'Únete a Cohabify hoy para encontrar tu espacio ideal y compañeros de piso. Regístrate ahora para comenzar tu búsqueda.');
       fileInput.value = ref('fileInput');
       fetch(import.meta.env.VITE_BACKEND_URL + '/api/tag/types/USER_TAG')
         .then(response => {
@@ -382,6 +487,19 @@ export default {
       termsAccepted,
       usernameError,
       validateUsername,
+      telephoneError,
+      disableRegisterButton,
+      validateTelephone,
+      nameError,
+      validateName,
+      emailError,
+      genderError,
+      validateEmail,
+      validateGender,
+      visiblePassword,
+      togglePasswordVisibility,
+      visibleConfirmPassword,
+      toggleConfirmPasswordVisibility,
     };
   }
 }
@@ -550,6 +668,29 @@ button {
 .text-clickable:hover {
     text-decoration: underline;
     background-color: transparent;
+}
+.btn-green:disabled {
+  background-color: darkgreen;
+  color: rgb(175, 175, 175);
+ }
+
+.input-with-toggle {
+    position: relative;
+}
+
+.input-with-toggle input {
+    padding-right: 40px;
+}
+
+.input-with-toggle .toggle-password-button {
+    color: black;
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
 </style>

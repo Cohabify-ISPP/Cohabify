@@ -43,8 +43,8 @@ public class WebSecurityConfig {
 					.requestMatchers("/resources/**","/webjars/**", "/WEB-INF/**", "/static/**").permitAll()
 					.requestMatchers("/api/tag/types/USER_TAG").permitAll()
 					.requestMatchers("/chat-ws").permitAll()
-					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register", "/auth/login/google").anonymous()
-					.requestMatchers(HttpMethod.GET, "/auth/register/verify/**").anonymous()
+					.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register", "/auth/login/google", "/auth/reset-password").anonymous()
+					.requestMatchers(HttpMethod.GET, "/auth/register/verify/**", "/auth/reset-password/**").anonymous()
 					.requestMatchers(HttpMethod.POST, "/auth/getUser").authenticated()
 					.requestMatchers(HttpMethod.GET, "/api/advertisements/houses", "/api/advertisements/users").permitAll()
 					.requestMatchers("/api/**").authenticated()
@@ -81,13 +81,8 @@ public class WebSecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration(); 
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:8080", "ws://localhost:8080",
 													  "http://localhost:5173", "http://localhost:5173/", "ws://localhost:5173",
-													  "https://s3-cohabify.onrender.com", "https://s3-cohabify.onrender.com/",
 													  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com, http://127.0.0.1:5173"));
-		configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080", "http://localhost:8080", "ws://localhost:8080",
-																  "http://localhost:5173", "http://localhost:5173/", "ws://localhost:5173",
-																  "https://s3-cohabify.onrender.com", "https://s3-cohabify.onrender.com/",
-																  "https://testing-cohabify.onrender.com", "https://testing-cohabify.onrender.com/",
-																  "http://127.0.0.1:5173", "http://http://127.0.0.1:5173/"));
+		configuration.setAllowedOriginPatterns(Arrays.asList("*://*-cohabify.onrender.com"));
 		configuration.setAllowedMethods(Arrays.asList("*"));
 		configuration.setAllowedHeaders(Arrays.asList("Authentication", "content-type"));
 		configuration.setAllowCredentials(true);

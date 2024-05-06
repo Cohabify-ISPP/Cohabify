@@ -1,5 +1,5 @@
 <script>
-import { ref, onBeforeMount, computed } from 'vue';
+import { ref, onBeforeMount, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { loadStripe } from '@stripe/stripe-js';
@@ -27,6 +27,16 @@ export default {
         const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
         const loading = ref(false);
         const lineItems = ref(null);
+
+        const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+        onMounted(() => {
+        updateMeta('Visualiza y Gestiona Anuncios en Cohabify', 'Explora, comenta, califica y gestiona anuncios de vivienda en Cohabify. Conecta con otros usuarios, promociona tus anuncios y participa en la comunidad.');
+        });
 
         const fetchAdvertisement = async () => {
             try {
@@ -182,7 +192,7 @@ export default {
         };
 
         const getCommonFlats = async () => {
-            if (currentUser.username == null) {
+            if (currentUser.value.username == null) {
                 commonHouses.value = [];
                 return;
             }
@@ -519,7 +529,7 @@ export default {
                         <hr>
                     </div>
                         
-                    <div v-for="anuncio in commonHouses" :key="anuncio">
+                    <div v-if="commonHouses.length > 0" v-for="anuncio in commonHouses" :key="anuncio">
 
                         <div class="piso">
                             <img  class="img-piso" :src="anuncio.images[0]" alt="Imagen del piso">
@@ -536,6 +546,7 @@ export default {
                             </div>
                         </div>
                    </div>
+                   <h5 style="color: #5D5E60; text-align: left;" v-else>Este usuario y tú no tenéis pisos en común</h5>
                 </div>
             </div>
         </div>

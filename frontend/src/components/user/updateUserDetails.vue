@@ -23,6 +23,12 @@ export default {
         const isDragging = ref(false);
         let userTags = [];
 
+        const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
         const imgUrl = computed(() => {
             if (img.value) {
                 return URL.createObjectURL(img.value);
@@ -65,14 +71,17 @@ export default {
         };
 
         const updateUserProfile = async () => {
+
             try {
-                if(password.value.length != 0) {
+                if (password.value.length != 0 && password.value === confirmPassword.value) {
                     user.value.password = password.value;
+                } else {
+                    user.value.password = originalUser.value.password;
                 }
 
                 document.getElementById("form").reportValidity();
 
-                if(password.value === confirmPassword.value && user.value.phone.length === 9 && !isNaN(user.value.phone) && user.value.email.includes('@') && !passwordError.value) {
+                if(user.value.phone.length === 9 && !isNaN(user.value.phone) && user.value.email.includes('@') && !passwordError.value) {
                     const formData = new FormData();
                     formData.append("string-data", new Blob([JSON.stringify({
                         name: "TODO",
@@ -228,6 +237,7 @@ export default {
         });
 
         onMounted(() => {
+            updateMeta('Editar Perfil de Usuario en Cohabify.', 'Actualiza tu perfil de usuario, cambia tu imagen, ajusta tu información personal y configura tu seguridad en Cohabify.');
             fileInput.value = "";
         })
 

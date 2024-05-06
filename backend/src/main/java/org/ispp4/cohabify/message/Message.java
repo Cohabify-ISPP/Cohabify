@@ -1,6 +1,5 @@
 package org.ispp4.cohabify.message;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.ispp4.cohabify.model.BaseEntity;
@@ -30,6 +29,5 @@ public class Message extends BaseEntity{
     @DBRef
     @NotNull
     private User sender;
-    
-    
+      
 }

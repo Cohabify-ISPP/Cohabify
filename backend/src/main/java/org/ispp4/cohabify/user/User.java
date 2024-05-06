@@ -23,14 +23,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Builder.Default;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Comparable<User> {
 
     @NotNull
     @Size(max = 100)
@@ -115,5 +114,10 @@ public class User extends BaseEntity {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
+
+     @Override
+    public int compareTo(User otherUser) {
+        return this.name.compareTo(otherUser.getName());
+    }
 
 }

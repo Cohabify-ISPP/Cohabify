@@ -17,6 +17,16 @@
             const lineItems = ref(null);
             const isLoading = ref(true);
 
+            const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+            onMounted(() => {
+                updateMeta('Escoge tu plan en Cohabify', 'Selecciona entre Básico, Explorador, y Propietario para maximizar tu experiencia en Cohabify.');
+            });
+
             onMounted(async () => {
             
             const urlParams = new URLSearchParams(window.location.search);
@@ -119,7 +129,9 @@
      <div v-if="isLoading" class="spinner-border mt-5" role="status">
                     <span class="visually-hidden">Loading...</span>
     </div>
-    <div  v-else class="container d-flex justify-content-center align-items-center  vh-80" style="padding:0 14vw ;">
+    <div v-else class="container" style="padding:0 12vw ;">
+            
+    <div  class="row d-flex justify-content-center align-items-start  vh-80" >
             <div class="col">
                 <div class="card card1">
                     <h2 class="fw-bold" style="color: #28426B;">Básico</h2>
@@ -149,7 +161,6 @@
                         </div>
                     </div>
                 </div>
-                <p style="margin-top:1vw"><em>* El plan básico debe pagar 3€ por cada promoción que desee hacer por anuncio</em></p>
             </div>
             <div class="col" style="margin-left: 40px; margin-right: 40px;">
                 <div class="card card2">
@@ -166,7 +177,7 @@
                             <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Perfil verificado</span>
                             <br>
                             <br>
-                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Acceso anticipado</span>
+                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Acceso anticipado*</span>
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> 5€</h2>
@@ -180,7 +191,9 @@
                         </div>
                     </div>
                 </div>
-                <p style="margin-top:1vw"><em>* El plan explorador debe pagar 3€ por cada promoción que desee hacer por anuncio</em></p>
+                <p style="margin-top:1vw"><em>* El plan explorador podrá ver las nuevas publicaciones con 24 horas de antelación. El plan básico sólo podrá ver 
+                            publicaciones con más de un día de antigüedad
+                </em></p>
             </div>
             <div class="col">
                 <div class="card card3">
@@ -191,13 +204,15 @@
                             <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Publicar viviendas</span>
                             <br>
                             <br>
+                            <br>
                             <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold" > Chats ilimitados</span>
                             <br>
                             <br>
-                            <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Promociones de pisos ilimitadas</span>
-                            <br>
-                            <br>
                             <img src="/images/Check.png" style="height: 20px; width: 20px;"><span class="fw-bold"> Estadísticas</span>
+                            <br>
+                            <br>
+                            <br style="height: 20px; width: 20px;">
+                            
                     
                         <div style="text-align: center;">
                             <h2 class="fw-bold" style="padding-top: 1vw;color: #28426B;"> 15€ + 5€*</h2>
@@ -213,6 +228,19 @@
                 </div>
                 <p style="margin-top:1vw"><em>* El plan propietario debe pagar 5€ por cada propiedad adicional que desee publicar</em></p>
             </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col card card4">
+            <h3 class="fw-bold" style="color: #28426B;">Promociones</h3>
+            <p class="fw-bold"><em>Promociona tus anuncios de vivienda o tu anuncio como compañero. Durante 24 horas el anuncio que quieras aparecerá en 
+                lo más alto del listado de anuncios, permitiendo así que más personas puedan ver tu publicación.</em></p>
+
+            <div style="text-align: center;">
+                <h2 class="fw-bold" style="color: #28426B;"> 3€</h2>
+            </div>
+
+        </div>
+    </div>
     </div>
    
 </template>
@@ -248,6 +276,11 @@
 
 .card3 {
     background-color: #98B2E8;
+}
+
+.card4 {
+    background-color: #d2dfff;
+
 }
 
 input {

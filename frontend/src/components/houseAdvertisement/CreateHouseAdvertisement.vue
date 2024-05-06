@@ -10,21 +10,32 @@
 
         <div class=" col  justify-content-center" style="padding-right:35px;">
           <div class="mb-3  text-start">
-            <label for="title" class="form-label text-white"><strong>Título</strong></label>
+            <label for="title" class="form-label text-white"><strong>Título<span style="color: red;"> *</span></strong></label>
             <input type="text" class="form-control" id="title" v-model="title" required
               placeholder="Escribe un título para el anuncio..." maxlength="100">
           </div>
           <div class="mb-3 text-start">
-            <label for="description" class="form-label text-white"><strong>Descripción</strong></label>
+            <label for="description" class="form-label text-white"><strong>Descripción<span style="color: red;"> *</span></strong></label>
             <textarea class="form-control" id="description" rows="3" v-model="description" required
               placeholder="Escribe una descripción para el anuncio..."maxlength="1500"></textarea>
           </div>
           <div class="row  mb-3">
             <div class="mb-3  text-start col">
-              <label for="cadastre" class="form-label text-white"><strong>Catastro</strong></label>
+              <div class="d-flex ">
+              <label for="cadastre" class="form-label text-white" style="padding-right: 5px;">
+                <strong>Catastro
+                  <span style="color: red;"> *</span>
+                </strong>
+              </label>
+              <div class="wrapper" style="padding-top:2px">
+                <div class="icon">
+                  <span class="tooltip">Al buscar un número de catastro se rellenará la <strong>ubicación</strong> y la <strong>superficie</strong> automáticamente</span>
+                  <span class="bi bi-info-lg"></span>
+                </div>
+              </div> 
+              </div>
               <input type="text" class="form-control" id="cadastre" v-model="cadastre" required
                 placeholder="12345678901234567890..." minlength="20" maxlength="20">
-          
             </div>
             <div class="mb-3  text-start col">
               <label for="location" class="form-label text-white"><strong>Ubicación</strong></label>
@@ -42,7 +53,7 @@
               Buscar
             </button>
             </div>
-            <div class="mb-3  text-start col">
+            <div class="mb-3 text-start col">
               <label for="location" class="form-label text-white"><strong>Seleccionado: {{ selectedCadastre }}</strong></label>
             </div>
           </div>
@@ -56,12 +67,12 @@
 
             </div>
             <div class="col mb-3 text-start">
-              <label for="floor" class="form-label text-white"><strong>Planta</strong></label>
+              <label for="floor" class="form-label text-white"><strong>Planta<span style="color: red;"> *</span></strong></label>
               <input type="number" class="form-control" id="floor" v-model="floor" required placeholder="0" min="-5" max="100">
             </div>
             <div class="col text-start">
               <div class="mb-3">
-                <label for="price" class="form-label text-white"><strong>Precio</strong></label>
+                <label for="price" class="form-label text-white"><strong>Precio<span style="color: red;"> *</span></strong></label>
                 <div class="input-group">
                   <input type="number" class="form-control" id="area" v-model="price" required placeholder="0" min="0" max="10000000">
                   <span class="input-group-text" style="color: grey;">€</span>
@@ -72,7 +83,7 @@
           <div class="row  mb-3">
             <div class="col">
               <div class="mb-3">
-                <label for="roomsNumber" class="form-label text-white"><strong>Habitaciones</strong></label>
+                <label for="roomsNumber" class="form-label text-white"><strong>Habitaciones<span style="color: red;"> *</span></strong></label>
                 <div class="input-group d-flex align-items-center justify-content-center " style="background-color: aliceblue; border-radius: 4px;">
                   <button class=" btn-primary" type="button" @click="decreaseRoomsNumber()">-</button>
                   <p  style="margin: auto;color:black">{{ roomsNumber }}</p>
@@ -82,7 +93,7 @@
             </div>
             <div class="col">
               <div class="mb-3">
-                <label for="bathroomsNumber" class="form-label text-white"><strong>Baños</strong></label>
+                <label for="bathroomsNumber" class="form-label text-white"><strong>Baños<span style="color: red;"> *</span></strong></label>
                 <div class="input-group d-flex align-items-center justify-content-center" style="background-color: aliceblue; border-radius: 4px;">
                   <button class="btn-primary" type="button" @click=" decreaseBathoomsNumber()">-</button>
                   <p  style=" margin: auto;color:black">{{ bathroomsNumber }}</p>
@@ -93,7 +104,7 @@
             <div class="col">
               <div class="mb-3">
                 <div>
-                  <label for="heating" class="form-label text-white"><strong>Calefacción</strong></label>
+                  <label for="heating" class="form-label text-white"><strong>Calefacción<span style="color: red;"> *</span></strong></label>
                 </div>
                 <select  class="form-select" id="heating" name="heating" v-model="heating" required>
                   <option value="" disabled selected hidden>Selecciona una opción</option>
@@ -107,14 +118,28 @@
           <div class="row  mb-3">
             
               <div class="text-start">
-                <label for="tenants" class="form-label text-white"><strong>Inquilinos (Ambos campos son necesarios)</strong></label>
+                <h5>¿Hay inquilinos ya en la vivienda utilizando Cohabify? Añádelos</h5>
+                <div class="d-flex">
+                  
+                  <p class="form-label text-white" style="padding-right: 5px;"><strong>Inquilinos</strong></p>
+                  <div class="wrapper" style="padding-top:2px">
+                    <div class="icon">
+                      <span class="tooltip">Para añadir un inquilino deberás introducir su <strong>nombre de usuario</strong> y su <strong>número de teléfono</strong></span>
+                      <span class="bi bi-info-lg"></span>
+                    </div>
+                  </div>
+                </div>
               </div>
-                <div class="row justify-content-center" >
-                  <input type="text" style="margin-right: 20px;" class="form-control col" v-model="userSearch" placeholder="Nombre de usuario a buscar..." maxlength="14">
-                  <input type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" class="form-control col" v-model="phoneSearch" placeholder="Teléfono a buscar...">
+                <div class="row d-flex justify-content-center mb-2" style="border-radius:4px">
+                  <div class="col">
+                  <input type="text" class="form-control" v-model="userSearch" placeholder="Nombre de usuario a buscar..." maxlength="14">
+                  </div>
+                  <div class="col">
+                  <input type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" class="form-control" v-model="phoneSearch" placeholder="Teléfono a buscar...">
+                  </div>
                 </div>
                 <div class="row justify-content-center" >  
-                  <button type="button" class="btn-primary col-md-3" style="margin-top: 20px;" @click.prevent="fetchUser">Buscar</button>
+                  <button type="button" class="btn-primary col-md-3" @click.prevent="fetchUser">Buscar</button>
                 </div>
               <p class="text-white text-start"><strong>Inquilinos seleccionados:</strong></p>
               <div class="text-start mb-3" v-if="selectedTenants.length > 0">
@@ -122,14 +147,14 @@
                   <table>
                     <tr v-for="(tenant, index) in selectedTenants" :key="'selected' + index">
                       <td>{{ tenant.username }}</td>
-                      <td class="d-flex justify-content-center align-items-center" style="margin:0.5vh 1vw"><span style="color:red; cursor: pointer" @click.prevent="selectedTenants = selectedTenants.filter(x => x !== tenant)" class="material-symbols-outlined">cancel</span></td>
+                      <td class="d-flex justify-content-center align-items-center" style="margin:0.5vh 1vw"><span style="color:#E84743; cursor: pointer" @click.prevent="selectedTenants = selectedTenants.filter(x => x !== tenant)" class="material-symbols-outlined">cancel</span></td>
                     </tr>
                   </table>
                 </div>
               </div>
             
             <div class=" row d-flex mb-2">
-            <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?</label>
+            <label for="tags" class="form-label text-white fw-bold">¿Cómo describirías tu vivienda?<span style="color: red;"> *</span></label>
           </div>   
           <div class="row d-flex mb-2">
             <div class="btn-group" role="group"  style="max-height:  180px; overflow-y: auto;" aria-label="Basic checkbox toggle button group">
@@ -146,9 +171,9 @@
         <div class="col  justify-content-center">
             <!--IMAGES-->
             <div class="row d-flex mb-2">
-            <div class="card mt-2">
+            <div class="card mt-2 mb-3">
               <div class="top">
-                <p>Arrastra aquí tus imágenes</p>
+                <p>Arrastra aquí tus imágenes <span style="color: red;"> *</span></p>
               </div>
               <div class="drag-area" @dragover.prevent="onDragover" @dragleave.prevent="onDragLeave"
                 @drop.prevent="onDrop">
@@ -169,10 +194,12 @@
                 </div>
               </div>
             </div>
+            <div class="d-flex flex-column mt-4 ">
+            <label for="map" class="form-label text-white text-start" style="justify-content: start;"><strong>Localidad<span style="color: red;"> *</span></strong></label>
             <GMapAutocomplete
                 placeholder="Busca cualquier lugar"
                 @place_changed="setPlace"
-                style="margin-right: 20px; padding: 10px; margin-top: 15px;;" class="form-control col"
+                style="margin-right: 20px; padding: 10px;" class="form-control col"
                 ></GMapAutocomplete>
             <GMapMap
             :center="mapCenter"
@@ -186,6 +213,7 @@
               :key="index"
               :position="m.position"/>
           </GMapMap>
+          </div>
             <!--Success-->
             <div class="mt-3">
               <button id="btnPublicar" style="margin-right: 10px;" type="submit" class="btn btn-success">Publicar</button>
@@ -199,7 +227,7 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, computed,watch } from 'vue'
+import { ref, onBeforeMount, onMounted, computed,watch } from 'vue'
 import { useStore } from 'vuex'
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -241,6 +269,17 @@ export default {
     const stripePromise = loadStripe('' + import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
     const loading = ref(false);
     const lineItems = ref(null);
+
+    const updateMeta = (title, description) => {
+            document.querySelector('meta[name="description"]').setAttribute('content', description);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', description);
+            };
+
+    onMounted(() => {
+      updateMeta('Publica tu Anuncio de Vivienda en Cohabify: Rápido y Efectivo', 'Publica anuncios de vivienda en Cohabify y alcanza a potenciales inquilinos rápidamente. Aprovecha una plataforma intuitiva para listar las características, ubicación y precio de tu propiedad.');
+    });
+
 
     const store = useStore()
     const user = computed(() => store.state.user);
@@ -798,5 +837,70 @@ color: #28426B;
 background-color: #28426B;
 color: #ffff;
 }
+
+.wrapper .icon {
+  position: relative;
+  background: #fff;
+  color: black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 16px;
+  background: #fff;
+  color: black;
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  width: 20em;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip::before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  background: #fff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+
+.wrapper .icon:hover .tooltip {
+  top: -90px;
+  width: 20em;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  background: #1da1f2;
+  color: #fff;
+}
+
+.wrapper .icon:hover .tooltip::before {
+  background: #1da1f2;
+}
+
+.wrapper .icon:hover {
+  background: #1da1f2;
+  color: #fff
+}
+
 
 </style>
