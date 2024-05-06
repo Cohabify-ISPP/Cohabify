@@ -71,14 +71,17 @@ export default {
         };
 
         const updateUserProfile = async () => {
+
             try {
-                if(password.value.length != 0) {
+                if (password.value.length != 0 && password.value === confirmPassword.value) {
                     user.value.password = password.value;
+                } else {
+                    user.value.password = originalUser.value.password;
                 }
 
                 document.getElementById("form").reportValidity();
 
-                if(password.value === confirmPassword.value && user.value.phone.length === 9 && !isNaN(user.value.phone) && user.value.email.includes('@') && !passwordError.value) {
+                if(user.value.phone.length === 9 && !isNaN(user.value.phone) && user.value.email.includes('@') && !passwordError.value) {
                     const formData = new FormData();
                     formData.append("string-data", new Blob([JSON.stringify({
                         name: "TODO",

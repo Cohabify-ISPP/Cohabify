@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.ispp4.cohabify.utils.Global;
 import org.bson.types.ObjectId;
-import org.ispp4.cohabify.houseAdvertisement.HouseAdvertisement;
+import org.ispp4.cohabify.dto.UserAdvertisementFiltersDTO;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.google.rpc.context.AttributeContext.Response;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -144,5 +142,23 @@ public class UserAdvertisementController {
         return new ResponseEntity<>(HttpStatus.OK);
         }
 	}
+
+	@Transactional(readOnly = true)
+    @PostMapping("/filter")
+    public ResponseEntity<List<UserAdvertisement>> getAllUserAdvertisementsFiltered(@Nullable Principal principal, @RequestBody UserAdvertisementFiltersDTO filters) {
+        List<UserAdvertisement> userAdvertisements = userAdvertisementService.findAll();
+		userAdvertisements = userAdvertisementService.checkPromotions(userAdvertisements);
+		if(principal != null) {
+			User user = userService.getUserByUsername(principal.getName());
+			if(user.getPlan().equals(Plan.BASIC)) {
+				userAdvertisements = userAdvertisements.stream()
+														// Filter advertisements to leave the ones that are owned or that were created at least a day before now
+														.filter(a -> a.getAuthor().getId().equals(user.getId()) || System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+														.toList();
+			}
+		}
+		userAdvertisements = userAdvertisementService.filterAdvertisements(userAdvertisements, filters);
+        return new ResponseEntity<>(userAdvertisements, HttpStatus.OK);
+    }
 	
 }

@@ -1,6 +1,5 @@
 package org.ispp4.cohabify.house;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;

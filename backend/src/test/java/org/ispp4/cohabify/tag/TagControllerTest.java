@@ -1,4 +1,4 @@
-package org.ispp4.cohabify.tag;
+/* package org.ispp4.cohabify.tag;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,7 +32,7 @@ public class TagControllerTest {
     private Tag testTag2;
     private ObjectId testObjectId;
 
-    /* 
+    
     @BeforeEach
     void setUp() {
         testTag1 = new Tag("Test tag 1", TagType.USER_TAG);
@@ -175,6 +175,7 @@ public class TagControllerTest {
     
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
-    */
+    
 
 }
+*/

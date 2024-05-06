@@ -12,8 +12,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 
 @Data
 @AllArgsConstructor
@@ -24,6 +22,9 @@ public class Chat extends BaseEntity{
     @NotNull
     private Boolean isAccepted;
 
+    @NotNull
+    private Boolean isActive;
+
     @DBRef
     @NotNull
     private List<User> users;
@@ -31,4 +32,8 @@ public class Chat extends BaseEntity{
     @DBRef
     @NotNull
     private List<Message> messages;
+
+    @DBRef
+    @NotNull
+    private User openedBy;
 }
