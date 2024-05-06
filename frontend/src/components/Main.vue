@@ -171,28 +171,7 @@ const setPlace = (place) => {
             </div>
           </div>
         </div>
-        <div class="carousel-item">
-          <div class="d-block card mb-3 bg-dark" style="max-width: 680px;">
-            <div class="row g-0">
-              <div class="col-md-8 ">
-                <div class="card-body">
-                  <h3 class="card-title text-white" style="font-size: 1.8em">Plan <span
-                      class="gradient-text">Propietario</span></h3>
-                  <br>
-                  <p class="card-text text-white" style="font-size: 1.1em;">Sé el primero en descubrir a tu nuevo compañero
-                    con el plan de explorador.</p>
-                  <br>
-                  <a class="btn btn-success" href="/plan" v-if="currentUser.username" style="font-size: 1.1em">Ver
-                    planes</a>
-                  <a class="btn btn-success" href="/login" v-else>Ver planes</a>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <img src="/images/explorador.png" class="img-fluid rounded-start" alt="...">
-              </div>
-            </div>
-          </div>
-        </div>
+  
       </div>
     </div>
   </div>
