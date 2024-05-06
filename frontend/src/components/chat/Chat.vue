@@ -48,7 +48,12 @@
                             <div class="flex-column overflow-auto" style="padding-right: 5px; max-width: 70%; max-height: 100%;">
                                 <div class ="d-flex" style="margin-bottom: 5px;">
                                     <div class="card-body d-flex align-items-center">
-                                      <h5 style="text-align: left;" class="card-title">{{ chatMembers(selectedChat) }}</h5>
+                                      <h5 style="text-align: left;color: white;" class="card-title">{{ chatMembers(selectedChat) }}</h5>
+                                    </div>
+                                    <div class="card-body d-flex align-items-center" v-if="selectedChat.isChatOwned">
+                                      <button @click.prevent="deleteChat" type="button" class="button boton-cancelar"
+                                              style="text-wrap: nowrap; width:100%;">
+                                        <strong>Borrar chat <i class="bi bi-x" style="margin-left: 5px;"></i></strong></button>
                                     </div>
                                 </div>
                             </div>
@@ -59,7 +64,7 @@
 
           <div class="messages-area" ref="messagesArea">
             <div v-for="message in selectedChat?.messages" :class="['message', 'one', 'card', message.sender.username === currentUser.username ? 'c2' : 'c1']">
-              <div class="username">{{ message.sender.username }}</div>
+              <div :class="['username', message.sender.username === currentUser.username ? 'u2' : 'u1']">{{ message.sender.username }}</div>
               <p style="padding: 15px;">{{ message.text }}</p>
               <div class="date">{{ formatDate(message.timeSent) }}</div>
             </div>
@@ -79,7 +84,7 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted, onUpdated, nextTick } from 'vue';
+import { ref, computed, onMounted, onUpdated, nextTick,  } from 'vue';
 import { useStore } from 'vuex';
 import { CohabifyStompClient } from "../../utils/stomp.js";
 
@@ -99,13 +104,6 @@ export default {
     });
 
     const chats = ref([])
-
-    const tenant = ref({
-      username: 'John Doe',
-      genre: 'MASCULINO',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?cs=srgb&dl=pexels-justin-shaifer-1222271.jpg&fm=jpg'
-    })
 
     const chatId = ref(null);
     const selectedChat = ref(null);
@@ -146,6 +144,8 @@ export default {
 
     const selectChat = (chat) => {
       selectedChat.value = chat;
+      selectedChat.value.isChatOwned = chat.openedBy.id == currentUser.value.id;
+
       subscribe();
     }
 
@@ -172,7 +172,7 @@ export default {
 
     function sendMessage() {
       if(selectedChat.value != null && selectedChat.value != undefined && 
-        messageInput.value != null && messageInput.value != undefined && messageInput.value != "") {
+        messageInput.value != null && messageInput.value != undefined && messageInput.value.replace(/\s/g, '') != "") {
         try {
             stompClient.send("/chat-msgs/" + selectedChat.value.id, {}, JSON.stringify({'msg': messageInput.value}));
             messageInput.value = "";
@@ -184,6 +184,9 @@ export default {
     }
 
     function addMessage(message) {
+      if(!selectedChat.value) {
+        selectedChat.value = {"users": [{"username": "Sistema"}], "messages": []};
+      }
       selectedChat.value.messages.push(message);
       scrollToBottom();
     }
@@ -205,6 +208,34 @@ export default {
       })
     }
 
+    const deleteChat = async () => {
+      if(await confirmDeleteChat()) {
+        fetch(import.meta.env.VITE_BACKEND_URL + "/api/chat/" + selectedChat.value.id, {
+          method: "DELETE",
+          headers: {
+            Authentication: "Bearer " + localStorage.getItem("authentication"),
+          },
+          credentials: "include",
+        })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("No se ha podido eliminar el chat");
+          }
+        })
+        .then((data) => {
+          location.reload()
+        })
+        .catch((error) => {
+          addSystemMessage("No se ha podido eliminar el chat")
+        });
+      }
+    }
+
+    const confirmDeleteChat = async () => {
+        var response = confirm("¿Estás seguro de que quieres borrar este chat?");
+        return response;
+    }
+
     return {
       currentUser,
       chats,
@@ -215,12 +246,30 @@ export default {
       messageInput,
       sendMessage,
       formatDate,
+      deleteChat,
     }
   },
 }
 </script>
 
 <style scoped>
+.boton-cancelar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1%;
+    background-color:#b32432;
+    color: #FFFFFF;
+    border-radius: 10px;
+    width: 27%;
+    height: 5vh;
+}
+
+.boton-cancelar:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.2s ease;
+}
+
 .container {
  
   display: flex;
@@ -444,6 +493,10 @@ export default {
 
 .offset {
   transform: translate(40%, 15%);
+}
+
+.u1{
+  color: white;
 }
 
 </style>

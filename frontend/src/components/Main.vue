@@ -99,7 +99,7 @@ const setPlace = (place) => {
         <b class="mt-3" style="font-size: 1.5em">Compañeros</b>
       </div>
     </div>
-    <div class="mb-auto">
+    <div class="mb-1 mt-3">
       <!-- meter aquí relleno para que no quede tan vacío-->
       <a class="btn btn-primary" @click="onClickShowMap" v-if="!showMap"
         style="background: radial-gradient(circle, rgb(168, 126, 237), rgb(64, 105, 255));margin-top:15px; margin-bottom:15px"><b>Mostrar
@@ -126,28 +126,55 @@ const setPlace = (place) => {
     <div class="justify-content-start mt-6 mb-3">
       <h3 style="font-size: 2em">¡No te pierdas esto!</h3>
     </div>
-    <div class="d-flex align-items-end justify-content-center">
-      <div class="card mb-3 bg-dark" style="max-width: 680px;">
-        <div class="row g-0">
-          <div class="col-md-8 ">
-            <div class="card-body">
-              <h3 class="card-title text-white" style="font-size: 1.8em">Plan <span
-                  class="gradient-text">Explorador</span></h3>
-              <br>
-              <p class="card-text text-white" style="font-size: 1.1em;">Sé el primero en descubrir a tu nuevo compañero
-                con el plan de explorador.</p>
-              <br>
-              <a class="btn btn-success" href="/plan" v-if="currentUser.username" style="font-size: 1.1em">Ver
-                planes</a>
-              <a class="btn btn-success" href="/login" v-else>Ver planes</a>
+    <div class="d-flex justify-content-center align-items-end">
+    <div id="adCarousel" class="carousel slide " data-bs-ride="carousel" style="max-width: 685px;">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="d-block card mb-3 bg-dark " style="max-width: 680px;">
+            <div class="row g-0">
+              <div class="col-md-8 ">
+                <div class="card-body">
+                  <h3 class="card-title text-white" style="font-size: 1.8em">Plan <span class="gradient-text-basic">Básico</span></h3>
+                  <br>
+                  <p class="card-text text-white" style="font-size: 1.1em;">Encuenta a tu compañero gemelo, entra y descubre los privilegios con el plan básico.</p>
+                  <br>
+                  <a class="btn btn-success" href="/plan" v-if="currentUser.username" style="font-size: 1.1em">Ver
+                    planes</a>
+                  <a class="btn btn-success" href="/login" v-else>Ver planes</a>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <img src="/images/basico.png" class="img-fluid rounded-start" alt="...">
+              </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <img src="/images/explorador.png" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="carousel-item">
+          <div class="d-block card mb-3 bg-dark " style="max-width: 680px;">
+            <div class="row g-0">
+              <div class="col-md-8 ">
+                <div class="card-body">
+                  <h3 class="card-title text-white" style="font-size: 1.8em">Plan <span
+                      class="gradient-text">Explorador</span></h3>
+                  <br>
+                  <p class="card-text text-white" style="font-size: 1.1em;">Sé el primero en descubrir a tu nuevo compañero
+                    con el plan de explorador.</p>
+                  <br>
+                  <a class="btn btn-success" href="/plan" v-if="currentUser.username" style="font-size: 1.1em">Ver
+                    planes</a>
+                  <a class="btn btn-success" href="/login" v-else>Ver planes</a>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <img src="/images/explorador.png" class="img-fluid rounded-start" alt="...">
+              </div>
+            </div>
           </div>
         </div>
+  
       </div>
     </div>
+  </div>
   </div>
   <div class="mt-16"></div>
   <div class="relative container-fluid text-start"
@@ -370,5 +397,12 @@ h3>.gradient-text {
   transform: scale(1.2);
   font-size: 5%;
   color: white;
+}
+
+.gradient-text-basic {
+  background: radial-gradient(circle, rgb(168, 126, 237), rgb(64, 105, 255));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 </style>
