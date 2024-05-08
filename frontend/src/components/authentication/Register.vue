@@ -8,24 +8,35 @@
       <form id="form1" class="row justify-content-center" @submit.prevent="[changePage]" v-if="!secondPage">
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
           <div class="form-group" style="padding: 20px;">
-            <label for="name" class="form-label text-white fw-bold">Nombre completo</label>
-            <input name="name" type="text" maxlength="255" required class="form-control" id="name" v-model="name"
+            <label for="name" class="form-label text-white fw-bold">Nombre completo <span style="color: red;"> *</span></label>
+            <input name="name" type="text" maxlength="100" required class="form-control" id="name" v-model="name"
               placeholder="Nombre completo" @input="validateName">
             <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!nameError==''">
               <p><i class="fas fa-exclamation-triangle"></i> {{ nameError }}</p>  
             </div>
           </div>
-          <div class="form-group" style="padding: 20px;">
-            <label for="phone" class="form-label text-white fw-bold">Teléfono</label>
+          <div class="form-group text-center" style="padding: 20px;">
+            <div class="text-center">
+              <div class="d-flex justify-content-center">
+                <label for="phone" class="form-label text-white fw-bold" style="padding-right: 5px;">Teléfono <span style="color: red;"> *</span></label>
+                <div class="wrapper" style="padding-top:2px">
+                  <div class="icon">
+                    <span class="tooltip">Tenga en cuenta que los números de teléfono en España empiezan en <strong>6 o 7 en el caso de los teléfonos móviles</strong>, o por <strong>8 o 9 en los teléfonos fijos</strong></span>
+                    <span class="bi bi-info-lg"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
             <input name="phone" type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" required class="form-control" id="phone"
-              v-model="phone" placeholder="XXXXXXXXX" @input="validateTelephone">
+              v-model="phone" placeholder="XXXXXXXXX" @input="validateTelephone" maxlength="9">
               <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!telephoneError==''">
                 <p><i class="fas fa-exclamation-triangle"></i> {{ telephoneError }}</p>  
               </div>
           </div>
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
-            <label for="password" class="form-label text-white fw-bold">Contraseña</label>
+            <label for="password" class="form-label text-white fw-bold">Contraseña <span style="color: red;"> *</span></label>
             
             <div class="input-with-toggle">
               <input name="password" :type="visiblePassword ? 'text':'password'" maxlength="255" required class="form-control" id="password" v-model="password"
@@ -50,7 +61,7 @@
         </div>
         <div class="col-md-6" style="padding-inline: 20px;" v-if="!secondPage">
           <div class="form-group" style="padding: 20px;">
-            <label for="username" class="form-label text-white fw-bold">Nombre de usuario</label>
+            <label for="username" class="form-label text-white fw-bold">Nombre de usuario <span style="color: red;"> *</span></label>
             <input name="username" type="text" maxlength="50" required class="form-control" id="username" v-model="username"
               placeholder="Nombre de usuario"  @input="validateUsername" :class="{ 'is-invalid': !isUsernameValid}">
               <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!isUsernameValid">
@@ -58,21 +69,21 @@
               </div>
           </div>
           <div class="form-group" style="padding: 20px;">
-            <label for="email" class="form-label text-white fw-bold">Email</label>
+            <label for="email" class="form-label text-white fw-bold">Email <span style="color: red;"> *</span></label>
             <input name="email" :readonly="googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== ''"
               :class="{ 'form-control': true, 'readonly': googleOAuthToken !== null && googleOAuthToken !== undefined && googleOAuthToken !== '' }" type="email"
-              maxlength="255" required id="email" v-model="email" placeholder="email" @input="validateEmail">
+              maxlength="255" required id="email" v-model="email" placeholder="Email" @input="validateEmail">
               <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="!emailError==''">
                 <p><i class="fas fa-exclamation-triangle"></i> {{ emailError }}</p>  
               </div>
           </div>
           <div v-if="googleOAuthToken === null || googleOAuthToken === undefined" class="form-group"
             style="padding: 20px;">
-            <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña</label>
+            <label for="confirmPassword" class="form-label text-white fw-bold">Repetir contraseña <span style="color: red;"> *</span></label>
 
             <div class="input-with-toggle">
                 <input name="confirmPassword" :type="visibleConfirmPassword ? 'text':'password'" required class="form-control" id="confirmPassword" v-model="confirmPassword" 
-                placeholder="repetir contraseña" :class="{ 'is-invalid': password !== confirmPassword }">
+                placeholder="Repetir contraseña" :class="{ 'is-invalid': password !== confirmPassword }" maxlength="255">
                 <button @click.prevent="toggleConfirmPasswordVisibility" class="toggle-password-button">
                     <span v-if="visibleConfirmPassword"><i class="bi bi-eye-slash-fill"></i></span>
                     <span v-else><i class="bi bi-eye-fill"></i></span>
@@ -93,7 +104,7 @@
       <form class="row justify-content-center" @submit.prevent="[register, changePage]" v-if="secondPage">
         <div class="col-md-6" style="padding-inline: 20px;">
           <div class="form-group" style="padding: 20px;">
-            <label for="gender" class="form-label text-white fw-bold">Género</label>
+            <label for="gender" class="form-label text-white fw-bold">Género <span style="color: red;"> *</span></label>
             <select required class="form-select" id="gender" v-model="gender">
               <option value="MASCULINO">Masculino</option>
               <option value="FEMENINO">Femenino</option>
@@ -126,8 +137,7 @@
                 </span>
               </span>
               <div v-else class="select">Deja la imagen aquí</div>
-              <input name="formFile" type="file" accept="image/*" class="file" ref="fileInput" @change="onFileChanged" id="formFile"
-                required />
+              <input name="formFile" type="file" accept="image/*" class="file" ref="fileInput" @change="onFileChanged" id="formFile" />
             </div>
             <div class="container">
               <div class="image" v-if="imgUrl">
@@ -239,8 +249,9 @@ export default {
     }
 
     const validateTelephone = () => {
-      if(phone.value.length !== 9 || isNaN(phone.value)){
-        telephoneError.value = 'El teléfono debe tener 9 dígitos';
+      const pattern = /^(\+34|0034|34)?[6789]\d{8}$/;
+      if(!pattern.test(phone.value)){
+        telephoneError.value = 'El teléfono debe tener 9 dígitos y ser válido';
       }else{
         telephoneError.value = '';
       }
@@ -374,7 +385,7 @@ export default {
     const register = () => {
       disableRegisterButton.value = true;
 
-      if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value || genderError.value === '') {
+      if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value) {
         alert('Las contraseñas no coinciden');
         disableRegisterButton.value = false;
       } else {
@@ -693,4 +704,67 @@ button {
     cursor: pointer;
 }
 
+.wrapper .icon {
+  position: relative;
+  background: #fff;
+  color: black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 16px;
+  background: #fff;
+  color: black;
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  width: 20em;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip::before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  background: #fff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+
+.wrapper .icon:hover .tooltip {
+  top: -90px;
+  width: 20em;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  background: #1da1f2;
+  color: #fff;
+}
+
+.wrapper .icon:hover .tooltip::before {
+  background: #1da1f2;
+}
+
+.wrapper .icon:hover {
+  background: #1da1f2;
+  color: #fff
+}
 </style>
