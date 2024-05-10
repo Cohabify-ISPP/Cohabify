@@ -348,7 +348,6 @@ export default {
       validateTelephone();
       validateName();
       validateEmail();
-      validateGender();
       if(passwordError.value !== '' || usernameError.value !== '' || telephoneError.value !== '' || nameError.value !== '' || emailError.value !== '') 
       return;
       if (!termsAccepted.value) {
@@ -384,7 +383,11 @@ export default {
 
     const register = () => {
       disableRegisterButton.value = true;
-
+      validateGender();
+      if (genderError.value !== '') {
+        disableRegisterButton.value = false;
+        return;
+      }
       if ((googleOAuthToken.value === null || googleOAuthToken.value === undefined || googleOAuthToken.value === "") && password.value !== confirmPassword.value) {
         alert('Las contraseñas no coinciden');
         disableRegisterButton.value = false;
@@ -496,7 +499,6 @@ export default {
       redirectToLogin,
       validationErrors,
       termsAccepted,
-      usernameError,
       validateUsername,
       telephoneError,
       disableRegisterButton,
