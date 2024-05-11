@@ -11,13 +11,13 @@
                     <div class="chat-card-body">
                         <div class="flex-container" style="height: 100%; width: auto;">
                             <div class="image-container" v-if="chat.users?.length == 1">
-                                <img :src="chat.users[0].imageUri" class="chat-profile-image">
+                                <img :src="chat.users[0].imageUri" class="contacts-profile-image">
                             </div>
                             <div class="image-container" v-if="chat.users?.length > 1">
-                                <img :src="chat.users[0].imageUri" class="chat-profile-image">
-                                <img :src="chat.users[1].imageUri" class="chat-profile-image offset">
+                                <img :src="chat.users[0].imageUri" class="contacts-profile-image">
+                                <img :src="chat.users[1].imageUri" class="contacts-profile-image offset">
                                 <div v-if="chat.users?.length > 2">
-                                  <span class="chat-profile-image offset2" style="font-weight: bolder; font-size: larger; color:black; text-align: end;"> +{{ chat.users?.length-2 }} </span>
+                                  <span class="offset2" style="font-weight: bolder; font-size: larger; color:black; text-align: end;"> +{{ chat.users?.length-2 }} </span>
                                 </div>
                             </div>
                             <div class="flex-column overflow-auto" style="padding-right: 5px; max-width: 70%; max-height: 100%;">
@@ -46,7 +46,7 @@
                             </div>
                             <div class="image-container" v-if="selectedChat.users?.length > 1">
                                 <img :src="selectedChat.users[0].imageUri" class="chat-profile-image">
-                                <img :src="selectedChat.users[1].imageUri" class="chat-profile-image offset">
+                                <img :src="selectedChat.users[1].imageUri" class="chat-profile-image offset4">
                                 <div v-if="selectedChat.users?.length > 2">
                               <span class="chat-profile-image offset3" style="font-weight: bolder; font-size: larger; color:white"> +{{ selectedChat.users?.length-2 }} </span>
                             </div>
@@ -508,16 +508,38 @@ export default {
   width: 10vh;
   max-width: 20%;
   position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
+
+.contacts-profile-image {
+  border-radius: 50%;
+  height: 8vh;
+  width: 8vh;
+  max-width: 20%;
+  position: absolute;
+}
+
 
 .offset {
   transform: translate(50%, 0);
 }
 .offset2 {
   transform: translate(80%, 0);
+  height: 8vh;
+  width: 8vh;
+  max-width: 20%;
+  overflow: hidden;
+  position: absolute;
 }
 .offset3 {
-  transform: translate(115%, 0);
+  transform: translate(125%, -50%);
+}
+.offset4 {
+  transform: translate(65%, -50%);
+}
+.offset5 {
+  transform: translate(65%, -50%);
 }
 
 
