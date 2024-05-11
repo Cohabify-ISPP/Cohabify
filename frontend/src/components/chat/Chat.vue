@@ -17,7 +17,7 @@
                                 <img :src="chat.users[0].imageUri" class="chat-profile-image">
                                 <img :src="chat.users[1].imageUri" class="chat-profile-image offset">
                                 <div v-if="chat.users?.length > 2">
-                                  <span class="chat-profile-image offset2" style="font-weight: bolder; font-size: larger; color:black; text-align: end;"> +{{ selectedChat.users?.length-2 }} </span>
+                                  <span class="chat-profile-image offset2" style="font-weight: bolder; font-size: larger; color:black; text-align: end;"> +{{ chat.users?.length-2 }} </span>
                                 </div>
                             </div>
                             <div class="flex-column overflow-auto" style="padding-right: 5px; max-width: 70%; max-height: 100%;">
@@ -73,7 +73,7 @@
           <div class="messages-area" ref="messagesArea">
             <div v-for="message in selectedChat?.messages" :class="['message', 'one', 'card', message.sender.username === currentUser.username ? 'c2' : 'c1']">
               <div :class="['username', message.sender.username === currentUser.username ? 'u2' : 'u1']">{{ message.sender.username }}</div>
-              <p style="padding: 15px;">{{ message.text }}</p>
+              <span style="padding-left: 15px;">{{ message.text }}</span>
               <div class="date">{{ formatDate(message.timeSent) }}</div>
             </div>
           </div>
@@ -335,7 +335,7 @@ export default {
   border-radius: 10px;
   background-color: #e1e9f7;
   width: 98%;
-  height: 60vh;
+  height: 100%;
   max-height: 60vh; 
   overflow-y: auto;
   border: 1px solid #35385896;
@@ -354,6 +354,7 @@ export default {
   font-size: 12px;
   color: #b6cdef;
   text-align: right;
+  margin-top: 5px;
 
 }
 
@@ -364,7 +365,7 @@ export default {
 
 .username {
   font-weight: bold;
-  padding: 15px;
+  padding: 5px;
   font-size: 15px;
   color: #b6cdef;
   margin-bottom: 5px;
