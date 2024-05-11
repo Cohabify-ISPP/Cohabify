@@ -206,6 +206,7 @@ export default {
     const disableRegisterButton =ref(false);
     const visiblePassword = ref(false);
     const visibleConfirmPassword = ref(false);
+    const defaultImg = ref('');
 
     const updateMeta = (title, description) => {
             document.querySelector('meta[name="description"]').setAttribute('content', description);
@@ -403,7 +404,14 @@ export default {
           googleOAuthToken: googleOAuthToken.value,
           tag: selectedTags.value,
         })], { type: "application/json" }));
+        
+        if (img.value === '') {
+          img.value = defaultImg.value;
+        } 
+
         formData.append("profile-pic", img.value);
+        
+        
 
         validationErrors.value = [];
 
@@ -439,8 +447,17 @@ export default {
       window.location.href = '/login';
     };
 
+    const fetchDefaultProfilePic = () => {
+      fetch('/images/Avatar.png') 
+        .then(response => response.blob())
+        .then(blob => {
+          defaultImg.value = new File([blob], 'default.png', {type: 'image/png'});
+        });
+    };
+
     onMounted(() => {
       updateMeta('Registro - Cohabify', 'Únete a Cohabify hoy para encontrar tu espacio ideal y compañeros de piso. Regístrate ahora para comenzar tu búsqueda.');
+      fetchDefaultProfilePic();
       fileInput.value = ref('fileInput');
       fetch(import.meta.env.VITE_BACKEND_URL + '/api/tag/types/USER_TAG')
         .then(response => {
@@ -513,6 +530,7 @@ export default {
       togglePasswordVisibility,
       visibleConfirmPassword,
       toggleConfirmPasswordVisibility,
+      defaultImg
     };
   }
 }
