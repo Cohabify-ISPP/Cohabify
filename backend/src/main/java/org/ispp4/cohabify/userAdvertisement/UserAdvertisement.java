@@ -8,6 +8,8 @@ import org.ispp4.cohabify.user.User;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -21,6 +23,8 @@ public class UserAdvertisement extends BaseEntity {
     private String description;
     
     @NotNull
+    @DecimalMin(value = "0", inclusive = false, message = "El valor de maxBudget debe ser mayor que 0")
+    @DecimalMax(value = "50000", inclusive = true, message = "El valor de maxBudget debe ser menor o igual a 50000")
     private Double maxBudget;
 
     @NotBlank

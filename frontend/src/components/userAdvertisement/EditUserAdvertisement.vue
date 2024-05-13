@@ -110,14 +110,19 @@ export default {
 
     const validateForm = () => {
       let isValid = true;
-      if (document.getElementById("form").reportValidity()) {
-
-        if (!userAd.value.maxBudget || isNaN(userAd.value.maxBudget)) {
-          isValid = false;
-          errorMessages.value.maxBudget = "Este campo debe ser un número";
-        } else {
-          errorMessages.value.maxBudget = "";
-        }
+        if (document.getElementById("form").reportValidity()) {
+          if (userAd.value.maxBudget === null || userAd.value.maxBudget === "") {
+              isValid = false;
+              errorMessages.value.maxBudget = "Este campo no puede estar vacío";
+          } else if (userAd.value.maxBudget <= 0) {
+              isValid = false;
+              errorMessages.value.maxBudget = "El presupuesto máximo debe ser un número mayor que 0";
+          } else if (userAd.value.maxBudget > 50000) {
+              isValid = false;
+              errorMessages.value.maxBudget = "El presupuesto máximo debe ser 50000 o menos";
+          } else {
+              errorMessages.value.maxBudget = "";
+          }
 
         if (!userAd.value.desiredLocation) {
           isValid = false;
@@ -213,6 +218,7 @@ export default {
                   <input
                     type="number"
                     min="0"
+                    max="50000"
                     class="form-control"
                     aria-label="Cantidad máxima"
                     v-model="userAd.maxBudget"
