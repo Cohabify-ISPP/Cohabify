@@ -69,7 +69,7 @@ const fetchAdvertisements = ()=>{
         })
 }
 watch(pageNumber => {
-      fetchAdvertisements();
+    fetchAdvertisements();
     });
 
 const currentAdvertisements = computed(() => {
@@ -150,7 +150,6 @@ const applyFilters = () => {
             errors.value.minRoomsVal = 'Valor negativo'
         }
     }
-
     if(Object.keys(errors.value).length === 0){
         fetchFilteredAdvertisements();
     }   
@@ -392,7 +391,7 @@ const goToPreviousPage = () => {
                         </div>
                     </div>
                     </div>
-                    <nav v-if="totalPages > 1" aria-label="Page navigation example" style="padding: 10px;">
+                    <nav v-if="totalPages > 1 && !filtered" aria-label="Page navigation example" style="padding: 10px;">
                         <b>Página  {{ pageNumber + 1 }} de {{ totalPages }}</b>
                         <ul class="pagination">
                           <li class="page-item" @click="goToFirstPage">

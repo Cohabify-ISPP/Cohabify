@@ -24,6 +24,10 @@ public class HouseAdvertisementService {
         return advertisementRepository.findAll(pageable);
     }
 
+    public List<HouseAdvertisement> findAll() {
+        return advertisementRepository.findAll();
+    }
+
     public List<HouseAdvertisement> findByAuthorId(ObjectId authorId) {
         return advertisementRepository.findByAuthorId(authorId);
     }
@@ -91,7 +95,7 @@ public class HouseAdvertisementService {
         if(filters != null) {
             ads = ads.stream()
                      .filter(a -> {
-                        return (filters.getPrice() == 0 || filters.getPrice() <= a.getPrice()) &&
+                        return (filters.getPrice() == 0 || filters.getPrice() >= a.getPrice()) &&
                         (filters.getMeters() == 0 || filters.getMeters() <= a.getHouse().getArea()) &&
                         (filters.getEmpty() || !filters.getEmpty() && filters.getTenants() >= a.getTenants().size() || filters.getTenants() == 0) &&
                         (!filters.getEmpty() || filters.getEmpty() && a.getTenants().size() == 0) &&

@@ -27,6 +27,10 @@ public class UserAdvertisementService {
     public Page<UserAdvertisement> findAll(Pageable pageable) {
         return userAdvertisementRepository.findAll(pageable);
     }
+    
+    public List<UserAdvertisement> findAll() {
+        return userAdvertisementRepository.findAll();
+    }
 
     public Optional<UserAdvertisement> findById(ObjectId id) {
         return userAdvertisementRepository.findById(id);

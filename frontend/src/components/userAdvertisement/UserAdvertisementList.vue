@@ -392,7 +392,7 @@ export default {
             </div>
           </a>
         </div>
-        <nav v-if="totalPages > 1" aria-label="Page navigation example" style="padding: 10px;">
+        <nav v-if="totalPages > 1 && !filtered" aria-label="Page navigation example" style="padding: 10px;">
           <b>Página {{ pageNumber + 1 }} de {{ totalPages }}</b>
           <ul class="pagination">
             <li class="page-item" @click="goToFirstPage">
