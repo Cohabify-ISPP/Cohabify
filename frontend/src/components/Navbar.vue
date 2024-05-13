@@ -159,7 +159,7 @@ watch(user, (newValue) => {
             <li><a class="dropdown-item" href="/advertisements/users/new" @click.prevent="$router.push('/advertisements/users/myAdvertisement')">Publicar/Editar</a></li>
           </ul>
         </li>
-        <li class="nav-item" v-if="isLoggedIn">
+        <li class="nav-item">
           <a class="nav-link" href="/plan">Planes</a>
         </li>
         
