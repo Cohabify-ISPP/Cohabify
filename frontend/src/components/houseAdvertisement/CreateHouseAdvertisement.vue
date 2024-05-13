@@ -528,6 +528,10 @@ export default {
         return;
         
       }
+      if(area.value === '' || area.value === 0){
+        alert("Introduce una superficie válida");
+        return;
+      }
       
       const formData = new FormData();
       formData.append("string-data", new Blob([JSON.stringify({
