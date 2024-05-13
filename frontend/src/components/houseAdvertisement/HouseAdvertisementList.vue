@@ -308,7 +308,7 @@ const goToPreviousPage = () => {
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
                         <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
-                        <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
+                        <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null, pageNumber=0;">Borrar</button>
                     </div>
                 </div>
             </transition>

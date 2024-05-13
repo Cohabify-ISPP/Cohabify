@@ -294,7 +294,7 @@ export default {
         <div class="d-flex justify-content-between mb-2">
           <button class="btn btn-success" @click="errors = []; applyFilters()">Aplicar</button>
           <button class="btn btn-danger"
-            @click="errors = []; filtered = false; filtered = false; budget = 0; cohabitants = 0; entranceDate = null;">Borrar</button>
+            @click="errors = []; filtered = false; filtered = false; budget = 0; cohabitants = 0; entranceDate = null;pageNumber=0;">Borrar</button>
         </div>
 
       </div>
