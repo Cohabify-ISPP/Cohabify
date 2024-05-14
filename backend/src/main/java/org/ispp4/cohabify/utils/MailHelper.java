@@ -45,11 +45,11 @@ public class MailHelper {
     private MimeMessage createVerificationMessage(User user) throws AddressException, MessagingException {
         String verifyURL = frontendUrl + "/register/verify/" + user.getVerificationCode();
         String toAddress = user.getEmail();
-        String subject = "Verifique su registro en Cohabify";
+        String subject = "Verifique su correo en Cohabify";
         String content = "<html>\n" +
                          "<body>\n" +
                          "<p>Estimado/a " + user.getUsername() + ",</p>\n" +
-                         "<p>Por favor, entre en el siguiente enlace para completar su registro:</p>\n" +
+                         "<p>Por favor, entre en el siguiente enlace para completar su registro o cambio de correo:</p>\n" +
                          "<p><a href=\"" + verifyURL + "\">" + verifyURL + "</a></p>\n" +
                          "<p>Muchas gracias por su confianza,</p>\n" +
                          "<p>Cohabify</p>\n" +
