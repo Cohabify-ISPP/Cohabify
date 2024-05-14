@@ -415,25 +415,29 @@ export default {
                                  
                                 <span style="font-weight: bold; font-size: large; color:#28426B"> {{ userAdvertisement.author?.likes.length }} </span>
                             </div>
-                            
-                            <button @click.prevent="openChat()" v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
-                            <div class="d-flex col" v-else>
-                                <div class="d-flex flex-column align-items-center">
-                                        <button class="btn btn-warning" style=" height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="handleCheckout(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
-                                            Promocionar
-                                            <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
-                                            campaign
-                                            </span>
-                                        </button>
+                            <div v-if="currentUser.id" class="d-flex align-items-center">
+                                <button @click.prevent="openChat()" v-if="currentUser.id !== userAdvertisement.author?.id" type="button" class="button boton" style="text-wrap: nowrap; width:100%; margin-left: 1vw;"><strong style="color:white">Iniciar chat <i class="bi bi-chat" style="margin-left: 5px;"></i></strong></button>
+                                <div class="d-flex col" v-else>
+                                    <div class="d-flex flex-column align-items-center">
+                                            <button class="btn btn-warning" style=" height: 5.5vh; display: flex; justify-content: center; align-items: center; font-size: 1.2em;" @click="handleCheckout(userAdvertisement.id)" v-if="userAdvertisement.promotionExpirationDate === null">
+                                                Promocionar
+                                                <span class="material-symbols-outlined" style="margin-left:4px; font-size: 1.5em;">
+                                                campaign
+                                                </span>
+                                            </button>
+                                    </div>
+                                    <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
+                                    <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
                                 </div>
-                                <button type="button" class="btn btn-success" @click="$router.push(`/advertisements/users/myAdvertisement`)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Editar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">edit</span></button>
-                                <button type="button" class="btn btn-danger"  @click="deleteUserAd(userAdvertisementId)" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-left: 1vw;"><strong>Eliminar</strong><span class="material-symbols-outlined" style="margin-left: 0.5rem;">delete</span></button>
+                                
                             </div>
-                            <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== userAdvertisement.author?.id && chatError != ''">
-                                <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
-                            </div>
+                            
                         </div>
+                        
                     </div>
+                    <div class="mt-3 alert alert-danger mx-5" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== userAdvertisement.author?.id && chatError != ''">
+                                    <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
+                                </div>
                 </div>
                 
                 <div style="flex-basis: 30%;" class="subseccion">
