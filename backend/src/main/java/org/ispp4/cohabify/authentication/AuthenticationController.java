@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.UUID;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -128,7 +129,7 @@ public class AuthenticationController {
 		
 		// Save the image and add the static uri to the user
 		String[] filename_split = image.getOriginalFilename().split("\\.");
-		String filename = user.getJsonId() + "." + filename_split[filename_split.length-1];
+		String filename = user.getJsonId() + UUID.randomUUID().toString() + "." + filename_split[filename_split.length-1];
 		String static_path;
 		try {
 			static_path = storageService.saveImage(filename, image);

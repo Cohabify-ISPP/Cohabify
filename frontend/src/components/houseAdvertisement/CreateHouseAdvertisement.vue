@@ -522,6 +522,18 @@ export default {
     const register = () => {
       document.getElementById("btnPublicar").disabled = true;
 
+      if (selectedTags.value.length === 0) {
+        alert("Selecciona al menos una etiqueta");
+        document.getElementById("btnPublicar").disabled = false;
+        return;
+      }
+
+      if (images.value.length === 0) {
+        alert("Selecciona al menos una imagen");
+        document.getElementById("btnPublicar").disabled = false;
+        return;
+      }
+
       if(x.value === null || y.value === null){
         alert("Selecciona una ubicación en el mapa");
         document.getElementById("btnPublicar").disabled = false;
