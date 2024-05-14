@@ -39,7 +39,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockPart;
@@ -104,10 +107,12 @@ public class HouseAdvertisementControllerTest {
         userOwner.setAuthorities(List.of("USER"));
         when(userService.getUserByUsername("test_user_owner")).thenReturn(userOwner);
 
-        PageRequest pageable = PageRequest.of(0, 10);
-        when(advertisementService.findAll(pageable).getContent()).thenReturn(Arrays.asList(
-                new HouseAdvertisement(),
-                new HouseAdvertisement()));
+        Pageable pageable = PageRequest.of(0, 10);
+        List<HouseAdvertisement> advertisements = Arrays.asList(
+            new HouseAdvertisement(),
+            new HouseAdvertisement());
+        Page<HouseAdvertisement> page = new PageImpl<>(advertisements, pageable, advertisements.size());
+        when(advertisementService.findAll(pageable)).thenReturn(page);
 
         House house1 = new House();
         house1.setId(new ObjectId());
@@ -125,7 +130,11 @@ public class HouseAdvertisementControllerTest {
         advertisement2.setAuthor(userBasic);
         advertisement2.setHouse(house2);
 
-        when(advertisementService.findAll(pageable).getContent()).thenReturn(List.of(advertisement1, advertisement2));
+        List<HouseAdvertisement> advertisements2 = Arrays.asList(
+            advertisement1,
+            advertisement2);
+        Page<HouseAdvertisement> page2 = new PageImpl<>(advertisements2, pageable, advertisements2.size());
+        when(advertisementService.findAll(pageable)).thenReturn(page2);
 
         when(advertisementService.findByAuthorId(userBasic.getId())).thenReturn(List.of(advertisement2));
         when(advertisementService.findByAuthorId(userBasic2.getId())).thenReturn(List.of(advertisement1));
@@ -190,9 +199,9 @@ public class HouseAdvertisementControllerTest {
     
     @Test
     void testGetAllAdvertisements() throws Exception {
-        controller.perform(get("/api/advertisements/houses"))
+        controller.perform(get("/api/advertisements/houses/all/0"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)));
+        .andExpect(jsonPath("$[0]", hasSize(1)));
     }
     
 
@@ -200,18 +209,18 @@ public class HouseAdvertisementControllerTest {
     // ve por falta de acceso anticipado)
     @Test
     void testGetAllAdvertisementsWithBasicPlan() throws Exception {
-        controller.perform(get("/api/advertisements/houses").with(user("test_user_basic")))
+        controller.perform(get("/api/advertisements/houses/all/0").with(user("test_user_basic")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is("60d313f3f682fbd39a1b8b5a")));
+                .andExpect(jsonPath("$[0]", hasSize(1)))
+                .andExpect(jsonPath("$[0][0].id", is("60d313f3f682fbd39a1b8b5a")));
     }
 
     // Testea con un usuario basico que es dueño del anuncio recien creado
     @Test
     void testGetAllAdvertisementsWithBasic2Plan() throws Exception {
-        controller.perform(get("/api/advertisements/houses").with(user("test_user_basic2")))
+        controller.perform(get("/api/advertisements/houses/all/0").with(user("test_user_basic2")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$[0]", hasSize(2)));
     }
 
     @Test
