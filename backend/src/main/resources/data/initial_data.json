@@ -252,8 +252,8 @@
                 }
             ],
             "locationPoint": {
-                "x": -2.6637,
-                "y": 54.6944
+                "x": -6.009917259216309,
+                "y": 37.38521194458008
             }
         },
         {
@@ -371,100 +371,100 @@
             }
          },
          {
-            "id": "62d5ec9af682fbd39a1b8b60",
-            "location": "Berlin, Alemania",
-            "roomsNumber": "5",
-            "bathroomsNumber": "2",
-            "area": "300",
-            "heating": "NATURAL_GAS",
-            "floor": "3",
-            "cadastre": "33333333333333333333",
-            "tags": [
-              {
-                "id": "60d5ec9af682fbd39a1b8b9c"
-              }
-            ],
-            "locationPoint": {
-              "x": 13.383333,
-              "y": 52.517037
+          "id": "62d5ec9af682fbd39a1b8b60",
+          "location": "Madrid, España",
+          "roomsNumber": "5",
+          "bathroomsNumber": "2",
+          "area": "300",
+          "heating": "NATURAL_GAS",
+          "floor": "3",
+          "cadastre": "33333333333333333333",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
             }
-         },
-         {
-            "id": "63d5ec9af682fbd39a1b8b60",
-            "location": "Paris, Francia",
-            "roomsNumber": "1",
-            "bathroomsNumber": "3",
-            "area": "100",
-            "heating": "NATURAL_GAS",
-            "floor": "4",
-            "cadastre": "44444444444444444444",
-            "tags": [
-              {
-                "id": "60d5ec9af682fbd39a1b8b9c"
-              }
-            ],
-            "locationPoint": {
-              "x": 2.352222,
-              "y": 48.856614
+          ],
+          "locationPoint": {
+            "x": -3.7037902,
+            "y": 40.4167754
+          }
+        },
+        {
+          "id": "63d5ec9af682fbd39a1b8b60",
+          "location": "Barcelona, España",
+          "roomsNumber": "1",
+          "bathroomsNumber": "3",
+          "area": "100",
+          "heating": "NATURAL_GAS",
+          "floor": "4",
+          "cadastre": "44444444444444444444",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
             }
-         },
-         {
-            "id": "64d5ec9af682fbd39a1b8b60",
-            "location": "Roma, Italia",
-            "roomsNumber": "4",
-            "bathroomsNumber": "2",
-            "area": "200",
-            "heating": "NATURAL_GAS",
-            "floor": "5",
-            "cadastre": "55555555555555555555",
-            "tags": [
-              {
-                "id": "60d5ec9af682fbd39a1b8b9c"
-              }
-            ],
-            "locationPoint": {
-              "x": 12.496366,
-              "y": 41.902783
+          ],
+          "locationPoint": {
+            "x": 2.1734035,
+            "y": 41.3850639
+          }
+        },
+        {
+          "id": "64d5ec9af682fbd39a1b8b60",
+          "location": "Valencia, España",
+          "roomsNumber": "4",
+          "bathroomsNumber": "2",
+          "area": "200",
+          "heating": "NATURAL_GAS",
+          "floor": "5",
+          "cadastre": "55555555555555555555",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
             }
-         },
-         {
-            "id": "66d5ec9af682fbd39a1b8b60",
-            "location": "Londres, Reino Unido",
-            "roomsNumber": "3",
-            "bathroomsNumber": "1",
-            "area": "150",
-            "heating": "NATURAL_GAS",
-            "floor": "6",
-            "cadastre": "66666666666666666666",
-            "tags": [
-              {
-                "id": "60d5ec9af682fbd39a1b8b9c"
-              }
-            ],
-            "locationPoint": {
-              "x": -0.1278,
-              "y": 51.5074
+          ],
+          "locationPoint": {
+            "x": -0.37739,
+            "y": 39.46975
+          }
+        },
+        {
+          "id": "66d5ec9af682fbd39a1b8b60",
+          "location": "Sevilla, España",
+          "roomsNumber": "3",
+          "bathroomsNumber": "1",
+          "area": "150",
+          "heating": "NATURAL_GAS",
+          "floor": "6",
+          "cadastre": "66666666666666666666",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
             }
-         },
-         {
-            "id": "67d5ec9af682fbd39a1b8b60",
-            "location": "Nueva York, EEUU",
-            "roomsNumber": "2",
-            "bathroomsNumber": "2",
-            "area": "120",
-            "heating": "NATURAL_GAS",
-            "floor": "7",
-            "cadastre": "77777777777777777777",
-            "tags": [
-              {
-                "id": "60d5ec9af682fbd39a1b8b9c"
-              }
-            ],
-            "locationPoint": {
-              "x": -74.0060,
-              "y": 40.7128
+          ],
+          "locationPoint": {
+            "x": -5.98694,
+            "y": 37.38283
+          }
+        },
+        {
+          "id": "67d5ec9af682fbd39a1b8b60",
+          "location": "Málaga, España",
+          "roomsNumber": "2",
+          "bathroomsNumber": "2",
+          "area": "120",
+          "heating": "NATURAL_GAS",
+          "floor": "7",
+          "cadastre": "77777777777777777777",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
             }
-         }
+          ],
+          "locationPoint": {
+            "x": -4.42034,
+            "y": 36.72016
+          }
+        }
     ],
     "houseAdvertisements": [
         {
@@ -595,8 +595,8 @@
         },
         {
           "id": "60dbec9af682fbd39a1b8b60",
-          "title": "Casa de campo en Berlín",
-          "description": "Se busca compañero de piso para compartir esta casa de campo en Berlín, a 20 minutos del centro de la ciudad. Ideal para amantes de la naturaleza.",
+          "title": "Casa en las afueras de Madrid",
+          "description": "Se busca compañero de piso para compartir esta casa de campo en Madrid, a 20 minutos del centro de la ciudad. Ideal para amantes de la un espacio pacífico.",
           "price": 1400,
           "house": {
             "id": "62d5ec9af682fbd39a1b8b60"
@@ -614,8 +614,8 @@
         },
         {
           "id": "60dcec9af682fbd39a1b8b60",
-          "title": "Apartamento en París con balcón",
-          "description": "Buscamos inquilino para compartir este apartamento en París con balcón y vistas al río Sena. A 10 minutos del Louvre.",
+          "title": "Apartamento en Barcelona con balcón",
+          "description": "Buscamos inquilino para compartir este apartamento en Barcelona con balcón y vistas a la Sagrada Familia.",
           "price": 1100,
           "house": {
             "id": "63d5ec9af682fbd39a1b8b60"
@@ -633,8 +633,8 @@
         },
         {
           "id": "60ddec9af682fbd39a1b8b60",
-          "title": "Villa en Roma con jardín",
-          "description": "Se busca compañero de piso para compartir esta villa en Roma con jardín y piscina. A 5 minutos del centro histórico.",
+          "title": "Villa en Valencia con jardín",
+          "description": "Se busca compañero de piso para compartir esta villa en Valencia con jardín y piscina. A 5 minutos del casco histórico.",
           "price": 1600,
           "house": {
             "id": "64d5ec9af682fbd39a1b8b60"
@@ -652,8 +652,8 @@
         },
         {
           "id": "60deec9af682fbd39a1b8b60",
-          "title": "Casa en Londres con vistas al río Támesis",
-          "description": "Buscamos inquilino para compartir esta casa en Londres con vistas al río Támesis. A 15 minutos del centro de la ciudad.",
+          "title": "Casa en Sevilla con vistas al río Guadalquivir",
+          "description": "Buscamos inquilino para compartir esta casa en Sevilla con vistas al río Guadalquivir. A 15 minutos del centro de la ciudad.",
           "price": 1200,
           "house": {
             "id": "66d5ec9af682fbd39a1b8b60"
@@ -671,8 +671,8 @@
         },
         {
           "id": "60dfec9af682fbd39a1b8b60",
-          "title": "Apartamento en Nueva York con terraza",
-          "description": "Se busca compañero de piso para compartir este apartamento en Nueva York con terraza y vistas al Central Park. A 10 minutos del Rockefeller Center.",
+          "title": "Apartamento en Málaga con terraza",
+          "description": "Se busca compañero de piso para compartir este apartamento en Málaga con terraza y vistas a la playa.",
           "price": 1500,
           "house": {
             "id": "67d5ec9af682fbd39a1b8b60"
