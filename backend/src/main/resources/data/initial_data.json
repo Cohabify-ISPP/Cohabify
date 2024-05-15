@@ -504,7 +504,7 @@
             },
             "tenants": [
                 {
-                    "id": "60d5ec9af682fbd39a1b8b9e"
+                    "id": "60d5ec9af682fbd39a1b8b9d"
                 }
             ],
             "images": [
@@ -544,11 +544,7 @@
             "author": {
                 "id": "60d5ec9af682fbd39a1b8b9d"
             },
-            "tenants": [
-                {
-                    "id": "60d5ec9af682fbd39a1b8b9e"
-                }
-            ],
+            "tenants": [],
             "images": [
                 "https://images.pexels.com/photos/59321/pexels-photo-59321.jpeg",
                 "https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg",
@@ -567,11 +563,7 @@
           "author": {
             "id": "60d5ec9af682fbd39a1b8b9e"
           },
-          "tenants": [
-            {
-              "id": "60d5ec9af682fbd39a1b8b9e"
-            }
-          ],
+          "tenants": [],
           "images": ["https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=600"]
         },
         {
@@ -586,11 +578,7 @@
           "author": {
             "id": "60d5ec9af682fbd39a1b8b9e"
           },
-          "tenants": [
-            {
-              "id": "60d5ec9af682fbd39a1b8b9e"
-            }
-          ],
+          "tenants": [],
           "images": ["https://images.pexels.com/photos/1115804/pexels-photo-1115804.jpeg?auto=compress&cs=tinysrgb&w=600"]
         },
         {
@@ -605,11 +593,7 @@
           "author": {
             "id": "60d5ec9af682fbd39a1b8b9e"
           },
-          "tenants": [
-            {
-              "id": "60d5ec9af682fbd39a1b8b9e"
-            }
-          ],
+          "tenants": [],
           "images": ["https://images.pexels.com/photos/19866623/pexels-photo-19866623/free-photo-of-ciudad-punto-de-referencia-calle-verano.jpeg?auto=compress&cs=tinysrgb&w=600"]
         },
         {
@@ -624,11 +608,7 @@
           "author": {
             "id": "60d5ec9af682fbd39a1b8b9e"
           },
-          "tenants": [
-            {
-              "id": "60d5ec9af682fbd39a1b8b9e"
-            }
-          ],
+          "tenants": [],
           "images": ["https://images.pexels.com/photos/19908787/pexels-photo-19908787/free-photo-of-casas-nublado-flores-jardin.jpeg?auto=compress&cs=tinysrgb&w=600"]
         },
         {
@@ -643,11 +623,7 @@
           "author": {
             "id": "60d5ec9af682fbd39a1b8b9e"
           },
-          "tenants": [
-            {
-              "id": "60d5ec9af682fbd39a1b8b9e"
-            }
-          ],
+          "tenants": [],
           "images": ["https://images.pexels.com/photos/19935957/pexels-photo-19935957/free-photo-of-casas-edificio-pared-muro.jpeg?auto=compress&cs=tinysrgb&w=600"]
         },
         {
@@ -662,11 +638,7 @@
           "author": {
             "id": "60d5ec9af682fbd39a1b8b9e"
           },
-          "tenants": [
-            {
-              "id": "60d5ec9af682fbd39a1b8b9e"
-            }
-          ],
+          "tenants": [],
           "images": ["https://images.pexels.com/photos/19928078/pexels-photo-19928078/free-photo-of-casas-pueblo-edificio-amarillo.jpeg?auto=compress&cs=tinysrgb&w=600"]
         },
         {
@@ -682,9 +654,6 @@
             "id": "60d5ec9af682fbd39a1b8b9e"
           },
           "tenants": [
-            {
-              "id": "60d5ec9af682fbd39a1b8b9e"
-            }
           ],
           "images": ["https://images.pexels.com/photos/19886009/pexels-photo-19886009/free-photo-of-casas-lamparas-casa-interior.jpeg?auto=compress&cs=tinysrgb&w=600"]
         }
