@@ -378,7 +378,7 @@
           "area": "300",
           "heating": "NATURAL_GAS",
           "floor": "3",
-          "cadastre": "33333333333333333333",
+          "cadastre": "4976601VK4747F0001DQ",
           "tags": [
             {
               "id": "60d5ec9af682fbd39a1b8b9c"
@@ -397,7 +397,7 @@
           "area": "100",
           "heating": "NATURAL_GAS",
           "floor": "4",
-          "cadastre": "44444444444444444444",
+          "cadastre": "7025101DF2872E0001HG",
           "tags": [
             {
               "id": "60d5ec9af682fbd39a1b8b9c"
@@ -416,7 +416,7 @@
           "area": "200",
           "heating": "NATURAL_GAS",
           "floor": "5",
-          "cadastre": "55555555555555555555",
+          "cadastre": "5912306YJ2761C0001DK",
           "tags": [
             {
               "id": "60d5ec9af682fbd39a1b8b9c"
@@ -435,7 +435,7 @@
           "area": "150",
           "heating": "NATURAL_GAS",
           "floor": "6",
-          "cadastre": "66666666666666666666",
+          "cadastre": "4635005TG3443F0001LR",
           "tags": [
             {
               "id": "60d5ec9af682fbd39a1b8b9c"
@@ -457,7 +457,7 @@
           "cadastre": "77777777777777777777",
           "tags": [
             {
-              "id": "60d5ec9af682fbd39a1b8b9c"
+              "id": "5051202UF7655S0001LJ"
             }
           ],
           "locationPoint": {
