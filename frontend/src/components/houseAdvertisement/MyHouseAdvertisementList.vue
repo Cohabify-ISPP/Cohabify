@@ -358,6 +358,30 @@ const fetchFilteredAdvertisements = async () => {
                     </div>
                 </div>
             </transition>
+            <nav v-if="totalPages > 1" aria-label="Page navigation example" style="padding: 10px;">
+                <b>Page {{ pageNumber }} of {{ totalPages }}</b>
+                <ul class="pagination">
+                  <li class="page-item" @click="pageNumber.value = 0">
+                    <t class="page-link" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </t>
+                  </li>
+                  <li class="page-item" v-if="pageNumber > 0" @click="pageNumber.value -= 1">
+                    <t class="page-link">{{ pageNumber.value }}</t>
+                  </li>
+                  <li class="page-item active">
+                    <t class="page-link">{{ pageNumber.value + 1 }}</t>
+                  </li>
+                  <li class="page-item" v-if="pageNumber.value + 1 <= totalPages" @click="pageNumber.value += 1">
+                    <t class="page-link">{{ pageNumber.value + 1 }}</t>
+                  </li>
+                  <li class="page-item" @click="pageNumber.value = totalPages.value - 1">
+                    <t class="page-link" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </t>
+                  </li>
+                </ul>
+              </nav>
             <div class="col">
                 <div class="d-flex justify-content-center align-items-center mt-4">
                     <div class="search-bar">

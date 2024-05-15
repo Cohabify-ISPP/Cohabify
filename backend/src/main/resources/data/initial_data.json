@@ -24,6 +24,7 @@
           "id": "60d5ec9af682fbd39a1b8b9f",
           "tag": "Tranquilo",
           "tagType": "USER_TAG"
+
       },
       {
           "id": "60d5ec9af682fbd39a1b8ba0",
@@ -50,11 +51,7 @@
           "tag": "Silencioso",
           "tagType": "USER_TAG"
       },
-      {
-          "id": "60d5ec9af682fbd39a1b8ba5",
-          "tag": "Dinámico",
-          "tagType": "USER_TAG"
-      },
+      
       {
           "id": "60d5ec9af682fbd39a1b8ba6",
           "tag": "Fiestero",
@@ -255,8 +252,8 @@
                 }
             ],
             "locationPoint": {
-                "x": 54.6944,
-                "y": -2.6637
+                "x": -6.009917259216309,
+                "y": 37.38521194458008
             }
         },
         {
@@ -315,6 +312,158 @@
                 "x": -4.433562,
                 "y": 37.471815
             }
+        },
+      {
+          "id": "60d5ec9af682fbd39a1b8b6f",
+          "location": "Cabra, Córdoba",
+          "roomsNumber": "3",
+          "bathroomsNumber": "1",
+          "area": "200",
+          "heating": "RADIATOR",
+          "floor": "0",
+          "cadastre": "12345678901234567893",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
+            }
+          ],
+          "locationPoint": {
+            "x": -4.433562,
+            "y": 37.471815
+          }
+        },
+        {
+            "id": "61d5ec9af682fbd39a1b8b6f",
+            "location": "Madrid, España",
+            "roomsNumber": "2",
+            "bathroomsNumber": "2",
+            "area": "150",
+            "heating": "NATURAL_GAS",
+            "floor": "1",
+            "cadastre": "98765432109876543210",
+            "tags": [
+              {
+                "id": "60d5ec9af682fbd39a1b8b9c"
+              }
+            ],
+            "locationPoint": {
+              "x": -3.714708,
+              "y": 40.416775
+            }
+         },
+         {
+            "id": "60d5ec9af682fbd39a1b8b6f",
+            "location": "Barcelona, España",
+            "roomsNumber": "4",
+            "bathroomsNumber": "1",
+            "area": "250",
+            "heating": "NATURAL_GAS",
+            "floor": "2",
+            "cadastre": "11223344556677889900",
+            "tags": [
+              {
+                "id": "60d5ec9af682fbd39a1b8b9c"
+              }
+            ],
+            "locationPoint": {
+              "x": 2.155043,
+              "y": 41.388786
+            }
+         },
+         {
+          "id": "62d5ec9af682fbd39a1b8b60",
+          "location": "Madrid, España",
+          "roomsNumber": "5",
+          "bathroomsNumber": "2",
+          "area": "300",
+          "heating": "NATURAL_GAS",
+          "floor": "3",
+          "cadastre": "4976601VK4747F0001DQ",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
+            }
+          ],
+          "locationPoint": {
+            "x": -3.7037902,
+            "y": 40.4167754
+          }
+        },
+        {
+          "id": "63d5ec9af682fbd39a1b8b60",
+          "location": "Barcelona, España",
+          "roomsNumber": "1",
+          "bathroomsNumber": "3",
+          "area": "100",
+          "heating": "NATURAL_GAS",
+          "floor": "4",
+          "cadastre": "7025101DF2872E0001HG",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
+            }
+          ],
+          "locationPoint": {
+            "x": 2.1734035,
+            "y": 41.3850639
+          }
+        },
+        {
+          "id": "64d5ec9af682fbd39a1b8b60",
+          "location": "Valencia, España",
+          "roomsNumber": "4",
+          "bathroomsNumber": "2",
+          "area": "200",
+          "heating": "NATURAL_GAS",
+          "floor": "5",
+          "cadastre": "5912306YJ2761C0001DK",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
+            }
+          ],
+          "locationPoint": {
+            "x": -0.37739,
+            "y": 39.46975
+          }
+        },
+        {
+          "id": "66d5ec9af682fbd39a1b8b60",
+          "location": "Sevilla, España",
+          "roomsNumber": "3",
+          "bathroomsNumber": "1",
+          "area": "150",
+          "heating": "NATURAL_GAS",
+          "floor": "6",
+          "cadastre": "4635005TG3443F0001LR",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
+            }
+          ],
+          "locationPoint": {
+            "x": -5.98694,
+            "y": 37.38283
+          }
+        },
+        {
+          "id": "67d5ec9af682fbd39a1b8b60",
+          "location": "Málaga, España",
+          "roomsNumber": "2",
+          "bathroomsNumber": "2",
+          "area": "120",
+          "heating": "NATURAL_GAS",
+          "floor": "7",
+          "cadastre": "5051202UF7655S0001LJ",
+          "tags": [
+            {
+              "id": "60d5ec9af682fbd39a1b8b9c"
+            }
+          ],
+          "locationPoint": {
+            "x": -4.42034,
+            "y": 36.72016
+          }
         }
     ],
     "houseAdvertisements": [
@@ -355,7 +504,7 @@
             },
             "tenants": [
                 {
-                    "id": "60d5ec9af682fbd39a1b8b9e"
+                    "id": "60d5ec9af682fbd39a1b8b9d"
                 }
             ],
             "images": [
@@ -395,16 +544,118 @@
             "author": {
                 "id": "60d5ec9af682fbd39a1b8b9d"
             },
-            "tenants": [
-                {
-                    "id": "60d5ec9af682fbd39a1b8b9e"
-                }
-            ],
+            "tenants": [],
             "images": [
                 "https://images.pexels.com/photos/59321/pexels-photo-59321.jpeg",
                 "https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg",
                 "https://images.pexels.com/photos/4480448/pexels-photo-4480448.jpeg"
             ]
+        },
+        {
+          "id": "61d5ec9af682fbd39a1b8b6f",
+          "title": "Apartamento moderno en Madrid",
+          "description": "Se busca compañero de piso para compartir este apartamento moderno en el centro de Madrid. A 5 minutos de la plaza del Sol y con vistas panorámicas.",
+          "price": 1500,
+          "house": {
+            "id": "61d5ec9af682fbd39a1b8b6f"
+          },
+          "views": 0,
+          "author": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "tenants": [],
+          "images": ["https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=600"]
+        },
+        {
+          "id": "60daec9af682fbd39a1b8b60",
+          "title": "Vivienda en Barcelona con terraza",
+          "description": "Buscamos inquilino para compartir esta vivienda en Barcelona con terraza y vistas al mar. A 15 minutos del centro de la ciudad.",
+          "price": 1300,
+          "house": {
+            "id": "60d5ec9af682fbd39a1b8b6f"
+          },
+          "views": 0,
+          "author": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "tenants": [],
+          "images": ["https://images.pexels.com/photos/1115804/pexels-photo-1115804.jpeg?auto=compress&cs=tinysrgb&w=600"]
+        },
+        {
+          "id": "60dbec9af682fbd39a1b8b60",
+          "title": "Casa en las afueras de Madrid",
+          "description": "Se busca compañero de piso para compartir esta casa de campo en Madrid, a 20 minutos del centro de la ciudad. Ideal para amantes de la un espacio pacífico.",
+          "price": 1400,
+          "house": {
+            "id": "62d5ec9af682fbd39a1b8b60"
+          },
+          "views": 0,
+          "author": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "tenants": [],
+          "images": ["https://images.pexels.com/photos/19866623/pexels-photo-19866623/free-photo-of-ciudad-punto-de-referencia-calle-verano.jpeg?auto=compress&cs=tinysrgb&w=600"]
+        },
+        {
+          "id": "60dcec9af682fbd39a1b8b60",
+          "title": "Apartamento en Barcelona con balcón",
+          "description": "Buscamos inquilino para compartir este apartamento en Barcelona con balcón y vistas a la Sagrada Familia.",
+          "price": 1100,
+          "house": {
+            "id": "63d5ec9af682fbd39a1b8b60"
+          },
+          "views": 0,
+          "author": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "tenants": [],
+          "images": ["https://images.pexels.com/photos/19908787/pexels-photo-19908787/free-photo-of-casas-nublado-flores-jardin.jpeg?auto=compress&cs=tinysrgb&w=600"]
+        },
+        {
+          "id": "60ddec9af682fbd39a1b8b60",
+          "title": "Villa en Valencia con jardín",
+          "description": "Se busca compañero de piso para compartir esta villa en Valencia con jardín y piscina. A 5 minutos del casco histórico.",
+          "price": 1600,
+          "house": {
+            "id": "64d5ec9af682fbd39a1b8b60"
+          },
+          "views": 0,
+          "author": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "tenants": [],
+          "images": ["https://images.pexels.com/photos/19935957/pexels-photo-19935957/free-photo-of-casas-edificio-pared-muro.jpeg?auto=compress&cs=tinysrgb&w=600"]
+        },
+        {
+          "id": "60deec9af682fbd39a1b8b60",
+          "title": "Casa en Sevilla con vistas al río Guadalquivir",
+          "description": "Buscamos inquilino para compartir esta casa en Sevilla con vistas al río Guadalquivir. A 15 minutos del centro de la ciudad.",
+          "price": 1200,
+          "house": {
+            "id": "66d5ec9af682fbd39a1b8b60"
+          },
+          "views": 0,
+          "author": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "tenants": [],
+          "images": ["https://images.pexels.com/photos/19928078/pexels-photo-19928078/free-photo-of-casas-pueblo-edificio-amarillo.jpeg?auto=compress&cs=tinysrgb&w=600"]
+        },
+        {
+          "id": "60dfec9af682fbd39a1b8b60",
+          "title": "Apartamento en Málaga con terraza",
+          "description": "Se busca compañero de piso para compartir este apartamento en Málaga con terraza y vistas a la playa.",
+          "price": 1500,
+          "house": {
+            "id": "67d5ec9af682fbd39a1b8b60"
+          },
+          "views": 0,
+          "author": {
+            "id": "60d5ec9af682fbd39a1b8b9e"
+          },
+          "tenants": [
+          ],
+          "images": ["https://images.pexels.com/photos/19886009/pexels-photo-19886009/free-photo-of-casas-lamparas-casa-interior.jpeg?auto=compress&cs=tinysrgb&w=600"]
         }
     ],
     "userRatings": [

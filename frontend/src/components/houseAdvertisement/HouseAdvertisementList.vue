@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useStore } from "vuex";
 import Navbar from '../Navbar.vue'
 
@@ -19,6 +19,10 @@ const showFilters = ref(false)
 const searchTerm = ref('')
 const store = useStore();
 const currentUser = computed(() => store.state.user);
+const pageNumber = ref(0);
+const hasNextPage = computed(() => pageNumber.value < totalPages.value - 1);
+const hasPreviousPage = computed(() => pageNumber.value > 0);
+const totalPages = ref(0);
 
 const updateMeta = (title, description) => {
             document.querySelector('meta[name="description"]').setAttribute('content', description);
@@ -28,7 +32,11 @@ const updateMeta = (title, description) => {
 
 onMounted(() => {
     updateMeta('Encuentra tu Vivienda Ideal en Cohabify: Búsqueda Personalizada y Filtros Avanzados', 'Utiliza nuestros filtros avanzados para encontrar viviendas en alquiler que se ajusten a tus necesidades específicas. Explora opciones por precio, tamaño, y más en Cohabify y descubre tu hogar ideal rápidamente.');
-    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses', {
+    fetchAdvertisements();
+})
+
+const fetchAdvertisements = ()=>{
+    fetch(import.meta.env.VITE_BACKEND_URL+'/api/advertisements/houses/all/'+ pageNumber.value, {
         method: "GET",
         headers: {
             'Authentication': 'Bearer ' + localStorage.getItem("authentication"),
@@ -43,23 +51,26 @@ onMounted(() => {
             return response.json()
         })
         .then(data => {
-
-            for (let i = 0; i < data.length; i++) {
-                fetchValoration(data[i].id).then((valoration) => {
-                    data[i].valoration = valoration;
+            totalPages.value = data[1];
+            for (let i = 0; i < data[0].length; i++) {
+                fetchValoration(data[0][i].id).then((valoration) => {
+                    data[0][i].valoration = valoration;
                 });
             }
 
             setTimeout(() => {
                 isLoading.value = false
-                advertisements.value = data
+                advertisements.value = data[0]
             }, 500)
         })
         .catch(error => {
             isLoading.value = false
             fetchError.value = error
         })
-})
+}
+watch(pageNumber => {
+    fetchAdvertisements();
+    });
 
 const currentAdvertisements = computed(() => {
  const ads = filtered.value ? filteredAdvertisements.value : advertisements.value;
@@ -139,7 +150,6 @@ const applyFilters = () => {
             errors.value.minRoomsVal = 'Valor negativo'
         }
     }
-
     if(Object.keys(errors.value).length === 0){
         fetchFilteredAdvertisements();
     }   
@@ -204,6 +214,26 @@ const fetchValoration = async (id) => {
   } catch (error) {
     console.error("Error:", error);
   }
+};
+
+const goToLastPage = () => {
+    window.scrollTo(0, 0);
+    pageNumber.value = totalPages.value - 1;
+};
+
+const goToFirstPage = () => {
+    window.scrollTo(0, 0);
+    pageNumber.value = 0;
+};
+
+const goToNextPage = () => {
+    window.scrollTo(0, 0);
+    pageNumber.value += 1;
+};
+
+const goToPreviousPage = () => {
+    window.scrollTo(0, 0);
+    pageNumber.value -= 1;
 };
 
 </script>
@@ -278,7 +308,7 @@ const fetchValoration = async (id) => {
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
                         <button class="btn btn-success" @click="errors=[]; applyFilters()">Aplicar</button>
-                        <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null">Borrar</button>
+                        <button class="btn btn-danger" @click="errors=[]; filtered = false;price = 0; meters = 0; empty = false; tenants = 0; minBathrooms = null; maxBathrooms = null; minBedrooms = null; maxBedrooms = null, pageNumber=0;">Borrar</button>
                     </div>
                 </div>
             </transition>
@@ -361,6 +391,30 @@ const fetchValoration = async (id) => {
                         </div>
                     </div>
                     </div>
+                    <nav v-if="totalPages > 1 && !filtered" aria-label="Page navigation example" style="padding: 10px;">
+                        <b>Página  {{ pageNumber + 1 }} de {{ totalPages }}</b>
+                        <ul class="pagination">
+                          <li class="page-item" @click="goToFirstPage">
+                            <t class="page-link" aria-label="Previous" style="color: #28426b">
+                              <span aria-hidden="true">&laquo;</span>
+                            </t>
+                          </li>
+                          <li class="page-item" v-if="hasPreviousPage" @click="goToPreviousPage">
+                            <t class="page-link"  style="color: #28426b">{{ pageNumber }}</t>
+                          </li>
+                          <li class="page-item">
+                            <t class="page-link" style="background-color:#28426b;color:white">{{ pageNumber + 1 }}</t>
+                          </li>
+                          <li class="page-item" v-if="hasNextPage" @click="goToNextPage">
+                            <t class="page-link" style="color: #28426b">{{ pageNumber + 2 }}</t>
+                          </li>
+                          <li class="page-item" @click="goToLastPage">
+                            <t class="page-link" aria-label="Next" style="color: #28426b">
+                              <span aria-hidden="true">&raquo;</span>
+                            </t>
+                          </li>
+                        </ul>
+                      </nav>
                 </div>
             </div>
         </div>

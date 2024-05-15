@@ -51,7 +51,7 @@ public class HouseServiceTest {
 
     @Test
     void shouldGetHouseByCadastre() {
-        String cadastre = "12345678901234567893";
+        String cadastre = "12345678901234567890";
         House house = this.houseService.getHouseByCadastre(cadastre).get();
         assertNotNull(house);
     }

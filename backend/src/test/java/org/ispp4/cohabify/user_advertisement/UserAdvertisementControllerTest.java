@@ -8,6 +8,7 @@ import org.ispp4.cohabify.userAdvertisement.UserAdvertisementController;
 import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,7 +24,8 @@ public class UserAdvertisementControllerTest {
 
     @Test
     public void testCreateExistingUserAdvertisement() {
-        UserAdvertisement existingAd = userAdvertisementService.findAll().get(0);
+        PageRequest pageable = PageRequest.of(0, 10);
+        UserAdvertisement existingAd = userAdvertisementService.findAll(pageable).getContent().get(0);
         ResponseEntity<UserAdvertisement> response = userAdvertisementController.createOrEditUserAd(existingAd);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());

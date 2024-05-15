@@ -19,6 +19,9 @@ import org.ispp4.cohabify.storage.StorageService;
 import org.ispp4.cohabify.user.Plan;
 import org.ispp4.cohabify.user.User;
 import org.ispp4.cohabify.user.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +57,12 @@ public class HouseAdvertisementController {
     private Global global;
 
     @Transactional(readOnly = true)
-    @GetMapping("")
-    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(@Nullable Principal principal) {
-        List<HouseAdvertisement> advertisements = advertisementService.findAll();
+    @GetMapping("/all/{pageNumber}")
+    public ResponseEntity<List<Object>> getAllAdvertisements(@Nullable Principal principal, @PathVariable int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 10);
+        Page page = advertisementService.findAll(pageable);
+        List<HouseAdvertisement> advertisements = page.getContent();
+        Integer numPages = page.getTotalPages();
         advertisements = advertisementService.checkPromotions(advertisements);
         if (principal == null) {
             advertisements = advertisements.stream() 
@@ -74,6 +80,31 @@ public class HouseAdvertisementController {
             }
         } 
         
+        return new ResponseEntity<>(List.of(advertisements, numPages), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/")
+    public ResponseEntity<List<HouseAdvertisement>> getAllAdvertisements(@Nullable Principal principal) {
+        Pageable pageable = PageRequest.of(0, 1000);
+        Page<HouseAdvertisement> page = advertisementService.findAll(pageable);
+        List<HouseAdvertisement> advertisements = page.getContent();
+        advertisements = advertisementService.checkPromotions(advertisements);
+        if (principal == null) {
+            advertisements = advertisements.stream() 
+            // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+        .filter(a -> System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000).toList();
+        }else{
+            User user = userService.getUserByUsername(principal.getName());
+            if(user.getPlan().equals(Plan.BASIC) ) {
+
+                advertisements = advertisements.stream() 
+                                                // Filter advertisements to leave the ones that are owned or that were created at least a day before now
+                                            .filter(a -> a.getAuthor().getId().equals(user.getId()) ||
+                                                            System.currentTimeMillis() > (a.getId().getTimestamp() & 0xFFFFFFFFL) * 1000L + 86400000)
+                                            .toList();
+            }
+        }         
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 

@@ -43,7 +43,7 @@ const fetchLocations = async () => {
     const userData = await userFetch.json();
     auth.value = userData;
 
-    const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/houses`,
+    const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/houses/`,
       {
         method: "GET",
         headers: {
@@ -117,7 +117,7 @@ const setPlace = (place) => {
         <GMapMap :center="mapCenter" :zoom="12" map-type-id="roadmap"
           style="height: 60vh; width: 90vh; padding: 10px; margin-top: 10px; border-radius: 10px;" v-if="showMap">
           <GMapMarker v-for="(a, index) in locations" :key="a.id"
-            :position="{ lat: a.house.locationPoint.x, lng: a.house.locationPoint.y }"
+            :position="{ lat: a.house.locationPoint.y, lng: a.house.locationPoint.x }"
             @click="$router.push(`/advertisements/houses/${a.id}`)" />
         </GMapMap>
       </div>

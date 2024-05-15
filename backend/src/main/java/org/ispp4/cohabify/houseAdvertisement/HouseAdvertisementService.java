@@ -1,6 +1,9 @@
 package org.ispp4.cohabify.houseAdvertisement;
 
 import org.bson.types.ObjectId;
+import org.ispp4.cohabify.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.ispp4.cohabify.dto.HouseAdvertisementFiltersDTO;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,10 @@ public class HouseAdvertisementService {
 
     public HouseAdvertisementService(HouseAdvertisementRepository advertisementRepository) {
         this.advertisementRepository = advertisementRepository;
+    }
+
+    public Page<HouseAdvertisement> findAll(Pageable pageable) {
+        return advertisementRepository.findAll(pageable);
     }
 
     public List<HouseAdvertisement> findAll() {
@@ -88,7 +95,7 @@ public class HouseAdvertisementService {
         if(filters != null) {
             ads = ads.stream()
                      .filter(a -> {
-                        return (filters.getPrice() == 0 || filters.getPrice() <= a.getPrice()) &&
+                        return (filters.getPrice() == 0 || filters.getPrice() >= a.getPrice()) &&
                         (filters.getMeters() == 0 || filters.getMeters() <= a.getHouse().getArea()) &&
                         (filters.getEmpty() || !filters.getEmpty() && filters.getTenants() >= a.getTenants().size() || filters.getTenants() == 0) &&
                         (!filters.getEmpty() || filters.getEmpty() && a.getTenants().size() == 0) &&
