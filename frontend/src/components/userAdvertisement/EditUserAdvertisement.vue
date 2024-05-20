@@ -306,6 +306,7 @@ export default {
                 class="form-control"
                 id="descripcion"
                 rows="3"
+                maxlength="255"
                 v-model="userAd.description"
                 placeholder="Añadir descripción..."
               ></textarea>

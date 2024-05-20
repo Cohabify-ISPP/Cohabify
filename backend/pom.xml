@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.ispp4</groupId>
 	<artifactId>cohabify</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>Cohabify</name>
 	<description>Backend project for Cohabify</description>
 	<properties>
