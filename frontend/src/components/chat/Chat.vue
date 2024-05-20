@@ -11,16 +11,19 @@
                     <div class="chat-card-body">
                         <div class="flex-container" style="height: 100%; width: auto;">
                             <div class="image-container" v-if="chat.users?.length == 1">
-                                <img :src="chat.users[0].imageUri" class="chat-profile-image">
+                                <img :src="chat.users[0].imageUri" class="contacts-profile-image">
                             </div>
                             <div class="image-container" v-if="chat.users?.length > 1">
-                                <img :src="chat.users[0].imageUri" class="chat-profile-image">
-                                <img :src="chat.users[1].imageUri" class="chat-profile-image offset">
+                                <img :src="chat.users[0].imageUri" class="contacts-profile-image">
+                                <img :src="chat.users[1].imageUri" class="contacts-profile-image offset">
+                                <div v-if="chat.users?.length > 2">
+                                  <span class="offset2" style="font-weight: bolder; font-size: larger; color:black; text-align: end;"> +{{ chat.users?.length-2 }} </span>
+                                </div>
                             </div>
                             <div class="flex-column overflow-auto" style="padding-right: 5px; max-width: 70%; max-height: 100%;">
                                 <div class ="d-flex" style="margin-bottom: 5px;">
                                     <div class="chat-card-body d-flex align-items-center">
-                                      <h5 style="text-align: left;" class="card-title">{{ chatMembers(chat) }}</h5>
+                                      <h5 style="text-align: left;" class="card-title">{{ contactsChatMembers(chat) }}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -35,7 +38,7 @@
     <div class="col-sm-6 col-md-8">
       <div class="container">
           <div>
-            <div class="card mb-3 mt-5" style="padding: 10px; background-color: #28426bc2; height: 72%; width: 98%; ">
+            <div class="card mb-3 mt-5" style="padding: 10px; background-color: #28426bc2; height: 65%; width: 98%; ">
                     <div class="card-body">
                       <div class="flex-container" style="height: 100%; width: auto;" v-if="selectedChat != null && selectedChat != undefined">
                             <div class="image-container" v-if="selectedChat.users?.length == 1">
@@ -43,8 +46,12 @@
                             </div>
                             <div class="image-container" v-if="selectedChat.users?.length > 1">
                                 <img :src="selectedChat.users[0].imageUri" class="chat-profile-image">
-                                <img :src="selectedChat.users[1].imageUri" class="chat-profile-image offset">
+                                <img :src="selectedChat.users[1].imageUri" class="chat-profile-image offset4">
+                                <div v-if="selectedChat.users?.length > 2">
+                              <span class="chat-profile-image offset3" style="font-weight: bolder; font-size: larger; color:white"> +{{ selectedChat.users?.length-2 }} </span>
                             </div>
+                            </div>
+                            
                             <div class="flex-column overflow-auto" style="padding-right: 5px; max-width: 70%; max-height: 100%;">
                                 <div class ="d-flex" style="margin-bottom: 5px;">
                                     <div class="card-body d-flex align-items-center">
@@ -54,6 +61,7 @@
                                       <button @click.prevent="deleteChat" type="button" class="button boton-cancelar"
                                               style="text-wrap: nowrap; width:100%;">
                                         <strong>Borrar chat <i class="bi bi-x" style="margin-left: 5px;"></i></strong></button>
+
                                     </div>
                                 </div>
                             </div>
@@ -65,13 +73,13 @@
           <div class="messages-area" ref="messagesArea">
             <div v-for="message in selectedChat?.messages" :class="['message', 'one', 'card', message.sender.username === currentUser.username ? 'c2' : 'c1']">
               <div :class="['username', message.sender.username === currentUser.username ? 'u2' : 'u1']">{{ message.sender.username }}</div>
-              <p style="padding: 15px;">{{ message.text }}</p>
+              <span style="padding-left: 15px;">{{ message.text }}</span>
               <div class="date">{{ formatDate(message.timeSent) }}</div>
             </div>
           </div>
           <div class="sender-area">
             <div class="input-place">
-              <input v-model="messageInput" placeholder="Escribe un mensaje..." @keyup.enter="sendMessage" class="send-input" type="text" maxlength="1500">
+              <input :disabled="!selectedChat" v-model="messageInput" placeholder="Escribe un mensaje..." @keyup.enter="sendMessage" class="send-input" type="text" maxlength="1500">
                 <div class="send" @click="sendMessage()">
                   <i class="bi bi-send-fill"></i>
               </div>
@@ -109,6 +117,15 @@ export default {
     const selectedChat = ref(null);
     const chatMembers = (chat) => {
       return chat.users.map(u => u.username).join(", ");
+    }
+
+    const contactsChatMembers = (chat) => {
+      if(chat.users.length <= 2) {
+        return chat.users.map(u => u.username).join(", ");
+      }else{
+        return chat.users.slice(0,2).map(u => u.username).join(", ")+"...";
+    
+      }
     }
 
     const messagesArea = ref(null);
@@ -240,6 +257,7 @@ export default {
       currentUser,
       chats,
       chatMembers,
+      contactsChatMembers,
       selectChat,
       selectedChat,
       messagesArea,
@@ -317,7 +335,7 @@ export default {
   border-radius: 10px;
   background-color: #e1e9f7;
   width: 98%;
-  height: 60vh;
+  height: 100%;
   max-height: 60vh; 
   overflow-y: auto;
   border: 1px solid #35385896;
@@ -336,6 +354,7 @@ export default {
   font-size: 12px;
   color: #b6cdef;
   text-align: right;
+  margin-top: 5px;
 
 }
 
@@ -346,7 +365,7 @@ export default {
 
 .username {
   font-weight: bold;
-  padding: 15px;
+  padding: 5px;
   font-size: 15px;
   color: #b6cdef;
   margin-bottom: 5px;
@@ -480,20 +499,49 @@ export default {
 
 
 .image-container {
- height: 90%; 
+ height: 90%;
 }
 
 .chat-profile-image {
   border-radius: 50%;
-  height: 80%;
-  width: auto;
+  height: 10vh;
+  width: 10vh;
+  max-width: 20%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.contacts-profile-image {
+  border-radius: 50%;
+  height: 8vh;
+  width: 8vh;
   max-width: 20%;
   position: absolute;
 }
 
+
 .offset {
-  transform: translate(40%, 15%);
+  transform: translate(50%, 0);
 }
+.offset2 {
+  transform: translate(80%, 0);
+  height: 8vh;
+  width: 8vh;
+  max-width: 20%;
+  overflow: hidden;
+  position: absolute;
+}
+.offset3 {
+  transform: translate(125%, -50%);
+}
+.offset4 {
+  transform: translate(65%, -50%);
+}
+.offset5 {
+  transform: translate(65%, -50%);
+}
+
 
 .u1{
   color: white;

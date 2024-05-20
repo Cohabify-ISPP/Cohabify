@@ -116,12 +116,19 @@ export default {
                         }
                     })
                     .then(jsonData => {
-                        localStorage.setItem("authentication", jsonData.token)
-                        store.dispatch('cargarUser');
-                        successfulAlert.value = true;
-                        setTimeout(() => {
-                        router.push("/user/" + user.value.id);
-                        }, 800);
+                        if(jsonData.token) {
+                            localStorage.setItem("authentication", jsonData.token)
+                            store.dispatch('cargarUser');
+                            successfulAlert.value = true;
+                            setTimeout(() => {
+                            router.push("/user/" + user.value.id);
+                            }, 800);
+                        } else {
+                            localStorage.removeItem("authentication");
+                            store.commit('limpiarUser');
+                            router.push('/');
+                        }
+                        
                     })
                     .catch(error => console.error(error));
                 }
@@ -344,9 +351,10 @@ export default {
                             <input type="text" maxlength="14" required class="form-control" id="username" v-model="user.username" placeholder="Nombre de usuario">
                 
                             <h5>Teléfono <i style="font-size: large;" class="bi bi-telephone-fill"></i></h5>
-                            <input type="tel" pattern="(\+34|0034|34)?[6789]\d{8}" required class="form-control" id="phone" v-model="user.phone" placeholder="XXXXXXXXX">
+                            <input type="tel" pattern="\d{9}" required class="form-control" id="phone" v-model="user.phone" placeholder="XXXXXXXXX">
                 
                             <h5>Correo electrónico <i style="font-size: large;" class="bi bi-envelope"></i></h5>
+                            <h6>Si cambia su correo electrónico se le enviará un email de confirmación al nuevo correo.</h6>
                             <input type="email" maxlength="255" required class="form-control" id="email" v-model="user.email" placeholder="email">
                 
                                 <h5>Género <i style="font-size: large;"

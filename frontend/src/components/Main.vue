@@ -43,7 +43,7 @@ const fetchLocations = async () => {
     const userData = await userFetch.json();
     auth.value = userData;
 
-    const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/houses`,
+    const response = await fetch(import.meta.env.VITE_BACKEND_URL + `/api/advertisements/houses/`,
       {
         method: "GET",
         headers: {
@@ -117,7 +117,7 @@ const setPlace = (place) => {
         <GMapMap :center="mapCenter" :zoom="12" map-type-id="roadmap"
           style="height: 60vh; width: 90vh; padding: 10px; margin-top: 10px; border-radius: 10px;" v-if="showMap">
           <GMapMarker v-for="(a, index) in locations" :key="a.id"
-            :position="{ lat: a.house.locationPoint.x, lng: a.house.locationPoint.y }"
+            :position="{ lat: a.house.locationPoint.y, lng: a.house.locationPoint.x }"
             @click="$router.push(`/advertisements/houses/${a.id}`)" />
         </GMapMap>
       </div>
@@ -138,9 +138,8 @@ const setPlace = (place) => {
                   <br>
                   <p class="card-text text-white" style="font-size: 1.1em;">Encuenta a tu compañero gemelo, entra y descubre los privilegios con el plan básico.</p>
                   <br>
-                  <a class="btn btn-success" href="/plan" v-if="currentUser.username" style="font-size: 1.1em">Ver
+                  <a class="btn btn-success" href="/plan"  style="font-size: 1.1em">Ver
                     planes</a>
-                  <a class="btn btn-success" href="/login" v-else>Ver planes</a>
                 </div>
               </div>
               <div class="col-md-4">
@@ -160,9 +159,8 @@ const setPlace = (place) => {
                   <p class="card-text text-white" style="font-size: 1.1em;">Sé el primero en descubrir a tu nuevo compañero
                     con el plan de explorador.</p>
                   <br>
-                  <a class="btn btn-success" href="/plan" v-if="currentUser.username" style="font-size: 1.1em">Ver
+                  <a class="btn btn-success" href="/plan" style="font-size: 1.1em">Ver
                     planes</a>
-                  <a class="btn btn-success" href="/login" v-else>Ver planes</a>
                 </div>
               </div>
               <div class="col-md-4">

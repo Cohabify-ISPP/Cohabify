@@ -16,6 +16,7 @@ import org.ispp4.cohabify.userAdvertisement.UserAdvertisementService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 
 @SpringBootTest
 public class UserAdvertisementServiceTest {
@@ -28,7 +29,8 @@ public class UserAdvertisementServiceTest {
 
     @Test
     void shouldGetAllUA(){
-        List<UserAdvertisement> userAds = uas.findAll();
+        PageRequest pageable = PageRequest.of(0, 10);
+        List<UserAdvertisement> userAds = uas.findAll(pageable).getContent();
         assertThat(userAds.size()).isGreaterThan(1);
 
     }

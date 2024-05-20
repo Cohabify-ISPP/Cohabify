@@ -574,7 +574,8 @@ onMounted(() => {
               
               <div v-if="currentUser?.id !== houseAdvertisement?.author?.id" class="d-flex col" style="flex-direction: column;">
                 <div class="d-flex">
-                  <div class="likes align-items-center " style="margin-right: 1vw">
+                  <div class="d-flex align-items-center">
+                  <div class="likes align-items-center col" style="margin-right: 1vw">
                     <button :class="{ 'like-button': true, 'no-clickable' : Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id }" :disabled="Object.keys(currentUser).length === 0 || houseAdvertisement?.author?.id == currentUser?.id" @click="toggleLike">
                       <i :class="{ 'bi bi-heart-fill': houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id), 'bi bi-heart': !houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) }" :style="{ color: houseAdvertisement.house?.likes.some((like) => like.id === currentUser.id) ? '#e87878' : '#28426b' }" class="heart-transition" style="margin-top: 2px; margin-right: 5px;"></i>
                     </button>   
@@ -583,21 +584,26 @@ onMounted(() => {
                       {{ houseAdvertisement.house?.likes.length }}
                     </span>
                   </div>
-                  <button @click.prevent="openTenantsChat()"type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
-                    <strong style="color: white">Iniciar chat inquilinos
-                      <i class="bi bi-chat" style="margin-left: 5px"></i>
-                    </strong>
-                  </button>
+                  <div v-if="currentUser.id" class="d-flex col">
+                    <button @click.prevent="openTenantsChat()"type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
+                      <strong style="color: white">Iniciar chat inquilinos
+                        <i class="bi bi-chat" style="margin-left: 5px"></i>
+                      </strong>
+                    </button>
 
-                  <button @click.prevent="openOwnerChat()" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
-                    <strong style="color: white">Iniciar chat dueño
-                      <i class="bi bi-chat" style="margin-left: 5px"></i>
-                    </strong>
-                  </button>
-                </div>
-                <div class="mt-3 alert alert-danger" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== houseAdvertisement?.author?.id && chatError != ''">
-                    <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
-                </div>
+                    <button @click.prevent="openOwnerChat()" type="button" class="button boton" style="text-wrap: nowrap; width: 100%; margin-left: 1vw">
+                      <strong style="color: white">Iniciar chat dueño
+                        <i class="bi bi-chat" style="margin-left: 5px"></i>
+                      </strong>
+                    </button>
+                  </div>
+                  </div>
+                    
+                
+              </div>
+              <div class="mt-3 alert alert-danger mx-2" role="alert" style="padding-top: 20px;" v-if="currentUser.id !== houseAdvertisement?.author?.id && chatError != ''">
+                        <i class="fas fa-exclamation-triangle"></i> {{ chatError }}
+                    </div>
               </div>
               
               <div class="d-flex col" v-else>

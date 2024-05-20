@@ -39,7 +39,7 @@
             </div>
             <div class="mb-3  text-start col">
               <label for="location" class="form-label text-white"><strong>Ubicación</strong></label>
-              <input type="text" readonly class="form-control" id="location"  maxlength="100" v-model="location" required placeholder="C/...">
+              <input type="text"  class="form-control" id="location"  maxlength="100" v-model="location" required placeholder="C/...">
             </div>
           </div>
           <div class="row  mb-3">
@@ -61,7 +61,7 @@
             <div class="col text-start">
               <label for="area" class="form-label text-white"><strong>Superficie</strong></label>
               <div class="input-group">
-                <input type="number" readonly class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
+                <input type="number" class="form-control" id="area" v-model="area" required placeholder="0" min="1" max="10000">
                 <span class="input-group-text" style="color: grey;">m²</span>
               </div>
 
@@ -522,11 +522,27 @@ export default {
     const register = () => {
       document.getElementById("btnPublicar").disabled = true;
 
+      if (selectedTags.value.length === 0) {
+        alert("Selecciona al menos una etiqueta");
+        document.getElementById("btnPublicar").disabled = false;
+        return;
+      }
+
+      if (images.value.length === 0) {
+        alert("Selecciona al menos una imagen");
+        document.getElementById("btnPublicar").disabled = false;
+        return;
+      }
+
       if(x.value === null || y.value === null){
         alert("Selecciona una ubicación en el mapa");
         document.getElementById("btnPublicar").disabled = false;
         return;
         
+      }
+      if(area.value === '' || area.value === 0){
+        alert("Introduce una superficie válida");
+        return;
       }
       
       const formData = new FormData();

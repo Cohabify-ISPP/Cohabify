@@ -13,6 +13,8 @@ import org.ispp4.cohabify.dto.JwtTokenDto;
 import org.ispp4.cohabify.dto.UserUpdateRequest;
 import org.ispp4.cohabify.storage.StorageService;
 import org.ispp4.cohabify.utils.Global;
+import org.ispp4.cohabify.utils.MailHelper;
+import org.ispp4.cohabify.utils.RandomStringGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -48,6 +50,8 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
     private StorageService storageService;
     private Global global;
+    private RandomStringGenerator randomStringGenerator;
+	private MailHelper mailHelper;
 
     @PostMapping("/add")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
@@ -133,6 +137,7 @@ public class UserController {
         User _user = userService.getUserById(id);
 
         if (_user != null) {
+            String oldEmail = _user.getEmail();
             User user = userService.getUserByUsername(request.getUsername());
             if(user != null && !user.getId().equals(_user.getId())) {
                 FormItemValidationError error = new FormItemValidationError();
@@ -164,6 +169,15 @@ public class UserController {
                 
                 _user.setImageUri(static_path);
                 _user = userService.save(_user);
+            }
+
+            if(!oldEmail.equals(_user.getEmail())) {
+                _user.setGoogleOAuthToken("");
+                _user.setVerificationCode(randomStringGenerator.extendStringWithRandomCharactersUrlSafe(user.getId().toString(), 64));
+                _user.setEnabled(false);
+                _user = userService.save(_user);
+                mailHelper.sendVerificationEmail(_user);
+                return ResponseEntity.status(HttpStatus.OK).body("{\"msg\": \"User will be logged out.\"}");
             }
 
             String jwt = jwtService.generateToken(_user);
